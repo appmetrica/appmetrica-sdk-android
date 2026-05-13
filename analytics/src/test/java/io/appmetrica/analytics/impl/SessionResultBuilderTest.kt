@@ -94,7 +94,7 @@ internal class SessionResultBuilderTest : CommonTest() {
     }
 
     private fun buildDbEventModel(
-        appEnvironment: String = "{}",
+        appEnvironment: String? = "{}",
         appEnvironmentRevision: Long = 0L,
     ): DbEventModel {
         val description = mock<Description>()
@@ -135,6 +135,18 @@ internal class SessionResultBuilderTest : CommonTest() {
             state
         )
         assertThat(result).isNull()
+    }
+
+    @Test
+    fun `build with null appEnvironment in DB computes environment size as zero`() {
+        val cv = buildEventContentValues(sessionId)
+        contentValuesToModel[cv] = buildDbEventModel(appEnvironment = null)
+        val state = ReportDataSizeState(0, 0, null)
+
+        val result = builder.build(sessionId, SessionDesc(), listOf(cv), requestConfig, 0, state)
+
+        assertThat(result).isNotNull
+        assertThat(result!!.updatedEnvironmentSize).isEqualTo(0)
     }
 
     @Test

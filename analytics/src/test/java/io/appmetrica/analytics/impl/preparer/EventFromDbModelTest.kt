@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.preparer
 
 import android.content.ContentValues
+import io.appmetrica.analytics.impl.AppEnvironment
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
@@ -128,6 +129,15 @@ internal class EventFromDbModelTest : CommonTest() {
         val event = EventFromDbModel(contentValues)
 
         assertThat(event.firstOccurrenceStatus).isEqualTo(FirstOccurrenceStatus.UNKNOWN)
+    }
+
+    @Test
+    fun constructorIfNoAppEnvironment() {
+        whenever(modelDescription.appEnvironment).thenReturn(null)
+
+        val event = EventFromDbModel(contentValues)
+
+        assertThat(event.appEnvironment).isEqualTo(AppEnvironment.DEFAULT_ENVIRONMENT_JSON_STRING)
     }
 
     @Test

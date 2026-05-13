@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.preparer
 
 import android.content.ContentValues
+import io.appmetrica.analytics.impl.AppEnvironment
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
@@ -34,7 +35,8 @@ internal class EventFromDbModel(cv: ContentValues) {
     val attributionIdChanged: Boolean? = dbEventModel.description.attributionIdChanged
     val openId: Int? = dbEventModel.description.openId
     val extras: ByteArray? = dbEventModel.description.extras
-    val appEnvironment: String = dbEventModel.description.appEnvironment ?: ""
+    val appEnvironment: String = dbEventModel.description.appEnvironment
+        ?: AppEnvironment.DEFAULT_ENVIRONMENT_JSON_STRING
     val appEnvironmentRevision: Long = dbEventModel.description.appEnvironmentRevision ?: 0L
 
     fun updateValue(newValue: String?) {
