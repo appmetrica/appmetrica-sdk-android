@@ -70,7 +70,7 @@
     group: "com.adjust.sdk"
     name: "adjust-android"
     from: "5.4.3"
-    to: "5.6.1"
+    to: "5.7.0"
   - repository: "https://repo.maven.apache.org/maven2"
     group: "com.kochava.tracker"
     name: "tracker"
