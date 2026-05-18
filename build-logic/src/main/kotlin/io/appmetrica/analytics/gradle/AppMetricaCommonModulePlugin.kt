@@ -40,7 +40,12 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
         // Create testSettings extension for test configuration
         val testSettings = project.extensions.create("testSettings", TestSettingsExtension::class.java)
-        testSettings.maxParallelForks.convention(4) // default value for all test tasks
+        val defaultMaxParallelForks = Regex("""-XX:ActiveProcessorCount=(\d+)""")
+            .find(System.getenv("_JAVA_OPTIONS").orEmpty())
+            ?.groupValues?.get(1)
+            ?.toIntOrNull()
+            ?: 100
+        testSettings.maxParallelForks.convention(defaultMaxParallelForks)
 
         // Apply TestSplitPlugin (uses testSettings.split nested extension)
         project.apply<TestSplitPlugin>() // id("appmetrica-test-split")
