@@ -1,0 +1,5 @@
+package io.appmetrica.analytics.remotepermissions.impl
+
+import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
+
+internal typealias RemotePermissionsConfigProto = RemotePermissionsProtobuf.RemotePermissions

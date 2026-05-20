@@ -1,27 +1,21 @@
-package io.appmetrica.analytics.remotepermissions.impl
+package io.appmetrica.analytics.remotepermissions.impl.config.service.converter
 
+import io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
-import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
-import org.junit.Before
 import org.junit.Test
 
-internal class FeatureConfigToProtoConverterTest : CommonTest() {
+internal class RemotePermissionsConfigProtoConverterTest : CommonTest() {
 
-    private lateinit var converter: FeatureConfigToProtoConverter
-
-    @Before
-    fun setUp() {
-        converter = FeatureConfigToProtoConverter()
-    }
+    private val converter = RemotePermissionsConfigProtoConverter()
 
     @Test
     fun `fromModel for filled`() {
         val firstPermission = "First permission"
         val secondPermission = "Second permission"
-        val input = FeatureConfig(setOf(firstPermission, secondPermission))
+        val input = ServiceSideRemotePermissionsConfig(setOf(firstPermission, secondPermission))
 
         val result = converter.fromModel(input)
 
@@ -35,7 +29,7 @@ internal class FeatureConfigToProtoConverterTest : CommonTest() {
 
     @Test
     fun `fromModel for empty set`() {
-        val result = converter.fromModel(FeatureConfig(emptySet()))
+        val result = converter.fromModel(ServiceSideRemotePermissionsConfig(emptySet()))
 
         ProtoObjectPropertyAssertions(result)
             .checkField("permissions", emptyArray<String>())

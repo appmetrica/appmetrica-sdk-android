@@ -1,8 +1,7 @@
 package io.appmetrica.analytics.remotepermissions
 
-import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
+import io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig
 import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
-import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -24,7 +23,7 @@ internal class ToStringTest(
         @Parameterized.Parameters(name = "{0}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> = listOf(
-            FeatureConfig(setOf("first", "second")).toTestCase()
+            ServiceSideRemotePermissionsConfig(setOf("first", "second")).toTestCase()
         )
     }
 }

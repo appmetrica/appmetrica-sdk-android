@@ -1,16 +1,12 @@
-package io.appmetrica.analytics.remotepermissions.impl
+package io.appmetrica.analytics.remotepermissions.impl.config.service
 
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-internal class FeatureParserTest : CommonTest() {
+internal class ServiceSideRemotePermissionsConfigParserTest : CommonTest() {
 
     private val block = "permissions"
     private val permissionName = "name"
@@ -22,18 +18,13 @@ internal class FeatureParserTest : CommonTest() {
     private val deniedPermission = "DeniedPermission"
     private val permissionWithMissingValue = "PermissionWithMissingValue"
 
-    private lateinit var featureParser: FeatureParser
-
-    @Before
-    fun setUp() {
-        featureParser = FeatureParser()
-    }
+    private val parser = ServiceSideRemotePermissionsConfigParser()
 
     @Test
     fun `parse for empty json`() {
-        val result = featureParser.parse(JSONObject())
+        val result = parser.parse(JSONObject())
 
-        ObjectPropertyAssertions(result)
+        ObjectPropertyAssertions(result.config)
             .checkField("permittedPermissions", emptySet<String>())
             .checkAll()
     }
@@ -41,9 +32,9 @@ internal class FeatureParserTest : CommonTest() {
     @Test
     fun `parse for empty block`() {
         val input = JSONObject().put(block, JSONObject())
-        val result = featureParser.parse(input)
+        val result = parser.parse(input)
 
-        ObjectPropertyAssertions(result)
+        ObjectPropertyAssertions(result.config)
             .checkField("permittedPermissions", emptySet<String>())
             .checkAll()
     }
@@ -55,9 +46,9 @@ internal class FeatureParserTest : CommonTest() {
             JSONObject()
                 .put(list, JSONArray())
         )
-        val result = featureParser.parse(input)
+        val result = parser.parse(input)
 
-        ObjectPropertyAssertions(result)
+        ObjectPropertyAssertions(result.config)
             .checkField("permittedPermissions", emptySet<String>())
             .checkAll()
     }
@@ -94,9 +85,9 @@ internal class FeatureParserTest : CommonTest() {
                         )
                 )
         )
-        val result = featureParser.parse(input)
+        val result = parser.parse(input)
 
-        ObjectPropertyAssertions(result)
+        ObjectPropertyAssertions(result.config)
             .checkField("permittedPermissions", setOf(firstPermittedPermission, secondPermittedPermission))
             .checkAll()
     }

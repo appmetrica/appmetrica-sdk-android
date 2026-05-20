@@ -6,18 +6,16 @@ import org.junit.Test
 
 internal class RemoteConfigPermissionStrategyTest : CommonTest() {
 
-    private lateinit var remoteConfigPermissionStrategy: RemoteConfigPermissionStrategy
+    private val remoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
 
     @Test
     fun `shouldAsk for initial empty set`() {
-        remoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
         assertThat(remoteConfigPermissionStrategy.forbidUsePermission("some")).isTrue()
     }
 
     @Test
     fun `shouldAsk for updated empty`() {
         val permission = "first"
-        remoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
         remoteConfigPermissionStrategy.updatePermissions(emptySet())
         assertThat(remoteConfigPermissionStrategy.forbidUsePermission(permission)).isTrue()
     }
@@ -25,7 +23,6 @@ internal class RemoteConfigPermissionStrategyTest : CommonTest() {
     @Test
     fun `shouldAsk for updated without target`() {
         val first = "first"
-        remoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
         remoteConfigPermissionStrategy.updatePermissions(setOf("second"))
         assertThat(remoteConfigPermissionStrategy.forbidUsePermission(first)).isTrue()
     }
@@ -33,7 +30,6 @@ internal class RemoteConfigPermissionStrategyTest : CommonTest() {
     @Test
     fun `shouldAsk for updated with target`() {
         val first = "first"
-        remoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
         remoteConfigPermissionStrategy.updatePermissions(setOf(first))
         assertThat(remoteConfigPermissionStrategy.forbidUsePermission(first)).isFalse()
     }

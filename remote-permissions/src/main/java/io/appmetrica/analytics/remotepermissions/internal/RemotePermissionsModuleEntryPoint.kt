@@ -10,61 +10,72 @@ import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoi
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
-import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
+import io.appmetrica.analytics.remotepermissions.impl.Constants
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
-import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
+import io.appmetrica.analytics.remotepermissions.impl.config.service.ServiceSideRemotePermissionsConfigConverter
+import io.appmetrica.analytics.remotepermissions.impl.config.service.ServiceSideRemotePermissionsConfigParser
 
 class RemotePermissionsModuleEntryPoint :
-    ModuleServiceEntryPoint<FeatureConfig>(),
+    ModuleServiceEntryPoint<ServiceSideRemotePermissionsConfigWrapper>(),
     AskForPermissionStrategyModuleProvider,
-    RemoteConfigUpdateListener<FeatureConfig> {
+    RemoteConfigUpdateListener<ServiceSideRemotePermissionsConfigWrapper> {
 
     private val tag = "[RemotePermissionsModuleEntryPoint]"
 
-    private val parser: JsonParser<FeatureConfig> = FeatureParser()
-    private val converter: Converter<FeatureConfig, ByteArray> = FeatureConfigToProtoBytesConverter()
-    private val listener: RemoteConfigUpdateListener<FeatureConfig> = this
+    private val parser = ServiceSideRemotePermissionsConfigParser()
+    private val converter = ServiceSideRemotePermissionsConfigConverter()
+    private val listener: RemoteConfigUpdateListener<ServiceSideRemotePermissionsConfigWrapper> = this
 
-    private val remoteConfigPermissionStrategy: RemoteConfigPermissionStrategy = RemoteConfigPermissionStrategy()
+    private val remoteConfigPermissionStrategy: RemoteConfigPermissionStrategy =
+        RemoteConfigPermissionStrategy()
 
     override val askForPermissionStrategy: PermissionStrategy
         get() = remoteConfigPermissionStrategy
 
-    override val identifier: String = "rp"
+    override val identifier: String = Constants.MODULE_NAME
 
-    override val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<FeatureConfig> =
-        object : RemoteConfigExtensionConfiguration<FeatureConfig>() {
+    override val remoteConfigExtensionConfiguration =
+        object : RemoteConfigExtensionConfiguration<ServiceSideRemotePermissionsConfigWrapper>() {
 
             override fun getFeatures(): List<String> = emptyList()
 
-            override fun getBlocks(): Map<String, Int> = mapOf("permissions" to 1)
+            override fun getBlocks(): Map<String, Int> =
+                mapOf(Constants.RemoteConfig.BLOCK_NAME to 1)
 
-            override fun getJsonParser(): JsonParser<FeatureConfig> = parser
+            override fun getJsonParser():
+                JsonParser<ServiceSideRemotePermissionsConfigWrapper> = parser
 
-            override fun getProtobufConverter(): Converter<FeatureConfig, ByteArray> = converter
+            override fun getProtobufConverter():
+                Converter<ServiceSideRemotePermissionsConfigWrapper, ByteArray> = converter
 
-            override fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<FeatureConfig> = listener
+            override fun getRemoteConfigUpdateListener():
+                RemoteConfigUpdateListener<ServiceSideRemotePermissionsConfigWrapper> = listener
         }
 
-    override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<FeatureConfig?>) {
+    override fun onRemoteConfigUpdated(
+        config: ModuleRemoteConfig<ServiceSideRemotePermissionsConfigWrapper?>
+    ) {
         DebugLogger.info(
             tag,
-            "omRemoteConfigUpdated with permitted permissions = ${config.featuresConfig?.permittedPermissions}"
+            "omRemoteConfigUpdated with permitted permissions = " +
+                "${config.featuresConfig?.config?.permittedPermissions}"
         )
         remoteConfigPermissionStrategy.updatePermissions(
-            config.featuresConfig?.permittedPermissions ?: emptySet()
+            config.featuresConfig?.config?.permittedPermissions ?: emptySet()
         )
     }
 
-    override fun initServiceSide(serviceContext: ServiceContext, initialConfig: ModuleRemoteConfig<FeatureConfig?>) {
+    override fun initServiceSide(
+        serviceContext: ServiceContext,
+        initialConfig: ModuleRemoteConfig<ServiceSideRemotePermissionsConfigWrapper?>
+    ) {
         DebugLogger.info(
             tag,
             "initServiceSide with initial permitted permissions = " +
-                "${initialConfig.featuresConfig?.permittedPermissions}"
+                "${initialConfig.featuresConfig?.config?.permittedPermissions}"
         )
         remoteConfigPermissionStrategy.updatePermissions(
-            initialConfig.featuresConfig?.permittedPermissions ?: emptySet()
+            initialConfig.featuresConfig?.config?.permittedPermissions ?: emptySet()
         )
     }
 }
