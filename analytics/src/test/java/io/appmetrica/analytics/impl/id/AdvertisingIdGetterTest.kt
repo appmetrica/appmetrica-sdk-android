@@ -101,7 +101,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
     @Test
     fun `constructor - reflective adv id provider`() {
         assertThat(reflectionAdvIdProviderRule.constructionMock.constructed()).hasSize(3)
-        assertThat(reflectionAdvIdProviderRule.argumentInterceptor.flatArguments())
+        assertThat(reflectionAdvIdProviderRule.argumentInterceptor.arguments.map { it.first() })
             .containsExactly(
                 Constants.Providers.GOOGLE,
                 Constants.Providers.HUAWEI,
