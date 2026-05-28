@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.idsync.impl
 
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule

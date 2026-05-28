@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.idsync.impl
 
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.network.internal.NetworkClientBuilder
 import io.appmetrica.analytics.networkapi.NetworkClientSettings

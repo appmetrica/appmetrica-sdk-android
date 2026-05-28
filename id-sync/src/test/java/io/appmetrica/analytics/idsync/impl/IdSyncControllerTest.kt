@@ -4,9 +4,9 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfig
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
-import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext

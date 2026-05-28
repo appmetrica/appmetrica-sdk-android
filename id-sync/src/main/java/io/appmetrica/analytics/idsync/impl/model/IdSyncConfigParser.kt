@@ -4,7 +4,6 @@ import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils
 import io.appmetrica.analytics.idsync.impl.protobuf.client.IdSyncProtobuf
 import io.appmetrica.analytics.idsync.impl.protobuf.client.IdSyncProtobuf.IdSyncConfig.Header
-import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
 import org.json.JSONArray
 import org.json.JSONObject
 

@@ -8,11 +8,11 @@ import io.appmetrica.analytics.idsync.impl.IdSyncRequestController
 import io.appmetrica.analytics.idsync.impl.IdSyncRequestSender
 import io.appmetrica.analytics.idsync.impl.IdSyncResultHandler
 import io.appmetrica.analytics.idsync.impl.RequestResult
+import io.appmetrica.analytics.idsync.impl.model.Preconditions
 import io.appmetrica.analytics.idsync.impl.model.RequestAttemptResult
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.analytics.idsync.impl.model.RequestState
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
-import io.appmetrica.analytics.idsync.internal.model.Preconditions
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceNetworkContext

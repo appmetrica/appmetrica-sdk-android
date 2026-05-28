@@ -1,12 +1,11 @@
 package io.appmetrica.analytics.idsync
 
 import io.appmetrica.analytics.idsync.impl.RequestResult
-import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
-import io.appmetrica.analytics.idsync.internal.model.NetworkType
-import io.appmetrica.analytics.idsync.internal.model.Preconditions
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfig
+import io.appmetrica.analytics.idsync.impl.model.NetworkType
+import io.appmetrica.analytics.idsync.impl.model.Preconditions
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
-import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
 import io.appmetrica.gradle.androidtestutils.tostring.ToStringTestUtils
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

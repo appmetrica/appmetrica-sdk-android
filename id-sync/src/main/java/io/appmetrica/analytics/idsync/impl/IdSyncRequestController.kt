@@ -4,10 +4,10 @@ import android.text.TextUtils
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.idsync.impl.model.RequestAttemptResult
+import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.analytics.idsync.impl.model.RequestState
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
 import io.appmetrica.analytics.idsync.impl.precondition.PreconditionProvider
-import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 

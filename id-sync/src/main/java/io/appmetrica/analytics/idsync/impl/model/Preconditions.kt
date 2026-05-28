@@ -1,6 +1,6 @@
-package io.appmetrica.analytics.idsync.internal.model
+package io.appmetrica.analytics.idsync.impl.model
 
-class Preconditions(
+internal class Preconditions(
     val networkType: NetworkType
 ) {
 

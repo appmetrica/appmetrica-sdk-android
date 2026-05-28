@@ -4,8 +4,8 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfig
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
-import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.TimeUnit

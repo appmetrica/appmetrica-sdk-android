@@ -3,10 +3,12 @@ package io.appmetrica.analytics.idsync.internal
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.idsync.impl.IdSyncConstants
 import io.appmetrica.analytics.idsync.impl.IdSyncController
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfig
 import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigParser
 import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigToProtoBytesConverter
 import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigToProtoConverter
-import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigWrapperJsonParser
+import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigWrapperProtobufConverter
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.gradle.testutils.CommonTest
@@ -31,12 +33,21 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
     @get:Rule
     val configParserRule = constructionRule<IdSyncConfigParser>()
 
+    @get:Rule
+    val wrapperJsonParserRule = constructionRule<IdSyncConfigWrapperJsonParser>()
+
+    @get:Rule
+    val wrapperProtobufConverterRule = constructionRule<IdSyncConfigWrapperProtobufConverter>()
+
     private val serviceContext: ServiceContext = mock()
     private val idSyncConfig: IdSyncConfig = mock()
+    private val idSyncConfigWrapper: IdSyncConfigWrapper = mock {
+        on { config } doReturn idSyncConfig
+    }
     private val sdkIdentifiers: SdkIdentifiers = mock()
 
-    private val moduleConfig: ModuleRemoteConfig<IdSyncConfig?> = mock {
-        on { featuresConfig } doReturn idSyncConfig
+    private val moduleConfig: ModuleRemoteConfig<IdSyncConfigWrapper?> = mock {
+        on { featuresConfig } doReturn idSyncConfigWrapper
         on { identifiers } doReturn sdkIdentifiers
     }
 
@@ -66,28 +77,21 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
     @Test
     fun `remoteExtensionConfiguration json parser`() {
         assertThat(moduleEntryPoint.remoteConfigExtensionConfiguration.getJsonParser())
-            .isEqualTo(configParserRule.constructionMock.constructed().first())
-
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
+            .isSameAs(wrapperJsonParser())
+        assertThat(wrapperJsonParserRule.argumentInterceptor.flatArguments())
+            .containsExactly(configParser())
         assertThat(configParserRule.argumentInterceptor.flatArguments())
-            .containsExactly(configProtoConverterRule.constructionMock.constructed().first())
-
-        assertThat(configProtoConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(configProtoConverterRule.argumentInterceptor.flatArguments())
-            .isEmpty()
+            .containsExactly(configProtoConverter())
     }
 
     @Test
-    fun `remoteExtensionConfiguration protofub converter`() {
+    fun `remoteExtensionConfiguration protobuf converter`() {
         assertThat(moduleEntryPoint.remoteConfigExtensionConfiguration.getProtobufConverter())
-            .isEqualTo(configToBytesConverterRule.constructionMock.constructed().first())
-
-        assertThat(configToBytesConverterRule.constructionMock.constructed()).hasSize(1)
+            .isSameAs(wrapperProtobufConverter())
+        assertThat(wrapperProtobufConverterRule.argumentInterceptor.flatArguments())
+            .containsExactly(configToBytesConverter())
         assertThat(configToBytesConverterRule.argumentInterceptor.flatArguments())
-            .containsExactly(configProtoConverterRule.constructionMock.constructed().first())
-
-        assertThat(configProtoConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(configProtoConverterRule.argumentInterceptor.flatArguments()).isEmpty()
+            .containsExactly(configProtoConverter())
     }
 
     @Test
@@ -135,5 +139,30 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
         moduleEntryPoint.remoteConfigExtensionConfiguration.getRemoteConfigUpdateListener()
             .onRemoteConfigUpdated(mock())
         verifyNoInteractions(idSyncController)
+    }
+
+    private fun configProtoConverter(): IdSyncConfigToProtoConverter {
+        assertThat(configProtoConverterRule.constructionMock.constructed()).hasSize(1)
+        return configProtoConverterRule.constructionMock.constructed().first()
+    }
+
+    private fun configParser(): IdSyncConfigParser {
+        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
+        return configParserRule.constructionMock.constructed().first()
+    }
+
+    private fun configToBytesConverter(): IdSyncConfigToProtoBytesConverter {
+        assertThat(configToBytesConverterRule.constructionMock.constructed()).hasSize(1)
+        return configToBytesConverterRule.constructionMock.constructed().first()
+    }
+
+    private fun wrapperJsonParser(): IdSyncConfigWrapperJsonParser {
+        assertThat(wrapperJsonParserRule.constructionMock.constructed()).hasSize(1)
+        return wrapperJsonParserRule.constructionMock.constructed().first()
+    }
+
+    private fun wrapperProtobufConverter(): IdSyncConfigWrapperProtobufConverter {
+        assertThat(wrapperProtobufConverterRule.constructionMock.constructed()).hasSize(1)
+        return wrapperProtobufConverterRule.constructionMock.constructed().first()
     }
 }

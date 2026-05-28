@@ -1,6 +1,6 @@
-package io.appmetrica.analytics.idsync.internal.model
+package io.appmetrica.analytics.idsync.impl.model
 
-class IdSyncConfig(
+internal class IdSyncConfig(
     val enabled: Boolean,
     val launchDelay: Long,
     val requests: List<RequestConfig>

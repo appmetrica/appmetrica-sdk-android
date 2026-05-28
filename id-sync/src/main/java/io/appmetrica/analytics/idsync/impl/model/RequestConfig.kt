@@ -1,6 +1,6 @@
-package io.appmetrica.analytics.idsync.internal.model
+package io.appmetrica.analytics.idsync.impl.model
 
-class RequestConfig(
+internal class RequestConfig(
     val type: String,
     val url: String,
     val preconditions: Preconditions,

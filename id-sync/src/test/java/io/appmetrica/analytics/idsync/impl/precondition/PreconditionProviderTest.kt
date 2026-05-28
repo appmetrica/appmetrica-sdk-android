@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.idsync.impl.precondition
 
-import io.appmetrica.analytics.idsync.internal.model.NetworkType
-import io.appmetrica.analytics.idsync.internal.model.Preconditions
+import io.appmetrica.analytics.idsync.impl.model.NetworkType
+import io.appmetrica.analytics.idsync.impl.model.Preconditions
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
