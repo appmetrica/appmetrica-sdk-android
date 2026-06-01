@@ -21,6 +21,8 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.impl.modules.ModulesSeeker
 import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl
+import io.appmetrica.analytics.impl.modules.plugin.KnownPluginModuleDescriptors
+import io.appmetrica.analytics.impl.modules.plugin.PluginModuleStatusDetector
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper
 import io.appmetrica.analytics.impl.referrer.common.Constants
 import io.appmetrica.analytics.impl.startup.StartupHelper
@@ -57,7 +59,10 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         val clientServiceLocator = ClientServiceLocator.getInstance()
         clientServiceLocator.modulesController.initClientSide(ClientContextImpl(context))
         val fieldsProvider = AppMetricaImplFieldsProvider()
-        fieldsProvider.createModuleStatusReporter(context).reportModulesStatus(status)
+        if (clientServiceLocator.currentProcessDetector.isMainProcess()) {
+            val pluginStatus = PluginModuleStatusDetector(KnownPluginModuleDescriptors.ALL).detect()
+            fieldsProvider.createModuleStatusReporter(context).reportModulesStatus(status + pluginStatus)
+        }
         val dataResultReceiver = fieldsProvider.createDataResultReceiver(core.defaultHandler, this)
         processConfiguration =
             fieldsProvider.createProcessConfiguration(context, dataResultReceiver)

@@ -21,6 +21,7 @@ import io.appmetrica.analytics.impl.modules.ModuleStatusReporter
 import io.appmetrica.analytics.impl.modules.ModulesSeeker
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController
 import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl
+import io.appmetrica.analytics.impl.modules.plugin.PluginModuleStatusDetector
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper
 import io.appmetrica.analytics.impl.startup.StartupHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
@@ -84,11 +85,18 @@ internal class AppMetricaImplTest : CommonTest() {
     }
 
     private val modulesStatus = listOf(mock<ModuleStatus>(), mock<ModuleStatus>())
+    private val pluginModulesStatus = listOf(mock<ModuleStatus>(), mock<ModuleStatus>())
+
     @get:Rule
     val modulesSeekerConstructionRule = constructionRule<ModulesSeeker> {
         on { discoverClientModules() } doReturn modulesStatus
     }
     private val modulesSeeker: ModulesSeeker by modulesSeekerConstructionRule
+
+    @get:Rule
+    val pluginModuleStatusDetectorConstructionRule = constructionRule<PluginModuleStatusDetector> {
+        on { detect() } doReturn pluginModulesStatus
+    }
 
     @get:Rule
     val clientContextImplMockedConstructionRule = constructionRule<ClientContextImpl>()
@@ -187,6 +195,7 @@ internal class AppMetricaImplTest : CommonTest() {
     }
 
     private val impl: AppMetricaImpl by setUp {
+        whenever(clientServiceLocatorRule.currentProcessDetector.isMainProcess()).thenReturn(true)
         AppMetricaImpl(context, appmetricaCore)
     }
 
@@ -195,8 +204,16 @@ internal class AppMetricaImplTest : CommonTest() {
         inOrder(modulesSeeker, modulesController, moduleStatusReporter) {
             verify(modulesSeeker).discoverClientModules()
             verify(modulesController).initClientSide(clientContextImpl)
-            verify(moduleStatusReporter).reportModulesStatus(modulesStatus)
+            verify(moduleStatusReporter).reportModulesStatus(modulesStatus + pluginModulesStatus)
         }
+    }
+
+    @Test
+    fun `constructor does not report module status in non-main process`() {
+        whenever(clientServiceLocatorRule.currentProcessDetector.isMainProcess()).thenReturn(false)
+        clearInvocations(moduleStatusReporter)
+        AppMetricaImpl(context, appmetricaCore)
+        verify(moduleStatusReporter, never()).reportModulesStatus(any())
     }
 
     @Test
