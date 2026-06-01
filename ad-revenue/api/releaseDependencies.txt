@@ -1,4 +1,5 @@
 io.appmetrica.analytics:ad-revenue-admob-v23:unspecified
+io.appmetrica.analytics:ad-revenue-applovin-v12-auto:unspecified
 io.appmetrica.analytics:ad-revenue-applovin-v12:unspecified
 io.appmetrica.analytics:ad-revenue-fyber-v3:unspecified
 io.appmetrica.analytics:ad-revenue-ironsource-v7:unspecified

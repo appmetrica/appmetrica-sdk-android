@@ -166,7 +166,7 @@ internal class AdRevenueConverterTest : CommonTest() {
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.APP_OPEN)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
-            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.APP_OPEN)
             assertThat(adRevenue.payload).isEqualTo(
                 mapOf(
                     "countryCode" to "RU",

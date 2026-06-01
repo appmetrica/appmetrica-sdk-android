@@ -47,6 +47,12 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-ad-revenue-applovin-v12-auto</artifactId>
+      <version>8.3.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue-fyber-v3</artifactId>
       <version>8.3.0</version>
       <scope>runtime</scope>

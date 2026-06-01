@@ -1,0 +1,5 @@
+syntax = "proto2";
+
+message AdRevenueApplovinConfig {
+  optional bool enabled = 1 [default = true];
+}

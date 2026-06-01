@@ -15,6 +15,7 @@ android {
 dependencies {
     runtimeOnly(project(":ad-revenue-admob-v23"))
     runtimeOnly(project(":ad-revenue-applovin-v12"))
+    runtimeOnly(project(":ad-revenue-applovin-v12-auto"))
     runtimeOnly(project(":ad-revenue-fyber-v3"))
     runtimeOnly(project(":ad-revenue-ironsource-v7"))
     runtimeOnly(project(":ad-revenue-ironsource-v9"))

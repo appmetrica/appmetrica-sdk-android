@@ -43,6 +43,7 @@ internal class AdRevenueConverter {
             MaxAdFormat.REWARDED -> ModuleAdType.REWARDED
             MaxAdFormat.INTERSTITIAL -> ModuleAdType.INTERSTITIAL
             MaxAdFormat.MREC -> ModuleAdType.MREC
+            MaxAdFormat.APP_OPEN -> ModuleAdType.APP_OPEN
             else -> ModuleAdType.OTHER
         }
     }

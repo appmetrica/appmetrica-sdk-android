@@ -1,0 +1,49 @@
+public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.AppLovinAutoClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector getAdRevenueCollector()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper> getServiceConfigExtensionConfiguration()
+    public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
+    public void onActivated()
+}
+
+public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.AppLovinAutoServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider getClientConfigProvider()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper>)
+}
+
+public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper {
+    public static final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper$Companion Companion
+
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig] getConfig$ad_revenue_applovin_v12_auto_release()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper$Companion {
+    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig])
+}
+
+public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper {
+    public static final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper$Companion Companion
+
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig] getConfig$ad_revenue_applovin_v12_auto_release()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper$Companion {
+    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig])
+}
+

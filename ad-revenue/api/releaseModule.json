@@ -60,6 +60,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue-applovin-v12-auto",
+                    "version": {
+                        "requires": "8.3.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-fyber-v3",
                     "version": {
                         "requires": "8.3.0"
