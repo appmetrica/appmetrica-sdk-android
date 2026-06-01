@@ -1,18 +1,19 @@
-package io.appmetrica.analytics.apphud.impl.config.service;
+package io.appmetrica.analytics.apphud.impl.config.client;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.Constants;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ClientSideApphudConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter;
 
-public class BundleToServiceApphudConfigConverter implements BundleToServiceConfigConverter<ServiceApphudConfig> {
+public class BundleToClientSideApphudConfigConverter implements BundleToServiceConfigConverter<ClientSideApphudConfig> {
 
-    private static final String TAG = "[ServiceModuleConfigBundleParser]";
+    private static final String TAG = "[BundleToClientSideApphudConfigConverter]";
 
     @NonNull
     @Override
-    public ServiceApphudConfig fromBundle(@NonNull Bundle bundle) {
+    public ClientSideApphudConfig fromBundle(@NonNull Bundle bundle) {
         boolean enabled = bundle.getBoolean(
             Constants.ServiceConfig.ENABLED_KEY,
             Constants.Defaults.DEFAULT_FEATURE_STATE
@@ -21,7 +22,7 @@ public class BundleToServiceApphudConfigConverter implements BundleToServiceConf
             Constants.ServiceConfig.API_KEY_KEY,
             Constants.Defaults.DEFAULT_API_KEY
         );
-        ServiceApphudConfig config = new ServiceApphudConfig(
+        ClientSideApphudConfig config = new ClientSideApphudConfig(
             enabled,
             apiKey
         );

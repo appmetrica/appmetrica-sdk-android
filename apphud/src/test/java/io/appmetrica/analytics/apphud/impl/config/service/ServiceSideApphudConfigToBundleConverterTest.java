@@ -1,8 +1,9 @@
-package io.appmetrica.analytics.apphud.impl.config.remote;
+package io.appmetrica.analytics.apphud.impl.config.service;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.Constants;
+import io.appmetrica.analytics.apphud.impl.config.service.model.ServiceSideApphudConfig;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,15 +12,15 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class RemoteApphudConfigBundleConverterTest extends CommonTest {
+public class ServiceSideApphudConfigToBundleConverterTest extends CommonTest {
 
     @NonNull
-    private final RemoteApphudConfigBundleConverter converter = new RemoteApphudConfigBundleConverter();
+    private final ServiceSideApphudConfigToBundleConverter converter = new ServiceSideApphudConfigToBundleConverter();
 
     @Test
     public void convertIfEnabled() {
         String apiKey = "some_api_key";
-        RemoteApphudConfig config = new RemoteApphudConfig(
+        ServiceSideApphudConfig config = new ServiceSideApphudConfig(
             true,
             apiKey
         );
@@ -35,7 +36,7 @@ public class RemoteApphudConfigBundleConverterTest extends CommonTest {
     @Test
     public void convertIfDisabled() {
         String apiKey = "some_api_key";
-        RemoteApphudConfig config = new RemoteApphudConfig(
+        ServiceSideApphudConfig config = new ServiceSideApphudConfig(
             false,
             apiKey
         );

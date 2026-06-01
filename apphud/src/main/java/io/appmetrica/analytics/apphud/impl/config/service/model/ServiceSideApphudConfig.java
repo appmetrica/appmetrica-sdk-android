@@ -1,15 +1,15 @@
-package io.appmetrica.analytics.apphud.impl.config.remote;
+package io.appmetrica.analytics.apphud.impl.config.service.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class RemoteApphudConfig {
+public class ServiceSideApphudConfig {
 
     private final boolean enabled;
     @Nullable
     private final String apiKey;
 
-    public RemoteApphudConfig(
+    public ServiceSideApphudConfig(
         boolean enabled,
         @Nullable String apiKey
     ) {
@@ -29,7 +29,7 @@ public class RemoteApphudConfig {
     @NonNull
     @Override
     public String toString() {
-        return "RemoteModuleConfig{" +
+        return "ServiceSideApphudConfig{" +
             "enabled=" + enabled +
             ", apiKey='" + apiKey + '\'' +
             '}';

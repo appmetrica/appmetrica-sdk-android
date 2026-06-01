@@ -1,20 +1,23 @@
 package io.appmetrica.analytics.apphud.internal;
 
 import android.content.Context;
+import android.os.Bundle;
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.apphud.impl.ApphudActivationConfigChecker;
+import io.appmetrica.analytics.apphud.impl.ApphudActivationConfigStorage;
 import io.appmetrica.analytics.apphud.impl.ApphudActivator;
-import io.appmetrica.analytics.apphud.impl.ClientModuleConfigStorage;
 import io.appmetrica.analytics.apphud.impl.Constants;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfigChecker;
-import io.appmetrica.analytics.apphud.impl.config.service.ServiceApphudConfig;
-import io.appmetrica.analytics.apphud.impl.config.service.BundleToServiceApphudConfigConverter;
+import io.appmetrica.analytics.apphud.impl.config.client.BundleToClientSideApphudConfigConverter;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ClientSideApphudConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
+import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider;
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig;
-import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration;
 import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -48,29 +51,31 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
     @Mock
     private ClientStorageProvider clientStorageProvider;
     @Mock
-    private ClientApphudConfig clientApphudConfig;
+    private ApphudActivationConfig apphudActivationConfig;
     @Mock
-    private ServiceApphudConfig serviceApphudConfig;
+    private ClientSideApphudConfig clientSideApphudConfig;
     @Mock
     private SdkIdentifiers sdkIdentifiers;
     @Mock
-    private ModuleServiceConfig<ServiceApphudConfig> moduleServiceConfig;
+    private ModuleServiceConfig<ClientSideApphudConfigWrapper> moduleServiceConfig;
+
+    private ClientSideApphudConfigWrapper wrapper;
 
     @Rule
-    public MockedConstructionRule<ClientModuleConfigStorage> storageRule =
-        new MockedConstructionRule<>(ClientModuleConfigStorage.class);
+    public MockedConstructionRule<ApphudActivationConfigStorage> storageRule =
+        new MockedConstructionRule<>(ApphudActivationConfigStorage.class);
     @Rule
-    public MockedConstructionRule<BundleToServiceApphudConfigConverter> bundleParserRule =
-        new MockedConstructionRule<>(BundleToServiceApphudConfigConverter.class);
+    public MockedConstructionRule<BundleToClientSideApphudConfigConverter> bundleConverterRule =
+        new MockedConstructionRule<>(BundleToClientSideApphudConfigConverter.class);
     @Rule
-    public MockedConstructionRule<ClientApphudConfigChecker> configCheckerRule =
-        new MockedConstructionRule<>(ClientApphudConfigChecker.class);
+    public MockedConstructionRule<ApphudActivationConfigChecker> configCheckerRule =
+        new MockedConstructionRule<>(ApphudActivationConfigChecker.class);
     @Rule
     public MockedConstructionRule<ApphudActivator> apphudActivatorRule =
         new MockedConstructionRule<>(ApphudActivator.class);
 
     @Captor
-    private ArgumentCaptor<ClientApphudConfig> clientModuleConfigCaptor;
+    private ArgumentCaptor<ApphudActivationConfig> activationConfigCaptor;
 
     private ApphudClientModuleEntryPoint entryPoint;
 
@@ -81,10 +86,11 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
         when(clientContext.getContext()).thenReturn(context);
         when(clientContext.getClientStorageProvider()).thenReturn(clientStorageProvider);
 
-        when(serviceApphudConfig.getApiKey()).thenReturn(apiKey);
+        when(clientSideApphudConfig.getApiKey()).thenReturn(apiKey);
         when(sdkIdentifiers.getDeviceId()).thenReturn(deviceId);
         when(sdkIdentifiers.getUuid()).thenReturn(uuid);
-        when(moduleServiceConfig.getFeaturesConfig()).thenReturn(serviceApphudConfig);
+        wrapper = ClientSideApphudConfigWrapper.toWrapper(clientSideApphudConfig);
+        when(moduleServiceConfig.getFeaturesConfig()).thenReturn(wrapper);
         when(moduleServiceConfig.getIdentifiers()).thenReturn(sdkIdentifiers);
     }
 
@@ -94,8 +100,16 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
     }
 
     @Test
-    public void getBundleParser() {
-        assertThat(entryPoint.getServiceConfigExtensionConfiguration().getBundleConverter()).isSameAs(bundleParser());
+    public void bundleConverterDelegatesToInnerConverter() {
+        Bundle bundle = new Bundle();
+        when(bundleConverter().fromBundle(bundle)).thenReturn(clientSideApphudConfig);
+
+        BundleToServiceConfigConverter<ClientSideApphudConfigWrapper> converter =
+            entryPoint.getServiceConfigExtensionConfiguration().getBundleConverter();
+        ClientSideApphudConfigWrapper result = converter.fromBundle(bundle);
+
+        verify(bundleConverter()).fromBundle(bundle);
+        assertThat(result.config).isSameAs(clientSideApphudConfig);
     }
 
     @Test
@@ -123,12 +137,12 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
     public void onActivated() {
         entryPoint.initClientSide(clientContext);
 
-        when(storage().load()).thenReturn(clientApphudConfig);
+        when(storage().load()).thenReturn(apphudActivationConfig);
 
         entryPoint.onActivated();
 
         verify(storage()).load();
-        verify(apphudActivator()).activateIfNecessary(context, clientApphudConfig);
+        verify(apphudActivator()).activateIfNecessary(context, apphudActivationConfig);
     }
 
     @Test
@@ -147,16 +161,16 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
 
     @Test
     public void configUpdateListener() {
-        when(serviceApphudConfig.isEnabled()).thenReturn(true);
+        when(clientSideApphudConfig.isEnabled()).thenReturn(true);
 
         entryPoint.initClientSide(clientContext);
         entryPoint.getServiceConfigExtensionConfiguration().getServiceConfigUpdateListener()
             .onServiceConfigUpdated(moduleServiceConfig);
 
-        verify(apphudActivator()).activateIfNecessary(eq(context), clientModuleConfigCaptor.capture());
-        ClientApphudConfig configForActivation = clientModuleConfigCaptor.getValue();
-        verify(storage()).save(clientModuleConfigCaptor.capture());
-        ClientApphudConfig configForStorage = clientModuleConfigCaptor.getValue();
+        verify(apphudActivator()).activateIfNecessary(eq(context), activationConfigCaptor.capture());
+        ApphudActivationConfig configForActivation = activationConfigCaptor.getValue();
+        verify(storage()).save(activationConfigCaptor.capture());
+        ApphudActivationConfig configForStorage = activationConfigCaptor.getValue();
 
         assertThat(configForStorage).isSameAs(configForActivation);
         Assertions.INSTANCE.ObjectPropertyAssertions(configForActivation)
@@ -169,16 +183,16 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
 
     @Test
     public void configUpdateListenerIfFeatureIsDisabled() {
-        when(serviceApphudConfig.isEnabled()).thenReturn(false);
+        when(clientSideApphudConfig.isEnabled()).thenReturn(false);
 
         entryPoint.initClientSide(clientContext);
         entryPoint.getServiceConfigExtensionConfiguration().getServiceConfigUpdateListener()
             .onServiceConfigUpdated(moduleServiceConfig);
 
-        verify(apphudActivator()).activateIfNecessary(eq(context), clientModuleConfigCaptor.capture());
-        ClientApphudConfig configForActivation = clientModuleConfigCaptor.getValue();
-        verify(storage()).save(clientModuleConfigCaptor.capture());
-        ClientApphudConfig configForStorage = clientModuleConfigCaptor.getValue();
+        verify(apphudActivator()).activateIfNecessary(eq(context), activationConfigCaptor.capture());
+        ApphudActivationConfig configForActivation = activationConfigCaptor.getValue();
+        verify(storage()).save(activationConfigCaptor.capture());
+        ApphudActivationConfig configForStorage = activationConfigCaptor.getValue();
 
         assertThat(configForStorage).isSameAs(configForActivation);
         Assertions.INSTANCE.ObjectPropertyAssertions(configForActivation)
@@ -189,13 +203,48 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
             .checkAll();
     }
 
-    private BundleToServiceApphudConfigConverter bundleParser() {
-        assertThat(bundleParserRule.getConstructionMock().constructed()).hasSize(1);
-        assertThat(bundleParserRule.getArgumentInterceptor().flatArguments()).isEmpty();
-        return bundleParserRule.getConstructionMock().constructed().get(0);
+    @Test
+    public void configUpdateListenerWithNullWrapper() {
+        when(moduleServiceConfig.getFeaturesConfig()).thenReturn(null);
+
+        entryPoint.initClientSide(clientContext);
+        entryPoint.getServiceConfigExtensionConfiguration().getServiceConfigUpdateListener()
+            .onServiceConfigUpdated(moduleServiceConfig);
+
+        verifyNoInteractions(apphudActivator(), storage());
     }
 
-    private ClientApphudConfigChecker configChecker() {
+    @Test
+    public void serviceConfigExtensionConfigurationIsCached() {
+        ServiceConfigExtensionConfiguration<ClientSideApphudConfigWrapper> first =
+            entryPoint.getServiceConfigExtensionConfiguration();
+        ServiceConfigExtensionConfiguration<ClientSideApphudConfigWrapper> second =
+            entryPoint.getServiceConfigExtensionConfiguration();
+
+        assertThat(first).isSameAs(second);
+    }
+
+    @Test
+    public void bundleConverterIsCached() {
+        ServiceConfigExtensionConfiguration<ClientSideApphudConfigWrapper> ext =
+            entryPoint.getServiceConfigExtensionConfiguration();
+        assertThat(ext.getBundleConverter()).isSameAs(ext.getBundleConverter());
+    }
+
+    @Test
+    public void serviceConfigUpdateListenerIsCached() {
+        ServiceConfigExtensionConfiguration<ClientSideApphudConfigWrapper> ext =
+            entryPoint.getServiceConfigExtensionConfiguration();
+        assertThat(ext.getServiceConfigUpdateListener()).isSameAs(ext.getServiceConfigUpdateListener());
+    }
+
+    private BundleToClientSideApphudConfigConverter bundleConverter() {
+        assertThat(bundleConverterRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(bundleConverterRule.getArgumentInterceptor().flatArguments()).isEmpty();
+        return bundleConverterRule.getConstructionMock().constructed().get(0);
+    }
+
+    private ApphudActivationConfigChecker configChecker() {
         assertThat(configCheckerRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(configCheckerRule.getArgumentInterceptor().flatArguments()).isEmpty();
         return configCheckerRule.getConstructionMock().constructed().get(0);
@@ -207,7 +256,7 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
         return apphudActivatorRule.getConstructionMock().constructed().get(0);
     }
 
-    private ClientModuleConfigStorage storage() {
+    private ApphudActivationConfigStorage storage() {
         assertThat(storageRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(storageRule.getArgumentInterceptor().flatArguments()).containsExactly(clientStorageProvider);
         return storageRule.getConstructionMock().constructed().get(0);

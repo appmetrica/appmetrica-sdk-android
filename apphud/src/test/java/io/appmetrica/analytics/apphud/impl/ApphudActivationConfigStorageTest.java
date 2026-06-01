@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.apphud.impl;
 
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider;
 import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
@@ -13,21 +13,21 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ClientApphudConfigStorageTest extends CommonTest {
+public class ApphudActivationConfigStorageTest extends CommonTest {
 
     @Mock
     private ClientStorageProvider storageProvider;
     @Mock
     private ModulePreferences preferences;
 
-    private ClientModuleConfigStorage storage;
+    private ApphudActivationConfigStorage storage;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(storageProvider.modulePreferences(Constants.MODULE_ID)).thenReturn(preferences);
 
-        storage = new ClientModuleConfigStorage(storageProvider);
+        storage = new ApphudActivationConfigStorage(storageProvider);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ClientApphudConfigStorageTest extends CommonTest {
         when(preferences.getString(Constants.ClientConfig.DEVICE_ID_KEY, null)).thenReturn(deviceId);
         when(preferences.getString(Constants.ClientConfig.UUID_KEY, null)).thenReturn(uuid);
 
-        ClientApphudConfig config = storage.load();
+        ApphudActivationConfig config = storage.load();
         Assertions.INSTANCE.ObjectPropertyAssertions(config)
             .withPrivateFields(true)
             .checkField("apiKey", apiKey)
@@ -53,7 +53,7 @@ public class ClientApphudConfigStorageTest extends CommonTest {
         String apiKey = "some_api_key";
         String deviceId = "some_device_id";
         String uuid = "some_uuid";
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             apiKey,
             deviceId,
             uuid

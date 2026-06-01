@@ -1,15 +1,16 @@
-package io.appmetrica.analytics.apphud.impl.config.remote;
+package io.appmetrica.analytics.apphud.impl.config.service;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.apphud.impl.config.service.model.ServiceSideApphudConfig;
 import io.appmetrica.analytics.apphud.impl.protobuf.client.RemoteApphudConfigProtobuf;
 import io.appmetrica.analytics.coreapi.internal.data.Converter;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.io.IOException;
 
-public class RemoteApphudConfigConverter implements Converter<RemoteApphudConfig, byte[]> {
+public class ServiceSideApphudConfigConverter implements Converter<ServiceSideApphudConfig, byte[]> {
 
     @Override
-    public byte[] fromModel(@NonNull RemoteApphudConfig value) {
+    public byte[] fromModel(@NonNull ServiceSideApphudConfig value) {
         RemoteApphudConfigProtobuf.RemoteApphudConfig proto = new RemoteApphudConfigProtobuf.RemoteApphudConfig();
         proto.enabled = value.isEnabled();
         if (value.getApiKey() != null) {
@@ -20,18 +21,18 @@ public class RemoteApphudConfigConverter implements Converter<RemoteApphudConfig
 
     @NonNull
     @Override
-    public RemoteApphudConfig toModel(@NonNull byte[] value) {
+    public ServiceSideApphudConfig toModel(@NonNull byte[] value) {
         try {
             RemoteApphudConfigProtobuf.RemoteApphudConfig proto =
                 RemoteApphudConfigProtobuf.RemoteApphudConfig.parseFrom(value);
-            return new RemoteApphudConfig(
+            return new ServiceSideApphudConfig(
                 proto.enabled,
                 proto.apiKey
             );
         } catch (IOException e) {
             RemoteApphudConfigProtobuf.RemoteApphudConfig proto =
                 new RemoteApphudConfigProtobuf.RemoteApphudConfig();
-            return new RemoteApphudConfig(
+            return new ServiceSideApphudConfig(
                 proto.enabled,
                 proto.apiKey
             );

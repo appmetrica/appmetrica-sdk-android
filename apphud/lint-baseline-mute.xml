@@ -7,8 +7,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/apphud/impl/config/service/BundleToServiceApphudConfigConverterTest.java"
-            line="13"
+            file="src/test/java/io/appmetrica/analytics/apphud/impl/ApphudActivationConfigCheckerTest.java"
+            line="12"
             column="1"/>
     </issue>
 
@@ -18,8 +18,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/apphud/impl/config/client/ClientApphudConfigCheckerTest.java"
-            line="11"
+            file="src/test/java/io/appmetrica/analytics/apphud/impl/config/client/BundleToClientSideApphudConfigConverterTest.java"
+            line="14"
             column="1"/>
     </issue>
 
@@ -29,8 +29,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/apphud/impl/config/remote/RemoteApphudConfigBundleConverterTest.java"
-            line="13"
+            file="src/test/java/io/appmetrica/analytics/apphud/impl/config/service/ServiceSideApphudConfigToBundleConverterTest.java"
+            line="14"
             column="1"/>
     </issue>
 

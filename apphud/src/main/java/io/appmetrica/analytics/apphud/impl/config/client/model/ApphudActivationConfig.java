@@ -1,9 +1,9 @@
-package io.appmetrica.analytics.apphud.impl.config.client;
+package io.appmetrica.analytics.apphud.impl.config.client.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class ClientApphudConfig {
+public class ApphudActivationConfig {
 
     @Nullable
     private final String apiKey;
@@ -12,7 +12,7 @@ public class ClientApphudConfig {
     @Nullable
     private final String uuid;
 
-    public ClientApphudConfig(
+    public ApphudActivationConfig(
         @Nullable String apiKey,
         @Nullable String deviceId,
         @Nullable String uuid
@@ -40,7 +40,7 @@ public class ClientApphudConfig {
     @NonNull
     @Override
     public String toString() {
-        return "ClientModuleConfig{" +
+        return "ApphudActivationConfig{" +
             "apiKey='" + apiKey + '\'' +
             ", deviceId='" + deviceId + '\'' +
             ", uuid='" + uuid + '\'' +

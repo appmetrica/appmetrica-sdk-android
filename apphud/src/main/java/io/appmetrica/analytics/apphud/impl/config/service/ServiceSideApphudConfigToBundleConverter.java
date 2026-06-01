@@ -1,13 +1,14 @@
-package io.appmetrica.analytics.apphud.impl.config.remote;
+package io.appmetrica.analytics.apphud.impl.config.service;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.apphud.impl.Constants;
+import io.appmetrica.analytics.apphud.impl.config.service.model.ServiceSideApphudConfig;
 
-public class RemoteApphudConfigBundleConverter {
+public class ServiceSideApphudConfigToBundleConverter {
 
     @Nullable
-    public Bundle convert(@Nullable RemoteApphudConfig config) {
+    public Bundle convert(@Nullable ServiceSideApphudConfig config) {
         if (config == null) {
             return null;
         }

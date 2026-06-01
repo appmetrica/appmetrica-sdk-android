@@ -2,8 +2,7 @@ package io.appmetrica.analytics.apphud.impl;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfigChecker;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ApphudActivator {
@@ -13,17 +12,17 @@ public class ApphudActivator {
     private boolean activated = false;
 
     @NonNull
-    private final ClientApphudConfigChecker configChecker;
+    private final ApphudActivationConfigChecker configChecker;
 
     public ApphudActivator(
-        @NonNull ClientApphudConfigChecker configChecker
+        @NonNull ApphudActivationConfigChecker configChecker
     ) {
         this.configChecker = configChecker;
     }
 
     public synchronized void activateIfNecessary(
         @NonNull Context context,
-        @NonNull ClientApphudConfig config
+        @NonNull ApphudActivationConfig config
     ) {
         if (activated) {
             DebugLogger.INSTANCE.info(TAG, "Apphud has already been activated");

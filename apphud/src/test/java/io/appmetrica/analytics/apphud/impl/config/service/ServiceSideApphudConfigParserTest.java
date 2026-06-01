@@ -1,7 +1,8 @@
-package io.appmetrica.analytics.apphud.impl.config.remote;
+package io.appmetrica.analytics.apphud.impl.config.service;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.Constants;
+import io.appmetrica.analytics.apphud.impl.config.service.model.ServiceSideApphudConfig;
 import io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
@@ -13,14 +14,14 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class RemoteApphudConfigParserTest extends CommonTest {
+public class ServiceSideApphudConfigParserTest extends CommonTest {
 
     @Rule
     public MockedStaticRule<RemoteConfigJsonUtils> remoteConfigJsonUtilsRule =
         new MockedStaticRule<>(RemoteConfigJsonUtils.class);
 
     @NonNull
-    private final RemoteApphudConfigParser parser = new RemoteApphudConfigParser();
+    private final ServiceSideApphudConfigParser parser = new ServiceSideApphudConfigParser();
 
     @Test
     public void parse() throws JSONException {
@@ -35,7 +36,7 @@ public class RemoteApphudConfigParserTest extends CommonTest {
             Constants.Defaults.DEFAULT_FEATURE_STATE
         )).thenReturn(true);
 
-        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new RemoteApphudConfig(
+        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new ServiceSideApphudConfig(
             true,
             apiKey
         ));
@@ -54,7 +55,7 @@ public class RemoteApphudConfigParserTest extends CommonTest {
             Constants.Defaults.DEFAULT_FEATURE_STATE
         )).thenReturn(false);
 
-        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new RemoteApphudConfig(
+        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new ServiceSideApphudConfig(
             false,
             apiKey
         ));
@@ -70,7 +71,7 @@ public class RemoteApphudConfigParserTest extends CommonTest {
             Constants.Defaults.DEFAULT_FEATURE_STATE
         )).thenReturn(true);
 
-        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new RemoteApphudConfig(
+        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new ServiceSideApphudConfig(
             true,
             Constants.Defaults.DEFAULT_API_KEY
         ));
@@ -85,7 +86,7 @@ public class RemoteApphudConfigParserTest extends CommonTest {
             Constants.Defaults.DEFAULT_FEATURE_STATE
         )).thenReturn(true);
 
-        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new RemoteApphudConfig(
+        assertThat(parser.parse(rawData)).usingRecursiveComparison().isEqualTo(new ServiceSideApphudConfig(
             true,
             Constants.Defaults.DEFAULT_API_KEY
         ));

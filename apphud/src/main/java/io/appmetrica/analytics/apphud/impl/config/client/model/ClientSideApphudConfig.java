@@ -1,15 +1,15 @@
-package io.appmetrica.analytics.apphud.impl.config.service;
+package io.appmetrica.analytics.apphud.impl.config.client.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class ServiceApphudConfig {
+public class ClientSideApphudConfig {
 
     private final boolean enabled;
     @Nullable
     private final String apiKey;
 
-    public ServiceApphudConfig(
+    public ClientSideApphudConfig(
         boolean enabled,
         @Nullable String apiKey
     ) {
@@ -29,7 +29,7 @@ public class ServiceApphudConfig {
     @NonNull
     @Override
     public String toString() {
-        return "ServiceModuleConfig{" +
+        return "ClientSideApphudConfig{" +
             "enabled=" + enabled +
             ", apiKey='" + apiKey + '\'' +
             '}';

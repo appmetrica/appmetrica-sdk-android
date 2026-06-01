@@ -1,6 +1,7 @@
-package io.appmetrica.analytics.apphud.impl.config.client;
+package io.appmetrica.analytics.apphud.impl;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +10,14 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class ClientApphudConfigCheckerTest extends CommonTest {
+public class ApphudActivationConfigCheckerTest extends CommonTest {
 
     @NonNull
-    private final ClientApphudConfigChecker checker = new ClientApphudConfigChecker();
+    private final ApphudActivationConfigChecker checker = new ApphudActivationConfigChecker();
 
     @Test
     public void doesNeedUpdateIfFull() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "some_api_key",
             "some_device_id",
             "some_uuid"
@@ -31,7 +32,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfEmptyApiKey() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "",
             "some_device_id",
             "some_uuid"
@@ -41,7 +42,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfNullApiKey() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             null,
             "some_device_id",
             "some_uuid"
@@ -51,7 +52,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfEmptyDeviceId() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "some_api_key",
             "",
             "some_uuid"
@@ -61,7 +62,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfNullDeviceId() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "some_api_key",
             null,
             "some_uuid"
@@ -71,7 +72,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfEmptyUuid() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "some_api_key",
             "some_device_id",
             ""
@@ -81,7 +82,7 @@ public class ClientApphudConfigCheckerTest extends CommonTest {
 
     @Test
     public void doesNeedUpdateIfNullUuid() {
-        ClientApphudConfig config = new ClientApphudConfig(
+        ApphudActivationConfig config = new ApphudActivationConfig(
             "some_api_key",
             "some_device_id",
             null

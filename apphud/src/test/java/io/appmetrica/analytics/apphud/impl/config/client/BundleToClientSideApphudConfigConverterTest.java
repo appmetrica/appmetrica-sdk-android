@@ -1,8 +1,9 @@
-package io.appmetrica.analytics.apphud.impl.config.service;
+package io.appmetrica.analytics.apphud.impl.config.client;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.Constants;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ClientSideApphudConfig;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +12,10 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class BundleToServiceApphudConfigConverterTest extends CommonTest {
+public class BundleToClientSideApphudConfigConverterTest extends CommonTest {
 
     @NonNull
-    private final BundleToServiceApphudConfigConverter parser = new BundleToServiceApphudConfigConverter();
+    private final BundleToClientSideApphudConfigConverter parser = new BundleToClientSideApphudConfigConverter();
 
     @Test
     public void parse() {
@@ -23,7 +24,7 @@ public class BundleToServiceApphudConfigConverterTest extends CommonTest {
         rawData.putBoolean(Constants.ServiceConfig.ENABLED_KEY, true);
         rawData.putString(Constants.ServiceConfig.API_KEY_KEY, apiKey);
 
-        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ServiceApphudConfig(
+        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ClientSideApphudConfig(
             true,
             apiKey
         ));
@@ -35,7 +36,7 @@ public class BundleToServiceApphudConfigConverterTest extends CommonTest {
         Bundle rawData = new Bundle();
         rawData.putString(Constants.ServiceConfig.API_KEY_KEY, apiKey);
 
-        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ServiceApphudConfig(
+        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ClientSideApphudConfig(
             false,
             apiKey
         ));
@@ -46,7 +47,7 @@ public class BundleToServiceApphudConfigConverterTest extends CommonTest {
         Bundle rawData = new Bundle();
         rawData.putBoolean(Constants.ServiceConfig.ENABLED_KEY, true);
 
-        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ServiceApphudConfig(
+        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ClientSideApphudConfig(
             true,
             Constants.Defaults.DEFAULT_API_KEY
         ));
@@ -56,7 +57,7 @@ public class BundleToServiceApphudConfigConverterTest extends CommonTest {
     public void parseIfNoEnabledAndApiKeyField() {
         Bundle rawData = new Bundle();
 
-        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ServiceApphudConfig(
+        assertThat(parser.fromBundle(rawData)).usingRecursiveComparison().isEqualTo(new ClientSideApphudConfig(
             false,
             Constants.Defaults.DEFAULT_API_KEY
         ));

@@ -1,11 +1,12 @@
-package io.appmetrica.analytics.apphud.impl.config.client;
+package io.appmetrica.analytics.apphud.impl;
 
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
 
-public class ClientApphudConfigChecker {
+public class ApphudActivationConfigChecker {
 
-    public boolean doesNeedUpdate(@Nullable ClientApphudConfig config) {
+    public boolean doesNeedUpdate(@Nullable ApphudActivationConfig config) {
         return config == null ||
             TextUtils.isEmpty(config.getApiKey()) ||
             TextUtils.isEmpty(config.getDeviceId()) ||

@@ -2,8 +2,7 @@ package io.appmetrica.analytics.apphud.impl;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
-import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfigChecker;
+import io.appmetrica.analytics.apphud.impl.config.client.model.ApphudActivationConfig;
 import io.appmetrica.analytics.apphud.internal.ApphudWrapper;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
@@ -30,9 +29,9 @@ public class ApphudActivatorTest extends CommonTest {
     @Mock
     private Context context;
     @Mock
-    private ClientApphudConfigChecker checker;
+    private ApphudActivationConfigChecker checker;
     @Mock
-    private ClientApphudConfig config;
+    private ApphudActivationConfig config;
     @Mock
     private ApphudWrapper apphudWrapper;
 
