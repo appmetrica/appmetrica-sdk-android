@@ -42,7 +42,7 @@ internal class AppLovinIlrdConverter {
             return 0.0 to Constants.Payload.ORIGINAL_AD_REVENUE_NO_VALUE
         }
         val raw = data.getDouble("revenue")
-        if (!raw.isFinite()) {
+        if (!raw.isFinite() || raw < 0) {
             return 0.0 to raw.toString()
         }
         return raw to null

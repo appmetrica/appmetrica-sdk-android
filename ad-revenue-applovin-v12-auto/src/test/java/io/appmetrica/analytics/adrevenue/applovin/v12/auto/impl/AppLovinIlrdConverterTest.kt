@@ -116,7 +116,7 @@ internal class AppLovinIlrdConverterTest : CommonTest() {
                 arrayOf(true, Double.NaN, BigDecimal.valueOf(0.0), "NaN"),
                 arrayOf(true, Double.POSITIVE_INFINITY, BigDecimal.valueOf(0.0), "Infinity"),
                 arrayOf(true, Double.NEGATIVE_INFINITY, BigDecimal.valueOf(0.0), "-Infinity"),
-                arrayOf(true, -1.0, BigDecimal.valueOf(-1.0), null),
+                arrayOf(true, -1.0, BigDecimal.valueOf(0.0), "-1.0"),
                 arrayOf(true, 0.0, BigDecimal.valueOf(0.0), null),
                 arrayOf(true, 1.5, BigDecimal.valueOf(1.5), null),
             )
