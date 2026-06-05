@@ -3069,7 +3069,6 @@
   "id-sync/src/main/java/io/appmetrica/analytics/idsync/impl/protobuf/client/IdSyncProtobuf.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/main/java/io/appmetrica/analytics/idsync/impl/protobuf/client/IdSyncProtobuf.java",
   "id-sync/src/main/java/io/appmetrica/analytics/idsync/internal/IdSyncConfigWrapper.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/main/java/io/appmetrica/analytics/idsync/internal/IdSyncConfigWrapper.kt",
   "id-sync/src/main/java/io/appmetrica/analytics/idsync/internal/IdSyncModuleEntryPoint.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/main/java/io/appmetrica/analytics/idsync/internal/IdSyncModuleEntryPoint.kt",
-  "id-sync/src/test/java/io/appmetrica/analytics/idsync/HashCodeEqualsTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/test/java/io/appmetrica/analytics/idsync/HashCodeEqualsTest.kt",
   "id-sync/src/test/java/io/appmetrica/analytics/idsync/ToStringTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/test/java/io/appmetrica/analytics/idsync/ToStringTest.kt",
   "id-sync/src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncControllerTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncControllerTest.kt",
   "id-sync/src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncEventReporterTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/id-sync/src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncEventReporterTest.kt",

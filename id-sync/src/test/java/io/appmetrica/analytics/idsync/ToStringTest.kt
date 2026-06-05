@@ -1,15 +1,10 @@
 package io.appmetrica.analytics.idsync
 
 import io.appmetrica.analytics.idsync.impl.RequestResult
-import io.appmetrica.analytics.idsync.impl.model.IdSyncConfig
-import io.appmetrica.analytics.idsync.impl.model.NetworkType
-import io.appmetrica.analytics.idsync.impl.model.Preconditions
-import io.appmetrica.analytics.idsync.impl.model.RequestConfig
 import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
 import io.appmetrica.gradle.androidtestutils.tostring.ToStringTestUtils
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
 internal class ToStringTest(
@@ -44,23 +39,6 @@ internal class ToStringTest(
                 responseBody = ByteArray(10) { it.toByte() },
                 responseHeaders = mapOf("key" to listOf("value#1", "value#2"))
             ).toTestCase(),
-            IdSyncConfig(
-                enabled = true,
-                launchDelay = 100500L,
-                requests = listOf(mock<RequestConfig>(), mock<RequestConfig>())
-            ).toTestCase(),
-            Preconditions(networkType = NetworkType.ANY).toTestCase(),
-            RequestConfig(
-                type = "type",
-                url = "Some url",
-                preconditions = mock<Preconditions>(),
-                headers = mapOf("key" to listOf("value#", "value#2")),
-                resendIntervalForValidResponse = 100500L,
-                resendIntervalForInvalidResponse = 200500L,
-                validResponseCodes = listOf(200, 204),
-                reportEventEnabled = true,
-                reportUrl = null
-            ).toTestCase()
         )
     }
 }

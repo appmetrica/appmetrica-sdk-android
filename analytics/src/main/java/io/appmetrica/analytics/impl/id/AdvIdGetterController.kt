@@ -23,36 +23,11 @@ internal class AdvIdGetterController(
         UNKNOWN
     }
 
-    internal class CanTrackIdentifiers(
+    internal data class CanTrackIdentifiers(
         val canTrackGaid: State,
         val canTrackHoaid: State,
         val canTrackYandexAdvId: State
-    ) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as CanTrackIdentifiers
-
-            if (canTrackGaid != other.canTrackGaid) return false
-            if (canTrackHoaid != other.canTrackHoaid) return false
-            if (canTrackYandexAdvId != other.canTrackYandexAdvId) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = canTrackGaid.hashCode()
-            result = 31 * result + canTrackHoaid.hashCode()
-            result = 31 * result + canTrackYandexAdvId.hashCode()
-            return result
-        }
-
-        override fun toString(): String {
-            return "CanTrackIdentifiers(canTrackGaid=$canTrackGaid, canTrackHoaid=$canTrackHoaid, " +
-                "canTrackYandexAdvId=$canTrackYandexAdvId)"
-        }
-    }
+    )
 
     private val storage: PreferencesServiceDbStorage = GlobalServiceLocator.getInstance().servicePreferences
 
