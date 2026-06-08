@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Base64;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.PreloadInfo;
+import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -32,6 +33,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressLint("RobolectricUsage") // Base64
 @RunWith(RobolectricTestRunner.class)
@@ -107,6 +110,53 @@ public class EventsManagerTest extends CommonTest {
             mPublicLogger
         );
         assertThat(report.getExtras()).isEqualTo(extras);
+    }
+
+    @Test
+    public void appMetricaEventReportEntryShouldContainCustomReportType() {
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
+        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
+    }
+
+    @Test
+    public void appMetricaEventReportEntryShouldContainExpectedSubtype() {
+        int type = new Random().nextInt();
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
+        when(eventData.getType()).thenReturn(type);
+        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        assertThat(report.getCustomType()).isEqualTo(type);
+    }
+
+    @Test
+    public void appMetricaEventReportEntryShouldContainExpectedName() {
+        String name = "myEventName";
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
+        when(eventData.getName()).thenReturn(name);
+        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        assertThat(report.getName()).isEqualTo(name);
+    }
+
+    @Test
+    public void appMetricaEventReportEntryShouldContainExpectedData() {
+        byte[] data = new byte[]{10, 20, 30};
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        when(eventData.getData()).thenReturn(data);
+        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        assertThat(report.getValueBytes()).isEqualTo(data);
+    }
+
+    @Test
+    public void appMetricaEventReportEntryShouldCombineBytesTruncated() {
+        int eventBytesTruncated = 42;
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        when(eventData.getData()).thenReturn(new byte[]{1});
+        when(eventData.getBytesTruncated()).thenReturn(eventBytesTruncated);
+        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        assertThat(report.getBytesTruncated()).isEqualTo(eventBytesTruncated);
     }
 
     @Test

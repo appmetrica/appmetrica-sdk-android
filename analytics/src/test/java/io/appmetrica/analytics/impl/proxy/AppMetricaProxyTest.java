@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ExternalAttribution;
@@ -679,6 +680,16 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).reportExternalAdRevenue(value);
         order.verify(mSynchronousStageExecutor).reportExternalAdRevenue(value);
         order.verify(moduleAdRevenueProcessor).process(value);
+    }
+
+    @Test
+    public void reportAppMetricaEvent() {
+        AppMetricaEvent event = mock(AppMetricaEvent.class);
+        mProxy.reportEvent(event);
+        InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mMainReporter);
+        order.verify(mBarrier).reportEvent(event);
+        order.verify(mSynchronousStageExecutor).reportEvent(event);
+        order.verify(mMainReporter).reportEvent(event);
     }
 
     @Test

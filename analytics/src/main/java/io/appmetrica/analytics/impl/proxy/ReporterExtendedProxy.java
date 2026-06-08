@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.internal.backport.Provider;
@@ -439,6 +440,18 @@ public class ReporterExtendedProxy implements IReporterExtended {
             @Override
             public void run() {
                 getReporter().reportAdRevenue(adRevenue, autoCollected);
+            }
+        });
+    }
+
+    @Override
+    public void reportEvent(@NonNull final AppMetricaEvent event) {
+        barrier.reportEvent(event);
+        synchronousStageExecutor.reportEvent(event);
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getReporter().reportEvent(event);
             }
         });
     }

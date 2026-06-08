@@ -4,6 +4,7 @@ import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
@@ -133,6 +134,10 @@ internal class ReporterBarrier {
     fun activate(config: ReporterConfig?) {}
 
     fun reportEvent(moduleEvent: ModuleEvent?) {}
+
+    fun reportEvent(event: AppMetricaEvent?) {
+        // no event check since it is from AppMetrica modules
+    }
 
     fun setSessionExtra(key: String?, value: ByteArray?) {}
 }

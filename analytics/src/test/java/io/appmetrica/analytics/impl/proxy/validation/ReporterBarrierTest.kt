@@ -5,6 +5,7 @@ import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.ValidationException
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
@@ -15,7 +16,7 @@ import org.mockito.kotlin.mock
 
 internal class ReporterBarrierTest : CommonTest() {
 
-    private val mBarrier = ReporterBarrier()
+    private val mBarrier by setUp { ReporterBarrier() }
 
     @Test
     fun reportEvent() {
@@ -225,5 +226,10 @@ internal class ReporterBarrierTest : CommonTest() {
     @Test(expected = ValidationException::class)
     fun reportAdRevenueWithBooleanIfAdRevenueIsNull() {
         mBarrier.reportAdRevenue(null, true)
+    }
+
+    @Test
+    fun reportAppMetricaEvent() {
+        mBarrier.reportEvent(mock<AppMetricaEvent>())
     }
 }

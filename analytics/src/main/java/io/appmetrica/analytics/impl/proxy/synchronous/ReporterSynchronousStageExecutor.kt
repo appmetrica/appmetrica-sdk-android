@@ -4,6 +4,7 @@ import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
@@ -25,6 +26,8 @@ internal class ReporterSynchronousStageExecutor {
     fun reportEvent(eventName: String, attributes: Map<String?, Any?>?) {}
 
     fun reportEvent(moduleEvent: ModuleEvent) {}
+
+    fun reportEvent(event: AppMetricaEvent) {}
 
     fun reportError(message: String, error: Throwable?): Throwable {
         return error ?: AppMetricaThrowable().apply {

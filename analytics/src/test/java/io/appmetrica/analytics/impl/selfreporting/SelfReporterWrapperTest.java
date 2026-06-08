@@ -4,6 +4,7 @@ import android.content.Context;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
@@ -476,6 +477,24 @@ public class SelfReporterWrapperTest extends CommonTest {
         verify(mReporter, never()).reportAdRevenue(adRevenue);
         mSelfReporterWrapper.onInitializationFinished(mContext);
         verify(mReporter).reportAdRevenue(adRevenue);
+    }
+
+    @Test
+    public void reportAppMetricaEventInitialized() {
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        AppMetricaEvent event = mock(AppMetricaEvent.class);
+        mSelfReporterWrapper.reportEvent(event);
+        verify(mReporter).reportEvent(event);
+    }
+
+    @Test
+    public void reportAppMetricaEventNotInitialized() {
+        AppMetricaEvent event = mock(AppMetricaEvent.class);
+        mSelfReporterWrapper.reportEvent(event);
+        verify(mReporter, never()).reportEvent(event);
+
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        verify(mReporter).reportEvent(event);
     }
 
     @Test

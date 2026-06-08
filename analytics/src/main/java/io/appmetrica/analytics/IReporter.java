@@ -2,6 +2,7 @@ package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -29,9 +30,9 @@ public interface IReporter {
      *
      * <p> <b>WARNING:</b> Frequent use of the method can lead to increasing outgoing internet traffic and
      * energy consumption.
-     * 
-     * @see ReporterConfig.Builder#withMaxReportsCount(int) 
-     * @see ReporterConfig.Builder#withDispatchPeriodSeconds(int) 
+     *
+     * @see ReporterConfig.Builder#withMaxReportsCount(int)
+     * @see ReporterConfig.Builder#withDispatchPeriodSeconds(int)
      */
     void sendEventsBuffer();
 
@@ -273,4 +274,13 @@ public interface IReporter {
      *                   Can be received by calling {@link Thread#getAllStackTraces()}.
      */
     void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads);
+
+    /**
+     * Sends a typed custom event.
+     *
+     * @param event Event to send. Binary payload schema is defined by the module implementation.
+     *
+     * @throws java.lang.IllegalArgumentException If {@code event} is null or its payload is empty.
+     */
+    void reportEvent(@NonNull AppMetricaEvent event);
 }

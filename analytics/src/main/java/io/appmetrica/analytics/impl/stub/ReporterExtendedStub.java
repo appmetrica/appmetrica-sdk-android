@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.IReporterExtended;
@@ -149,6 +150,11 @@ public class ReporterExtendedStub implements IReporterExtended {
 
     @Override
     public void reportAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
+        //Do nothing
+    }
+
+    @Override
+    public void reportEvent(@NonNull AppMetricaEvent event) {
         //Do nothing
     }
 }

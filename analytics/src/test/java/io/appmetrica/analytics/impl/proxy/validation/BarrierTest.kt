@@ -16,6 +16,7 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.ValidationException
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.profile.UserProfile
@@ -33,7 +34,7 @@ internal class BarrierTest : CommonTest() {
         on { isActivated } doReturn true
     }
 
-    private val mBarrier = Barrier(appMetricaFacadeProvider)
+    private val mBarrier by setUp { Barrier(appMetricaFacadeProvider) }
 
     @Test
     fun enableActivityAutoTracking() {
@@ -610,5 +611,10 @@ internal class BarrierTest : CommonTest() {
     @Test(expected = ValidationException::class)
     fun `reportAnr for null all threads`() {
         mBarrier.reportAnr(null)
+    }
+
+    @Test
+    fun reportAppMetricaEvent() {
+        mBarrier.reportEvent(mock<AppMetricaEvent>())
     }
 }

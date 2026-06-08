@@ -30,6 +30,13 @@
                     "version": {
                         "requires": "2.2"
                     }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-core-api",
+                    "version": {
+                        "requires": "8.4.0"
+                    }
                 }
             ],
             "files": [
@@ -125,13 +132,6 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-core-api",
-                    "version": {
-                        "requires": "8.4.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
                         "requires": "8.4.0"
@@ -184,6 +184,13 @@
                     "module": "installreferrer",
                     "version": {
                         "requires": "2.2"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-core-api",
+                    "version": {
+                        "requires": "8.4.0"
                     }
                 }
             ],

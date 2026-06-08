@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
+import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
@@ -301,6 +303,13 @@ public abstract class BaseReporter implements IBaseReporter {
                 moduleEvent.getAttributes()
             );
         }
+    }
+
+    public void reportEvent(@NonNull final AppMetricaEvent event) {
+        final AppMetricaEventData eventData = event.getEventData();
+        final CounterReport counterReport = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        mReportsHandler.reportEvent(counterReport, mReporterEnvironment, null);
+        mPublicLogger.info("AppMetricaEvent received: " + eventData.getDescription());
     }
 
     @Override

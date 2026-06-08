@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.ModuleEvent;
+import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
@@ -336,6 +337,22 @@ public final class EventsManager {
         counterReport.setExtras(Collections.singletonMap(key, value == null ? new byte[0] : value));
 
         return counterReport;
+    }
+
+    static CounterReport appMetricaEventReportEntry(
+        @NonNull AppMetricaEventData event,
+        @NonNull PublicLogger logger
+    ) {
+        CounterReport report = new ClientCounterReport(
+            event.getData(),
+            event.getName(),
+            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
+            logger
+        );
+        report.setCustomType(event.getType());
+        report.setBytesTruncated(report.getBytesTruncated() + event.getBytesTruncated());
+
+        return report;
     }
 
     public static CounterReport clientExternalAttributionEntry(

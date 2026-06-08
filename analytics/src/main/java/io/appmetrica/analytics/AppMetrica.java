@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaPluginsImplProvider;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider;
@@ -115,6 +116,17 @@ public final class AppMetrica {
      */
     public static void reportEvent(@NonNull String eventName) {
         AppMetricaProxyProvider.getProxy().reportEvent(eventName);
+    }
+
+    /**
+     * Sends a typed custom event.
+     *
+     * @param event Event to send. Binary payload schema is defined by the module implementation.
+     *
+     * @throws java.lang.IllegalArgumentException If {@code event} is null or its payload is empty.
+     */
+    public static void reportEvent(@NonNull AppMetricaEvent event) {
+        AppMetricaProxyProvider.getProxy().reportEvent(event);
     }
 
     /**
@@ -565,7 +577,7 @@ public final class AppMetrica {
 
     /**
      * <p>Gets specific startup parameters based on the options in {@link StartupParamsCallback}.
-     * 
+     *
      * Parameters might not be available right away. When they do arrive,
      * the <code>callback</code> is informed instantly. If the parameters are already there,
      * the <code>callback</code> also gets notified right away.
@@ -575,7 +587,7 @@ public final class AppMetrica {
      * and will be removed automatically, which can cause them to disappear unexpectedly
      * after garbage collection (<code>GC</code>).</p>
      *
-     * {@code NOTE}: This method can be called even without initializing via 
+     * {@code NOTE}: This method can be called even without initializing via
      * {@link AppMetrica#activate(Context, AppMetricaConfig)}, but it will take more time to get the startup identifiers.
      *
      * @param context Context object
@@ -584,7 +596,7 @@ public final class AppMetrica {
      *               If the list is empty, the default request is for {@link StartupParamsCallback#APPMETRICA_UUID},
      *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID},
      *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID_HASH}.
-     */    
+     */
     public static void requestStartupParams(
             @NonNull final Context context,
             @NonNull final StartupParamsCallback callback,
@@ -632,7 +644,7 @@ public final class AppMetrica {
     }
 
     /**
-     * Sends an ANR event (the application is not responding) manually. 
+     * Sends an ANR event (the application is not responding) manually.
      * It is an alternative for automatic ANR tracking, which is enabled in the ${@link AppMetricaConfig} configuration
      * during SDK activation.
      *
@@ -641,7 +653,7 @@ public final class AppMetrica {
      *
      * @see AppMetricaConfig.Builder#withAnrMonitoring(boolean)
      * @see AppMetricaConfig.Builder#withAnrMonitoringTimeout(int)
-     * @see AppMetrica#activate(Context, AppMetricaConfig) 
+     * @see AppMetrica#activate(Context, AppMetricaConfig)
      */
     public static void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
         AppMetricaProxyProvider.getProxy().reportAnr(allThreads);

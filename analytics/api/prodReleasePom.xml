@@ -41,6 +41,12 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-core-api</artifactId>
+      <version>8.4.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue</artifactId>
       <version>8.4.0</version>
       <scope>runtime</scope>
@@ -96,12 +102,6 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-appsetid</artifactId>
-      <version>8.4.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-api</artifactId>
       <version>8.4.0</version>
       <scope>runtime</scope>
     </dependency>

@@ -3,6 +3,8 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
+import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher;
@@ -70,6 +72,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -700,6 +703,23 @@ public abstract class BaseReporterTest extends BaseReporterData {
             any(ReporterEnvironment.class),
             eq(serviceDataReporterType),
             eq(attributes)
+        );
+    }
+
+    @Test
+    public void reportAppMetricaEvent() {
+        AppMetricaEventData eventData = mock(AppMetricaEventData.class);
+        AppMetricaEvent event = mock(AppMetricaEvent.class);
+        when(eventData.getData()).thenReturn("event data".getBytes());
+        when(event.getEventData()).thenReturn(eventData);
+        when(EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger)).thenReturn(mockedEvent);
+
+        getReporter().reportEvent(event);
+
+        verify(mReportsHandler).reportEvent(
+            same(mockedEvent),
+            any(ReporterEnvironment.class),
+            isNull()
         );
     }
 

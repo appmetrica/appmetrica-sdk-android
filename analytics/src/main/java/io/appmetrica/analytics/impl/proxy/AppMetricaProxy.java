@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.AnrListener;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -556,6 +557,17 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         barrier.warmUpForSelfProcess(context);
         synchronousStageExecutor.warmUpForSelfReporter(context);
         getProvider().getInitializedImpl(context);
+    }
+
+    public void reportEvent(@NonNull final AppMetricaEvent event) {
+        barrier.reportEvent(event);
+        synchronousStageExecutor.reportEvent(event);
+        getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                getMainReporter().reportEvent(event);
+            }
+        });
     }
 
     @VisibleForTesting

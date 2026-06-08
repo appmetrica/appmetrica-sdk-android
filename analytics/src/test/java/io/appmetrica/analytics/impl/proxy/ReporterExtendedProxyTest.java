@@ -4,6 +4,7 @@ import android.content.Context;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
@@ -421,6 +422,16 @@ public class ReporterExtendedProxyTest extends CommonTest {
         mReporterExtendedProxy.reportEvent(moduleEvent);
         InOrder inOrder = Mockito.inOrder(mReporter);
         inOrder.verify(mReporter).reportEvent(moduleEvent);
+    }
+
+    @Test
+    public void reportAppMetricaEvent() {
+        AppMetricaEvent event = mock(AppMetricaEvent.class);
+        mReporterExtendedProxy.reportEvent(event);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportEvent(event);
+        inOrder.verify(mSynchronousStageExecutor).reportEvent(event);
+        inOrder.verify(mReporter).reportEvent(event);
     }
 
     @Test

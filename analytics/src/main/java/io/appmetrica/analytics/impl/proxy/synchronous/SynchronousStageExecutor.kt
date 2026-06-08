@@ -16,6 +16,7 @@ import io.appmetrica.analytics.ExternalAttribution
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
+import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
@@ -65,6 +66,8 @@ internal class SynchronousStageExecutor @VisibleForTesting constructor(
     fun sendEventsBuffer() {}
 
     fun reportEvent(eventName: String) {}
+
+    fun reportEvent(event: AppMetricaEvent) {}
 
     fun reportEvent(
         eventName: String,
