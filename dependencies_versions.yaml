@@ -13,7 +13,7 @@
     group: "com.applovin"
     name: "applovin-sdk"
     from: "12.5.0"
-    to: "13.6.2"
+    to: "13.6.3"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-fyber-v3"
   dependencies:
@@ -85,7 +85,7 @@
     group: "io.airbridge"
     name: "sdk-android"
     from: "4.7.1"
-    to: "4.9.4"
+    to: "4.10.0"
   - repository: "https://maven.singular.net"
     group: "com.singular.sdk"
     name: "singular_sdk"
