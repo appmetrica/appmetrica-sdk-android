@@ -141,28 +141,13 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
         verifyNoInteractions(idSyncController)
     }
 
-    private fun configProtoConverter(): IdSyncConfigToProtoConverter {
-        assertThat(configProtoConverterRule.constructionMock.constructed()).hasSize(1)
-        return configProtoConverterRule.constructionMock.constructed().first()
-    }
+    private fun configProtoConverter(): IdSyncConfigToProtoConverter = configProtoConverterRule.single()
 
-    private fun configParser(): IdSyncConfigParser {
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
-        return configParserRule.constructionMock.constructed().first()
-    }
+    private fun configParser(): IdSyncConfigParser = configParserRule.single()
 
-    private fun configToBytesConverter(): IdSyncConfigToProtoBytesConverter {
-        assertThat(configToBytesConverterRule.constructionMock.constructed()).hasSize(1)
-        return configToBytesConverterRule.constructionMock.constructed().first()
-    }
+    private fun configToBytesConverter(): IdSyncConfigToProtoBytesConverter = configToBytesConverterRule.single()
 
-    private fun wrapperJsonParser(): IdSyncConfigWrapperJsonParser {
-        assertThat(wrapperJsonParserRule.constructionMock.constructed()).hasSize(1)
-        return wrapperJsonParserRule.constructionMock.constructed().first()
-    }
+    private fun wrapperJsonParser(): IdSyncConfigWrapperJsonParser = wrapperJsonParserRule.single()
 
-    private fun wrapperProtobufConverter(): IdSyncConfigWrapperProtobufConverter {
-        assertThat(wrapperProtobufConverterRule.constructionMock.constructed()).hasSize(1)
-        return wrapperProtobufConverterRule.constructionMock.constructed().first()
-    }
+    private fun wrapperProtobufConverter(): IdSyncConfigWrapperProtobufConverter = wrapperProtobufConverterRule.single()
 }

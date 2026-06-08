@@ -83,14 +83,8 @@ internal class AdRevenueOtherServiceModuleEntryPointTest : CommonTest() {
         verify(bundleConverter()).convert(notNull())
     }
 
-    private fun bundleConverter(): ServiceSideAdRevenueOtherConfigToBundleConverter {
-        assertThat(bundleConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(bundleConverterRule.argumentInterceptor.flatArguments()).isEmpty()
-        return bundleConverterRule.constructionMock.constructed().first()
-    }
+    private fun bundleConverter(): ServiceSideAdRevenueOtherConfigToBundleConverter =
+        bundleConverterRule.singleWithArgs()
 
-    private fun configParser(): ServiceSideAdRevenueOtherConfigParser {
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
-        return configParserRule.constructionMock.constructed().first()
-    }
+    private fun configParser(): ServiceSideAdRevenueOtherConfigParser = configParserRule.single()
 }

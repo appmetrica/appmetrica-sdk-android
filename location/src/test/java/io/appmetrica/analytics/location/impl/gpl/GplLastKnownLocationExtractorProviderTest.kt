@@ -46,11 +46,7 @@ internal class GplLastKnownLocationExtractorProviderTest : CommonTest() {
             .containsExactly(context, locationPermissionResolutionStrategy(), listener, executor)
     }
 
-    private fun locationPermissionResolutionStrategy(): SinglePermissionStrategy {
-        assertThat(singlePermissionStrategyMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(singlePermissionStrategyMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(permissionExtractor, Manifest.permission.ACCESS_COARSE_LOCATION)
-        return singlePermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun locationPermissionResolutionStrategy(): SinglePermissionStrategy =
+        singlePermissionStrategyMockedConstructionRule
+            .singleWithArgs(permissionExtractor, Manifest.permission.ACCESS_COARSE_LOCATION)
 }

@@ -69,11 +69,7 @@ internal class PassiveLocationReceiverProviderTest : CommonTest() {
             )
     }
 
-    private fun fineLocationPermissionResolutionStrategy(): SinglePermissionStrategy {
-        assertThat(singlePermissionStrategyMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(singlePermissionStrategyMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(permissionExtractor, Manifest.permission.ACCESS_FINE_LOCATION)
-        return singlePermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun fineLocationPermissionResolutionStrategy(): SinglePermissionStrategy =
+        singlePermissionStrategyMockedConstructionRule
+            .singleWithArgs(permissionExtractor, Manifest.permission.ACCESS_FINE_LOCATION)
 }

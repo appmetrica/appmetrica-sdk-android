@@ -347,19 +347,11 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
-    private fun aesEncrypter(): AESEncrypter {
-        assertThat(aesEncrypterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(aesEncrypterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(AESEncrypter.DEFAULT_ALGORITHM, password, iv)
-        return aesEncrypterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun aesEncrypter(): AESEncrypter =
+        aesEncrypterMockedConstructionRule.singleWithArgs(AESEncrypter.DEFAULT_ALGORITHM, password, iv)
 
-    private fun aesCredentialProvider(): AESCredentialProvider {
-        assertThat(aesCredentialProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(aesCredentialProviderMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context)
-        return aesCredentialProviderMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun aesCredentialProvider(): AESCredentialProvider =
+        aesCredentialProviderMockedConstructionRule.singleWithArgs(context)
 
     private fun interceptStartupState(): StartupStateModel {
         verify(protobufStateStorage).save(startupStateModelCaptor.capture())
@@ -392,10 +384,6 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         )
     }
 
-    private fun startupStorage(): StartupState.Storage {
-        assertThat(startupStateStorageMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(startupStateStorageMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context)
-        return startupStateStorageMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun startupStorage(): StartupState.Storage =
+        startupStateStorageMockedConstructionRule.singleWithArgs(context)
 }

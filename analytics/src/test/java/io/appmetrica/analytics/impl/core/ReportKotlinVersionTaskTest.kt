@@ -118,15 +118,7 @@ internal class ReportKotlinVersionTaskTest : CommonTest() {
         verify(preferences).putLastKotlinVersionSendTime(currentTimeMillis)
     }
 
-    private fun extractTimePassedChecker(): TimePassedChecker {
-        assertThat(timePassedCheckerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(timePassedCheckerMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return timePassedCheckerMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun extractTimePassedChecker(): TimePassedChecker = timePassedCheckerMockedConstructionRule.singleWithArgs()
 
-    private fun extractTimeProvider(): SystemTimeProvider {
-        assertThat(systemTimeProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(systemTimeProviderMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return systemTimeProviderMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun extractTimeProvider(): SystemTimeProvider = systemTimeProviderMockedConstructionRule.singleWithArgs()
 }

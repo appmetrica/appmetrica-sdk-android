@@ -115,17 +115,8 @@ internal class TelephonyDataProviderTest : CommonTest() {
             constructed[1] as DummyTelephonyInfoAdapterApplier<MobileConnectionDescription>
     }
 
-    private fun simInfoExtractor(): SimInfoExtractor {
-        assertThat(simInfoExtractorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(simInfoExtractorMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context)
-        return simInfoExtractorMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun simInfoExtractor(): SimInfoExtractor = simInfoExtractorMockedConstructionRule.singleWithArgs(context)
 
-    private fun mobileConnectionDescriptionExtractor(): MobileConnectionDescriptionExtractor {
-        assertThat(mobileConnectionDescriptionExtractorMockedRule.constructionMock.constructed()).hasSize(1)
-        assertThat(mobileConnectionDescriptionExtractorMockedRule.argumentInterceptor.flatArguments())
-            .containsExactly(context)
-        return mobileConnectionDescriptionExtractorMockedRule.constructionMock.constructed().first()
-    }
+    private fun mobileConnectionDescriptionExtractor(): MobileConnectionDescriptionExtractor =
+        mobileConnectionDescriptionExtractorMockedRule.singleWithArgs(context)
 }

@@ -99,15 +99,7 @@ internal class SessionExtrasStorageTest : CommonTest() {
         verify(binaryDataHelper).insert(dbKey, valueFromDb)
     }
 
-    private fun converter(): SessionExtrasConverter {
-        assertThat(converterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(converterMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return converterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun converter(): SessionExtrasConverter = converterMockedConstructionRule.singleWithArgs()
 
-    private fun serializer(): SessionExtrasSerializer {
-        assertThat(serializerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(serializerMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return serializerMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun serializer(): SessionExtrasSerializer = serializerMockedConstructionRule.singleWithArgs()
 }

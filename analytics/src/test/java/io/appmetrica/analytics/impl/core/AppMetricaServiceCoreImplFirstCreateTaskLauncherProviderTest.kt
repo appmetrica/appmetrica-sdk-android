@@ -37,18 +37,10 @@ internal class AppMetricaServiceCoreImplFirstCreateTaskLauncherProviderTest : Co
         checkMetricaCoreImplFirstCreateTaskProvider()
     }
 
-    private fun metricaCoreImplFirstCreateTaskLauncher(): CoreImplFirstCreateTaskLauncher {
-        assertThat(coreImplFirstCreateTaskLauncherMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(coreImplFirstCreateTaskLauncherMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(tasks)
-        return coreImplFirstCreateTaskLauncherMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun metricaCoreImplFirstCreateTaskLauncher(): CoreImplFirstCreateTaskLauncher =
+        coreImplFirstCreateTaskLauncherMockedConstructionRule.singleWithArgs(tasks)
 
     private fun checkMetricaCoreImplFirstCreateTaskProvider() {
-        assertThat(coreImplFirstCreateTaskProviderMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(coreImplFirstCreateTaskProviderMockedConstructionRule.argumentInterceptor.flatArguments())
-            .isEmpty()
+        coreImplFirstCreateTaskProviderMockedConstructionRule.singleWithArgs()
     }
 }

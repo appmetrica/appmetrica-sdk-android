@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,15 +44,9 @@ internal class ComponentDatabaseUpgradeScriptToV112Test : CommonTest() {
         }
     }
 
-    private fun sessionMigrator(): ComponentDatabaseUpgradeScriptToV112.SessionsMigrator {
-        assertThat(sessionMigratorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(sessionMigratorMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return sessionMigratorMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun sessionMigrator(): ComponentDatabaseUpgradeScriptToV112.SessionsMigrator =
+        sessionMigratorMockedConstructionRule.singleWithArgs()
 
-    private fun eventMigrator(): ComponentDatabaseUpgradeScriptToV112.EventsMigrator {
-        assertThat(eventsMigratorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(eventsMigratorMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return eventsMigratorMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun eventMigrator(): ComponentDatabaseUpgradeScriptToV112.EventsMigrator =
+        eventsMigratorMockedConstructionRule.singleWithArgs()
 }

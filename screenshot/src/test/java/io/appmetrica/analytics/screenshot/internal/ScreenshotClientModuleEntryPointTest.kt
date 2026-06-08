@@ -97,14 +97,8 @@ internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
         verify(screenshotCaptorsController()).updateConfig(null)
     }
 
-    private fun bundleConverter(): BundleToClientSideScreenshotConfigConverter {
-        assertThat(bundleToClientSideScreenshotConfigConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(bundleToClientSideScreenshotConfigConverterRule.argumentInterceptor.flatArguments()).isEmpty()
-        return bundleToClientSideScreenshotConfigConverterRule.constructionMock.constructed().first()
-    }
+    private fun bundleConverter(): BundleToClientSideScreenshotConfigConverter =
+        bundleToClientSideScreenshotConfigConverterRule.singleWithArgs()
 
-    private fun screenshotCaptorsController(): ScreenshotCaptorsController {
-        assertThat(screenshotCaptorsControllerRule.constructionMock.constructed()).hasSize(1)
-        return screenshotCaptorsControllerRule.constructionMock.constructed().first()
-    }
+    private fun screenshotCaptorsController(): ScreenshotCaptorsController = screenshotCaptorsControllerRule.single()
 }

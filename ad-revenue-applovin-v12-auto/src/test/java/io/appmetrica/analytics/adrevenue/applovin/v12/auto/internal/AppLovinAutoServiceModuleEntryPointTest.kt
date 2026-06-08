@@ -105,19 +105,9 @@ internal class AppLovinAutoServiceModuleEntryPointTest : CommonTest() {
         verify(bundleConverter()).convert(null)
     }
 
-    private fun bundleConverter(): ServiceApplovinConfigToBundleConverter {
-        assertThat(bundleConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(bundleConverterRule.argumentInterceptor.flatArguments()).isEmpty()
-        return bundleConverterRule.constructionMock.constructed().first()
-    }
+    private fun bundleConverter(): ServiceApplovinConfigToBundleConverter = bundleConverterRule.singleWithArgs()
 
-    private fun configParser(): ServiceApplovinConfigParser {
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
-        return configParserRule.constructionMock.constructed().first()
-    }
+    private fun configParser(): ServiceApplovinConfigParser = configParserRule.single()
 
-    private fun configConverter(): ServiceApplovinConfigConverter {
-        assertThat(configConverterRule.constructionMock.constructed()).hasSize(1)
-        return configConverterRule.constructionMock.constructed().first()
-    }
+    private fun configConverter(): ServiceApplovinConfigConverter = configConverterRule.single()
 }

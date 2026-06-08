@@ -217,21 +217,10 @@ internal class RemotePermissionsModuleEntryPointTest : CommonTest() {
         assertThat(remotePermissionsModuleEntryPoint.moduleServicesDatabase).isNull()
     }
 
-    private fun remoteConfigPermissionStrategy(): RemoteConfigPermissionStrategy {
-        assertThat(remoteConfigPermissionStrategyMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(remoteConfigPermissionStrategyMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly()
-        return remoteConfigPermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun remoteConfigPermissionStrategy(): RemoteConfigPermissionStrategy =
+        remoteConfigPermissionStrategyMockedConstructionRule.singleWithArgs()
 
-    private fun getParser(): ServiceSideRemotePermissionsConfigParser {
-        assertThat(parserMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        return parserMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun getParser(): ServiceSideRemotePermissionsConfigParser = parserMockedConstructionRule.single()
 
-    private fun getConverter(): ServiceSideRemotePermissionsConfigConverter {
-        assertThat(converterMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        return converterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun getConverter(): ServiceSideRemotePermissionsConfigConverter = converterMockedConstructionRule.single()
 }

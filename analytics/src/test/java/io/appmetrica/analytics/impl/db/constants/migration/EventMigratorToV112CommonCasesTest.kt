@@ -514,8 +514,5 @@ internal class EventMigratorToV112CommonCasesTest(
         )
     }
 
-    private fun dbEventModelConverter(): DbEventModelConverter {
-        assertThat(dbEventModelConverterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        return dbEventModelConverterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun dbEventModelConverter(): DbEventModelConverter = dbEventModelConverterMockedConstructionRule.single()
 }

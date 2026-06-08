@@ -85,14 +85,7 @@ internal class ScreenshotServiceModuleEntryPointTest : CommonTest() {
         verify(bundleConverter()).convert(notNull())
     }
 
-    private fun bundleConverter(): ServiceSideScreenshotConfigToBundleConverter {
-        assertThat(bundleConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(bundleConverterRule.argumentInterceptor.flatArguments()).isEmpty()
-        return bundleConverterRule.constructionMock.constructed().first()
-    }
+    private fun bundleConverter(): ServiceSideScreenshotConfigToBundleConverter = bundleConverterRule.singleWithArgs()
 
-    private fun configParser(): ServiceSideScreenshotConfigParser {
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
-        return configParserRule.constructionMock.constructed().first()
-    }
+    private fun configParser(): ServiceSideScreenshotConfigParser = configParserRule.single()
 }

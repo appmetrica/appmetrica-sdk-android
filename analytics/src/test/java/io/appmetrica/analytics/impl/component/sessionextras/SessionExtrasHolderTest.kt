@@ -85,10 +85,5 @@ internal class SessionExtrasHolderTest : CommonTest() {
         assertThat(sessionExtrasHolder.snapshot).containsExactlyEntriesOf(mapOf(defaultKey to defaultValue))
     }
 
-    private fun storage(): SessionExtrasStorage {
-        assertThat(storageMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(storageMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, componentId)
-        return storageMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun storage(): SessionExtrasStorage = storageMockedConstructionRule.singleWithArgs(context, componentId)
 }

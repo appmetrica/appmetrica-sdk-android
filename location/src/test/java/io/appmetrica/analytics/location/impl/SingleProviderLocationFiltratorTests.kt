@@ -6,7 +6,6 @@ import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -117,9 +116,5 @@ internal class SingleProviderLocationFiltratorTests : CommonTest() {
         verifyNoMoreInteractions(firstConsumer, secondConsumer)
     }
 
-    private fun timePassChecker(): TimePassedChecker {
-        assertThat(timePassedCheckerMockedRule.constructionMock.constructed()).hasSize(1)
-        assertThat(timePassedCheckerMockedRule.argumentInterceptor.flatArguments()).isEmpty()
-        return timePassedCheckerMockedRule.constructionMock.constructed().first()
-    }
+    private fun timePassChecker(): TimePassedChecker = timePassedCheckerMockedRule.singleWithArgs()
 }

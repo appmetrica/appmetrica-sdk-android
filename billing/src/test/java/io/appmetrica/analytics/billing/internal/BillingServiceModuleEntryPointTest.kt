@@ -76,13 +76,7 @@ internal class BillingServiceModuleEntryPointTest : CommonTest() {
         verify(billingMonitorWrapper()).updateConfig(any())
     }
 
-    private fun billingMonitorWrapper(): BillingMonitorWrapper {
-        assertThat(billingMonitorWrapperRule.constructionMock.constructed()).hasSize(1)
-        return billingMonitorWrapperRule.constructionMock.constructed().first()
-    }
+    private fun billingMonitorWrapper(): BillingMonitorWrapper = billingMonitorWrapperRule.single()
 
-    private fun configParser(): ServiceSideBillingConfigParser {
-        assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
-        return configParserRule.constructionMock.constructed().first()
-    }
+    private fun configParser(): ServiceSideBillingConfigParser = configParserRule.single()
 }

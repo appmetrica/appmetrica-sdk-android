@@ -775,12 +775,8 @@ internal class ServiceModulesControllerTest : CommonTest() {
         verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
-    private fun alwaysAskForPermissionStrategy(): NeverForbidPermissionStrategy {
-        assertThat(neverForbidPermissionStrategyMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(neverForbidPermissionStrategyMockedConstructionRule.argumentInterceptor.flatArguments())
-            .isEmpty()
-        return neverForbidPermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun alwaysAskForPermissionStrategy(): NeverForbidPermissionStrategy =
+        neverForbidPermissionStrategyMockedConstructionRule.singleWithArgs()
 
     internal abstract class AskForPermissionStrategyModule :
         ModuleServiceEntryPoint<Any>(),

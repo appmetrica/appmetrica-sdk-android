@@ -172,11 +172,6 @@ internal class LastKnownLocationExtractorProviderFactoryImplTest : CommonTest() 
         assertThat(second).isEqualTo(networkLastKnownLocationExtractorProvider)
     }
 
-    private fun gplLastKnownLocationExtractorProvider(): GplLastKnownLocationExtractorProvider {
-        assertThat(gplLastKnownLocationExtractorProviderMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(gplLastKnownLocationExtractorProviderMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly("location-module-gpl")
-        return gplLastKnownLocationExtractorProviderMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun gplLastKnownLocationExtractorProvider(): GplLastKnownLocationExtractorProvider =
+        gplLastKnownLocationExtractorProviderMockedConstructionRule.singleWithArgs("location-module-gpl")
 }

@@ -7,7 +7,6 @@ import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
 import io.appmetrica.analytics.location.impl.LocationListenerWrapper
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -62,9 +61,5 @@ internal class GplLastKnownLocationExtractorTest : CommonTest() {
         whenever(wrapperFactory().create(any(), any(), any())).thenThrow(RuntimeException())
     }
 
-    private fun wrapperFactory(): GplWrapperFactory {
-        assertThat(gplWrapperFactoryMockedRule.constructionMock.constructed()).hasSize(1)
-        assertThat(gplWrapperFactoryMockedRule.argumentInterceptor.flatArguments()).isEmpty()
-        return gplWrapperFactoryMockedRule.constructionMock.constructed().first()
-    }
+    private fun wrapperFactory(): GplWrapperFactory = gplWrapperFactoryMockedRule.singleWithArgs()
 }

@@ -292,23 +292,13 @@ internal class LocationApiImplTest : CommonTest() {
         verify(locationClient).updateLocationFilter(locationFilter)
     }
 
-    private fun locationFlagStrategy(): LocationFlagStrategy {
-        assertThat(locationFlagStrategyMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(locationFlagStrategyMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return locationFlagStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun locationFlagStrategy(): LocationFlagStrategy =
+        locationFlagStrategyMockedConstructionRule.singleWithArgs()
 
-    private fun compositePermissionStrategy(): CompositePermissionStrategy {
-        assertThat(compositePermissionStrategyMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(compositePermissionStrategyMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(arrayOf(locationFlagStrategy, askForPermissionStrategy))
-        return compositePermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun compositePermissionStrategy(): CompositePermissionStrategy =
+        compositePermissionStrategyMockedConstructionRule
+            .singleWithArgs(arrayOf(locationFlagStrategy, askForPermissionStrategy))
 
-    private fun simplePermissionExtractor(): SimplePermissionExtractor {
-        assertThat(simplePermissionExtractorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(simplePermissionExtractorMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(compositePermissionStrategy)
-        return simplePermissionExtractorMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun simplePermissionExtractor(): SimplePermissionExtractor =
+        simplePermissionExtractorMockedConstructionRule.singleWithArgs(compositePermissionStrategy)
 }

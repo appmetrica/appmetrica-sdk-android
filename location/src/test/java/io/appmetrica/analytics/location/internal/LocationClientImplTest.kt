@@ -287,10 +287,7 @@ internal class LocationClientImplTest : CommonTest() {
         return locationStreamDispatcherMockedConstructionRule.constructionMock.constructed().first()
     }
 
-    private fun defaultLocationConfig(): LocationConfig {
-        assertThat(locationConfigMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        return locationConfigMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun defaultLocationConfig(): LocationConfig = locationConfigMockedConstructionRule.single()
 
     private fun locationReceiverProviderFactoryImpl(): LocationReceiverProviderFactoryImpl {
         assertThat(locationReceiverProviderFactoryImplMockedConstructionRule.constructionMock.constructed())

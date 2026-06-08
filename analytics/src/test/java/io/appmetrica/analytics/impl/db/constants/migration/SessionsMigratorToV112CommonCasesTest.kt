@@ -260,10 +260,8 @@ internal class SessionsMigratorToV112CommonCasesTest(
 
     private fun Int?.toBoolean(): Boolean? = this?.let { this == 1 }
 
-    private fun dbSessionModelConverter(): DbSessionModelConverter {
-        assertThat(dbSessionModelConverterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        return dbSessionModelConverterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun dbSessionModelConverter(): DbSessionModelConverter =
+        dbSessionModelConverterMockedConstructionRule.single()
 
     private fun stubDatabase(cursorRecord: SessionCursorRecord) {
         whenever(

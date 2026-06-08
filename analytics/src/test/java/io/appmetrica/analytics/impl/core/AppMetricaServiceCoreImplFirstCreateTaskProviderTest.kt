@@ -24,9 +24,6 @@ internal class AppMetricaServiceCoreImplFirstCreateTaskProviderTest : CommonTest
         assertThat(coreImplFirstCreateTaskProvider.tasks()).containsExactly(reportKotlinVersionTask())
     }
 
-    private fun reportKotlinVersionTask(): ReportKotlinVersionTask {
-        assertThat(reportKotlinVersionTaskMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(reportKotlinVersionTaskMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return reportKotlinVersionTaskMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun reportKotlinVersionTask(): ReportKotlinVersionTask =
+        reportKotlinVersionTaskMockedConstructionRule.singleWithArgs()
 }

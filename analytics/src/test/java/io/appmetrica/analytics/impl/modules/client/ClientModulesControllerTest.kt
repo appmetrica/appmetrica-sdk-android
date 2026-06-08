@@ -219,9 +219,6 @@ internal class ClientModulesControllerTest : CommonTest() {
             .containsExactly(firstModuleAdSourceId, secondModuleAdSourceId)
     }
 
-    private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory {
-        assertThat(clientModuleServiceConfigModelFactoryRule.constructionMock.constructed()).hasSize(1)
-        assertThat(clientModuleServiceConfigModelFactoryRule.argumentInterceptor.flatArguments()).isEmpty()
-        return clientModuleServiceConfigModelFactoryRule.constructionMock.constructed().first()
-    }
+    private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory =
+        clientModuleServiceConfigModelFactoryRule.singleWithArgs()
 }

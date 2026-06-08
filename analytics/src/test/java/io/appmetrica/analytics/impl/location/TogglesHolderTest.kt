@@ -63,38 +63,22 @@ internal class TogglesHolderTest : CommonTest() {
             .isEqualTo(conjunctionCompositeToggle(visibleAppStateTrackingStatusToggle()))
     }
 
-    private fun singleClientApiTrackingStatusToggle(): ClientApiTrackingStatusToggle {
-        assertThat(clientApiTrackingStatusToggleMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(clientApiTrackingStatusToggleMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(GlobalServiceLocator.getInstance().servicePreferences)
-        return clientApiTrackingStatusToggleMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun singleClientApiTrackingStatusToggle(): ClientApiTrackingStatusToggle =
+        clientApiTrackingStatusToggleMockedConstructionRule
+            .singleWithArgs(GlobalServiceLocator.getInstance().servicePreferences)
 
-    private fun singleWakelockToggle(): WakelocksToggle {
-        assertThat(wakelocksToggleMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(wakelocksToggleMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-        return wakelocksToggleMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun singleWakelockToggle(): WakelocksToggle = wakelocksToggleMockedConstructionRule.singleWithArgs()
 
-    private fun visibleAppStateTrackingStatusToggle(): VisibleAppStateOnlyTrackingStatusToggle {
-        assertThat(visibleAppStateOnlyTrackingStatusToggleMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(visibleAppStateOnlyTrackingStatusToggleMockedConstructionRule.argumentInterceptor.flatArguments())
-            .isEmpty()
-        return visibleAppStateOnlyTrackingStatusToggleMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun visibleAppStateTrackingStatusToggle(): VisibleAppStateOnlyTrackingStatusToggle =
+        visibleAppStateOnlyTrackingStatusToggleMockedConstructionRule.singleWithArgs()
 
-    private fun conjunctionCompositeToggle(outerToggle: Toggle): ConjunctiveCompositeThreadSafeToggle {
-        assertThat(conjuctionCompositeToggleMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(conjuctionCompositeToggleMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(
-                listOf(
-                    singleClientApiTrackingStatusToggle(),
-                    singleWakelockToggle(),
-                    outerToggle
-                ),
-                "loc-def"
-            )
-        return conjuctionCompositeToggleMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun conjunctionCompositeToggle(outerToggle: Toggle): ConjunctiveCompositeThreadSafeToggle =
+        conjuctionCompositeToggleMockedConstructionRule.singleWithArgs(
+            listOf(
+                singleClientApiTrackingStatusToggle(),
+                singleWakelockToggle(),
+                outerToggle
+            ),
+            "loc-def"
+        )
 }

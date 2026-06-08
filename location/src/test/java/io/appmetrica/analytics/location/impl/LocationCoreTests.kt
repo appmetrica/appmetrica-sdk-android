@@ -443,17 +443,11 @@ internal class LocationCoreTests : CommonTest() {
         verify(locationStreamDispatcher).setLocationConfig(locationConfig)
     }
 
-    private fun locationDataCacheUpdateScheduler(): LocationDataCacheUpdateScheduler {
-        assertThat(locationDataCacheUpdateSchedulerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(locationDataCacheUpdateSchedulerMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(executor, locationCore, locationDataCache, "loc")
-        return locationDataCacheUpdateSchedulerMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun locationDataCacheUpdateScheduler(): LocationDataCacheUpdateScheduler =
+        locationDataCacheUpdateSchedulerMockedConstructionRule
+            .singleWithArgs(executor, locationCore, locationDataCache, "loc")
 
-    private fun locationListenerWrapper(): LocationListenerWrapper {
-        assertThat(locationListenerWrapperMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(locationListenerWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(locationStreamDispatcher)
-        return locationListenerWrapperMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun locationListenerWrapper(): LocationListenerWrapper =
+        locationListenerWrapperMockedConstructionRule
+            .singleWithArgs(locationStreamDispatcher)
 }

@@ -68,10 +68,7 @@ internal class GplWrapperFactoryTest : CommonTest() {
             .isInstanceOf(DummyGplLibraryWrapper::class.java)
     }
 
-    private fun singleGplWrapper(): GplLibraryWrapper {
-        assertThat(gplLibraryWrapperMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(gplLibraryWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, locationListener, looper, executor, TimeUnit.SECONDS.toMillis(1))
-        return gplLibraryWrapperMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun singleGplWrapper(): GplLibraryWrapper =
+        gplLibraryWrapperMockedConstructionRule
+            .singleWithArgs(context, locationListener, looper, executor, TimeUnit.SECONDS.toMillis(1))
 }

@@ -82,19 +82,11 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
             )
     }
 
-    private fun legacyModulePreferenceAdapter(): LegacyModulePreferenceAdapter {
-        assertThat(legacyModulePreferencesAdapterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(legacyModulePreferencesAdapterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(preferences)
-        return legacyModulePreferencesAdapterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun legacyModulePreferenceAdapter(): LegacyModulePreferenceAdapter =
+        legacyModulePreferencesAdapterMockedConstructionRule.singleWithArgs(preferences)
 
-    private fun modulePreferencesAdapter(): ModulePreferencesAdapter {
-        assertThat(modulePreferencesAdapterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(modulePreferencesAdapterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(moduleIdentifier, preferences)
-        return modulePreferencesAdapterMockedConstructionRule.constructionMock.constructed().first()
-    }
+    private fun modulePreferencesAdapter(): ModulePreferencesAdapter =
+        modulePreferencesAdapterMockedConstructionRule.singleWithArgs(moduleIdentifier, preferences)
 
     private fun moduleEventReporters(): List<ModuleEventReporter> {
         val result = moduleEventReporterMockedConstructionRule.constructionMock.constructed()
