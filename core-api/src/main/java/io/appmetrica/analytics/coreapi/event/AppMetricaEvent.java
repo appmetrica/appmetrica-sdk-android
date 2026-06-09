@@ -5,14 +5,23 @@ import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
 
 /**
  * Base class for typed custom events sent via
- * {@link io.appmetrica.analytics.AppMetrica#reportEvent(AppMetricaEvent)} or
- * {@link io.appmetrica.analytics.IReporter#reportEvent(AppMetricaEvent)}.
- * Feature modules subclass this and provide the binary payload via {@link #getEventData()}.
+ * {@code AppMetrica.reportEvent(AppMetricaEvent)} or
+ * {@code IReporter#reportEvent(AppMetricaEvent)}.
+ * <p>
+ * Do not subclass this class in application code. Concrete subclasses are provided by
+ * other AppMetrica modules and supply the binary payload via {@link #getEventData()}.
  */
 public abstract class AppMetricaEvent {
 
     /**
-     * Returns the internal event representation with type, name and binary payload.
+     * Constructor for {@link AppMetricaEvent}.
+     */
+    protected AppMetricaEvent() {}
+
+    /**
+     * Returns the internal event representation.
+     *
+     * @return the internal event representation.
      */
     @NonNull
     public abstract AppMetricaEventData getEventData();

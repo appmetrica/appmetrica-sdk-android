@@ -5,7 +5,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-core-api")
     name.set("AppMetrica SDK Core API")
-    withJavadoc.set(false)
+    withJavadoc.set(true)
 }
 
 android {

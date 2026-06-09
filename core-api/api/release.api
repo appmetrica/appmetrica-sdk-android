@@ -7,7 +7,6 @@ public final class io.appmetrica.analytics.coreapi.BuildConfig {
 }
 
 public abstract class io.appmetrica.analytics.coreapi.event.AppMetricaEvent {
-    public <init>()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData getEventData()
 }
 
