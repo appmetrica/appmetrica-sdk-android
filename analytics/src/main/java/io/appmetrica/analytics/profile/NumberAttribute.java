@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.AttributeSaver;
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy;
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
@@ -13,7 +14,6 @@ import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 
 /**
  * The number attribute class.

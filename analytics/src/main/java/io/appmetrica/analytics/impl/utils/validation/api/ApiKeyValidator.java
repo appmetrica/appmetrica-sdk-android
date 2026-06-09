@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.utils.validation.api;
 
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import java.util.UUID;
 
 public class ApiKeyValidator implements Validator<String> {

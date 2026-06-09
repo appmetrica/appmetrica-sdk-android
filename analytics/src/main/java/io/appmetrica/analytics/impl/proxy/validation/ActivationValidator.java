@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.proxy.validation;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 
 public class ActivationValidator extends ThrowIfFailedValidator<Void> {
 

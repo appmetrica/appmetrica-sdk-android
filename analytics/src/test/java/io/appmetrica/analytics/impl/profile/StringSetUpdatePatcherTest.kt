@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile
 
+import io.appmetrica.analytics.coreutils.internal.validation.Validator
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer
-import io.appmetrica.analytics.impl.utils.validation.Validator
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule

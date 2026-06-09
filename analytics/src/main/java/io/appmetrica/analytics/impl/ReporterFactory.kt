@@ -7,11 +7,11 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
+import io.appmetrica.analytics.coreutils.internal.validation.Validator
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.reporter.MainReporterContext
 import io.appmetrica.analytics.impl.startup.StartupHelper
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
-import io.appmetrica.analytics.impl.utils.validation.Validator
 import io.appmetrica.analytics.impl.utils.validation.api.ReporterKeyIsUsedValidator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger

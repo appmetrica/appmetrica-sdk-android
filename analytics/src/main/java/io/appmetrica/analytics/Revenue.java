@@ -2,9 +2,9 @@ package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.utils.validation.NonNullValidator;
+import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 import java.util.Currency;
 
 /**

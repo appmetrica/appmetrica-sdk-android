@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class IdentifiersValidator implements Validator<List<String>> {
         mValidIdentifiers = validIdentifiers;
     }
 
+    @NonNull
     @Override
     public ValidationResult validate(@NonNull List<String> identifiers) {
         for (String identifier : identifiers) {

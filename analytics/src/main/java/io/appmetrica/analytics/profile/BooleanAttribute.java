@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.AttributeSaver;
 import io.appmetrica.analytics.impl.profile.BooleanUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy;
@@ -9,7 +10,6 @@ import io.appmetrica.analytics.impl.profile.ResetUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 
 /**
  * The boolean attribute class.

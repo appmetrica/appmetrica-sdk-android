@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.ValidationException;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 
 public class ThrowIfFailedValidator<T> implements Validator<T> {
 
@@ -14,6 +16,7 @@ public class ThrowIfFailedValidator<T> implements Validator<T> {
         mInternalValidator = internalValidator;
     }
 
+    @NonNull
     @Override
     public ValidationResult validate(@Nullable T data) {
         ValidationResult result = mInternalValidator.validate(data);

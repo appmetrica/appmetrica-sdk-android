@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.AttributeSaver;
 import io.appmetrica.analytics.impl.profile.CounterUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 
 /**
  * The counter attribute class.

@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.proxy;
 
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
 import io.appmetrica.analytics.impl.VerificationConstants;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 
 public final class CustomAttribute {
 

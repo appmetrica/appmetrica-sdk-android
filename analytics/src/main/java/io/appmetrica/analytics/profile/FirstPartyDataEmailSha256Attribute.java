@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy;
 import io.appmetrica.analytics.impl.profile.Constants;
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
@@ -11,7 +12,6 @@ import io.appmetrica.analytics.impl.profile.fpd.Sha256Converter;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
 import java.util.Arrays;
 
 /**

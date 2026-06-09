@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.proxy.validation
 
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
+import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
-import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 
 internal class LibraryAdapterBarrier(

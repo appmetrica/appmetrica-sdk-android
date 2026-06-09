@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.proxy.validation
 import android.content.Context
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
-import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 

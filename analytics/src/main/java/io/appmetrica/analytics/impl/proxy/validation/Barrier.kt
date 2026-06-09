@@ -16,11 +16,11 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonEmptyStringValidator
+import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
-import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator
-import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 import io.appmetrica.analytics.profile.UserProfile

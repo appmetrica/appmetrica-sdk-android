@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.profile;
 
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.BooleanUpdatePatcher;
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 

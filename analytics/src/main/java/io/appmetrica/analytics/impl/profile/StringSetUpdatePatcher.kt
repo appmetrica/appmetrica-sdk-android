@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile
 
+import io.appmetrica.analytics.coreutils.internal.validation.Validator
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer
-import io.appmetrica.analytics.impl.utils.validation.Validator
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
 internal class StringSetUpdatePatcher(

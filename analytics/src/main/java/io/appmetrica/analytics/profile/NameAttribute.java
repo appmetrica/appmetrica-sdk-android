@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.profile;
 
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.impl.profile.Constants;
 import io.appmetrica.analytics.impl.profile.SimpleSaver;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
 
 /**
  * The name attribute class.

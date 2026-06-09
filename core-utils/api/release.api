@@ -672,3 +672,53 @@ public abstract class io.appmetrica.analytics.coreutils.internal.toggle.SimpleTh
     protected final void updateState(boolean)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.validation.DummyValidator<T> implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<T> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] T)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.IntegerFromRangeValidator implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<Integer> {
+    public <init>([NonNull] String, [NonNull] java.util.List<Integer>)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] Integer)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.NonEmptyCollectionValidator<T> implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<java.util.Collection<? extends T>> {
+    public <init>([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] java.util.Collection<? extends T>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.NonEmptyStringValidator implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<String> {
+    public <init>([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator<T> implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<T> {
+    public <init>([NonNull] String)
+    public final [NonNull] String getObjectDescription()
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] T)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.ValidationResult {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult$Companion Companion
+
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult failed([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>, [NonNull] String)
+    public final [NonNull] String getDescription()
+    public final [NonNull] Class<io.appmetrica.analytics.coreutils.internal.validation.Validator<?>> getValidatorClass()
+    public final boolean isValid()
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult successful([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>)
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.validation.ValidationResult$Companion {
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult failed([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>, [NonNull] String)
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult successful([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.validation.ValidationResultsChain implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<java.util.List<io.appmetrica.analytics.coreutils.internal.validation.ValidationResult>> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([NonNull] java.util.List<io.appmetrica.analytics.coreutils.internal.validation.ValidationResult>)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.validation.Validator<T> {
+    public abstract [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate(T)
+}
+

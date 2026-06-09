@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.proxy.validation
 
-import io.appmetrica.analytics.impl.utils.validation.NonEmptyCollectionValidator
-import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator
-import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
+import io.appmetrica.analytics.coreutils.internal.validation.NonEmptyCollectionValidator
+import io.appmetrica.analytics.coreutils.internal.validation.NonEmptyStringValidator
+import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.plugins.StackTraceItem

@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.profile;
 
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 
 public class KeyValidator implements Validator<String> {
 

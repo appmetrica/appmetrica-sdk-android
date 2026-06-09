@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.AttributeSaver;
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy;
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
@@ -10,7 +11,6 @@ import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 
 /**
  * The string attribute class.

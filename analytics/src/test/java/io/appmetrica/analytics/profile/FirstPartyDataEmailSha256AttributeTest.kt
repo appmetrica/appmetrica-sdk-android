@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.profile
 
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy
 import io.appmetrica.analytics.impl.profile.StringSetUpdatePatcher
 import io.appmetrica.analytics.impl.profile.fpd.Sha256Converter
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat

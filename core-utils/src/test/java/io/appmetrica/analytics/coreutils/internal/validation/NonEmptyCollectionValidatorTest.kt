@@ -1,11 +1,10 @@
-package io.appmetrica.analytics.impl.proxy.validation
+package io.appmetrica.analytics.coreutils.internal.validation
 
-import io.appmetrica.analytics.impl.utils.validation.NonEmptyCollectionValidator
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-internal class NonEmptyCollectionValidatorTest : CommonTest() {
+class NonEmptyCollectionValidatorTest : CommonTest() {
 
     private val validator = NonEmptyCollectionValidator<String>("My collection")
 

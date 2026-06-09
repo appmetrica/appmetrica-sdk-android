@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.validation.revenue;
 
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import org.junit.Test;

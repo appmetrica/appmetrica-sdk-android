@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.impl.profile.ResetUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;

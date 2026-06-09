@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl.proxy;
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
@@ -8,8 +10,6 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
-import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockProvider;
 import java.lang.reflect.InvocationTargetException;

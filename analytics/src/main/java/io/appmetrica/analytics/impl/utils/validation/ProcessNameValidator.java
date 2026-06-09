@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
+import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 
 public class ProcessNameValidator implements Validator<String> {
 
@@ -17,6 +19,7 @@ public class ProcessNameValidator implements Validator<String> {
         mContext = context;
     }
 
+    @NonNull
     @Override
     public ValidationResult validate(@Nullable String data) {
         ValidationResult result;

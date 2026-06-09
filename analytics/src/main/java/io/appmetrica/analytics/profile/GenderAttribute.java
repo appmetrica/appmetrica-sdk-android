@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.profile;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.impl.profile.CommonSavingStrategy;
 import io.appmetrica.analytics.impl.profile.Constants;
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
@@ -11,7 +12,6 @@ import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
-import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
 
 /**
  * The gender attribute class.
