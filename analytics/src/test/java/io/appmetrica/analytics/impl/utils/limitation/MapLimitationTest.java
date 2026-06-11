@@ -1,5 +1,8 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.MapTrimmers;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.data.RandomStringGenerator;

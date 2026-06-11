@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;

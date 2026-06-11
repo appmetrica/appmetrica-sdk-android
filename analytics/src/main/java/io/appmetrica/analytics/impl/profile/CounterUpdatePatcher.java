@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.profile;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 
 public final class CounterUpdatePatcher extends CommonUserProfileUpdatePatcher<Double> {

@@ -7,9 +7,9 @@ import io.appmetrica.analytics.impl.profile.fpd.EmailNormalizer;
 import io.appmetrica.analytics.impl.profile.fpd.PhoneNormalizer;
 import io.appmetrica.analytics.impl.profile.fpd.Sha256Converter;
 import io.appmetrica.analytics.impl.profile.fpd.TelegramLoginNormalizer;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 
 /**
  * The attribute class.

@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 
 /**
  * The string attribute class.

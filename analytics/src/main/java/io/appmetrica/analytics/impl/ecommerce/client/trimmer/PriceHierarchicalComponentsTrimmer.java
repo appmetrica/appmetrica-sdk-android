@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.ecommerce.client.trimmer;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
-import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalListTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalListTrimmer;
 
 public class PriceHierarchicalComponentsTrimmer extends HierarchicalListTrimmer<AmountWrapper> {
 

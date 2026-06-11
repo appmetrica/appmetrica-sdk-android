@@ -321,6 +321,126 @@ public final class io.appmetrica.analytics.coreutils.internal.io.InputStreamUtil
     public final [NonNull] byte[] readSafelyApprox(int, [NonNull] kotlin.jvm.functions.Function0<? extends java.io.InputStream>)
 }
 
+public abstract class io.appmetrica.analytics.coreutils.internal.limitation.BaseTrimmer<T> implementation io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<T> {
+    protected final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger mPublicLogger
+
+    public <init>(int, [NonNull] String, [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger)
+    public [NonNull] String getLogName()
+    public int getMaxSize()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.BaseTrimmer<byte[]> {
+    public <init>(int, [NonNull] String, [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger)
+    public [Nullable] byte[] trim([Nullable] byte[])
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo implementation io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider {
+    public final int bytesTruncated
+
+    public <init>(int)
+    public int getBytesTruncated()
+    public String toString()
+    public static io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider total(io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider...)
+    public static int totalBytesTruncated(io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider...)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider {
+    public abstract int getBytesTruncated()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation {
+    public <init>(int)
+    public int getMaxSize()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo extends io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo {
+    public final int itemsDropped
+
+    public <init>(int, int)
+    public String toString()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.limitation.DummyTrimmer<T> implementation io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<T> {
+    public <init>()
+    public [Nullable] T trim([Nullable] T)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.MapTrimmers {
+    public static final int DEFAULT_KEY_MAX_LENGTH
+    public static final int DEFAULT_MAP_MAX_SIZE
+    public static final int DEFAULT_VALUE_MAX_LENGTH
+
+    public <init>(int, int, int, [NonNull] String, [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger)
+    public io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation getCollectionLimitation()
+    public io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer getKeyTrimmer()
+    public io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer getValueTrimmer()
+    public void logContainerLimitReached([NonNull] String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.BaseTrimmer<String> {
+    public <init>(int, [NonNull] String)
+    public <init>(int, [NonNull] String, [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger)
+    public [Nullable] String trim([Nullable] String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.BaseTrimmer<String> {
+    public <init>(int, [NonNull] String)
+    public <init>(int, [NonNull] String, [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger)
+    public [Nullable] String trim([Nullable] String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.SubstituteTrimmer<T> implementation io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<T> {
+    public <init>([NonNull] io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<T>, [Nullable] T)
+    public [Nullable] T trim([Nullable] T)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<T> {
+    public abstract [Nullable] T trim([Nullable] T)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult<V, M extends io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> implementation io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider {
+    public final [NonNull] M metaInfo
+    public final [Nullable] V value
+
+    public <init>([Nullable] V, [NonNull] M)
+    public int getBytesTruncated()
+    public [NonNull] String toString()
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.BaseHierarchicalTrimmer<V, M extends io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> implementation io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalTrimmer<V, M> {
+    public <init>(int)
+    public int getLimit()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalListTrimmer<T> extends io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.BaseHierarchicalTrimmer<java.util.List<T>, io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo> {
+    public <init>(int)
+    public <init>(int, [Nullable] io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalTrimmer<T, io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider>)
+    protected int byteSizeOf([Nullable] T)
+    public [Nullable] io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalTrimmer<T, io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> getItemTrimmer()
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult<java.util.List<T>, io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo> trim([Nullable] java.util.List<T>)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringListTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalListTrimmer<String> {
+    public <init>(int, int)
+    public <init>(int, [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringTrimmer)
+    protected int byteSizeOf([Nullable] String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.BaseHierarchicalTrimmer<String, io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> {
+    public <init>(int)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult<String, io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> trim([Nullable] String)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalTrimmer<V, M extends io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider> {
+    public abstract [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult<V, M> trim([Nullable] V)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer extends io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.BaseHierarchicalTrimmer<java.util.Map<String, String>, io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo> {
+    public <init>(int, int, int)
+    public <init>(int, [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringTrimmer, [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringTrimmer)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult<java.util.Map<String, String>, io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo> trim([Nullable] java.util.Map<String, String>)
+}
+
 public abstract class io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage {
     public <init>()
     public static [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getMainPublicOrAnonymousLogger()

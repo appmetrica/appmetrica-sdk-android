@@ -6,6 +6,9 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo
+import io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult
 import io.appmetrica.analytics.ecommerce.ECommerceAmount
 import io.appmetrica.analytics.ecommerce.ECommerceCartItem
 import io.appmetrica.analytics.ecommerce.ECommerceOrder
@@ -55,9 +58,6 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.startup.StatSending
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo
-import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo
-import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult
 import io.appmetrica.analytics.internal.AppMetricaService
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType

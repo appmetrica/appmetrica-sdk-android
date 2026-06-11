@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl
 
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer
 import io.appmetrica.analytics.impl.request.DbNetworkTaskConfig
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer
 
 internal class ReportMessagePreparer(
     private val dbInteractor: ReportTaskDbInteractor,

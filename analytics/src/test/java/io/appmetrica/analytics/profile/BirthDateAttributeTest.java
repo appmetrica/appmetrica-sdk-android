@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.DummyTrimmer;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

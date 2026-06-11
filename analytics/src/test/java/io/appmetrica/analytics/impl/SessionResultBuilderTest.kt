@@ -54,7 +54,7 @@ internal class SessionResultBuilderTest : CommonTest() {
         on { deviceId } doReturn "test-device-id"
         on { autoCollectedDataSubscribers } doReturn emptySet()
     }
-    private val trimmer = mock<io.appmetrica.analytics.impl.utils.limitation.Trimmer<ByteArray>> {
+    private val trimmer = mock<io.appmetrica.analytics.coreutils.internal.limitation.Trimmer<ByteArray>> {
         on { trim(any()) } doAnswer { it.arguments[0] as ByteArray }
     }
     private val selfReporter = mock<IReporterExtended>()

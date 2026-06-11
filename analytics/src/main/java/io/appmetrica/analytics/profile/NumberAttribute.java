@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.profile.ResetUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 
 /**

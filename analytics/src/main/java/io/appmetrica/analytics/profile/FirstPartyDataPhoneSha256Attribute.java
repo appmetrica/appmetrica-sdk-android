@@ -9,9 +9,9 @@ import io.appmetrica.analytics.impl.profile.LimitedSaver;
 import io.appmetrica.analytics.impl.profile.StringSetUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.fpd.Sha256Converter;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 import java.util.Arrays;
 
 /**

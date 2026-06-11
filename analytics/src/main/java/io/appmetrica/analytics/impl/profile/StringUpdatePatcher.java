@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 
 public class StringUpdatePatcher extends CommonUserProfileUpdatePatcher<String> {
 

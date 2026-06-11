@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.converter.ECommerceEventCon
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.ShownScreenInfoEventConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import java.util.List;
 
 public class ShownScreenInfoEvent extends ECommerceEvent {

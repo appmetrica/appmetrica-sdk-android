@@ -9,10 +9,10 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.PriceWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.trimmer.PriceHierarchicalComponentsTrimmer;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
-import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 

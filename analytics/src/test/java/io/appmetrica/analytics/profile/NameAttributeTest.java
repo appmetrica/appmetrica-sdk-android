@@ -3,7 +3,7 @@ package io.appmetrica.analytics.profile;
 import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.coreutils.internal.validation.Validator;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 

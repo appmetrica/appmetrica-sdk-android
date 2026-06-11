@@ -12,12 +12,12 @@ import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.HashMap;
 

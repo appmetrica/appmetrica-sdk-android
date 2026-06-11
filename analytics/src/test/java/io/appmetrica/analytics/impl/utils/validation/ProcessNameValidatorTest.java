@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
 import android.content.Context;
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
@@ -57,7 +58,7 @@ public class ProcessNameValidatorTest extends CommonTest {
 
     @Test
     public void testValidate() {
-        io.appmetrica.analytics.coreutils.internal.validation.ValidationResult result = mValidator.validate(mInputProcessName);
+        ValidationResult result = mValidator.validate(mInputProcessName);
         assertThat(result.isValid()).isEqualTo(mValid);
         if (!mValid) {
             assertThat(result.getDescription()).isNotEmpty();

@@ -6,8 +6,8 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class CartItemConverter

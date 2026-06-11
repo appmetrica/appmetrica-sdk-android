@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import io.appmetrica.gradle.testutils.CommonTest;

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.MatrixCursor
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
@@ -22,7 +23,6 @@ import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.utils.TimeUtils
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.networktasks.internal.DefaultNetworkResponseHandler

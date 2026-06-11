@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.profile.SimpleSaver;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.DummyTrimmer;
 
 /**
  * The gender attribute class.

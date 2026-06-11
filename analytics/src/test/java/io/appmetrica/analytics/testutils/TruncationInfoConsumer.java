@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.testutils;
 
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
 import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.function.Consumer;
 

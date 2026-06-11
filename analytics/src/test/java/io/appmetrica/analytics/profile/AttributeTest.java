@@ -2,7 +2,7 @@ package io.appmetrica.analytics.profile;
 
 import io.appmetrica.analytics.impl.profile.CustomAttribute;
 import io.appmetrica.analytics.impl.profile.StringUpdatePatcher;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;

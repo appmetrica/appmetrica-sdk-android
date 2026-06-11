@@ -7,10 +7,10 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.SubstituteTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.SubstituteTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 
 class RevenueWrapper {

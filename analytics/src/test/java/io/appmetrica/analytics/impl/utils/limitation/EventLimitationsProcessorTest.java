@@ -1,6 +1,9 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.data.RandomStringGenerator;

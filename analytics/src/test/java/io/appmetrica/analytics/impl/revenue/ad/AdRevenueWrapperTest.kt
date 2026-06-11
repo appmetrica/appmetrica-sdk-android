@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.revenue.ad
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.coreutils.internal.StringUtils
+import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer
+import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer
 import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
-import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions

@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl
 
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session
@@ -7,7 +8,6 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Se
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Time
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.TimeUtils
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule

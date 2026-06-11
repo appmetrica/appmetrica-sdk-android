@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl
 
 import android.content.ContentValues
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer
 import io.appmetrica.analytics.impl.preparer.EventFromDbModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.EnvironmentVariable
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session.SessionDesc
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
 import org.json.JSONObject

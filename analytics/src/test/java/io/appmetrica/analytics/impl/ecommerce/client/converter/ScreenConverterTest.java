@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
 import io.appmetrica.analytics.impl.ecommerce.client.model.ScreenWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult;
+import io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringTrimmer;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.assertions.Assertions;

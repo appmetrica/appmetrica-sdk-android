@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionLimitation;
 
 public class LimitedSaver implements AttributeSaver {
 

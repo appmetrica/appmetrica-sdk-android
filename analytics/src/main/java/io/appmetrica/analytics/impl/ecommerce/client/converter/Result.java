@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 
 public class Result<R, M extends BytesTruncatedProvider> implements BytesTruncatedProvider {
     @NonNull

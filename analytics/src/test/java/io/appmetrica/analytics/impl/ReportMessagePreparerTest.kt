@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl
 
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.request.DbNetworkTaskConfig
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat

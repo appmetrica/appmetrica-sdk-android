@@ -6,10 +6,10 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
-import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringListTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.coreutils.internal.limitation.CollectionTrimInfo;
+import io.appmetrica.analytics.coreutils.internal.limitation.TrimmingResult;
+import io.appmetrica.analytics.coreutils.internal.limitation.hierarchical.HierarchicalStringListTrimmer;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 

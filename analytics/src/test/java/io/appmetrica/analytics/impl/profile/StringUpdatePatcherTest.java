@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.profile;
 
 import io.appmetrica.analytics.coreutils.internal.validation.DummyValidator;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.DummyTrimmer;
+import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
