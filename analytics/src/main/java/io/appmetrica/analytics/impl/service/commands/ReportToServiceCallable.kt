@@ -53,6 +53,12 @@ internal abstract class ReportToServiceCallable(
             } while (
                 retry && !AppMetricaUncaughtExceptionHandler.isProcessDying() && triesCount < CONNECTION_TRIES_COUNT
             )
+            if (triesCount >= CONNECTION_TRIES_COUNT && serviceConnector.service == null) {
+                DebugLogger.info(
+                    tag,
+                    "[${javaClass.name}]Failed to connect to service after $CONNECTION_TRIES_COUNT tries"
+                )
+            }
         } catch (throwable: Throwable) {
             DebugLogger.error(tag, throwable)
             onReportToServiceError(throwable)
@@ -72,7 +78,12 @@ internal abstract class ReportToServiceCallable(
 
     open fun handleAbsentService(): Boolean {
         serviceConnector.bindService()
-        serviceConnector.waitForConnect(CONNECTION_WAIT_TIMEOUT_MILLIS)
+        val connected = serviceConnector.waitForConnect(CONNECTION_WAIT_TIMEOUT_MILLIS)
+        DebugLogger.info(
+            tag,
+            "[${javaClass.name}]handleAbsentService waitForConnect result=$connected, " +
+                "isConnected=${serviceConnector.isConnected}"
+        )
         return true
     }
 

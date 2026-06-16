@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.IBinder
+import android.os.Process
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 /* ktlint-disable appmetrica-rules:internal-modifier-in-impl-package */
@@ -29,8 +30,13 @@ open class AppMetricaCoreService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
-        DebugLogger.info(tag, "onBind")
-        return serviceDelegate.onBind(intent)
+        val binder = serviceDelegate.onBind(intent)
+        DebugLogger.info(
+            tag,
+            "onBind returning binder: ${binder?.javaClass?.simpleName ?: "null"}, " +
+                "identity=${binder?.let { System.identityHashCode(it) } ?: 0}, pid=${Process.myPid()}"
+        )
+        return binder
     }
 
     override fun onRebind(intent: Intent) {

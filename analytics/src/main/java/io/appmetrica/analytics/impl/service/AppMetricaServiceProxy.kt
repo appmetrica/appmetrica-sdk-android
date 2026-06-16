@@ -74,7 +74,15 @@ internal class AppMetricaServiceProxy(
     override fun onBind(intent: Intent): IBinder {
         DebugLogger.info(TAG, "Bind to the service with data: $intent")
         serviceCore?.onBind(intent)
-        return if (intent.isWakelockAction()) WakeLockBinder() else coreBinder
+        val binder = if (intent.isWakelockAction()) WakeLockBinder() else coreBinder
+        DebugLogger.info(
+            TAG,
+            "onBind returning binder: type=${binder.javaClass.simpleName}, " +
+                "identity=${System.identityHashCode(binder)}, " +
+                "coreBinderInitialized=${::coreBinder.isInitialized}, " +
+                "isWakelockAction=${intent.isWakelockAction()}"
+        )
+        return binder
     }
 
     override fun onRebind(intent: Intent) {

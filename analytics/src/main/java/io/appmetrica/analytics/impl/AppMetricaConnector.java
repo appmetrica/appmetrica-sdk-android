@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.Process;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -64,12 +65,20 @@ public class AppMetricaConnector {
     }
 
     public void bindService() {
-        DebugLogger.INSTANCE.info(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Binding to service ... Application: %s, pid: %d, thread: %s",
+            mContext.getPackageName(),
+            Process.myPid(),
+            Thread.currentThread().getName()
+        );
         synchronized (this) {
             if (mService != null) {
+                DebugLogger.INSTANCE.info(TAG, "Skip bindService: already connected, mService is set");
                 return;
             }
             bindCountDown = new CountDownLatch(1);
+            DebugLogger.INSTANCE.info(TAG, "Created bindCountDown latch for new bind attempt");
         }
 
         Intent intent = intentProvider.getIntent(mContext);
@@ -154,21 +163,68 @@ public class AppMetricaConnector {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            DebugLogger.INSTANCE.info(TAG, "Service connected. Component name: %s", name);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Service connected. Component name: %s, pid: %d, thread: %s, binder: %s, binderIdentity: %d",
+                name,
+                Process.myPid(),
+                Thread.currentThread().getName(),
+                service,
+                service != null ? System.identityHashCode(service) : 0
+            );
 
             synchronized (AppMetricaConnector.this) {
                 mService = IAppMetricaService.Stub.asInterface(service);
-                DebugLogger.INSTANCE.info(TAG, "onServiceConnected - countDown");
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "onServiceConnected - mService set: %b, countDown",
+                    mService != null
+                );
                 bindCountDown.countDown();
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            DebugLogger.INSTANCE.info(TAG, "Service disconnected. Component name: %s", name);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Service disconnected. Component name: %s, pid: %d, thread: %s",
+                name,
+                Process.myPid(),
+                Thread.currentThread().getName()
+            );
 
             synchronized (AppMetricaConnector.this) {
                 mService = null;
+            }
+        }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "onBindingDied. Component name: %s, pid: %d, thread: %s",
+                name,
+                Process.myPid(),
+                Thread.currentThread().getName()
+            );
+            synchronized (AppMetricaConnector.this) {
+                mService = null;
+            }
+        }
+
+        @Override
+        public void onNullBinding(ComponentName name) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "onNullBinding. Component name: %s, pid: %d, thread: %s",
+                name,
+                Process.myPid(),
+                Thread.currentThread().getName()
+            );
+            synchronized (AppMetricaConnector.this) {
+                mService = null;
+                bindCountDown.countDown();
             }
         }
 
@@ -191,7 +247,13 @@ public class AppMetricaConnector {
     }
 
     public boolean waitForConnect(@NonNull final Long timeout) {
-        DebugLogger.INSTANCE.info(TAG, "waitForConnect with timeout = %s", timeout);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "waitForConnect with timeout = %s, pid: %d, thread: %s",
+            timeout,
+            Process.myPid(),
+            Thread.currentThread().getName()
+        );
         try {
             synchronized (this) {
                 if (bindCountDown == null) {
@@ -199,7 +261,16 @@ public class AppMetricaConnector {
                     return false;
                 }
             }
-            return bindCountDown.await(timeout, TimeUnit.MILLISECONDS);
+            boolean awaitResult = bindCountDown.await(timeout, TimeUnit.MILLISECONDS);
+            synchronized (this) {
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "waitForConnect finished: awaitResult=%b, mServiceSet=%b",
+                    awaitResult,
+                    mService != null
+                );
+            }
+            return awaitResult;
         } catch (InterruptedException e) {
             DebugLogger.INSTANCE.error(TAG, e);
         }
