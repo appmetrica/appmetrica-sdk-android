@@ -1,5 +1,6 @@
 import io.appmetrica.analytics.gradle.AppMetricaModulePlugin
 import io.appmetrica.analytics.gradle.Constants
+import io.appmetrica.analytics.gradle.publishing.registerAggregateJavadocTask
 
 plugins {
     id("appmetrica-update-version")
@@ -27,6 +28,10 @@ fun createTaskName(
 }
 
 buildTypes.forEach { buildType ->
+    registerAggregateJavadocTask(
+        buildType = buildType,
+        projectToFlavor = projectToFlavorMapping,
+    )
     tasks.register("assemble${buildType.replaceFirstChar { it.uppercase() }}") {
         dependsOn(modules.map { it.tasks.named(createTaskName("assemble", it.name, buildType)) })
     }
