@@ -5,7 +5,7 @@
     group: "com.google.android.gms"
     name: "play-services-ads"
     from: "20.7.0"
-    to: "25.3.0"
+    to: "25.4.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-applovin-v12"
   dependencies:
@@ -44,7 +44,7 @@
     group: "com.unity3d.ads-mediation"
     name: "mediation-sdk"
     from: "9.0.0"
-    to: "9.4.3"
+    to: "9.4.4"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-other"
   dependencies:
@@ -107,7 +107,7 @@
     group: "com.apphud"
     name: "ApphudSDK-Android"
     from: "3.0.0"
-    to: "3.2.5"
+    to: "3.2.6"
 - group: "io.appmetrica.analytics"
   name: "analytics-appsetid"
   dependencies:
@@ -132,7 +132,7 @@
     group: "com.android.billingclient"
     name: "billing"
     from: "8.0.0"
-    to: "9.0.0"
+    to: "9.1.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-gpllibrary"
   dependencies:
