@@ -147,6 +147,10 @@
         <allow pkg="io\.appmetrica\.analytics\.networktasks\.impl(\..+)?" regex="true"/>
     </subpackage>
 
+    <subpackage name="productflow">
+        <allow pkg="io\.appmetrica\.analytics\.productflow\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
     <subpackage name="remotepermissions">
         <allow pkg="io\.appmetrica\.analytics\.remotepermissions\.impl(\..+)?" regex="true"/>
     </subpackage>

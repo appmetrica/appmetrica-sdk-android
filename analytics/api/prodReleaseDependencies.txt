@@ -52,6 +52,7 @@ io.appmetrica.analytics:network-api:unspecified
 io.appmetrica.analytics:network-okhttp:unspecified
 io.appmetrica.analytics:network-tasks:unspecified
 io.appmetrica.analytics:network:unspecified
+io.appmetrica.analytics:product-flow:unspecified
 io.appmetrica.analytics:proto:unspecified
 io.appmetrica.analytics:remote-permissions:unspecified
 io.appmetrica.analytics:reporter-extension:unspecified

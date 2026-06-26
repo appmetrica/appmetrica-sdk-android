@@ -307,9 +307,17 @@ public abstract class BaseReporter implements IBaseReporter {
 
     public void reportEvent(@NonNull final AppMetricaEvent event) {
         final AppMetricaEventData eventData = event.getEventData();
-        final CounterReport counterReport = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
-        mReportsHandler.reportEvent(counterReport, mReporterEnvironment, null);
-        mPublicLogger.info("AppMetricaEvent received: " + eventData.getDescription());
+        if (reservedEventType(eventData.getType())) {
+            DebugLogger.INSTANCE.warning(
+                TAG,
+                "Try to send custom event with event type = %s, reserved for metrica usage only",
+                String.valueOf(eventData.getType())
+            );
+        } else {
+            mPublicLogger.info("AppMetricaEvent received: " + eventData.getDescription());
+            final CounterReport counterReport = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+            mReportsHandler.reportEvent(counterReport, mReporterEnvironment, null);
+        }
     }
 
     @Override

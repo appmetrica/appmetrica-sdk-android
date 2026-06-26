@@ -6,9 +6,9 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer
 import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer
+import io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel
 import io.appmetrica.analytics.impl.adrevenue.AdRevenueDataSource
 import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher
-import io.appmetrica.analytics.impl.utils.DecimalProtoModel
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger

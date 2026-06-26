@@ -80,6 +80,7 @@ public class io.appmetrica.analytics.coreutils.internal.WrapUtils {
     public static [NonNull] String getOrDefaultIfEmpty([Nullable] String, [NonNull] String)
     public static <T> [Nullable] T getOrDefaultNullable([Nullable] T, [Nullable] T)
     public static [Nullable] String getOrDefaultNullableIfEmpty([Nullable] String, [Nullable] String)
+    public static [NonNull] java.math.BigDecimal microsToBigDecimal(long)
     public static <T> [NonNull] String wrapToTag([Nullable] T)
 }
 
@@ -528,6 +529,25 @@ public abstract class io.appmetrica.analytics.coreutils.internal.permission.Mult
 public final class io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy implementation io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
     public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] String)
     public boolean hasNecessaryPermissions([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel$Companion Companion
+
+    public <init>(long, int)
+    public final long component1()
+    public final int component2()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel copy(long, int)
+    public boolean equals([Nullable] Object)
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel fromDecimal([NonNull] java.math.BigDecimal)
+    public final int getExponent()
+    public final long getMantissa()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel$Companion {
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel fromDecimal([NonNull] java.math.BigDecimal)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils {

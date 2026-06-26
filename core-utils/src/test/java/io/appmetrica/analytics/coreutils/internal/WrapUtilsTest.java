@@ -1,11 +1,13 @@
 package io.appmetrica.analytics.coreutils.internal;
 
 import io.appmetrica.gradle.testutils.CommonTest;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
@@ -169,6 +171,40 @@ public class WrapUtilsTest extends CommonTest {
         @Test
         public void test() {
             assertThat(WrapUtils.getMillisOrDefault(mInput, mTimeUnit, mDefValue)).isEqualTo(mExpectedValue);
+        }
+    }
+
+    @RunWith(Parameterized.class)
+    public static class MicrosToBigDecimalTest {
+
+        private final long mMicros;
+        private final BigDecimal mExpected;
+
+        public MicrosToBigDecimalTest(final long micros, final String expected) {
+            mMicros = micros;
+            mExpected = new BigDecimal(expected);
+        }
+
+        @Parameterized.Parameters()
+        public static Collection<Object[]> data() {
+            return Arrays.asList(new Object[][]{
+                    {0L, "0.000000"},
+                    {1L, "0.000001"},
+                    {1_000_000L, "1.000000"},
+                    {1_500_000L, "1.500000"},
+                    {-1_000_000L, "-1.000000"},
+                    {-500_000L, "-0.500000"},
+                    {123_456_789L, "123.456789"},
+                    {Long.MAX_VALUE, "9223372036854.775807"},
+                    {Long.MIN_VALUE, "-9223372036854.775808"}
+            });
+        }
+
+        @Test
+        public void test() {
+            BigDecimal actual = WrapUtils.microsToBigDecimal(mMicros);
+            assertThat(actual).isEqualByComparingTo(mExpected);
+            assertThat(actual.scale()).isEqualTo(6);
         }
     }
 }

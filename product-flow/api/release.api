@@ -1,0 +1,85 @@
+public final class io.appmetrica.analytics.productflow.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.productflow.FlowResultEventBuilder {
+    public [NonNull] io.appmetrica.analytics.coreapi.event.AppMetricaEvent build()
+    public [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder withPayload([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder withPrice([Nullable] io.appmetrica.analytics.productflow.OfferPrice)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder withProductId([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder withProductOfferId([Nullable] String)
+}
+
+public class io.appmetrica.analytics.productflow.FlowStartEventBuilder {
+    public [NonNull] io.appmetrica.analytics.coreapi.event.AppMetricaEvent build()
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStartEventBuilder withPayload([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStartEventBuilder withPrice([Nullable] io.appmetrica.analytics.productflow.OfferPrice)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStartEventBuilder withProductOfferId([Nullable] String)
+}
+
+public class io.appmetrica.analytics.productflow.FlowStepEventBuilder {
+    public [NonNull] io.appmetrica.analytics.coreapi.event.AppMetricaEvent build()
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder withPayload([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder withPrice([Nullable] io.appmetrica.analytics.productflow.OfferPrice)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder withProductId([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder withProductOfferId([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder withStepOption([Nullable] String)
+}
+
+public class io.appmetrica.analytics.productflow.IllegalProductFlowParametersException extends RuntimeException {
+    public <init>(String)
+}
+
+public class io.appmetrica.analytics.productflow.OfferPrice {
+    public <init>(double, [NonNull] String)
+    public <init>([NonNull] java.math.BigDecimal, [NonNull] String)
+    public <init>(long, [NonNull] String)
+    public [NonNull] java.math.BigDecimal getAmount()
+    public [NonNull] String getUnit()
+    public [NonNull] String toString()
+}
+
+public class io.appmetrica.analytics.productflow.OfferReferrer {
+    public [Nullable] String getIdentifier()
+    public [Nullable] String getScreen()
+    public [Nullable] String getType()
+    public static [NonNull] io.appmetrica.analytics.productflow.OfferReferrer$Builder newBuilder()
+    public [NonNull] String toString()
+}
+
+public static class io.appmetrica.analytics.productflow.OfferReferrer$Builder {
+    public [NonNull] io.appmetrica.analytics.productflow.OfferReferrer build()
+    public [NonNull] io.appmetrica.analytics.productflow.OfferReferrer$Builder withIdentifier([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferReferrer$Builder withScreen([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferReferrer$Builder withType([Nullable] String)
+}
+
+public class io.appmetrica.analytics.productflow.OfferShownEventBuilder {
+    public [NonNull] io.appmetrica.analytics.coreapi.event.AppMetricaEvent build()
+    public [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder withBenefitType([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder withPayload([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder withPrice([Nullable] io.appmetrica.analytics.productflow.OfferPrice)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder withProductId([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder withReferrer([Nullable] io.appmetrica.analytics.productflow.OfferReferrer)
+}
+
+public abstract class io.appmetrica.analytics.productflow.ProductFlowEvent {
+    public static [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder flowResultForOffer([NonNull] io.appmetrica.analytics.productflow.ProductFlowStatus, [NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.productflow.FlowResultEventBuilder flowResultForProduct([NonNull] io.appmetrica.analytics.productflow.ProductFlowStatus, [NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.productflow.FlowStartEventBuilder flowStart([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder flowStepForOffer([NonNull] String, [NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.productflow.FlowStepEventBuilder flowStepForProduct([NonNull] String, [NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.productflow.OfferShownEventBuilder offerShown([NonNull] String, [NonNull] String)
+}
+
+public enum io.appmetrica.analytics.productflow.ProductFlowStatus {
+    CANCELLED, DECLINED, EXPIRED, FAIL, PENDING, SUCCESS
+
+    public static io.appmetrica.analytics.productflow.ProductFlowStatus valueOf(String)
+    public static io.appmetrica.analytics.productflow.ProductFlowStatus[] values()
+}
+

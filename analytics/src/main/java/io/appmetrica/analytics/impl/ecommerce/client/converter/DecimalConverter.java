@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.impl.utils.DecimalProtoModel;
 import java.math.BigDecimal;
 
 public class DecimalConverter implements ProtobufConverter<BigDecimal, Ecommerce.ECommerceEvent.Decimal> {

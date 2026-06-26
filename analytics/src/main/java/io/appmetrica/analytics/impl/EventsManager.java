@@ -9,6 +9,7 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
  * Class for various kinds of event management.
  */
 public final class EventsManager {
+
+    private static final String TAG = "[EventsManager]";
 
     private static final Set<Integer> SHOULD_USE_ERROR_ENVIRONMENT = CollectionUtils.unmodifiableSetOf(
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF.getTypeId(),
@@ -343,6 +346,13 @@ public final class EventsManager {
         @NonNull AppMetricaEventData event,
         @NonNull PublicLogger logger
     ) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Sending AppMetricaEvent: total size = %d, bytes truncated = %d",
+            event.getData().length,
+            event.getBytesTruncated()
+        );
+
         CounterReport report = new ClientCounterReport(
             event.getData(),
             event.getName(),

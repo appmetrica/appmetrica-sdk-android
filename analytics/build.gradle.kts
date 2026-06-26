@@ -113,6 +113,7 @@ project.tasks.register<GenerateThirdPartyAidlTask>("generateThirdPartyAidl")
 dependencies {
     api(appMetricaLibs.installreferrer)
     api(project(":core-api"))
+    api(project(":product-flow"))
 
     implementation(project(":appsetid"))
     implementation(project(":core-utils"))
@@ -133,4 +134,5 @@ dependencies {
 
     testImplementation(project(":identifiers"))
     testImplementation(appMetricaLibs.playServicesLocation)
+    testImplementation(appMetricaLibs.archunit)
 }

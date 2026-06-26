@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl.utils;
+package io.appmetrica.analytics.coreutils.internal.proto;
 
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;

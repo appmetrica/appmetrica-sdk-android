@@ -2,6 +2,8 @@ package io.appmetrica.analytics.coreutils.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,5 +62,10 @@ public class WrapUtils {
 
     public static double getFiniteDoubleOrDefaultNullable(@Nullable Double input, double fallback) {
         return input == null ? fallback : getFiniteDoubleOrDefault(input, fallback);
+    }
+
+    @NonNull
+    public static BigDecimal microsToBigDecimal(long micros) {
+        return new BigDecimal(micros).divide(new BigDecimal(1000000), 6, RoundingMode.HALF_EVEN);
     }
 }
