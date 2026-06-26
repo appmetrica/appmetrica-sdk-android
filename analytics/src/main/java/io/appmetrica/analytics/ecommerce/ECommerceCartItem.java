@@ -52,7 +52,7 @@ public class ECommerceCartItem {
     public ECommerceCartItem(@NonNull ECommerceProduct product,
                              @NonNull ECommercePrice revenue,
                              double quantity) {
-        this(product, revenue, new BigDecimal(Utils.getFiniteDoubleOrDefault(quantity, 0d)));
+        this(product, revenue, BigDecimal.valueOf(Utils.getFiniteDoubleOrDefault(quantity, 0d)));
     }
 
     /**

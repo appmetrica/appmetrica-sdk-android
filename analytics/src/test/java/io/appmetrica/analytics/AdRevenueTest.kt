@@ -29,28 +29,28 @@ class AdRevenueTest : CommonTest() {
     fun builderWithDouble() {
         val revenue = 23764872364.12984681726
         val result = AdRevenue.newBuilder(revenue, currency).build()
-        assertThat(result.adRevenue).isEqualTo(BigDecimal(revenue))
+        assertThat(result.adRevenue).isEqualTo(BigDecimal.valueOf(revenue))
     }
 
     @Test
     fun builderWithNanDouble() {
         val revenue = Double.NaN
         val result = AdRevenue.newBuilder(revenue, currency).build()
-        assertThat(result.adRevenue).isEqualTo(BigDecimal.ZERO)
+        assertThat(result.adRevenue).isEqualTo(BigDecimal.valueOf(0.0))
     }
 
     @Test
     fun builderWithNegativeInfinityDouble() {
         val revenue = Double.NEGATIVE_INFINITY
         val result = AdRevenue.newBuilder(revenue, currency).build()
-        assertThat(result.adRevenue).isEqualTo(BigDecimal.ZERO)
+        assertThat(result.adRevenue).isEqualTo(BigDecimal.valueOf(0.0))
     }
 
     @Test
     fun builderWithPositiveInfinityDouble() {
         val revenue = Double.POSITIVE_INFINITY
         val result = AdRevenue.newBuilder(revenue, currency).build()
-        assertThat(result.adRevenue).isEqualTo(BigDecimal.ZERO)
+        assertThat(result.adRevenue).isEqualTo(BigDecimal.valueOf(0.0))
     }
 
     @Test

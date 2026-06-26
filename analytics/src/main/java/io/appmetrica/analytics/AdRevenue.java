@@ -133,9 +133,7 @@ public class AdRevenue {
      * Creates the new instance of {@link Builder}.
      *
      * @param adRevenue Amount of money received via ad revenue represented as double.
-     *                  It will be converted to {@link BigDecimal}.
-     *                  Note that for that purpose AppMetrica uses {@link BigDecimal#BigDecimal(double)}} constructor
-     *                  which can yield unpredictable results for values that cannot be precisely represented as double.
+     *                  It will be converted to {@link BigDecimal} via {@link BigDecimal#valueOf(double)}.
      * @param currency Currency.
      * @return new {@link Builder} instance.
      *
@@ -143,7 +141,7 @@ public class AdRevenue {
      * @see AdRevenue#currency
      */
     public static Builder newBuilder(double adRevenue, @NonNull Currency currency) {
-        return new Builder(new BigDecimal(Utils.getFiniteDoubleOrDefault(adRevenue, 0d)), currency);
+        return new Builder(BigDecimal.valueOf(Utils.getFiniteDoubleOrDefault(adRevenue, 0d)), currency);
     }
 
     /**

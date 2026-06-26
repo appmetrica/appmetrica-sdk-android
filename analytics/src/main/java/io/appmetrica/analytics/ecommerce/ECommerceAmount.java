@@ -37,7 +37,7 @@ public class ECommerceAmount {
      * @param unit Amount unit. For example, "USD", "RUB", etc.
      */
     public ECommerceAmount(double amount, @NonNull String unit) {
-        this(new BigDecimal(Utils.getFiniteDoubleOrDefault(amount, 0d)), unit);
+        this(BigDecimal.valueOf(Utils.getFiniteDoubleOrDefault(amount, 0d)), unit);
     }
 
     /**
