@@ -47,7 +47,7 @@ robolectric = "4.16"
 ktlint = "0.43.2"
 equalsverifier = "3.15.2"
 jsonassert = "1.5.0"
-archunit = "1.3.0"
+archunit = "1.4.0"
 
 [plugins]
 appMetricaCheckNamespace = { id = "io.appmetrica.gradle.check-namespace", version.ref = "selfGradlePlugins" }
