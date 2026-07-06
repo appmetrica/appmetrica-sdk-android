@@ -10,7 +10,6 @@ internal class DefaultCaptorProvider(
 
     override fun getCaptors() = listOf(
         AndroidApiScreenshotCaptor(clientContext, callback),
-        ContentObserverScreenshotCaptor(clientContext, callback),
         ServiceScreenshotCaptor(clientContext, callback),
     )
 }
