@@ -25,6 +25,7 @@ import org.junit.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -364,6 +365,16 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
+    fun `activateReporter applies app environment from config`() {
+        val config = ReporterConfig.newConfigBuilder(firstReporterApiKey)
+            .withAppEnvironmentValue("memory", "2mb")
+            .withAppEnvironmentValue("money", "-100")
+            .build()
+        reporterFactory.activateReporter(config)
+        verify(manualReporter).putAllToAppEnvironment(config.appEnvironment)
+    }
+
+    @Test
     fun `activate reporter perform common initialization`() {
         val config = ReporterConfig.newConfigBuilder(firstReporterApiKey).build()
         reporterFactory.activateReporter(config)
@@ -421,6 +432,19 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(manualReporterConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, processConfiguration, config, reportsHandler)
+    }
+
+    @Test
+    fun `getOrCreateReporter applies app environment from config`() {
+        val config = ReporterConfig.newConfigBuilder(firstReporterApiKey)
+            .withAppEnvironmentValue("memory", "2mb")
+            .withAppEnvironmentValue("money", "-100")
+            .build()
+        reporterFactory.getOrCreateReporter(config)
+        inOrder(manualReporter) {
+            verify(manualReporter).putAllToAppEnvironment(config.appEnvironment)
+            verify(manualReporter).start()
+        }
     }
 
     @Test
