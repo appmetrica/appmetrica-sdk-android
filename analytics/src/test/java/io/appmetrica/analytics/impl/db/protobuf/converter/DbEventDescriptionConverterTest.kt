@@ -34,6 +34,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     private val attributionIdChanged = true
     private val openId = 31
     private val extras = "extras string".toByteArray()
+    private val valueProtocolVersion = 2
 
     private val attributionIdChangedProto = DbProto.Utils.OPTIONAL_BOOL_TRUE
     private val attributionIdChangedProtoFromNull = DbProto.Utils.OPTIONAL_BOOL_UNDEFINED
@@ -75,7 +76,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             source,
             attributionIdChanged,
             openId,
-            extras
+            extras,
+            valueProtocolVersion
         )
         val proto = converter.fromModel(model)
         ProtoObjectPropertyAssertions(proto)
@@ -97,6 +99,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("attributionIdChanged", attributionIdChangedProto)
             .checkField("openId", openId)
             .checkField("extras", extras)
+            .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll()
     }
 
@@ -104,7 +107,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     fun fromModelIfNullFields() {
         val model = DbEventModel.Description(
             null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null
         )
         val proto = converter.fromModel(model)
         ProtoObjectPropertyAssertions(proto)
@@ -126,6 +129,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("attributionIdChanged", attributionIdChangedProtoFromNull)
             .checkField("openId", -1)
             .checkField("extras", "".toByteArray())
+            .checkField("valueProtocolVersion", 1)
             .checkAll()
     }
 
@@ -150,6 +154,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.attributionIdChanged = attributionIdChangedProto
             it.openId = openId
             it.extras = extras
+            it.valueProtocolVersion = valueProtocolVersion
         }
         val model = converter.toModel(proto)
         ObjectPropertyAssertions(model)
@@ -171,6 +176,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("attributionIdChanged", attributionIdChanged)
             .checkField("openId", openId)
             .checkField("extras", extras)
+            .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll()
     }
 
@@ -197,7 +203,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "source",
                 "attributionIdChanged",
                 "openId",
-                "extras"
+                "extras",
+                "valueProtocolVersion"
             ).checkAll()
     }
 
@@ -222,6 +229,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.attributionIdChanged = -1
             it.openId = -1
             it.extras = "".toByteArray()
+            it.valueProtocolVersion = 1
         }
         val model = converter.toModel(proto)
         ObjectPropertyAssertions(model)
@@ -243,7 +251,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "source",
                 "attributionIdChanged",
                 "openId",
-                "extras"
+                "extras",
+                "valueProtocolVersion"
             ).checkAll()
     }
 
@@ -270,7 +279,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 source,
                 attributionIdChanged,
                 openId,
-                extras
+                extras,
+                valueProtocolVersion
             )
         )
         assertThat(proto.value).contains(validValuePart)
@@ -299,7 +309,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 source,
                 attributionIdChanged,
                 openId,
-                extras
+                extras,
+                valueProtocolVersion
             )
         )
         assertThat(proto.name).contains(validValuePart)

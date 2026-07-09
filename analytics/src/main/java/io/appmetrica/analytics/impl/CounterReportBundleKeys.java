@@ -20,4 +20,5 @@ final class CounterReportBundleKeys {
     static final String ATTRIBUTION_ID_CHANGED = COUNTER_REPORT_KEY_PREFIX + "AttributionIdChanged";
     static final String OPEN_ID = COUNTER_REPORT_KEY_PREFIX + "OpenId";
     static final String EXTRAS = COUNTER_REPORT_KEY_PREFIX + "Extras";
+    static final String VALUE_PROTOCOL_VERSION = COUNTER_REPORT_KEY_PREFIX + "ValueProtocolVersion";
 }

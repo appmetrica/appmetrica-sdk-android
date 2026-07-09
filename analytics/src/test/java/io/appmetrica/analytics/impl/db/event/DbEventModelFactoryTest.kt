@@ -52,6 +52,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
     private val extras = mutableMapOf(
         "key" to "value".toByteArray()
     )
+    private val valueProtocolVersion = 2
     private val reportData: CounterReport = mock {
         on { type } doReturn type
         on { customType } doReturn customType
@@ -65,6 +66,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         on { attributionIdChanged } doReturn attributionIdChanged
         on { openId } doReturn openId
         on { extras } doReturn extras
+        on { valueProtocolVersion } doReturn valueProtocolVersion
     }
     private val eventEncryptionMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER
     private val environmentRevisionValue = "environmentRevisionValue string"
@@ -160,6 +162,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
                         .checkField("attributionIdChanged", attributionIdChanged)
                         .checkField("openId", openId)
                         .checkField("extras", convertedExtras)
+                        .checkField("valueProtocolVersion", valueProtocolVersion)
                 }
             )
             .checkAll()

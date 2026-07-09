@@ -19,6 +19,7 @@ import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimme
 import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
 import io.appmetrica.analytics.coreutils.internal.limitation.Trimmer;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ClientCounterReport extends CounterReport {
@@ -131,9 +132,15 @@ public class ClientCounterReport extends CounterReport {
         refreshBytesTruncated();
     }
 
-    private void checkFieldForTrimming(byte[] originalValue, byte[] newValue, TrimmedField trimmedField) {
-        if (originalValue.length != newValue.length) {
-            mTrimmedFields.put(trimmedField, originalValue.length - newValue.length);
+    private void checkFieldForTrimming(
+        @Nullable byte[] originalValue,
+        @Nullable byte[] newValue,
+        TrimmedField trimmedField
+    ) {
+        if (!Arrays.equals(originalValue, newValue)) {
+            int originalValueLength = originalValue != null ? originalValue.length : 0;
+            int newValueLength = newValue != null ? newValue.length : 0;
+            mTrimmedFields.put(trimmedField, originalValueLength - newValueLength);
         } else {
             mTrimmedFields.remove(trimmedField);
         }
@@ -166,7 +173,7 @@ public class ClientCounterReport extends CounterReport {
         return newValue;
     }
 
-    private byte[] trimValue(byte[] value) {
+    private byte[] trimValue(@Nullable byte[] value) {
         byte[] newValue = mValueBytesTrimmer.trim(value);
         checkFieldForTrimming(value, newValue, TrimmedField.VALUE);
         return newValue;

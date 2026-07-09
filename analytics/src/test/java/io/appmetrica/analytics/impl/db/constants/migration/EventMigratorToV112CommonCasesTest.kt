@@ -59,7 +59,8 @@ internal class EventMigratorToV112CommonCasesTest(
             val source: Any? = EventSource.NATIVE.code,
             val attributionIdChanged: Any? = 1,
             val openId: Any? = 113,
-            val extras: ByteArray? = ByteArray(5) { it.toByte() }
+            val extras: ByteArray? = ByteArray(5) { it.toByte() },
+            val valueProtocolVersion: Any? = null
         )
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] {0}")
@@ -483,6 +484,7 @@ internal class EventMigratorToV112CommonCasesTest(
                         .checkField("attributionIdChanged", expectedRecord.attributionIdChanged == 1)
                         .checkField("openId", expectedRecord.openId)
                         .checkField("extras", expectedRecord.extras)
+                        .checkField("valueProtocolVersion", expectedRecord.valueProtocolVersion)
                         .checkFieldsAreNull("locationInfo", "connectionType", "cellularConnectionType")
                 }
                 .checkAll()

@@ -23,6 +23,7 @@ import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
@@ -195,7 +196,12 @@ public class ReportsHandler {
         }
         mConnector.removeScheduleDisconnect();
         if (Utils.isNullOrEmpty(attributes) == false) {
-            report.setValue(JsonHelper.mapToJsonString(attributes));
+            final String jsonValue = JsonHelper.mapToJsonString(attributes);
+            if (report.getType() == InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId()) {
+                report.setValueBytes(StringUtils.getUTF8Bytes(jsonValue));
+            } else {
+                report.setValue(jsonValue);
+            }
             prepareRegularReport(report, environment);
         }
         ReportToSend reportToSend = ReportToSend.newBuilder(report, environment)

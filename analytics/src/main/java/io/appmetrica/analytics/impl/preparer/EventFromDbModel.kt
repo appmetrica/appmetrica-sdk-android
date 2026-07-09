@@ -38,6 +38,7 @@ internal class EventFromDbModel(cv: ContentValues) {
     val appEnvironment: String = dbEventModel.description.appEnvironment
         ?: AppEnvironment.DEFAULT_ENVIRONMENT_JSON_STRING
     val appEnvironmentRevision: Long = dbEventModel.description.appEnvironmentRevision ?: 0L
+    val valueProtocolVersion: Int? = dbEventModel.description.valueProtocolVersion
 
     fun updateValue(newValue: String?) {
         value = newValue

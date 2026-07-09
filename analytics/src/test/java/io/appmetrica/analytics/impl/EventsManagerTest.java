@@ -5,6 +5,7 @@ import android.util.Base64;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -84,7 +85,7 @@ public class EventsManagerTest extends CommonTest {
             ModuleEvent.newBuilder(new Random().nextInt()).withValue(value).build(),
             mPublicLogger
         );
-        assertThat(report.getValue()).isEqualTo(value);
+        assertThat(report.getValueBytes()).isEqualTo(StringUtils.getUTF8Bytes(value));
     }
 
     @Test

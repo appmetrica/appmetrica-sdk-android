@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.preparer.BytesValueComposer;
+import io.appmetrica.analytics.impl.preparer.CustomEventValueComposer;
 import io.appmetrica.analytics.impl.preparer.DummyLocationInfoComposer;
 import io.appmetrica.analytics.impl.preparer.DummyNetworkInfoComposer;
 import io.appmetrica.analytics.impl.preparer.EmptyNameComposer;
@@ -17,6 +18,7 @@ import io.appmetrica.analytics.impl.preparer.EventPreparer;
 import io.appmetrica.analytics.impl.preparer.EventTypeComposer;
 import io.appmetrica.analytics.impl.preparer.NameComposer;
 import io.appmetrica.analytics.impl.preparer.ProtobufNativeCrashComposer;
+import io.appmetrica.analytics.impl.preparer.StringValueComposer;
 import io.appmetrica.analytics.impl.preparer.UnGzipBytesValueComposer;
 import io.appmetrica.analytics.impl.preparer.ValueComposer;
 import io.appmetrica.analytics.impl.preparer.ValueWithPreloadInfoComposer;
@@ -26,6 +28,7 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
+import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collections;
@@ -168,6 +171,11 @@ public final class ProtobufUtils {
         ValueComposer encryptedValueComposer = new EncryptedStringValueComposer();
         ValueComposer emptyValueComposer = new EmptyValueComposer();
         ValueComposer base64DecodedValueComposer = new BytesValueComposer();
+        ValueComposer customEventBase64DecodedValueComposer = new CustomEventValueComposer(
+            base64DecodedValueComposer,
+            new StringValueComposer(),
+            new EventEncrypterProvider()
+        );
         ValueComposer unGzippedBase64DecodedValueComposer = new UnGzipBytesValueComposer();
         ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
         EventPreparer nativeCrashPreparer = EventPreparer.builderWithDefaults()
@@ -254,13 +262,15 @@ public final class ProtobufUtils {
         );
         eventsMapping.put(
                 InternalEvents.EVENT_TYPE_CUSTOM_EVENT,
-                EventPreparer.builderWithDefaults().withEventTypeComposer(new EventTypeComposer() {
-                    @Nullable
-                    @Override
-                    public Integer getEventType(@NonNull EventFromDbModel event) {
-                        return event.getCustomType();
-                    }
-                }).build()
+                EventPreparer.builderWithDefaults()
+                        .withValueComposer(customEventBase64DecodedValueComposer)
+                        .withEventTypeComposer(new EventTypeComposer() {
+                            @Nullable
+                            @Override
+                            public Integer getEventType(@NonNull EventFromDbModel event) {
+                                return event.getCustomType();
+                            }
+                        }).build()
         );
         eventsMapping.put(InternalEvents.EVENT_TYPE_APP_OPEN, preparerWithEncryptedValue);
         eventsMapping.put(InternalEvents.EVENT_TYPE_PERMISSIONS, preparerWithoutName);

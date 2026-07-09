@@ -254,7 +254,8 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                         } else {
                             cursor.getBlob(it)
                         }
-                    }
+                    },
+                    valueProtocolVersion = null
                 )
             )
         } catch (e: Throwable) {

@@ -73,6 +73,9 @@ public class CounterReport implements CounterReportApi, Parcelable {
             reportData.putInt(CounterReportBundleKeys.OPEN_ID, openId);
         }
         reportData.putBundle(CounterReportBundleKeys.EXTRAS, CollectionUtils.mapToBundle(extras));
+        if (valueProtocolVersion != null) {
+            reportData.putInt(CounterReportBundleKeys.VALUE_PROTOCOL_VERSION, valueProtocolVersion);
+        }
 
         dest.writeBundle(reportData);
     }
@@ -109,6 +112,9 @@ public class CounterReport implements CounterReportApi, Parcelable {
                 );
                 result.setOpenId(Utils.getIntOrNull(data, CounterReportBundleKeys.OPEN_ID));
                 result.setExtras(CollectionUtils.bundleToMap(data.getBundle(CounterReportBundleKeys.EXTRAS)));
+                result.setValueProtocolVersion(
+                    Utils.getIntOrNull(data, CounterReportBundleKeys.VALUE_PROTOCOL_VERSION)
+                );
                 return result;
             }
 
@@ -145,6 +151,8 @@ public class CounterReport implements CounterReportApi, Parcelable {
     private Integer openId;
     @NonNull
     private Map<String, byte[]> extras = new HashMap<>();
+    @Nullable
+    private Integer valueProtocolVersion;
     @NonNull
     private final SystemTimeProvider systemTimeProvider = new SystemTimeProvider();
 
@@ -345,6 +353,15 @@ public class CounterReport implements CounterReportApi, Parcelable {
         return creationTimestamp;
     }
 
+    @Nullable
+    public Integer getValueProtocolVersion() {
+        return valueProtocolVersion;
+    }
+
+    public void setValueProtocolVersion(@Nullable Integer valueProtocolVersion) {
+        this.valueProtocolVersion = valueProtocolVersion;
+    }
+
     @NonNull
     public Bundle toBundle(final Bundle bundle) {
         final Bundle data = null != bundle ? bundle : new Bundle();
@@ -415,6 +432,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
         counterReport.setEventEnvironment(reportData.getEventEnvironment());
         counterReport.setPayload(reportData.getPayload());
         counterReport.setExtras(reportData.extras);
+        counterReport.setValueProtocolVersion(reportData.getValueProtocolVersion());
         counterReport.setProfileID(reportData.getProfileID());
         return counterReport;
     }

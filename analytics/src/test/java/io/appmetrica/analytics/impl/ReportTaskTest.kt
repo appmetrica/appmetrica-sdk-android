@@ -142,7 +142,8 @@ internal class ReportTaskTest : CommonTest() {
                         source = null,
                         attributionIdChanged = null,
                         openId = null,
-                        extras = null
+                        extras = null,
+                        valueProtocolVersion = null
                     )
                 )
             ) // FIELD_EVENT_DESCRIPTION
@@ -571,7 +572,8 @@ internal class ReportTaskTest : CommonTest() {
                                 source = null,
                                 attributionIdChanged = null,
                                 openId = null,
-                                extras = null
+                                extras = null,
+                                valueProtocolVersion = null
                             )
                         )
                     ) // FIELD_EVENT_DESCRIPTION

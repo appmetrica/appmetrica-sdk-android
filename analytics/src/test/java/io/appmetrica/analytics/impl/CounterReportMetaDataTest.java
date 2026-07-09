@@ -118,6 +118,7 @@ public class CounterReportMetaDataTest extends CommonTest {
         Bundle originalPayload = new Bundle();
         originalPayload.putInt("some key", 100);
         Map<String, byte[]> extras = Collections.singletonMap("key", new byte[]{1, 3, 5, 7});
+        int valueProtocolVersion = 2;
         CounterReport originalReport = new CounterReport();
         originalReport.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
         originalReport.setCustomType(InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId());
@@ -135,6 +136,7 @@ public class CounterReportMetaDataTest extends CommonTest {
         originalReport.setAttributionIdChanged(attributionIdChanged);
         originalReport.setOpenId(openId);
         originalReport.setExtras(extras);
+        originalReport.setValueProtocolVersion(valueProtocolVersion);
         Assertions.INSTANCE.ObjectPropertyAssertions(reportProvider.apply(originalReport))
             .withIgnoredFields("systemTimeProvider")
             .withPrivateFields(true)
@@ -160,6 +162,7 @@ public class CounterReportMetaDataTest extends CommonTest {
             .checkFieldIsNull("attributionIdChanged")
             .checkFieldIsNull("openId")
             .checkField("extras", extras)
+            .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll();
     }
 }

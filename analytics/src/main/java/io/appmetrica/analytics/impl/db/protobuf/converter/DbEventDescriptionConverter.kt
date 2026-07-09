@@ -68,6 +68,9 @@ internal class DbEventDescriptionConverter(
         value.extras?.let {
             proto.extras = it
         }
+        value.valueProtocolVersion?.let {
+            proto.valueProtocolVersion = it
+        }
     }
 
     override fun toModel(value: DbProto.EventDescription): DbEventModel.Description {
@@ -94,6 +97,7 @@ internal class DbEventDescriptionConverter(
             optionalBoolConverter.toModel(value.attributionIdChanged),
             value.openId.takeIf { it != defaultModel.openId },
             value.extras.takeIf { !it.contentEquals(defaultModel.extras) },
+            value.valueProtocolVersion.takeIf { it != defaultModel.valueProtocolVersion }
         )
     }
 }

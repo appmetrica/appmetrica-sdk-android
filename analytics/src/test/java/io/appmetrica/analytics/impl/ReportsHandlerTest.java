@@ -20,12 +20,16 @@ import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.IAppMetricaService;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -276,6 +280,53 @@ public class ReportsHandlerTest extends CommonTest {
         // Verify calls for connector
         verify(mConnector, times(1)).removeScheduleDisconnect();
         verify(mConnector, never()).scheduleDisconnect();
+    }
+
+    @Test
+    public void testReportEventWithAttributesForCustomEventStoresBase64EncodedValue() {
+        final Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("key", "value");
+        final CounterReport report = new ClientCounterReport(
+            "name",
+            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
+            mock(PublicLogger.class)
+        );
+
+        mReportsHandlerSpy.reportEvent(
+            report,
+            mArgReporterEnvironment,
+            AppMetricaServiceDataReporter.TYPE_CORE,
+            attributes
+        );
+
+        ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
+        verify(mReportsSender).queueReport(reportToSend.capture());
+        CounterReport queuedReport = reportToSend.getValue().getReport();
+        assertThat(queuedReport.getValueBytes())
+            .isEqualTo(StringUtils.getUTF8Bytes(JsonHelper.mapToJsonString(attributes)));
+    }
+
+    @Test
+    public void testReportEventWithAttributesForRegularEventStoresPlainJsonValue() {
+        final Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("key", "value");
+        final CounterReport report = new ClientCounterReport(
+            "name",
+            InternalEvents.EVENT_TYPE_REGULAR.getTypeId(),
+            mock(PublicLogger.class)
+        );
+
+        mReportsHandlerSpy.reportEvent(
+            report,
+            mArgReporterEnvironment,
+            AppMetricaServiceDataReporter.TYPE_CORE,
+            attributes
+        );
+
+        ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
+        verify(mReportsSender).queueReport(reportToSend.capture());
+        CounterReport queuedReport = reportToSend.getValue().getReport();
+        assertThat(queuedReport.getValue()).isEqualTo(JsonHelper.mapToJsonString(attributes));
     }
 
     @Test

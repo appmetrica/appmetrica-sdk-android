@@ -316,13 +316,15 @@ public final class EventsManager {
     }
 
     static CounterReport customEventReportEntry(@NonNull ModuleEvent moduleEvent, @NonNull PublicLogger logger) {
+        final String stringValue = moduleEvent.getValue();
         CounterReport report = new ClientCounterReport(
-            moduleEvent.getValue(),
+            stringValue == null ? null : StringUtils.getUTF8Bytes(stringValue),
             moduleEvent.getName(),
             InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
-            moduleEvent.getType(),
             logger
         );
+        report.setCustomType(moduleEvent.getType());
+        report.setValueProtocolVersion(2);
         report.setSource(new EventCategoryToSourceConverter().convert(moduleEvent.getCategory()));
         report.setEventEnvironment(JsonHelper.mapToJsonString(moduleEvent.getEnvironment()));
         if (moduleEvent.getExtras() != null) {
@@ -361,6 +363,7 @@ public final class EventsManager {
         );
         report.setCustomType(event.getType());
         report.setBytesTruncated(report.getBytesTruncated() + event.getBytesTruncated());
+        report.setValueProtocolVersion(2);
 
         return report;
     }

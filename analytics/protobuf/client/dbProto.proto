@@ -46,4 +46,5 @@ message EventDescription {
   optional Utils.OptionalBool attribution_id_changed = 16 [default = OPTIONAL_BOOL_UNDEFINED];
   optional int32 open_id = 17 [default = -1];
   optional bytes extras = 18 [default = ""];
+  optional uint32 value_protocol_version = 19 [default = 1];
 }

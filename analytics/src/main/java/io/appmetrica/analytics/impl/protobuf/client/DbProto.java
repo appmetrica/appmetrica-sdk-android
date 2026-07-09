@@ -489,6 +489,9 @@ public interface DbProto {
     // optional bytes extras = 18 [default = ""];
     public byte[] extras;
 
+    // optional uint32 value_protocol_version = 19 [default = 1];
+    public int valueProtocolVersion;
+
     public EventDescription() {
       clear();
     }
@@ -512,6 +515,7 @@ public interface DbProto {
       attributionIdChanged = DbProto.Utils.OPTIONAL_BOOL_UNDEFINED;
       openId = -1;
       extras = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+      valueProtocolVersion = 1;
       cachedSize = -1;
       return this;
     }
@@ -572,6 +576,9 @@ public interface DbProto {
       }
       if (!java.util.Arrays.equals(this.extras, io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         output.writeBytes(18, this.extras);
+      }
+      if (this.valueProtocolVersion != 1) {
+        output.writeUInt32(19, this.valueProtocolVersion);
       }
       super.writeTo(output);
     }
@@ -650,6 +657,10 @@ public interface DbProto {
       if (!java.util.Arrays.equals(this.extras, io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
             .computeBytesSize(18, this.extras);
+      }
+      if (this.valueProtocolVersion != 1) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+            .computeUInt32Size(19, this.valueProtocolVersion);
       }
       return size;
     }
@@ -749,6 +760,10 @@ public interface DbProto {
           }
           case 146: {
             this.extras = input.readBytes();
+            break;
+          }
+          case 152: {
+            this.valueProtocolVersion = input.readUInt32();
             break;
           }
         }

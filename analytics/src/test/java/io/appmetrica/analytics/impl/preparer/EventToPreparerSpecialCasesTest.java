@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,7 +41,7 @@ public class EventToPreparerSpecialCasesTest extends CommonTest {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_CUSTOM_EVENT);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(eventPreparer.getNameComposer()).isExactlyInstanceOf(SameNameComposer.class);
-        softly.assertThat(eventPreparer.getValueComposer()).isExactlyInstanceOf(StringValueComposer.class);
+        softly.assertThat(eventPreparer.getValueComposer()).isExactlyInstanceOf(CustomEventValueComposer.class);
         softly.assertThat(eventPreparer.getEncodingTypeProvider()).isExactlyInstanceOf(NoneEncodingTypeProvider.class);
 
         final int type = InternalEvents.EVENT_TYPE_REGULAR.getTypeId();
@@ -54,6 +55,33 @@ public class EventToPreparerSpecialCasesTest extends CommonTest {
         softly.assertThat(eventPreparer.getEventTypeComposer().getEventType(event)).isEqualTo(customType);
 
         softly.assertAll();
+    }
+
+    @Test
+    public void testCustomEventValueIsStringDecodedForValueProtocolVersionUpTo1() {
+        EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_CUSTOM_EVENT);
+        final String value = "value";
+        final byte[] rawValue = value.getBytes();
+        ContentValues cv = new ContentValues();
+        DbProto.EventDescription eventDescription = new DbProto.EventDescription();
+        eventDescription.value = value;
+        eventDescription.valueProtocolVersion = 1;
+        cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
+        EventFromDbModel event = new EventFromDbModel(cv);
+        Assertions.assertThat(eventPreparer.getValueComposer().getValue(event, mConfig)).isEqualTo(rawValue);
+    }
+
+    @Test
+    public void testCustomEventValueIsBase64Decoded() {
+        EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_CUSTOM_EVENT);
+        final byte[] rawValue = new byte[]{1, 2, 3, 4};
+        ContentValues cv = new ContentValues();
+        DbProto.EventDescription eventDescription = new DbProto.EventDescription();
+        eventDescription.value = new String(Base64.encode(rawValue, Base64.DEFAULT));
+        eventDescription.valueProtocolVersion = 2;
+        cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
+        EventFromDbModel event = new EventFromDbModel(cv);
+        Assertions.assertThat(eventPreparer.getValueComposer().getValue(event, mConfig)).isEqualTo(rawValue);
     }
 
     @Test

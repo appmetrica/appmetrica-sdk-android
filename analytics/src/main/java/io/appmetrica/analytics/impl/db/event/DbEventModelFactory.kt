@@ -58,7 +58,8 @@ internal class DbEventModelFactory @JvmOverloads constructor(
             source = reportData.source,
             attributionIdChanged = reportData.attributionIdChanged,
             openId = reportData.openId,
-            extras = eventExtrasConverter.fromModel(reportData.extras)
+            extras = eventExtrasConverter.fromModel(reportData.extras),
+            valueProtocolVersion = reportData.valueProtocolVersion
         )
     }
 

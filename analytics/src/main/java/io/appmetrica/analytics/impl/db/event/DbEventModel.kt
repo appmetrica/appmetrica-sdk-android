@@ -34,6 +34,7 @@ internal class DbEventModel(
         val source: EventSource?,
         val attributionIdChanged: Boolean?,
         val openId: Int?,
-        val extras: ByteArray?
+        val extras: ByteArray?,
+        val valueProtocolVersion: Int?
     )
 }

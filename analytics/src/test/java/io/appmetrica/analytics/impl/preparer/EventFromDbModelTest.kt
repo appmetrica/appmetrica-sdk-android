@@ -43,6 +43,7 @@ internal class EventFromDbModelTest : CommonTest() {
     private val extras = byteArrayOf(1, 3, 5, 7, 9)
     private val appEnvironment = "app environment"
     private val appEnvironmentRevision = 123L
+    private val valueProtocolVersion = 2
 
     private val contentValues: ContentValues = mock()
     private val model: DbEventModel = mock()
@@ -79,6 +80,7 @@ internal class EventFromDbModelTest : CommonTest() {
         whenever(modelDescription.extras).thenReturn(extras)
         whenever(modelDescription.appEnvironment).thenReturn(appEnvironment)
         whenever(modelDescription.appEnvironmentRevision).thenReturn(appEnvironmentRevision)
+        whenever(modelDescription.valueProtocolVersion).thenReturn(valueProtocolVersion)
     }
 
     @Test
@@ -110,6 +112,7 @@ internal class EventFromDbModelTest : CommonTest() {
             .checkField("extras", extras)
             .checkField("appEnvironment", appEnvironment)
             .checkField("appEnvironmentRevision", appEnvironmentRevision)
+            .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll()
     }
 
