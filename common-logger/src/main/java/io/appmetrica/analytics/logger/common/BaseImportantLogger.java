@@ -22,7 +22,7 @@ public abstract class BaseImportantLogger {
     public BaseImportantLogger(@NonNull String loggerTag) {
         this.impl = new MultilineLogger(
             new SystemLogger(loggerTag),
-            new LogMessageConstructor(),
+            new LogMessageConstructor(true),
             new LogMessageSplitter()
         );
     }

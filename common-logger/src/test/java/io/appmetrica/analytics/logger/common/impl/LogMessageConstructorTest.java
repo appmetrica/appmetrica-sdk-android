@@ -92,6 +92,36 @@ public class LogMessageConstructorTest extends CommonTest {
     }
 
     @Test
+    public void constructWithInvalidFormatAndMaskingMasksApiKeyInReturnedString() {
+        String apiKey = "12345678-1234-1234-1234-123456789012";
+        LogMessageConstructor maskingConstructor = new LogMessageConstructor(true);
+
+        String constructedMessage = maskingConstructor.construct(tag, "%D45%DF", apiKey);
+
+        assertThat(constructedMessage).doesNotContain(apiKey);
+        assertThat(constructedMessage).contains("12345678-xxxx-xxxx-xxxx-xxxxxxxx9012");
+    }
+
+    @Test
+    public void constructWithInvalidFormatAndMaskingMasksApiKeyInLogE() {
+        String apiKey = "12345678-1234-1234-1234-123456789012";
+        String maskedApiKey = "12345678-xxxx-xxxx-xxxx-xxxxxxxx9012";
+        LogMessageConstructor maskingConstructor = new LogMessageConstructor(true);
+
+        maskingConstructor.construct(tag, "%D45%DF", apiKey);
+
+        final String expectedErrorMessage = "Attention!!! Invalid log format. See exception details above. " +
+            "Message: %D45%DF; arguments: [" + maskedApiKey + "]";
+        logRule.getStaticMock().verify(
+            () -> Log.e(
+                org.mockito.ArgumentMatchers.eq("[LogMessageConstructor]"),
+                org.mockito.ArgumentMatchers.eq(expectedErrorMessage),
+                org.mockito.ArgumentMatchers.any(Throwable.class)
+            )
+        );
+    }
+
+    @Test
     public void constructWithPercentInConstructedMessageArgument() {
         String constructedMessage = constructor.construct(tag, "%s", "argu%DF2ment");
         assertThat(constructedMessage).isEqualTo(String.format(

@@ -31,7 +31,7 @@ public abstract class BaseReleaseLogger {
     public BaseReleaseLogger(@NonNull String tag, @NonNull String logPrefix) {
         this.logger = new MultilineLogger(
             new SystemLogger(tag),
-            new LogMessageConstructor(),
+            new LogMessageConstructor(true),
             new LogMessageSplitter()
         );
         this.logPrefix = logPrefix;
