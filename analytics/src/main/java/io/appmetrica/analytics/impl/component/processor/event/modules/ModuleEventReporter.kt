@@ -22,6 +22,7 @@ internal class ModuleEventReporter(
             name = report.name
             report.value?.let { value = it }
             report.valueBytes?.let { valueBytes = it }
+            valueProtocolVersion = report.valueProtocolVersion
             bytesTruncated = report.bytesTruncated
         }
         DebugLogger.info(tag, "new report: $newReport")

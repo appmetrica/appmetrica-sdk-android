@@ -27,6 +27,7 @@ internal class ModuleEventReporterTest : CommonTest() {
     private val nameValue = "Some event name"
     private val reportValue = "Some event value"
     private val valueBytesValue = ByteArray(128) { int -> int.toByte() }
+    private val valueProtocolVersionValue = 3
     private val bytesTruncatedValue = 123
 
     private val moduleReport = mock<CounterReportApi> {
@@ -35,6 +36,7 @@ internal class ModuleEventReporterTest : CommonTest() {
         on { name } doReturn nameValue
         on { value } doReturn reportValue
         on { valueBytes } doReturn valueBytesValue
+        on { valueProtocolVersion } doReturn valueProtocolVersionValue
         on { bytesTruncated } doReturn bytesTruncatedValue
     }
 
@@ -60,7 +62,7 @@ internal class ModuleEventReporterTest : CommonTest() {
             verify(newReport).customType = customTypeValue
             verify(newReport).name = nameValue
             verify(newReport).value = reportValue
-            verify(newReport).valueBytes = valueBytesValue
+            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
             verify(newReport).bytesTruncated = bytesTruncatedValue
             verify(eventSaver).identifyAndSaveReport(newReport)
         }
@@ -75,6 +77,7 @@ internal class ModuleEventReporterTest : CommonTest() {
             verify(newReport).customType = customTypeValue
             verify(newReport).name = nameValue
             verify(newReport).valueBytes = valueBytesValue
+            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
             verify(newReport).bytesTruncated = bytesTruncatedValue
             verify(eventSaver).identifyAndSaveReport(newReport)
         }
@@ -89,6 +92,7 @@ internal class ModuleEventReporterTest : CommonTest() {
             verify(newReport).customType = customTypeValue
             verify(newReport).name = nameValue
             verify(newReport).value = reportValue
+            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
             verify(newReport).bytesTruncated = bytesTruncatedValue
             verify(eventSaver).identifyAndSaveReport(newReport)
         }

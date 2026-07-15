@@ -12,6 +12,8 @@ interface CounterReportApi {
 
     var valueBytes: ByteArray?
 
+    var valueProtocolVersion: Int?
+
     var bytesTruncated: Int
 
     var extras: MutableMap<String, ByteArray>

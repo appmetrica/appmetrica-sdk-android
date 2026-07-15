@@ -186,6 +186,7 @@ public interface io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
     public abstract int getType()
     public abstract [Nullable] String getValue()
     public abstract [Nullable] byte[] getValueBytes()
+    public abstract [Nullable] Integer getValueProtocolVersion()
     public abstract void setBytesTruncated(int)
     public abstract void setCustomType(int)
     public abstract void setExtras([NonNull] java.util.Map<String, byte[]>)
@@ -193,6 +194,7 @@ public interface io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
     public abstract void setType(int)
     public abstract void setValue([Nullable] String)
     public abstract void setValueBytes([Nullable] byte[])
+    public abstract void setValueProtocolVersion([Nullable] Integer)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor extends io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread, java.util.concurrent.Executor {
