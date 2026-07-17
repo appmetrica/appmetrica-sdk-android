@@ -407,7 +407,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
     }
 
     @Test
-    public void getThresholdIdIsFirstLoadedFgSessionIdAndDoesNotChangeOnRecreation() {
+    public void getThresholdIdSlidesForwardWhenSessionIsRecreatedWithLargerGap() {
         long fgId = 1000L;
         long newFgId = 2000L;
         when(mFgSession.getId()).thenReturn(fgId);
@@ -425,13 +425,15 @@ public class SessionManagerStateMachineTest extends CommonTest {
         );
         manager.heartbeat(mCounterReport);
 
+        // gap between first and current is small — threshold stays at firstSessionId
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(fgId);
 
-        // Session is recreated — threshold stays at the first loaded session's ID
+        // Session is recreated with a large ID gap (simulates long-lived process) — threshold slides
         when(mFgSession.isValid(anyLong())).thenReturn(false);
         manager.heartbeat(mCounterReport);
 
-        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(fgId);
+        assertThat(manager.getThresholdSessionIdForActualSessions())
+            .isEqualTo(newFgId - SessionManagerStateMachine.SESSION_PROTECTION_WINDOW);
     }
 
     @Test
@@ -472,5 +474,30 @@ public class SessionManagerStateMachineTest extends CommonTest {
         );
         manager.getSomeSession(mCounterReport);
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(createdBgId);
+    }
+
+    @Test
+    public void getThresholdIdSlidesWindowForLongLivedProcess() {
+        long firstSessionId = 1000L;
+        long latestSessionId = firstSessionId + SessionManagerStateMachine.SESSION_PROTECTION_WINDOW + 5;
+        when(mFgSession.getId()).thenReturn(firstSessionId);
+        when(mFgSession.isValid(anyLong())).thenReturn(false);
+        when(mBgSessionFactory.load()).thenReturn(null);
+        Session latestSession = mock(Session.class);
+        when(latestSession.getId()).thenReturn(latestSessionId);
+        when(latestSession.getType()).thenReturn(SessionType.FOREGROUND);
+        when(mFgSessionFactory.create(any())).thenReturn(latestSession);
+        SessionManagerStateMachine manager = new SessionManagerStateMachine(
+            mComponentUnit,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory,
+            mSessionFromPastFactory
+        );
+        manager.heartbeat(mCounterReport);
+
+        long expectedThreshold = latestSessionId - SessionManagerStateMachine.SESSION_PROTECTION_WINDOW;
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(expectedThreshold);
+        assertThat(expectedThreshold).isGreaterThan(firstSessionId);
     }
 }

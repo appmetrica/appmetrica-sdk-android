@@ -106,7 +106,7 @@ internal class EventBatchWriter(
                 EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY.joinToString(", "),
                 percentToDelete
             )
-            databaseCleaner.cleanEvents(
+            val deletedEventsCount = databaseCleaner.cleanEvents(
                 db,
                 Constants.EventsTable.TABLE_NAME,
                 whereClause,
@@ -115,10 +115,25 @@ internal class EventBatchWriter(
                 component.componentId.apiKey,
                 true
             ).mDeletedRowsCount
+            deleteEmptyOverflowedSessions(db)
+            deletedEventsCount
         } catch (e: Throwable) {
             DebugLogger.error(tag, e, "Something was wrong while removing excessive reports from db")
             AppMetricaSelfReportFacade.getReporter().reportError("deleteExcessiveReports exception", e)
             0
+        }
+    }
+
+    private fun deleteEmptyOverflowedSessions(db: SQLiteDatabase) {
+        try {
+            val threshold = component.sessionManager.thresholdSessionIdForActualSessions
+            db.delete(
+                Constants.SessionTable.TABLE_NAME,
+                Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS,
+                arrayOf(threshold.toString())
+            )
+        } catch (e: Throwable) {
+            DebugLogger.error(tag, e, "Something was wrong while removing empty overflowed sessions from db")
         }
     }
 
