@@ -14,6 +14,11 @@ public class SessionManagerStateMachine {
 
     private static final String TAG = "[SessionManagerFSM]";
 
+    // Protects sessions from synthetic rapid-switching scenarios (deeplinks, attributionId changes
+    // can generate events for 3+ sessions simultaneously).
+    @VisibleForTesting
+    static final int SESSION_PROTECTION_WINDOW = 10;
+
     public interface EventSaver {
         void saveEvent(@NonNull final CounterReport reportData, @NonNull final SessionState sessionState);
     }
@@ -154,9 +159,13 @@ public class SessionManagerStateMachine {
     }
 
     public synchronized long getThresholdSessionIdForActualSessions() {
-        return firstSessionIdOfThisLaunch != null
-            ? firstSessionIdOfThisLaunch
-            : SessionIDProvider.SESSION_ID_MIN_LIMIT;
+        if (firstSessionIdOfThisLaunch == null) {
+            return SessionIDProvider.SESSION_ID_MIN_LIMIT;
+        }
+        long currentSessionId = mCurrentSession != null
+            ? mCurrentSession.getId()
+            : firstSessionIdOfThisLaunch;
+        return Math.max(firstSessionIdOfThisLaunch, currentSessionId - SESSION_PROTECTION_WINDOW);
     }
 
     private void updateFirstSessionIdOfThisLaunch(long sessionId) {

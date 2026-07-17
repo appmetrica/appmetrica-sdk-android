@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
+import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
@@ -41,6 +42,7 @@ internal class EventBatchWriterTest : CommonTest() {
 
     private val dbLimit = 100L
     private val apiKey = "test-api-key"
+    private val threshold = 12345L
 
     private val database: SQLiteDatabase = mock()
     private val storage: DatabaseStorage = mock {
@@ -54,11 +56,15 @@ internal class EventBatchWriterTest : CommonTest() {
     }
     private val eventTrigger: EventTrigger = mock()
     private val publicLogger: PublicLogger = mock()
+    private val sessionManager: SessionManagerStateMachine = mock {
+        on { thresholdSessionIdForActualSessions } doReturn threshold
+    }
     private val component: ComponentUnit = mock {
         on { freshReportRequestConfig } doReturn reportRequestConfig
         on { componentId } doReturn componentId
         on { eventTrigger } doReturn eventTrigger
         on { publicLogger } doReturn publicLogger
+        on { sessionManager } doReturn sessionManager
     }
     private val rowCount = AtomicLong(0)
     private val listener: EventListener = mock()
@@ -151,6 +157,35 @@ internal class EventBatchWriterTest : CommonTest() {
         )
         assertThat(rowCount.get()).isEqualTo(91)
         verify(listener).onEventsUpdated()
+    }
+
+    @Test
+    fun `writeEvents deletes empty sessions after overflow cleanup`() {
+        rowCount.set(100)
+        whenever(reportRequestConfig.maxEventsInDbCount).thenReturn(100L)
+        whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
+            .thenReturn(DatabaseCleaner.DeletionInfo(null, 10))
+
+        writer.writeEvents(listOf(ContentValues()))
+
+        verify(database).delete(
+            eq(Constants.SessionTable.TABLE_NAME),
+            eq(Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS),
+            eq(arrayOf(threshold.toString()))
+        )
+    }
+
+    @Test
+    fun `writeEvents does not delete sessions when no overflow`() {
+        rowCount.set(0)
+
+        writer.writeEvents(listOf(ContentValues()))
+
+        verify(database, never()).delete(
+            eq(Constants.SessionTable.TABLE_NAME),
+            any(),
+            any()
+        )
     }
 
     @Test
