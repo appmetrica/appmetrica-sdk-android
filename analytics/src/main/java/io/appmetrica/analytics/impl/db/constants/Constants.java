@@ -147,6 +147,22 @@ public final class Constants {
                 "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         /*
+         * Checks that a session has at least one event. Stops at the first match (EXISTS short-circuits).
+         *
+         * EXISTS (
+         *     SELECT 1 FROM events
+         *     WHERE events.session_id   = sessions.id
+         *       AND events.session_type = sessions.type
+         * )
+         */
+        public static final String HAS_EVENTS_EXISTS_CONDITION =
+            "EXISTS (SELECT 1 FROM " + EventsTable.TABLE_NAME +
+            " WHERE " + EventsTable.TABLE_NAME + "." + EventsTable.EventTableEntry.FIELD_EVENT_SESSION +
+            " = " + TABLE_NAME + "." + SessionTableEntry.FIELD_SESSION_ID +
+            " AND " + EventsTable.TABLE_NAME + "." + EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE +
+            " = " + TABLE_NAME + "." + SessionTableEntry.FIELD_SESSION_TYPE + ")";
+
+        /*
             Select only not empty sessions. Empty sessions will be cleared during report sending.
             Works similarly to SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS
         */

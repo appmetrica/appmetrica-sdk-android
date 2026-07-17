@@ -74,7 +74,7 @@ internal class ReportSessionsCollector(
         val candidates = mutableListOf<SessionCandidate>()
         var reportDataSize = 0
         try {
-            for (sessionModel in dbInteractor.querySessionModels(queryValues)) {
+            for (sessionModel in dbInteractor.querySessionModels(queryValues, maxEventCountPerRequest)) {
                 if (candidates.size >= maxEventCountPerRequest) break
 
                 val sessionId = sessionModel.id
