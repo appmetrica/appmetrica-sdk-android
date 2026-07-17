@@ -61,7 +61,7 @@ internal class ReportSessionsCollectorTest : CommonTest() {
 
     @Before
     fun setUp() {
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(emptyList())
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(emptyList())
         whenever(dbInteractor.queryReportsForSessions(any(), any())).thenReturn(emptyMap())
     }
 
@@ -102,7 +102,7 @@ internal class ReportSessionsCollectorTest : CommonTest() {
 
     @Test
     fun `collect returns empty data when sessionBuilder returns null`() {
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(listOf(buildSessionModel()))
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(listOf(buildSessionModel()))
 
         val result = collector.collect(queryValues, requestConfig)
         assertThat(result.sessions).isEmpty()
@@ -111,7 +111,7 @@ internal class ReportSessionsCollectorTest : CommonTest() {
 
     @Test
     fun `collect returns session data`() {
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(listOf(buildSessionModel()))
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(listOf(buildSessionModel()))
         whenever(sessionBuilder.build(any(), any(), any(), any(), any(), any()))
             .thenReturn(buildRetrievedResult())
 
@@ -126,7 +126,7 @@ internal class ReportSessionsCollectorTest : CommonTest() {
     @Test
     fun `collect stops at MAX_EVENT_COUNT_PER_REQUEST across sessions`() {
         val id2 = sessionId + 1
-        whenever(dbInteractor.querySessionModels(any()))
+        whenever(dbInteractor.querySessionModels(any(), any()))
             .thenReturn(listOf(buildSessionModel(id = sessionId), buildSessionModel(id = id2)))
         whenever(sessionBuilder.build(any(), any(), any(), any(), any(), any()))
             .thenReturn(buildRetrievedResult(updatedEventsCount = 100))
@@ -140,7 +140,7 @@ internal class ReportSessionsCollectorTest : CommonTest() {
     @Test
     fun `collect stops sessions when environment revision changes between sessions`() {
         val id2 = sessionId + 1
-        whenever(dbInteractor.querySessionModels(any()))
+        whenever(dbInteractor.querySessionModels(any(), any()))
             .thenReturn(listOf(buildSessionModel(id = sessionId), buildSessionModel(id = id2)))
 
         val revision1 = AppEnvironment.EnvironmentRevision("{}", 0)

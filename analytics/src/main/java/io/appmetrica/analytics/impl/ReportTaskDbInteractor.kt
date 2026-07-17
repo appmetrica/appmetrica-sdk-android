@@ -22,8 +22,8 @@ internal class ReportTaskDbInteractor(component: ComponentUnit) {
     fun collectAllQueryParameters(): ContentValues? =
         dbHelper.collectAllQueryParameters().firstOrNull()
 
-    fun querySessionModels(queryValues: Map<String, String>): List<DbSessionModel> {
-        val cursor = dbHelper.querySessions(queryValues) ?: return emptyList()
+    fun querySessionModels(queryValues: Map<String, String>, limit: Int): List<DbSessionModel> {
+        val cursor = dbHelper.querySessions(queryValues, limit) ?: return emptyList()
         val result = mutableListOf<DbSessionModel>()
         try {
             cursor.use {

@@ -405,9 +405,9 @@ public class DatabaseHelper {
         DebugLogger.INSTANCE.info(TAG, "%d reports removed. Row count %d", totalDeletedRows, rows);
     }
 
-    // Queries all sessions from the database without special sessions.
+    // Queries sessions that have at least one event, up to the given limit.
     @Nullable
-    public Cursor querySessions(final Map<String, String> extraSelection) {
+    public Cursor querySessions(final Map<String, String> extraSelection, final int limit) {
         Cursor dataCursor = null;
 
         mReadLock.lock();
@@ -416,9 +416,14 @@ public class DatabaseHelper {
             if (rDatabase != null) {
                 dataCursor = rDatabase.query(
                         SessionTable.TABLE_NAME, null,
-                        formWhereClause(SessionTableEntry.FIELD_SESSION_ID + " >= ?", extraSelection),
+                        formWhereClause(
+                            SessionTableEntry.FIELD_SESSION_ID + " >= ? AND " +
+                            SessionTable.HAS_EVENTS_EXISTS_CONDITION,
+                            extraSelection
+                        ),
                         formWhereArgs(new String [] {Long.toString(0)}, extraSelection),
-                        null, null, SessionTableEntry.FIELD_SESSION_ID + " ASC", null
+                        null, null, SessionTableEntry.FIELD_SESSION_ID + " ASC",
+                        String.valueOf(limit)
                 );
             }
         } catch (Throwable exception) {
