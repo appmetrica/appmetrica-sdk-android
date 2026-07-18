@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.MatrixCursor
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils
@@ -62,6 +63,7 @@ import java.util.UUID
 import java.util.function.Predicate
 import javax.net.ssl.HttpsURLConnection
 
+@SuppressLint("RobolectricUsage") // Database interactions
 @RunWith(RobolectricTestRunner::class)
 internal class ReportTaskTest : CommonTest() {
 
@@ -242,7 +244,7 @@ internal class ReportTaskTest : CommonTest() {
             requestBodyEncrypter
         )
         whenever(dbInteractor.collectAllQueryParameters()).thenReturn(firstQueryParameter)
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(listOf(sessionModel))
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(listOf(sessionModel))
         whenever(dbInteractor.queryReportsForSessions(any(), any())).doAnswer {
             mapOf(sessionId to cursorToContentValuesList(reportCursor))
         }
@@ -360,14 +362,14 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onCreateIfSessionsCursorIsNull() {
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(emptyList())
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfSessionsCursorIsEmpty() {
-        whenever(dbInteractor.querySessionModels(any())).thenReturn(emptyList())
+        whenever(dbInteractor.querySessionModels(any(), any())).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
@@ -579,7 +581,7 @@ internal class ReportTaskTest : CommonTest() {
         }
         stubbing(dbInteractor) {
             on { collectAllQueryParameters() } doReturn firstQueryParameter
-            on { querySessionModels(any()) } doReturn sessionModelsWithLargeAmount
+            on { querySessionModels(any(), any()) } doReturn sessionModelsWithLargeAmount
             on { queryReportsForSessions(any(), any()) } doAnswer {
                 // Return all 1000 events under sessionId 0 (the first session in the cursor)
                 mapOf(0L to cursorToContentValuesList(reportCursorWithLargeAmountOfEvents))

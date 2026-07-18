@@ -561,6 +561,57 @@ public class DatabaseHelperTest extends CommonTest {
         }
     }
 
+    @Test
+    public void querySessionsReturnsSessionWithEvents() {
+        addSession(db, 1000, 1, "params");
+        addGeneralEvents(db, 1, 1000, 1);
+
+        Cursor cursor = helper.querySessions(Collections.emptyMap(), 10);
+
+        assertThat(cursorToSessionIds(cursor)).containsExactly(1000L);
+    }
+
+    @Test
+    public void querySessionsExcludesSessionsWithoutEvents() {
+        addSession(db, 1000, 1, "params1");
+        addSession(db, 1001, 1, "params2");
+        addGeneralEvents(db, 1, 1000, 1);
+
+        Cursor cursor = helper.querySessions(Collections.emptyMap(), 10);
+
+        assertThat(cursorToSessionIds(cursor)).containsExactly(1000L);
+    }
+
+    @Test
+    public void querySessionsRespectsLimit() {
+        addSession(db, 1000, 1, "a");
+        addSession(db, 1001, 1, "b");
+        addSession(db, 1002, 1, "c");
+        addGeneralEvents(db, 1, 1000, 1);
+        addGeneralEvents(db, 1, 1001, 1);
+        addGeneralEvents(db, 1, 1002, 1);
+
+        Cursor cursor = helper.querySessions(Collections.emptyMap(), 2);
+
+        assertThat(cursorToSessionIds(cursor)).containsExactly(1000L, 1001L);
+    }
+
+    private List<Long> cursorToSessionIds(Cursor cursor) {
+        List<Long> ids = new ArrayList<>();
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    ids.add(cursor.getLong(
+                        cursor.getColumnIndex(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID)
+                    ));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return ids;
+    }
+
     private void addSession(SQLiteDatabase db, long sessionId, int sessionType, String requestParameter) {
         ContentValues values = new ContentValues();
         values.put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID, sessionId);

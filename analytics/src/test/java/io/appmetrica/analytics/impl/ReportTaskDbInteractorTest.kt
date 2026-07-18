@@ -68,15 +68,28 @@ internal class ReportTaskDbInteractorTest : CommonTest() {
 
     @Test
     fun `querySessionModels returns empty list when cursor is null`() {
-        whenever(dbHelper.querySessions(queryValues)).thenReturn(null)
-        assertThat(interactor.querySessionModels(queryValues)).isEmpty()
+        val limit = 42
+        whenever(dbHelper.querySessions(queryValues, limit)).thenReturn(null)
+        assertThat(interactor.querySessionModels(queryValues, limit)).isEmpty()
     }
 
     @Test
     fun `querySessionModels returns empty list when cursor has no rows`() {
+        val limit = 42
         val cursor = mock<Cursor> { on { moveToNext() } doReturn false }
-        whenever(dbHelper.querySessions(queryValues)).thenReturn(cursor)
-        assertThat(interactor.querySessionModels(queryValues)).isEmpty()
+        whenever(dbHelper.querySessions(queryValues, limit)).thenReturn(cursor)
+        assertThat(interactor.querySessionModels(queryValues, limit)).isEmpty()
+    }
+
+    @Test
+    fun `querySessionModels delegates to dbHelper with limit`() {
+        val limit = 42
+        val cursor = mock<Cursor> { on { moveToNext() } doReturn false }
+        whenever(dbHelper.querySessions(queryValues, limit)).thenReturn(cursor)
+
+        interactor.querySessionModels(queryValues, limit)
+
+        verify(dbHelper).querySessions(queryValues, limit)
     }
 
     @Test
