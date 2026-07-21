@@ -18,7 +18,7 @@ playServicesAppset = "16.1.0"
 playServicesLocation = "21.0.1"
 
 # External libraries
-okhttp = "4.11.0" # check minSDK and proguard before update: https://github.com/square/okhttp/tree/master
+okhttp = "4.12.0" # check minSDK and proguard before update: https://github.com/square/okhttp/tree/master
 commonLogger = "7.0.0"
 
 # Ad revenue adapters

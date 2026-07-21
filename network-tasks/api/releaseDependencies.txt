@@ -1,6 +1,6 @@
-com.squareup.okhttp3:okhttp:4.11.0
-com.squareup.okio:okio-jvm:3.2.0
-com.squareup.okio:okio:3.2.0
+com.squareup.okhttp3:okhttp:4.12.0
+com.squareup.okio:okio-jvm:3.6.0
+com.squareup.okio:okio:3.6.0
 io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
@@ -11,7 +11,7 @@ io.appmetrica.analytics:network-okhttp:unspecified
 io.appmetrica.analytics:network:unspecified
 io.appmetrica.analytics:proto:unspecified
 org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25
-org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0
-org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10
 org.jetbrains.kotlin:kotlin-stdlib:1.9.25
 org.jetbrains:annotations:13.0
