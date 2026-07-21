@@ -68,6 +68,7 @@ public class CertificatesFingerprintsProvider {
     }
 
     @NonNull
+    @SuppressWarnings("deprecation")
     private List<String> getFromSystem() {
         List<String> fingerprints = new ArrayList<String>();
         try {
