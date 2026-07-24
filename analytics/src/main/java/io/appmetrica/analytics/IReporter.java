@@ -262,6 +262,16 @@ public interface IReporter {
     void putAppEnvironmentValue(@NonNull String key, @Nullable String value);
 
     /**
+     * Sets key - value data to be used as additional information, associated
+     * with your unhandled exception and error reports.
+     *
+     * @param key the environment key.
+     * @param value the environment value. To remove pair from environment pass {@code null} value.
+     * @see AppMetrica#putErrorEnvironmentValue(String, String)
+     */
+    void putErrorEnvironmentValue(@NonNull String key, @Nullable String value);
+
+    /**
      * Clears app environment and removes it from storage.
      * <p>If called before metrica initialization, app environment will be cleared right after init
      */

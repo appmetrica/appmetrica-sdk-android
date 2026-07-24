@@ -122,6 +122,7 @@ internal class ReporterFactory(
             )
             performCommonInitialization(manualReporter)
             manualReporter.putAllToAppEnvironment(config.appEnvironment)
+            manualReporter.putAllToErrorEnvironment(config.errorEnvironment)
             manualReporter.start()
             reporter = manualReporter
             reporters[config.apiKey] = reporter

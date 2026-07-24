@@ -375,6 +375,16 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
+    fun `activateReporter applies error environment from config`() {
+        val config = ReporterConfig.newConfigBuilder(firstReporterApiKey)
+            .withErrorEnvironmentValue("memory", "2mb")
+            .withErrorEnvironmentValue("money", "-100")
+            .build()
+        reporterFactory.activateReporter(config)
+        verify(manualReporter).putAllToErrorEnvironment(config.errorEnvironment)
+    }
+
+    @Test
     fun `activate reporter perform common initialization`() {
         val config = ReporterConfig.newConfigBuilder(firstReporterApiKey).build()
         reporterFactory.activateReporter(config)
@@ -443,6 +453,19 @@ internal class ReporterFactoryTest : CommonTest() {
         reporterFactory.getOrCreateReporter(config)
         inOrder(manualReporter) {
             verify(manualReporter).putAllToAppEnvironment(config.appEnvironment)
+            verify(manualReporter).start()
+        }
+    }
+
+    @Test
+    fun `getOrCreateReporter applies error environment from config`() {
+        val config = ReporterConfig.newConfigBuilder(firstReporterApiKey)
+            .withErrorEnvironmentValue("memory", "2mb")
+            .withErrorEnvironmentValue("money", "-100")
+            .build()
+        reporterFactory.getOrCreateReporter(config)
+        inOrder(manualReporter) {
+            verify(manualReporter).putAllToErrorEnvironment(config.errorEnvironment)
             verify(manualReporter).start()
         }
     }

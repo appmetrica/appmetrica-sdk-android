@@ -41,6 +41,11 @@ public class ReporterExtendedStubTest extends CommonTest {
     }
 
     @Test
+    public void putErrorEnvironmentValue() {
+        getStub().putErrorEnvironmentValue("key", "value");
+    }
+
+    @Test
     public void clearAppEnvironment() {
         getStub().clearAppEnvironment();
     }

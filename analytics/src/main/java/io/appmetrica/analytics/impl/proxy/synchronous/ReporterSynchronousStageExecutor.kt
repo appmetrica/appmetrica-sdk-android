@@ -15,6 +15,8 @@ internal class ReporterSynchronousStageExecutor {
 
     fun putAppEnvironmentValue(key: String, value: String?) {}
 
+    fun putErrorEnvironmentValue(key: String, value: String?) {}
+
     fun clearAppEnvironment() {}
 
     fun sendEventsBuffer() {}

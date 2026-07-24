@@ -385,7 +385,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     @WorkerThread
-    override fun putErrorEnvironmentValue(key: String, value: String) {
+    override fun putErrorEnvironmentValue(key: String, value: String?) {
         mainReporter.putErrorEnvironmentValue(key, value)
     }
 

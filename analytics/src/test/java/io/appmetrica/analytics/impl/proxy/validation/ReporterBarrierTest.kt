@@ -179,6 +179,11 @@ internal class ReporterBarrierTest : CommonTest() {
     }
 
     @Test
+    fun putErrorEnvironmentValue() {
+        mBarrier.putErrorEnvironmentValue("key", "value")
+    }
+
+    @Test
     fun clearAppEnvironment() {
         mBarrier.clearAppEnvironment()
     }

@@ -49,6 +49,16 @@ internal class ReporterConfigTest : CommonTest() {
         appEnvironmentMapKeySecond to appEnvironmentMapValueSecond
     )
 
+    private val errorEnvironmentMapKeyFirst = "errorEnvironmentMap_key1"
+    private val errorEnvironmentMapValueFirst = "errorEnvironmentMap_value1"
+    private val errorEnvironmentMapKeySecond = "errorEnvironmentMap_key2"
+    private val errorEnvironmentMapValueSecond = "errorEnvironmentMap_value2"
+
+    private val errorEnvironmentMap = mapOf(
+        errorEnvironmentMapKeyFirst to errorEnvironmentMapValueFirst,
+        errorEnvironmentMapKeySecond to errorEnvironmentMapValueSecond
+    )
+
     @Test
     fun builder() {
         val config = ReporterConfig.newConfigBuilder(mApiKey)
@@ -61,6 +71,8 @@ internal class ReporterConfigTest : CommonTest() {
             .withMaxReportsCount(MAX_REPORTS_COUNT)
             .withAppEnvironmentValue(appEnvironmentMapKeyFirst, appEnvironmentMapValueFirst)
             .withAppEnvironmentValue(appEnvironmentMapKeySecond, appEnvironmentMapValueSecond)
+            .withErrorEnvironmentValue(errorEnvironmentMapKeyFirst, errorEnvironmentMapValueFirst)
+            .withErrorEnvironmentValue(errorEnvironmentMapKeySecond, errorEnvironmentMapValueSecond)
             .withAdditionalConfig(additionalConfigKeyFirst, additionalConfigValueFirst)
             .withAdditionalConfig(additionalConfigKeySecond, additionalConfigValueSecond)
             .build()
@@ -74,6 +86,7 @@ internal class ReporterConfigTest : CommonTest() {
             .checkField("dispatchPeriodSeconds", DISPATCH_PERIOD)
             .checkField("maxReportsCount", MAX_REPORTS_COUNT)
             .checkField("appEnvironment", appEnvironmentMap)
+            .checkField("errorEnvironment", errorEnvironmentMap)
             .checkField("additionalConfig", additionalConfigMap)
             .checkAll()
     }
@@ -91,6 +104,7 @@ internal class ReporterConfigTest : CommonTest() {
             .checkField<Any>("dispatchPeriodSeconds", null)
             .checkField<Any>("maxReportsCount", null)
             .checkField("appEnvironment", emptyMap<Any, Any>())
+            .checkField("errorEnvironment", emptyMap<Any, Any>())
             .checkField("additionalConfig", emptyMap<Any, Any>())
             .checkAll()
     }

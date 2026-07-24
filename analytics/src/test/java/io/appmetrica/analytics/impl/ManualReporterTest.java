@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl;
 
+import io.appmetrica.analytics.IReporter;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
@@ -106,6 +107,28 @@ public class ManualReporterTest extends BaseReporterTest {
             eq(TEST_ERROR_ENVIRONMENT_KEY),
             eq(TEST_ERROR_ENVIRONMENT_VALUE),
             any(ReporterEnvironment.class)
+        );
+    }
+
+    @Test
+    public void applyErrorEnvironmentFromReporterConfig() {
+        ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey)
+            .withErrorEnvironmentValue(TEST_ERROR_ENVIRONMENT_KEY, TEST_ERROR_ENVIRONMENT_VALUE)
+            .build();
+        ManualReporter reporter = new ManualReporter(mContext, mProcessConfiguration, config, mReportsHandler);
+        reporter.putAllToErrorEnvironment(config.errorEnvironment);
+        assertThat(reporter.getEnvironment().getErrorEnvironment())
+            .contains(TEST_ERROR_ENVIRONMENT_KEY)
+            .contains(TEST_ERROR_ENVIRONMENT_VALUE);
+    }
+
+    @Test
+    public void putErrorEnvironmentValueThroughIReporterInterface() {
+        IReporter reporter = getReporter();
+        reporter.putErrorEnvironmentValue(TEST_ERROR_ENVIRONMENT_KEY, TEST_ERROR_ENVIRONMENT_VALUE);
+        verify(mReporterEnvironment).putErrorEnvironmentValue(
+            eq(TEST_ERROR_ENVIRONMENT_KEY),
+            eq(TEST_ERROR_ENVIRONMENT_VALUE)
         );
     }
 

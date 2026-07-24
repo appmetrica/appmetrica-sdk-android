@@ -100,6 +100,14 @@ public class ReporterConfig {
     public final Map<String, String> appEnvironment;
 
     /**
+     * Error environment to be set after initialization.
+     *
+     * @see Builder#withErrorEnvironmentValue(String, String)
+     * @see AppMetricaConfig#errorEnvironment
+     */
+    public final Map<String, String> errorEnvironment;
+
+    /**
      * Additional configs.
      *
      * @see Builder#withAdditionalConfig(String, Object)
@@ -117,6 +125,7 @@ public class ReporterConfig {
         dispatchPeriodSeconds = builder.dispatchPeriodSeconds;
         maxReportsCount = builder.maxReportsCount;
         appEnvironment = CollectionUtils.unmodifiableSameOrderMapCopy(builder.appEnvironment);
+        errorEnvironment = CollectionUtils.unmodifiableSameOrderMapCopy(builder.errorEnvironment);
         additionalConfig = CollectionUtils.unmodifiableSameOrderMapCopy(builder.additionalConfig);
     }
 
@@ -130,6 +139,7 @@ public class ReporterConfig {
         dispatchPeriodSeconds = config.dispatchPeriodSeconds;
         maxReportsCount = config.maxReportsCount;
         appEnvironment = config.appEnvironment;
+        errorEnvironment = config.errorEnvironment;
         additionalConfig = config.additionalConfig;
     }
 
@@ -175,6 +185,8 @@ public class ReporterConfig {
         private Integer maxReportsCount;
         @NonNull
         private final HashMap<String, String> appEnvironment = new HashMap<>();
+        @NonNull
+        private final HashMap<String, String> errorEnvironment = new HashMap<>();
         @NonNull
         private final HashMap<String, Object> additionalConfig = new HashMap<>();
 
@@ -322,6 +334,22 @@ public class ReporterConfig {
         @NonNull
         public Builder withAppEnvironmentValue(String key, String value) {
             this.appEnvironment.put(key, value);
+            return this;
+        }
+
+        /**
+         * Sets key - value data to be used as additional information, associated
+         * with your unhandled exception and error reports.
+         * Pairs added to config builder will be set right after reporter initialization.
+         *
+         * @param key the environment key
+         * @param value the environment value. To remove pair from environment pass {@code null} value
+         * @return the same object
+         * @see AppMetricaConfig.Builder#withErrorEnvironmentValue(String, String)
+         */
+        @NonNull
+        public Builder withErrorEnvironmentValue(@NonNull String key, @Nullable String value) {
+            this.errorEnvironment.put(key, value);
             return this;
         }
 

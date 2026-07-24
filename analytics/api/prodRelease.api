@@ -291,6 +291,7 @@ public interface io.appmetrica.analytics.IReporter {
     public abstract [NonNull] io.appmetrica.analytics.plugins.IPluginReporter getPluginExtension()
     public abstract void pauseSession()
     public abstract void putAppEnvironmentValue([NonNull] String, [Nullable] String)
+    public abstract void putErrorEnvironmentValue([NonNull] String, [Nullable] String)
     public abstract void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
     public abstract void reportAnr([NonNull] java.util.Map<Thread, StackTraceElement[]>)
     public abstract void reportECommerce([NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent)
@@ -387,6 +388,7 @@ public class io.appmetrica.analytics.ReporterConfig {
     public final java.util.Map<String, String> appEnvironment
     public final [Nullable] Boolean dataSendingEnabled
     public final [Nullable] Integer dispatchPeriodSeconds
+    public final java.util.Map<String, String> errorEnvironment
     public final [Nullable] Boolean logs
     public final [Nullable] Integer maxReportsCount
     public final [Nullable] Integer maxReportsInDatabaseCount
@@ -402,6 +404,7 @@ public static class io.appmetrica.analytics.ReporterConfig$Builder {
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withAppEnvironmentValue(String, String)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withDataSendingEnabled(boolean)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withDispatchPeriodSeconds(int)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withErrorEnvironmentValue([NonNull] String, [Nullable] String)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withLogs()
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsCount(int)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsInDatabaseCount(int)

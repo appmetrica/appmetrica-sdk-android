@@ -25,6 +25,12 @@ public class ReporterExtendedStub implements IReporterExtended {
     }
 
     @Override
+    public void putErrorEnvironmentValue(@NonNull String key,
+                                         @Nullable String value) {
+        //Do nothing
+    }
+
+    @Override
     public void clearAppEnvironment() {
         //Do nothing
     }

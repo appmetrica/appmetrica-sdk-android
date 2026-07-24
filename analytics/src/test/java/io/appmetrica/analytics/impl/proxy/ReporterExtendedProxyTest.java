@@ -150,6 +150,17 @@ public class ReporterExtendedProxyTest extends CommonTest {
     }
 
     @Test
+    public void testPutErrorEnvironmentValue() {
+        final String key = "key";
+        final String value = "value";
+        mReporterExtendedProxy.putErrorEnvironmentValue(key, value);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).putErrorEnvironmentValue(key, value);
+        inOrder.verify(mSynchronousStageExecutor).putErrorEnvironmentValue(key, value);
+        inOrder.verify(mReporter).putErrorEnvironmentValue(key, value);
+    }
+
+    @Test
     public void testClearAppEnvironment() {
         mReporterExtendedProxy.clearAppEnvironment();
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);

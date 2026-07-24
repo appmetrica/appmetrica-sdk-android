@@ -181,6 +181,18 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @Override
+    public void putErrorEnvironmentValue(@NonNull final String key, @Nullable final String value) {
+        barrier.putErrorEnvironmentValue(key, value);
+        synchronousStageExecutor.putErrorEnvironmentValue(key, value);
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getReporter().putErrorEnvironmentValue(key, value);
+            }
+        });
+    }
+
+    @Override
     public void clearAppEnvironment() {
         barrier.clearAppEnvironment();
         synchronousStageExecutor.clearAppEnvironment();

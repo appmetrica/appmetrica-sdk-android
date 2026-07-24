@@ -121,6 +121,11 @@ internal class ReporterBarrier {
         value: String?
     ) {}
 
+    fun putErrorEnvironmentValue(
+        key: String?,
+        value: String?
+    ) {}
+
     fun clearAppEnvironment() {}
 
     fun sendEventsBuffer() {}
