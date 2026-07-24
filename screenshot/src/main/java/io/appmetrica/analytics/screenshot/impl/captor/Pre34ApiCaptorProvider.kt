@@ -10,6 +10,5 @@ internal class Pre34ApiCaptorProvider(
 
     override fun getCaptors() = listOf(
         ContentObserverScreenshotCaptor(clientContext, callback),
-        ServiceScreenshotCaptor(clientContext, callback),
     )
 }
