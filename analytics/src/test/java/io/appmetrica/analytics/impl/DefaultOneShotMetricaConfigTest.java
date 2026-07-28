@@ -200,6 +200,20 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     }
 
     @Test
+    public void clearErrorEnvironmentInDefaultConfigTest() throws Exception {
+        DefaultOneShotMetricaConfig defaultOneShotMetricaConfig = new DefaultOneShotMetricaConfig();
+        defaultOneShotMetricaConfig.putErrorEnvironmentValue("a", "1");
+        defaultOneShotMetricaConfig.clearErrorEnvironment();
+        defaultOneShotMetricaConfig.putErrorEnvironmentValue("b", "2");
+
+        AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+        AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
+
+        assertThat(merged.errorEnvironment.size()).isEqualTo(1);
+        assertThat(merged.errorEnvironment).containsKey("b");
+    }
+
+    @Test
     public void testOneShotStrategy() {
         DefaultOneShotMetricaConfig config = createDefaultMetricaConfigWithValues();
         config.clearAppEnvironment();

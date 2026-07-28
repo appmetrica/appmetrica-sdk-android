@@ -269,6 +269,12 @@ internal class AppMetricaTests : CommonTest() {
     }
 
     @Test
+    fun clearErrorEnvironment() {
+        AppMetrica.clearErrorEnvironment()
+        verify(proxy).clearErrorEnvironment()
+    }
+
+    @Test
     fun getPluginExtension() {
         val pluginsImpl = mock<AppMetricaPlugins>()
         whenever(impl).thenReturn(pluginsImpl)

@@ -390,6 +390,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     @WorkerThread
+    override fun clearErrorEnvironment() {
+        mainReporter.clearErrorEnvironment()
+    }
+
+    @WorkerThread
     override fun setUserProfileID(userProfileID: String?) {
         mainReporter.setUserProfileID(userProfileID)
     }

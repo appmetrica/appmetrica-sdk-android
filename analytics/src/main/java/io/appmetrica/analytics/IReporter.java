@@ -264,10 +264,12 @@ public interface IReporter {
     /**
      * Sets key - value data to be used as additional information, associated
      * with your unhandled exception and error reports.
+     * To reset environment use {@link AppMetrica#clearErrorEnvironment()}.
      *
      * @param key the environment key.
      * @param value the environment value. To remove pair from environment pass {@code null} value.
      * @see AppMetrica#putErrorEnvironmentValue(String, String)
+     * @see AppMetrica#clearErrorEnvironment()
      */
     void putErrorEnvironmentValue(@NonNull String key, @Nullable String value);
 
@@ -276,6 +278,13 @@ public interface IReporter {
      * <p>If called before metrica initialization, app environment will be cleared right after init
      */
     void clearAppEnvironment();
+
+    /**
+     * Clears error environment.
+     * <p>If called before metrica initialization, error environment will be cleared right after init
+     * @see AppMetrica#putErrorEnvironmentValue(String, String)
+     */
+    void clearErrorEnvironment();
 
     /**
      * Sends an ANR event (the application is not responding) manually.

@@ -65,6 +65,7 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void activate([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public static void activateReporter([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ReporterConfig)
     public static void clearAppEnvironment()
+    public static void clearErrorEnvironment()
     public static void enableActivityAutoTracking([NonNull] android.app.Application)
     public static [Nullable] String getDeviceId([NonNull] android.content.Context)
     public static int getLibraryApiLevel()
@@ -288,6 +289,7 @@ public interface io.appmetrica.analytics.IModuleReporter {
 
 public interface io.appmetrica.analytics.IReporter {
     public abstract void clearAppEnvironment()
+    public abstract void clearErrorEnvironment()
     public abstract [NonNull] io.appmetrica.analytics.plugins.IPluginReporter getPluginExtension()
     public abstract void pauseSession()
     public abstract void putAppEnvironmentValue([NonNull] String, [Nullable] String)

@@ -216,6 +216,14 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        super.clearErrorEnvironment();
+        mainReporterComponents.getNativeCrashClient().updateErrorEnvironment(
+            mReporterEnvironment.getErrorEnvironment()
+        );
+    }
+
+    @Override
     public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
         mPublicLogger.info("Add auto collected data subscriber: %s", subscriber);
         mReporterEnvironment.getReporterConfiguration().addAutoCollectedDataSubscriber(subscriber);

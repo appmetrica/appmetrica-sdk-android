@@ -172,6 +172,21 @@ public class SelfReporterWrapperTest extends CommonTest {
     }
 
     @Test
+    public void testClearErrorEnvironmentInitialized() {
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        mSelfReporterWrapper.clearErrorEnvironment();
+        verify(mReporter).clearErrorEnvironment();
+    }
+
+    @Test
+    public void testClearErrorEnvironmentNotInitialized() {
+        mSelfReporterWrapper.clearErrorEnvironment();
+        verify(mReporter, never()).clearErrorEnvironment();
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        verify(mReporter).clearErrorEnvironment();
+    }
+
+    @Test
     public void testSendEventsBufferInitialized() {
         mSelfReporterWrapper.onInitializationFinished(mContext);
         mSelfReporterWrapper.sendEventsBuffer();

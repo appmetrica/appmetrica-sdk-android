@@ -470,8 +470,10 @@ public final class AppMetrica {
     /**
      * Sets key - value data to be used as additional information, associated
      * with your unhandled exception and error reports.
+     * To reset environment use {@link AppMetrica#clearErrorEnvironment()}.
      * @param key the environment key.
      * @param value the environment value. To remove pair from environment pass {@code null} value.
+     * @see AppMetrica#clearErrorEnvironment()
      */
     public static void putErrorEnvironmentValue(@NonNull String key, @Nullable String value) {
         AppMetricaProxyProvider.getProxy().putErrorEnvironmentValue(key, value);
@@ -573,6 +575,15 @@ public final class AppMetrica {
      */
     public static void clearAppEnvironment() {
         AppMetricaProxyProvider.getProxy().clearAppEnvironment();
+    }
+
+    /**
+     * Clears error environment.
+     * <p>If called before metrica initialization, error environment will be cleared right after init</p>
+     * @see AppMetrica#putErrorEnvironmentValue(String, String)
+     */
+    public static void clearErrorEnvironment() {
+        AppMetricaProxyProvider.getProxy().clearErrorEnvironment();
     }
 
     /**

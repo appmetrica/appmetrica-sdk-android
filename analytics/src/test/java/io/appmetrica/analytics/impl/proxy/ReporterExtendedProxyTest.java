@@ -170,6 +170,15 @@ public class ReporterExtendedProxyTest extends CommonTest {
     }
 
     @Test
+    public void testClearErrorEnvironment() {
+        mReporterExtendedProxy.clearErrorEnvironment();
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).clearErrorEnvironment();
+        inOrder.verify(mSynchronousStageExecutor).clearErrorEnvironment();
+        inOrder.verify(mReporter).clearErrorEnvironment();
+    }
+
+    @Test
     public void testReportEvent() {
         final String name = "name";
         mReporterExtendedProxy.reportEvent(name);

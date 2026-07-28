@@ -132,6 +132,13 @@ public class ManualReporterTest extends BaseReporterTest {
         );
     }
 
+    @Test
+    public void clearErrorEnvironmentThroughIReporterInterface() {
+        IReporter reporter = getReporter();
+        reporter.clearErrorEnvironment();
+        verify(mReporterEnvironment).clearErrorEnvironment();
+    }
+
     private ManualReporter createReporterWithProfileID(String userProfileID) {
         ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey)
             .withUserProfileID(userProfileID)

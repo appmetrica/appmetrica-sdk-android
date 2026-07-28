@@ -294,6 +294,34 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     }
 
     @Test
+    public void clearErrorEnvironmentNoInstance() {
+        setUpNoInstance();
+        AppMetricaFacade.clearErrorEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearErrorEnvironment();
+    }
+
+    @Test
+    public void clearErrorEnvironmentFutureNotDone() {
+        setUpFutureNotDone();
+        AppMetricaFacade.clearErrorEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearErrorEnvironment();
+    }
+
+    @Test
+    public void clearErrorEnvironmentNoMainReporter() {
+        setUpNoMainReporter();
+        AppMetricaFacade.clearErrorEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearErrorEnvironment();
+    }
+
+    @Test
+    public void clearErrorEnvironmentInitialized() {
+        setUpInitialized();
+        AppMetricaFacade.clearErrorEnvironment();
+        verify(impl).clearErrorEnvironment();
+    }
+
+    @Test
     public void setUserProfileIDNoInstance() {
         String userProfileID = "user_profile_id";
         setUpNoInstance();

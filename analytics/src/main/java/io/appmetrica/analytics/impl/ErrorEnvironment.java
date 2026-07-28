@@ -22,6 +22,10 @@ public class ErrorEnvironment {
         mLimitation.tryToAddValue(mEnvironmentValues, key, value);
     }
 
+    void clear() {
+        mEnvironmentValues.clear();
+    }
+
     @Nullable
     String toJsonString() {
         return mEnvironmentValues.isEmpty() ? null : new JSONObject(mEnvironmentValues).toString();

@@ -128,6 +128,8 @@ internal class ReporterBarrier {
 
     fun clearAppEnvironment() {}
 
+    fun clearErrorEnvironment() {}
+
     fun sendEventsBuffer() {}
 
     fun reportAnr(allThreads: Map<Thread, Array<StackTraceElement>>?) {

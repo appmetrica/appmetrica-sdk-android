@@ -63,6 +63,8 @@ internal class SynchronousStageExecutor @VisibleForTesting constructor(
 
     fun clearAppEnvironment() {}
 
+    fun clearErrorEnvironment() {}
+
     fun sendEventsBuffer() {}
 
     fun reportEvent(eventName: String) {}

@@ -67,6 +67,11 @@ public class AppMetricaFacadeProvider {
     }
 
     @WorkerThread
+    public void clearErrorEnvironment() {
+        AppMetricaFacade.clearErrorEnvironment();
+    }
+
+    @WorkerThread
     public void putAppEnvironmentValue(String key, String value) {
         AppMetricaFacade.putAppEnvironmentValue(key, value);
     }

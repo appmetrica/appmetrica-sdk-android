@@ -130,6 +130,12 @@ internal class AppMetricaFacadeProviderTest : CommonTest() {
     }
 
     @Test
+    fun clearErrorEnvironment() {
+        provider.clearErrorEnvironment()
+        appMetricaFacadeStaticRule.staticMock.verify { AppMetricaFacade.clearErrorEnvironment() }
+    }
+
+    @Test
     fun setUserProfileID() {
         val userProfileID = "user_profile_id"
         provider.setUserProfileID(userProfileID)

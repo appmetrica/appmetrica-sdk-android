@@ -51,6 +51,11 @@ public class ReporterExtendedStubTest extends CommonTest {
     }
 
     @Test
+    public void clearErrorEnvironment() {
+        getStub().clearErrorEnvironment();
+    }
+
+    @Test
     public void sendEventsBuffer() {
         getStub().sendEventsBuffer();
     }

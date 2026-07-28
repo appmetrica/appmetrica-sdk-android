@@ -203,6 +203,12 @@ public abstract class BaseReporter implements IBaseReporter {
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        mPublicLogger.info("Clear error environment");
+        mReporterEnvironment.clearErrorEnvironment();
+    }
+
+    @Override
     public void resumeSession() {
         onResumeForegroundSession(null);
         mPublicLogger.info("Resume session");

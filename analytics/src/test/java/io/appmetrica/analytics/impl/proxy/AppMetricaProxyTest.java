@@ -648,6 +648,15 @@ public class AppMetricaProxyTest extends CommonTest {
     }
 
     @Test
+    public void testClearErrorEnvironment() {
+        mProxy.clearErrorEnvironment();
+        InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
+        order.verify(mBarrier).clearErrorEnvironment();
+        order.verify(mSynchronousStageExecutor).clearErrorEnvironment();
+        order.verify(mProvider).clearErrorEnvironment();
+    }
+
+    @Test
     public void registerAnrListener() {
         AnrListener listener = mock(AnrListener.class);
         mProxy.registerAnrListener(listener);

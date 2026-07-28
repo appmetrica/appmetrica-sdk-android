@@ -72,6 +72,11 @@ public class ReporterEnvironment extends ClientConfiguration {
         mErrorEnvironment.put(key, value);
     }
 
+    synchronized void clearErrorEnvironment() {
+        DebugLogger.INSTANCE.info(TAG, "clearErrorEnvironment");
+        mErrorEnvironment.clear();
+    }
+
     @Nullable
     public synchronized String getErrorEnvironment() {
         return mErrorEnvironment.toJsonString();

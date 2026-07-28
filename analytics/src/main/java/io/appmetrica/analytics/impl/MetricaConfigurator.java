@@ -20,6 +20,8 @@ public interface MetricaConfigurator {
 
     void putErrorEnvironmentValue(String key, String value);
 
+    void clearErrorEnvironment();
+
     void setUserProfileID(@Nullable String userProfileID);
 
     void addAutoCollectedDataSubscriber(@NonNull String subscriber);

@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_KEY;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_VALUE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class ErrorEnvironmentTest extends CommonTest {
@@ -27,5 +28,13 @@ public class ErrorEnvironmentTest extends CommonTest {
     public void testPutShouldUseLimitation() {
         mErrorEnvironment.put(TEST_ENVIRONMENT_KEY, TEST_ENVIRONMENT_VALUE);
         verify(mSimpleMapLimitation).tryToAddValue(mErrorEnvironment.getEnvironmentValues(), TEST_ENVIRONMENT_KEY, TEST_ENVIRONMENT_VALUE);
+    }
+
+    @Test
+    public void testClear() {
+        mErrorEnvironment.getEnvironmentValues().put(TEST_ENVIRONMENT_KEY, TEST_ENVIRONMENT_VALUE);
+        mErrorEnvironment.clear();
+        assertThat(mErrorEnvironment.getEnvironmentValues()).isEmpty();
+        assertThat(mErrorEnvironment.toJsonString()).isNull();
     }
 }

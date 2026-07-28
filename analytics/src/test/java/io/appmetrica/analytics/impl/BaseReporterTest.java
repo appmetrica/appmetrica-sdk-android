@@ -553,6 +553,12 @@ public abstract class BaseReporterTest extends BaseReporterData {
     }
 
     @Test
+    public void testClearErrorEnvironmentShouldForwardToReporterEnvironment() {
+        mReporter.clearErrorEnvironment();
+        verify(mReporterEnvironment).clearErrorEnvironment();
+    }
+
+    @Test
     public void testStartShouldReportFirstEvent() {
         mReporter.start();
         verify(mReportsHandler, times(1)).reportActivationEvent(any(ReporterEnvironment.class));

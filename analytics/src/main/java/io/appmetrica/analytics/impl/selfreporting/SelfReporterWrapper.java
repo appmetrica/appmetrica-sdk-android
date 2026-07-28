@@ -104,6 +104,16 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter, 
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        processCommand(new IReporterCommandPerformer() {
+            @Override
+            public void perform(@NonNull IReporterExtended reporter) {
+                reporter.clearErrorEnvironment();
+            }
+        });
+    }
+
+    @Override
     public void sendEventsBuffer() {
         processCommand(new IReporterCommandPerformer() {
             @Override

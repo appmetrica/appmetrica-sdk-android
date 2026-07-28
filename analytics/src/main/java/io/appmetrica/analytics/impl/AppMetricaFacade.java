@@ -155,6 +155,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @WorkerThread
+    public static void clearErrorEnvironment() {
+        getConfigurator().clearErrorEnvironment();
+    }
+
+    @WorkerThread
     public static void putAppEnvironmentValue(String key, String value) {
         getConfigurator().putAppEnvironmentValue(key, value);
     }

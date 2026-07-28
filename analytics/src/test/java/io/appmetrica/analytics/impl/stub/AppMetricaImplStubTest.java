@@ -148,6 +148,11 @@ public class AppMetricaImplStubTest extends CommonTest {
     }
 
     @Test
+    public void clearErrorEnvironment() {
+        stub.clearErrorEnvironment();
+    }
+
+    @Test
     public void setUserProfileID() {
         stub.setUserProfileID("User Profile ID");
     }

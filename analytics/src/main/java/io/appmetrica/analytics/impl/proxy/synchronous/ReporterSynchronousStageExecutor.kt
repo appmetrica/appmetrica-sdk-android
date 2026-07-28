@@ -19,6 +19,8 @@ internal class ReporterSynchronousStageExecutor {
 
     fun clearAppEnvironment() {}
 
+    fun clearErrorEnvironment() {}
+
     fun sendEventsBuffer() {}
 
     fun reportEvent(eventName: String) {}

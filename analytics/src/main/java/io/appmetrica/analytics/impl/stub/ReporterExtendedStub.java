@@ -36,6 +36,11 @@ public class ReporterExtendedStub implements IReporterExtended {
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        //Do nothing
+    }
+
+    @Override
     public void sendEventsBuffer() {
         //Do nothing
     }

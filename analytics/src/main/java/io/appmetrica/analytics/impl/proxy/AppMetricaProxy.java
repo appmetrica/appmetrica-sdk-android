@@ -490,6 +490,17 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
+    public void clearErrorEnvironment() {
+        barrier.clearErrorEnvironment();
+        synchronousStageExecutor.clearErrorEnvironment();
+        getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                getProvider().clearErrorEnvironment();
+            }
+        });
+    }
+
     public void requestStartupParams(
             @NonNull final Context context,
             @NonNull final StartupParamsCallback callback,

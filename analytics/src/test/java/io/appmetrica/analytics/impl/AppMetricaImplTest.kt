@@ -919,6 +919,20 @@ internal class AppMetricaImplTest : CommonTest() {
     }
 
     @Test
+    fun `clearErrorEnvironment after activate`() {
+        impl.activate(config)
+        impl.clearErrorEnvironment()
+        verify(reporterFromConsumerProvider).clearErrorEnvironment()
+    }
+
+    @Test
+    fun `clearErrorEnvironment after activate anonymously`() {
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        impl.clearErrorEnvironment()
+        verify(reporterFromConsumerProvider).clearErrorEnvironment()
+    }
+
+    @Test
     fun `setUserProfileId after activate`() {
         impl.activate(config)
         impl.setUserProfileID("profileId")

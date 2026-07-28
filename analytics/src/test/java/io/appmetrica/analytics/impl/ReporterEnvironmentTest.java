@@ -74,6 +74,12 @@ public class ReporterEnvironmentTest extends CommonTest {
     }
 
     @Test
+    public void testClearErrorEnvironmentShouldForwardsToCrashEnvironment() {
+        mReporterEnvironment.clearErrorEnvironment();
+        verify(mErrorEnvironment).clear();
+    }
+
+    @Test
     public void testIsSessionPausedInitialState() {
         assertThat(mReporterEnvironment.isForegroundSessionPaused()).isTrue();
     }

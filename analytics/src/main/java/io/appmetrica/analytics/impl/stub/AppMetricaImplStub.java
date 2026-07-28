@@ -143,6 +143,11 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        // Do nothing
+    }
+
+    @Override
     public void setUserProfileID(@Nullable String userProfileID) {
         // Do nothing
     }

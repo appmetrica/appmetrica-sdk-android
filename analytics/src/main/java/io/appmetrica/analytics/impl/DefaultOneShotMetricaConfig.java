@@ -128,6 +128,12 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     }
 
     @Override
+    public void clearErrorEnvironment() {
+        DebugLogger.INSTANCE.info(TAG, "clearErrorEnvironment");
+        errorEnvironment.clear();
+    }
+
+    @Override
     public void setUserProfileID(@Nullable String userProfileID) {
         DebugLogger.INSTANCE.info(TAG, "setUserProfileID: %s", userProfileID);
         this.userProfileID = userProfileID;

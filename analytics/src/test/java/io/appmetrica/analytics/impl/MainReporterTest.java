@@ -137,6 +137,15 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
+    public void testClearErrorEnvironmentShouldUpdateEnvInNativeCrashClient() {
+        String errorEnv = "erroorrenen";
+        doReturn(errorEnv).when(mReporterEnvironment).getErrorEnvironment();
+        mMainReporter = getReporter();
+        mMainReporter.clearErrorEnvironment();
+        verify(nativeCrashClient).updateErrorEnvironment(eq(errorEnv));
+    }
+
+    @Test
     public void testRegisterObserverFromConstructor() {
         when(mReporterEnvironment.getProcessConfiguration()).thenReturn(mProcessConfiguration);
         mReporter = getReporter();

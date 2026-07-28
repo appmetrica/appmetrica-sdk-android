@@ -296,6 +296,8 @@ internal class Barrier(
 
     fun clearAppEnvironment() {}
 
+    fun clearErrorEnvironment() {}
+
     fun sendEventsBuffer() {
         activationValidator.validate()
     }

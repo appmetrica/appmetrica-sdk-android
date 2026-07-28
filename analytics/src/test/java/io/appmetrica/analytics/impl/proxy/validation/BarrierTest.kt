@@ -582,6 +582,11 @@ internal class BarrierTest : CommonTest() {
     }
 
     @Test
+    fun clearErrorEnvironment() {
+        mBarrier.clearErrorEnvironment()
+    }
+
+    @Test
     fun sendEventsBuffer() {
         mBarrier.sendEventsBuffer()
     }
