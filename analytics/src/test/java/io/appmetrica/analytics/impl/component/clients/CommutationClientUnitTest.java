@@ -72,6 +72,7 @@ public class CommutationClientUnitTest extends CommonTest {
         CounterReport report = new CounterReport();
         mClientUnit.handle(report, mClientConfiguration);
         verify(mCommutationDispatcherComponent, times(1)).handleReport(report, mClientUnit);
+        verify(mCommutationDispatcherComponent, times(1)).updateConfig(mClientConfiguration);
     }
 
     @Test

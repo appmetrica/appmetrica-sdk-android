@@ -81,6 +81,7 @@ public class StartupStateConverterTest extends CommonTest {
     private static final String[] DIAGNOSTIC_URLS = new String[]{"diagnosticUrl1", "diagnosticUrl2"};
     private static final String[] HOST_URLS_FROM_STARTUP = new String[]{"fromStartup1", "fromStartup2"};
     private static final String[] HOST_URLS_FROM_CLIENT = new String[]{"fromClient1", "fromClient2"};
+    private static final String[] HOST_URLS_FROM_LIBRARY_ADAPTER = new String[]{"fromAdapter1", "fromAdapter2"};
     private static final String ENCODED_CLIDS_FROM_RESPONSE = "testEncodedClidsFromResponse";
     private static final String LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST = "testLastClientClidsForStartupRequest";
     private static final String LAST_CHOSEN_CLIDS_FOR_REQUEST = "testLastChosenClidsForRequest";
@@ -150,6 +151,7 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.reportAdUrl = REPORT_AD_URL;
         stateProto.hostUrlsFromStartup = HOST_URLS_FROM_STARTUP;
         stateProto.hostUrlsFromClient = HOST_URLS_FROM_CLIENT;
+        stateProto.hostUrlsFromLibraryAdapter = HOST_URLS_FROM_LIBRARY_ADAPTER;
         stateProto.diagnosticUrls = DIAGNOSTIC_URLS;
         stateProto.customSdkHosts = customSdkHostsProto;
 
@@ -198,6 +200,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("reportAdUrl", REPORT_AD_URL);
         assertions.checkField("hostUrlsFromStartup", Arrays.asList(HOST_URLS_FROM_STARTUP));
         assertions.checkField("hostUrlsFromClient", Arrays.asList(HOST_URLS_FROM_CLIENT));
+        assertions.checkField("hostUrlsFromLibraryAdapter", Arrays.asList(HOST_URLS_FROM_LIBRARY_ADAPTER));
         assertions.checkField("diagnosticUrls", Arrays.asList(DIAGNOSTIC_URLS));
         assertions.checkField("encodedClidsFromResponse", ENCODED_CLIDS_FROM_RESPONSE);
         assertions.checkField("lastClientClidsForStartupRequest", LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST);
@@ -242,6 +245,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withDiagnosticUrls(Arrays.asList(StartupStateConverterTest.DIAGNOSTIC_URLS))
             .withHostUrlsFromStartup(Arrays.asList(StartupStateConverterTest.HOST_URLS_FROM_STARTUP))
             .withHostUrlsFromClient(Arrays.asList(StartupStateConverterTest.HOST_URLS_FROM_CLIENT))
+            .withHostUrlsFromLibraryAdapter(Arrays.asList(StartupStateConverterTest.HOST_URLS_FROM_LIBRARY_ADAPTER))
             .withEncodedClidsFromResponse(StartupStateConverterTest.ENCODED_CLIDS_FROM_RESPONSE)
             .withLastClientClidsForStartupRequest(StartupStateConverterTest.LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST)
             .withLastChosenForRequestClids(LAST_CHOSEN_CLIDS_FOR_REQUEST)
@@ -286,6 +290,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("reportAdUrl", REPORT_AD_URL);
         assertions.checkField("hostUrlsFromStartup", HOST_URLS_FROM_STARTUP);
         assertions.checkField("hostUrlsFromClient", HOST_URLS_FROM_CLIENT);
+        assertions.checkField("hostUrlsFromLibraryAdapter", HOST_URLS_FROM_LIBRARY_ADAPTER);
         assertions.checkField("diagnosticUrls", DIAGNOSTIC_URLS);
         assertions.checkField("encodedClidsFromResponse", ENCODED_CLIDS_FROM_RESPONSE);
         assertions.checkField("lastClientClidsForStartupRequest", LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST);
@@ -320,6 +325,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withReportUrls(null)
             .withHostUrlsFromStartup(null)
             .withHostUrlsFromClient(null)
+            .withHostUrlsFromLibraryAdapter(null)
             .withStatSending(null)
             .withPermissionsCollectingConfig(null)
             .withRetryPolicyConfig(null)

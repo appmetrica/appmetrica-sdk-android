@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.util.List;
 
 public interface MetricaConfigurator {
 
@@ -25,4 +26,6 @@ public interface MetricaConfigurator {
     void setUserProfileID(@Nullable String userProfileID);
 
     void addAutoCollectedDataSubscriber(@NonNull String subscriber);
+
+    void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts);
 }

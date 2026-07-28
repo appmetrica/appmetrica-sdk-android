@@ -268,6 +268,11 @@ public class ReportsHandler {
         mCommutationReportEnvironment.getProcessConfiguration().setCustomHosts(customHosts);
     }
 
+    public void setLibraryAdapterCustomHosts(final List<String> customHosts) {
+        DebugLogger.INSTANCE.info(TAG, "setLibraryAdapterCustomHosts: %s", customHosts);
+        mCommutationReportEnvironment.getProcessConfiguration().setLibraryAdapterCustomHosts(customHosts);
+    }
+
     public void setClids(final Map<String, String> clids) {
         DebugLogger.INSTANCE.info(TAG, "setClientClids: %s", clids);
         mCommutationReportEnvironment.getProcessConfiguration().setClientClids(clids);

@@ -46,6 +46,17 @@ internal class LibraryAdapterBarrierTest : CommonTest() {
     }
 
     @Test
+    fun setCustomHosts() {
+        assertThat(barrier.setCustomHosts(arrayOf("host1", "host2"))).isTrue()
+    }
+
+    @Test
+    fun `setCustomHosts if not activated`() {
+        whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
+        assertThat(barrier.setCustomHosts(arrayOf("host1", "host2"))).isFalse()
+    }
+
+    @Test
     fun reportEvent() {
         assertThat(barrier.reportEvent("sender", "event", "payload")).isTrue()
     }

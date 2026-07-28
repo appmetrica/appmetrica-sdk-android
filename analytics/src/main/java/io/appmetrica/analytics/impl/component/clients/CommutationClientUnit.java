@@ -44,7 +44,7 @@ public class CommutationClientUnit implements ClientIdentifiersChangedListener, 
 
     @Override
     public void handle(@NonNull CounterReport counterReport, @NonNull CommonArguments sdkConfig) {
-        mComponentUnit.updateSdkConfig(sdkConfig.componentArguments);
+        mComponentUnit.updateConfig(sdkConfig);
         mComponentUnit.handleReport(counterReport, this);
     }
 

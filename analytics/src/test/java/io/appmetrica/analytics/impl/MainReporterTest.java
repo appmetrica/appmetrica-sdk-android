@@ -477,4 +477,11 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mPublicLogger).info("Set advIdentifiersTracking to %s", true);
     }
 
+    @Test
+    public void setLibraryAdapterCustomHosts() {
+        List<String> customHosts = Arrays.asList("host1", "host2");
+        mMainReporter.setLibraryAdapterCustomHosts(customHosts);
+        verify(mReportsHandler).setLibraryAdapterCustomHosts(customHosts);
+    }
+
 }

@@ -51,6 +51,7 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         ClidsInfo.Candidate chosenClids = new ClidsInfo.Candidate(Collections.singletonMap("clid1", "1"), DistributionSource.APP);
         when(clidsStorage.updateAndRetrieveData(new ClidsInfo.Candidate(clidsFromClient, DistributionSource.APP))).thenReturn(chosenClids);
         List<String> newCustomHosts = Arrays.asList("host1", "host2");
+        List<String> newLibraryAdapterCustomHosts = Arrays.asList("adapter.host1", "adapter.host2");
         String countryInit = "by";
         long firstStartupServerTime = 495734685;
         StartupState startupState = TestUtils.createDefaultStartupStateBuilder()
@@ -65,7 +66,9 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
             referrerSource,
             clidsFromClient,
             true,
-            newCustomHosts
+            newCustomHosts,
+            true,
+            newLibraryAdapterCustomHosts
         );
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
@@ -84,6 +87,8 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         softly.assertThat(config.getChosenClids()).isEqualTo(chosenClids);
         softly.assertThat(config.hasNewCustomHosts()).isTrue();
         softly.assertThat(config.getNewCustomHosts()).isEqualTo(newCustomHosts);
+        softly.assertThat(config.hasNewLibraryAdapterCustomHosts()).isTrue();
+        softly.assertThat(config.getNewLibraryAdapterCustomHosts()).isEqualTo(newLibraryAdapterCustomHosts);
         softly.assertThat(config.hasSuccessfulStartup()).isTrue();
         softly.assertThat(config.getCountryInit()).isEqualTo(countryInit);
         softly.assertThat(config.getFirstStartupTime()).isEqualTo(firstStartupServerTime);
@@ -119,6 +124,8 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments(
             argumentsReferrer,
             argumentsReferrerSource,
+            null,
+            false,
             null,
             false,
             null

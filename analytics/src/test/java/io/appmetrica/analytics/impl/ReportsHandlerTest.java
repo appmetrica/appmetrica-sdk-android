@@ -638,6 +638,14 @@ public class ReportsHandlerTest extends CommonTest {
     }
 
     @Test
+    public void testSetLibraryAdapterCustomHosts() {
+        List<String> customHosts = Arrays.asList("host1", "host2");
+        mReportsHandler.setLibraryAdapterCustomHosts(customHosts);
+        assertThat(mReportsHandler.getCommutationReporterEnvironment().getProcessConfiguration().getLibraryAdapterCustomHosts())
+            .isEqualTo(customHosts);
+    }
+
+    @Test
     public void reportRequestReferrerEvent() {
         ReferrerResultReceiver receiver = mock(ReferrerResultReceiver.class);
         doAnswer(new Answer() {

@@ -39,6 +39,13 @@ class AppMetricaLibraryAdapterTest : CommonTest() {
     }
 
     @Test
+    fun setCustomHosts() {
+        val customHosts = arrayOf("host1", "host2")
+        AppMetricaLibraryAdapter.setCustomHosts(customHosts)
+        verify(proxy).setCustomHosts(customHosts)
+    }
+
+    @Test
     fun reportEvent() {
         val sender = "sender_value"
         val event = "event_value"

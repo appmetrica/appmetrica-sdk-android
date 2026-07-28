@@ -69,6 +69,7 @@ public class ProcessConfiguration implements Parcelable {
     private interface Keys {
         String CFG_PREFIX = "PROCESS_CFG_";
         String CUSTOM_HOSTS = CFG_PREFIX + "CUSTOM_HOSTS";
+        String LIBRARY_ADAPTER_CUSTOM_HOSTS = CFG_PREFIX + "LIBRARY_ADAPTER_CUSTOM_HOSTS";
         String CLIENT_CLIDS = CFG_PREFIX + "CLIDS";
         String DISTRIBUTION_REFERRER = CFG_PREFIX + "DISTRIBUTION_REFERRER";
         String INSTALL_REFERRER_SOURCE = CFG_PREFIX + "INSTALL_REFERRER_SOURCE";
@@ -152,6 +153,10 @@ public class ProcessConfiguration implements Parcelable {
         return mParamsMapping.containsKey(Keys.CUSTOM_HOSTS);
     }
 
+    public boolean hasLibraryAdapterCustomHosts() {
+        return mParamsMapping.containsKey(Keys.LIBRARY_ADAPTER_CUSTOM_HOSTS);
+    }
+
     @Nullable
     public List<String> getCustomHosts() {
         String stringValue = mParamsMapping.getAsString(Keys.CUSTOM_HOSTS);
@@ -159,8 +164,25 @@ public class ProcessConfiguration implements Parcelable {
         return result;
     }
 
+    @Nullable
+    public List<String> getLibraryAdapterCustomHosts() {
+        String stringValue = mParamsMapping.getAsString(Keys.LIBRARY_ADAPTER_CUSTOM_HOSTS);
+        return TextUtils.isEmpty(stringValue) ? null : JsonHelper.jsonToList(stringValue);
+    }
+
     public synchronized void setCustomHosts(@Nullable final List<String> customHostUrlList) {
         mParamsMapping.put(Keys.CUSTOM_HOSTS, JsonHelper.listToJsonString(customHostUrlList));
+    }
+
+    public synchronized void setLibraryAdapterCustomHosts(@Nullable final List<String> customHostUrlList) {
+        if (customHostUrlList == null) {
+            mParamsMapping.remove(Keys.LIBRARY_ADAPTER_CUSTOM_HOSTS);
+        } else {
+            mParamsMapping.put(
+                Keys.LIBRARY_ADAPTER_CUSTOM_HOSTS,
+                JsonHelper.listToJsonString(customHostUrlList)
+            );
+        }
     }
 
     @Nullable

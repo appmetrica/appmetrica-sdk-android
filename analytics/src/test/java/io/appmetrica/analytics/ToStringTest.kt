@@ -300,9 +300,9 @@ internal class ToStringTest(
                 excludedFields = setOf("deviceID", "deviceIDHash")
             ),
 
-            StartupRequestConfig(mock(), mock()).toTestCase(
+            StartupRequestConfig(mock(), mock(), mock()).toTestCase(
                 modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
-                excludedFields = setOf("defaultStartupHostsProvider", "referrerManager")
+                excludedFields = setOf("defaultStartupHostsProvider", "resourceStartupHostsProvider", "referrerManager")
             ),
             TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase(),
 

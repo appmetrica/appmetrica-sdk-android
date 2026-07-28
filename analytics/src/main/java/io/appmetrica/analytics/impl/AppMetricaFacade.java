@@ -145,6 +145,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @WorkerThread
+    public static void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        getConfigurator().setLibraryAdapterCustomHosts(customHosts);
+    }
+
+    @WorkerThread
     public static void setDataSendingEnabled(final boolean enabled) {
         getConfigurator().setDataSendingEnabled(enabled);
     }

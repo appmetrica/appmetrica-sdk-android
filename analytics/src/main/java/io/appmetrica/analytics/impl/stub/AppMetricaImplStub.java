@@ -157,6 +157,11 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
         // Do nothing
     }
 
+    @Override
+    public void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        // Do nothing
+    }
+
     @NonNull
     @Override
     public IReporterFactory getReporterFactory() {

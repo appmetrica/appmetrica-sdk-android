@@ -82,7 +82,9 @@ public class StartupArgumentsTest extends CommonTest {
             "gpl",
             Collections.singletonMap("clid2", "55"),
             true,
-            Collections.singletonList("newHost")
+            Collections.singletonList("newHost"),
+            true,
+            Collections.singletonList("newHostFromAdapter")
         );
 
         StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(
@@ -104,6 +106,8 @@ public class StartupArgumentsTest extends CommonTest {
         StartupRequestConfig.Arguments emptyArguments = new StartupRequestConfig.Arguments(
             null,
             null,
+            null,
+            false,
             null,
             false,
             null
@@ -152,6 +156,8 @@ public class StartupArgumentsTest extends CommonTest {
             null,
             null,
             value,
+            null,
+            false,
             null
         );
     }

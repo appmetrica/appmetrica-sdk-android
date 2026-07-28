@@ -2,6 +2,7 @@ package io.appmetrica.analytics;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy;
 
@@ -42,6 +43,15 @@ public class AppMetricaLibraryAdapter {
      */
     public static void setAdvIdentifiersTracking(boolean enabled) {
         proxy.setAdvIdentifiersTracking(enabled);
+    }
+
+    /**
+     * Sets custom hosts to be used for startup requests.
+     *
+     * @param customHosts array of custom host urls.
+     */
+    public static void setCustomHosts(@Nullable String[] customHosts) {
+        proxy.setCustomHosts(customHosts);
     }
 
     /**

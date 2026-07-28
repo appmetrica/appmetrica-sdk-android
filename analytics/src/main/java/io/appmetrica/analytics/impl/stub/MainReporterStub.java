@@ -130,4 +130,9 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
         // Do nothing
     }
+
+    @Override
+    public void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        // Do nothing
+    }
 }

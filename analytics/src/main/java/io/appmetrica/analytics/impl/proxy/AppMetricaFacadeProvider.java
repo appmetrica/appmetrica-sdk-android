@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import java.util.List;
 
 public class AppMetricaFacadeProvider {
 
@@ -54,6 +55,11 @@ public class AppMetricaFacadeProvider {
     @WorkerThread
     public void setAdvIdentifiersTracking(final boolean enabled) {
         AppMetricaFacade.setAdvIdentifiersTracking(enabled);
+    }
+
+    @WorkerThread
+    public void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        AppMetricaFacade.setLibraryAdapterCustomHosts(customHosts);
     }
 
     @WorkerThread

@@ -1143,6 +1143,9 @@ public interface StartupStateProtobuf {
     // repeated string hostUrlsFromClient = 7;
     public java.lang.String[] hostUrlsFromClient;
 
+    // repeated string hostUrlsFromLibraryAdapter = 33;
+    public java.lang.String[] hostUrlsFromLibraryAdapter;
+
     // repeated .StartupState.CustomSdkHostsPair customSdkHosts = 8;
     public StartupStateProtobuf.StartupState.CustomSdkHostsPair[] customSdkHosts;
 
@@ -1221,6 +1224,7 @@ public interface StartupStateProtobuf {
       reportAdUrl = "";
       hostUrlsFromStartup = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_STRING_ARRAY;
       hostUrlsFromClient = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_STRING_ARRAY;
+      hostUrlsFromLibraryAdapter = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_STRING_ARRAY;
       customSdkHosts = StartupStateProtobuf.StartupState.CustomSdkHostsPair.emptyArray();
       flags = null;
       encodedClidsFromResponse = "";
@@ -1354,6 +1358,14 @@ public interface StartupStateProtobuf {
       }
       if (this.externalAttributionConfig != null) {
         output.writeMessage(32, this.externalAttributionConfig);
+      }
+      if (this.hostUrlsFromLibraryAdapter != null && this.hostUrlsFromLibraryAdapter.length > 0) {
+        for (int i = 0; i < this.hostUrlsFromLibraryAdapter.length; i++) {
+          java.lang.String element = this.hostUrlsFromLibraryAdapter[i];
+          if (element != null) {
+            output.writeString(33, element);
+          }
+        }
       }
       super.writeTo(output);
     }
@@ -1514,6 +1526,20 @@ public interface StartupStateProtobuf {
       if (this.externalAttributionConfig != null) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
           .computeMessageSize(32, this.externalAttributionConfig);
+      }
+      if (this.hostUrlsFromLibraryAdapter != null && this.hostUrlsFromLibraryAdapter.length > 0) {
+        int dataCount = 0;
+        int dataSize = 0;
+        for (int i = 0; i < this.hostUrlsFromLibraryAdapter.length; i++) {
+          java.lang.String element = this.hostUrlsFromLibraryAdapter[i];
+          if (element != null) {
+            dataCount++;
+            dataSize += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+                .computeStringSizeNoTag(element);
+          }
+        }
+        size += dataSize;
+        size += 2 * dataCount;
       }
       return size;
     }
@@ -1752,6 +1778,23 @@ public interface StartupStateProtobuf {
               this.externalAttributionConfig = new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
             }
             input.readMessage(this.externalAttributionConfig);
+            break;
+          }
+          case 266: {
+            int arrayLength = io.appmetrica.analytics.protobuf.nano.WireFormatNano
+                .getRepeatedFieldArrayLength(input, 266);
+            int i = this.hostUrlsFromLibraryAdapter == null ? 0 : this.hostUrlsFromLibraryAdapter.length;
+            java.lang.String[] newArray = new java.lang.String[i + arrayLength];
+            if (i != 0) {
+              java.lang.System.arraycopy(this.hostUrlsFromLibraryAdapter, 0, newArray, 0, i);
+            }
+            for (; i < newArray.length - 1; i++) {
+              newArray[i] = input.readString();
+              input.readTag();
+            }
+            // Last one without readTag.
+            newArray[i] = input.readString();
+            this.hostUrlsFromLibraryAdapter = newArray;
             break;
           }
         }

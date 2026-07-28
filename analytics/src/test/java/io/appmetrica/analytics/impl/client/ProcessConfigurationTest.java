@@ -257,6 +257,48 @@ public class ProcessConfigurationTest extends CommonTest {
     }
 
     @Test
+    public void testDefaultLibraryAdapterCustomHosts() {
+        assertThat(processConfiguration.hasLibraryAdapterCustomHosts()).isFalse();
+        assertThat(processConfiguration.getLibraryAdapterCustomHosts()).isNull();
+    }
+
+    @Test
+    public void testWriteNullLibraryAdapterCustomHostsRemovesThem() {
+        processConfiguration.setLibraryAdapterCustomHosts(getTestCustomHosts());
+        processConfiguration.setLibraryAdapterCustomHosts(null);
+        assertThat(processConfiguration.hasLibraryAdapterCustomHosts()).isFalse();
+        assertThat(processConfiguration.getLibraryAdapterCustomHosts()).isNull();
+    }
+
+    @Test
+    public void testWriteEmptyLibraryAdapterCustomHostsIsKeptAsExplicitlySet() {
+        processConfiguration.setLibraryAdapterCustomHosts(new ArrayList<String>());
+        // unlike a null value, an explicit empty list keeps the "was configured" flag set
+        assertThat(processConfiguration.hasLibraryAdapterCustomHosts()).isTrue();
+        assertThat(processConfiguration.getLibraryAdapterCustomHosts()).isNullOrEmpty();
+    }
+
+    @Test
+    public void testWriteLibraryAdapterCustomHosts() {
+        List<String> hosts = getTestCustomHosts();
+        processConfiguration.setLibraryAdapterCustomHosts(hosts);
+        assertThat(processConfiguration.hasLibraryAdapterCustomHosts()).isTrue();
+        assertThat(processConfiguration.getLibraryAdapterCustomHosts()).isEqualTo(hosts);
+    }
+
+    @Test
+    public void testRewriteLibraryAdapterCustomHosts() {
+        processConfiguration.setLibraryAdapterCustomHosts(new ArrayList<String>() {
+            {
+                add("http://initial.custom.adapter.host.ru");
+            }
+        });
+        List<String> hosts = getTestCustomHosts();
+        processConfiguration.setLibraryAdapterCustomHosts(hosts);
+        assertThat(processConfiguration.getLibraryAdapterCustomHosts()).isEqualTo(hosts);
+    }
+
+    @Test
     public void testNullClidsValueOverridesByConfig() {
         HashMap<String, String> clidsFromConfig = new HashMap<String, String>();
         clidsFromConfig.put("clid1", "1");

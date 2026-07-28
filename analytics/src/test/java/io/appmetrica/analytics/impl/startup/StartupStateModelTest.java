@@ -38,6 +38,7 @@ public class StartupStateModelTest extends CommonTest {
         final String certificateUrl = "certificate.url";
         final List<String> hostUrlsFromStartup = Arrays.asList("host.url1.fromstartup", "host.url2.fromstartup");
         final List<String> hostUrlsFromClient = Arrays.asList("host.url1.fromclient", "host.url2.fromclient");
+        final List<String> hostUrlsFromLibraryAdapter = Arrays.asList("host.url1.fromadapter", "host.url2.fromadapter");
         final List<String> diagnosticUrls = Arrays.asList("diagnostic.url1", "diagnostic.url2");
         final Map<String, List<String>> customSdkHosts = new HashMap<>();
         customSdkHosts.put("key1", Arrays.asList("host1", "host2"));
@@ -69,6 +70,7 @@ public class StartupStateModelTest extends CommonTest {
             .withCertificateUrl(certificateUrl)
             .withHostUrlsFromStartup(hostUrlsFromStartup)
             .withHostUrlsFromClient(hostUrlsFromClient)
+            .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withDiagnosticUrls(diagnosticUrls)
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
@@ -102,6 +104,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("certificateUrl", certificateUrl);
         assertions.checkField("hostUrlsFromStartup", hostUrlsFromStartup);
         assertions.checkField("hostUrlsFromClient", hostUrlsFromClient);
+        assertions.checkField("hostUrlsFromLibraryAdapter", hostUrlsFromLibraryAdapter);
         assertions.checkField("diagnosticUrls", diagnosticUrls);
         assertions.checkField("encodedClidsFromResponse", encodedClidsFromResponse);
         assertions.checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest);
@@ -143,6 +146,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("certificateUrl", (String) null);
         assertions.checkField("hostUrlsFromStartup", (List) null);
         assertions.checkField("hostUrlsFromClient", (List) null);
+        assertions.checkField("hostUrlsFromLibraryAdapter", (List) null);
         assertions.checkField("diagnosticUrls", (List) null);
         assertions.checkField("encodedClidsFromResponse", (String) null);
         assertions.checkField("lastClientClidsForStartupRequest", (String) null);
@@ -179,6 +183,7 @@ public class StartupStateModelTest extends CommonTest {
         final String certificateUrl = "certificate.url";
         final List<String> hostUrlsFromStartup = Arrays.asList("host.url1.fromstartup", "host.url2.fromstartup");
         final List<String> hostUrlsFromClient = Arrays.asList("host.url1.fromclient", "host.url2.fromclient");
+        final List<String> hostUrlsFromLibraryAdapter = Arrays.asList("host.url1.fromadapter", "host.url2.fromadapter");
         final List<String> diagnosticUrls = Arrays.asList("diagnostic.url1", "diagnostic.url2");
         final Map<String, List<String>> customSdkHosts = new HashMap<>();
         customSdkHosts.put("key1", Arrays.asList("host1", "host2"));
@@ -211,6 +216,7 @@ public class StartupStateModelTest extends CommonTest {
             .withCertificateUrl(certificateUrl)
             .withHostUrlsFromStartup(hostUrlsFromStartup)
             .withHostUrlsFromClient(hostUrlsFromClient)
+            .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withDiagnosticUrls(diagnosticUrls)
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
@@ -246,6 +252,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("certificateUrl", certificateUrl);
         assertions.checkField("hostUrlsFromStartup", hostUrlsFromStartup);
         assertions.checkField("hostUrlsFromClient", hostUrlsFromClient);
+        assertions.checkField("hostUrlsFromLibraryAdapter", hostUrlsFromLibraryAdapter);
         assertions.checkField("diagnosticUrls", diagnosticUrls);
         assertions.checkField("encodedClidsFromResponse", encodedClidsFromResponse);
         assertions.checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest);

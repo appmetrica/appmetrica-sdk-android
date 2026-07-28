@@ -38,6 +38,8 @@ public class StartupRequestConfigTest extends CommonTest {
     @Mock
     private DefaultStartupHostsProvider defaultStartupHostsProvider;
     @Mock
+    private HostsProvider resourceStartupHostsProvider;
+    @Mock
     private SdkEnvironmentProvider sdkEnvironmentProvider;
     @Mock
     private AppSetIdProvider appSetIdProvider;
@@ -59,6 +61,7 @@ public class StartupRequestConfigTest extends CommonTest {
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
         when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
         when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+        when(resourceStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
         mStartupStateBuilder = TestUtils.createDefaultStartupStateBuilder();
     }
 
@@ -123,7 +126,11 @@ public class StartupRequestConfigTest extends CommonTest {
 
     @Test
     public void testReferrerHolder() {
-        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
         assertThat(requestConfig.getReferrerManager()).isSameAs(referrerManager);
     }
 
@@ -143,11 +150,73 @@ public class StartupRequestConfigTest extends CommonTest {
     }
 
     @Test
+    public void startupHostsFromServerAreMergedWithLibraryAdapterHosts() {
+        String startupHost = "startup.host";
+        String libraryAdapterHost = "library.host";
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
+        requestConfig.setStartupHostsFromStartup(Arrays.asList(startupHost));
+        requestConfig.setStartupHostsFromLibraryAdapter(Arrays.asList(libraryAdapterHost));
+        assertThat(requestConfig.getStartupHosts()).containsExactly(startupHost, libraryAdapterHost);
+    }
+
+    @Test
+    public void hasOnlyLibraryAdapterHosts() {
+        String libraryAdapterHost = "library.host";
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
+        requestConfig.setStartupHostsFromLibraryAdapter(Arrays.asList(libraryAdapterHost));
+        assertThat(requestConfig.getStartupHosts()).containsExactly(libraryAdapterHost);
+    }
+
+    @Test
+    public void clientHostsWinOverLibraryAdapterHosts() {
+        String clientHost = "client.host";
+        String libraryAdapterHost = "library.host";
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
+        requestConfig.setStartupHostsFromClient(Arrays.asList(clientHost));
+        requestConfig.setStartupHostsFromLibraryAdapter(Arrays.asList(libraryAdapterHost));
+        assertThat(requestConfig.getStartupHosts()).containsExactly(clientHost);
+    }
+
+    @Test
+    public void resourceHostsWinOverLibraryAdapterHosts() {
+        String resourceHost = "resource.host";
+        String libraryAdapterHost = "library.host";
+        when(resourceStartupHostsProvider.getHosts()).thenReturn(Arrays.asList(resourceHost));
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
+        requestConfig.setStartupHostsFromLibraryAdapter(Arrays.asList(libraryAdapterHost));
+        assertThat(requestConfig.getStartupHosts()).containsExactly(resourceHost);
+    }
+
+    @Test
     public void hasOnlyDefaultHosts() {
         String firstHost = "host.1";
         String secondHost = "host.2";
-        when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
-        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
 
@@ -155,8 +224,12 @@ public class StartupRequestConfigTest extends CommonTest {
     public void hasOnlyHostsFromClient() {
         String firstHost = "host.1";
         String secondHost = "host.2";
-        when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(new ArrayList<String>());
-        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
         requestConfig.setStartupHostsFromClient(Arrays.asList(firstHost, secondHost));
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
@@ -165,25 +238,33 @@ public class StartupRequestConfigTest extends CommonTest {
     public void hasOnlyHostsFromStartup() {
         String firstHost = "host.1";
         String secondHost = "host.2";
-        when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(new ArrayList<String>());
-        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(new ArrayList<String>());
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
         requestConfig.setStartupHostsFromStartup(Arrays.asList(firstHost, secondHost));
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
 
     @Test
-    public void hasHostsFromAllSources() {
+    public void serverAndClientHostsWinOverDefaultHosts() {
         String firstHost = "host.1";
         String secondHost = "host.2";
         String thirdHost = "host.3";
         String fourthHost = "host.4";
         String fifthHost = "host.5";
         String sixthHost = "host.6";
-        when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
-        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        when(defaultStartupHostsProvider.getHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
+        StartupRequestConfig requestConfig = new StartupRequestConfig(
+            referrerManager,
+            resourceStartupHostsProvider,
+            defaultStartupHostsProvider
+        );
         requestConfig.setStartupHostsFromClient(Arrays.asList(thirdHost, fourthHost));
         requestConfig.setStartupHostsFromStartup(Arrays.asList(fifthHost, sixthHost));
-        assertThat(requestConfig.getStartupHosts()).containsExactly(fifthHost, sixthHost, thirdHost, fourthHost, firstHost, secondHost);
+        assertThat(requestConfig.getStartupHosts()).containsExactly(fifthHost, sixthHost, thirdHost, fourthHost);
     }
 
     private StartupRequestConfig createStartupRequestConfigWithNullArgs(@NonNull StartupState.Builder builder) {
@@ -196,6 +277,8 @@ public class StartupRequestConfigTest extends CommonTest {
             new StartupRequestConfig.Arguments(
                 null,
                 null,
+                null,
+                false,
                 null,
                 false,
                 null

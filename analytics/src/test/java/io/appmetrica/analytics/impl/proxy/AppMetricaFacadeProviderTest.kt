@@ -148,4 +148,13 @@ internal class AppMetricaFacadeProviderTest : CommonTest() {
         provider.addAutoCollectedDataSubscriber(subscriber)
         appMetricaFacadeStaticRule.staticMock.verify { AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber) }
     }
+
+    @Test
+    fun setLibraryAdapterCustomHosts() {
+        val customHosts = listOf("host1", "host2")
+        provider.setLibraryAdapterCustomHosts(customHosts)
+        appMetricaFacadeStaticRule.staticMock.verify {
+            AppMetricaFacade.setLibraryAdapterCustomHosts(customHosts)
+        }
+    }
 }

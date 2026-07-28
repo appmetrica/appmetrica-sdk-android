@@ -166,6 +166,9 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
                 )
             }
         }
+        if (libraryAdapterConfig.customHosts != null) {
+            startupHelper.setLibraryAdapterCustomHosts(libraryAdapterConfig.customHosts)
+        }
         val activatedNow = activateCommonComponentsIfNotYet(
             publicLogger,
             config,
@@ -403,6 +406,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     override fun addAutoCollectedDataSubscriber(subscriber: String) {
         DebugLogger.info(tag, "Add auto collected data subscriber: $subscriber")
         mainReporter.addAutoCollectedDataSubscriber(subscriber)
+    }
+
+    override fun setLibraryAdapterCustomHosts(customHosts: List<String>?) {
+        DebugLogger.info(tag, "Set library adapter custom hosts: $customHosts")
+        startupHelper.setLibraryAdapterCustomHosts(customHosts)
     }
 
     @AnyThread

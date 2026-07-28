@@ -268,6 +268,21 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
+    public void setLibraryAdapterCustomHosts() {
+        List<String> customHosts = Arrays.asList("host1", "host2");
+
+        startupHelper.setLibraryAdapterCustomHosts(customHosts);
+
+        verify(reportsHandler).setLibraryAdapterCustomHosts(customHosts);
+        verify(reportsHandler).reportStartupEvent(
+            eq(allIdentifiers),
+            any(ResultReceiver.class),
+            eq(null),
+            eq(false)
+        );
+    }
+
+    @Test
     public void setDistributionReferrer() {
         String referrer = "test-referrer";
 

@@ -2,6 +2,8 @@ package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
+import java.util.List;
 
 /**
  * Contains configuration for AppMetricaLibraryAdapter.
@@ -18,6 +20,14 @@ public class AppMetricaLibraryAdapterConfig {
     public final Boolean advIdentifiersTracking;
 
     /**
+     * Custom hosts for startup config.
+     *
+     * @see AppMetricaLibraryAdapterConfig.Builder#withCustomHosts(List)
+     */
+    @Nullable
+    public final List<String> customHosts;
+
+    /**
      * Creates a new builder for {@link AppMetricaLibraryAdapterConfig}.
      * @return a new builder for {@link AppMetricaLibraryAdapterConfig}.
      */
@@ -25,16 +35,17 @@ public class AppMetricaLibraryAdapterConfig {
         return new Builder();
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "AppMetricaLibraryAdapterConfig{" +
             "advIdentifiersTracking=" + advIdentifiersTracking +
+            ", customHosts=" + customHosts +
             '}';
     }
 
     private AppMetricaLibraryAdapterConfig(@NonNull Builder builder) {
         this.advIdentifiersTracking = builder.advIdentifiersTracking;
+        this.customHosts = builder.customHosts;
     }
 
     /**
@@ -47,6 +58,8 @@ public class AppMetricaLibraryAdapterConfig {
 
         @Nullable
         private Boolean advIdentifiersTracking;
+        @Nullable
+        private List<String> customHosts;
 
         /**
          * Enables/disables including advertising identifiers like GAID, Huawei OAID within its reports.
@@ -63,6 +76,22 @@ public class AppMetricaLibraryAdapterConfig {
         @NonNull
         public Builder withAdvIdentifiersTracking(boolean enabled) {
             advIdentifiersTracking = enabled;
+            return this;
+        }
+
+        /**
+         * Sets the list of hosts to be used for startup requests. This is optional value.
+         *
+         * @param customHosts non-empty host list.
+         *
+         * @return the same {@link Builder} object.
+         *
+         * @see AppMetricaLibraryAdapter#setCustomHosts(String[])
+         * @see AppMetricaLibraryAdapterConfig#customHosts
+         */
+        @NonNull
+        public Builder withCustomHosts(@NonNull List<String> customHosts) {
+            this.customHosts = CollectionUtils.unmodifiableListCopy(customHosts);
             return this;
         }
 

@@ -18,6 +18,8 @@ internal class LibraryAdapterSynchronousStageExecutor {
 
     fun setAdvIdentifiersTracking(enabled: Boolean) {}
 
+    fun setCustomHosts(customHosts: Array<String>?) {}
+
     fun reportEvent(sender: String?, event: String?, payload: String?) {}
 
     fun subscribeForAutoCollectedData(context: Context, apiKey: String) {

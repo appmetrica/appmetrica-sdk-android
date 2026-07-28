@@ -31,6 +31,8 @@ public class StartupStateModel {
     @Nullable
     public final List<String> hostUrlsFromClient;
     @Nullable
+    public final List<String> hostUrlsFromLibraryAdapter;
+    @Nullable
     public final List<String> diagnosticUrls;
     @Nullable
     public final Map<String, List<String>> customSdkHosts;
@@ -89,6 +91,8 @@ public class StartupStateModel {
             null : CollectionUtils.unmodifiableListCopy(builder.mHostUrlsFromStartup);
         this.hostUrlsFromClient = builder.mHostUrlsFromClient == null ?
             null : CollectionUtils.unmodifiableListCopy(builder.mHostUrlsFromClient);
+        this.hostUrlsFromLibraryAdapter = builder.mHostUrlsFromLibraryAdapter == null ?
+            null : CollectionUtils.unmodifiableListCopy(builder.mHostUrlsFromLibraryAdapter);
         this.diagnosticUrls = builder.mDiagnosticUrls == null ?
             null : CollectionUtils.unmodifiableListCopy(builder.mDiagnosticUrls);
         this.customSdkHosts = builder.customSdkHosts == null ?
@@ -135,6 +139,7 @@ public class StartupStateModel {
             .withUuid(uuid)
             .withHostUrlsFromStartup(hostUrlsFromStartup)
             .withHostUrlsFromClient(hostUrlsFromClient)
+            .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withReportUrls(reportUrls)
             .withGetAdUrl(getAdUrl)
@@ -172,6 +177,7 @@ public class StartupStateModel {
             ", certificateUrl='" + certificateUrl + '\'' +
             ", hostUrlsFromStartup=" + hostUrlsFromStartup +
             ", hostUrlsFromClient=" + hostUrlsFromClient +
+            ", hostUrlsFromLibraryAdapter=" + hostUrlsFromLibraryAdapter +
             ", diagnosticUrls=" + diagnosticUrls +
             ", customSdkHosts=" + customSdkHosts +
             ", encodedClidsFromResponse='" + encodedClidsFromResponse + '\'' +
@@ -216,6 +222,8 @@ public class StartupStateModel {
         List<String> mHostUrlsFromStartup;
         @Nullable
         List<String> mHostUrlsFromClient;
+        @Nullable
+        List<String> mHostUrlsFromLibraryAdapter;
         @Nullable
         List<String> mDiagnosticUrls;
         @Nullable
@@ -289,6 +297,11 @@ public class StartupStateModel {
 
         public StartupStateBuilder withHostUrlsFromClient(@Nullable List<String> hostUrlsFromClient) {
             mHostUrlsFromClient = hostUrlsFromClient;
+            return this;
+        }
+
+        public StartupStateBuilder withHostUrlsFromLibraryAdapter(@Nullable List<String> hostUrlsFromLibraryAdapter) {
+            mHostUrlsFromLibraryAdapter = hostUrlsFromLibraryAdapter;
             return this;
         }
 

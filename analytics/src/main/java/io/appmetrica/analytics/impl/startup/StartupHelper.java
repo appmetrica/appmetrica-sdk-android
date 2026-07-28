@@ -219,6 +219,13 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         }
     }
 
+    public void setLibraryAdapterCustomHosts(final List<String> libraryAdapterCustomHosts) {
+        synchronized (mStartupParamsLock) {
+            mReportsHandler.setLibraryAdapterCustomHosts(libraryAdapterCustomHosts);
+            sendStartupEvent(mClientClids, false);
+        }
+    }
+
     public void setClids(final Map<String, String> clids) {
         if (Utils.isNullOrEmpty(clids) == false) {
             synchronized (mStartupParamsLock) {

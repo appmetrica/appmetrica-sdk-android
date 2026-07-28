@@ -48,6 +48,19 @@ internal class AppMetricaLibraryAdapterProxy {
         }
     }
 
+    fun setCustomHosts(customHosts: Array<String>?) {
+        if (barrier.setCustomHosts(customHosts)) {
+            DebugLogger.info(tag, "SetCustomHosts with customHosts: ${customHosts?.joinToString()}")
+            synchronousStageExecutor.setCustomHosts(customHosts)
+            provider.setLibraryAdapterCustomHosts(customHosts?.toList())
+        } else {
+            DebugLogger.warning(
+                tag,
+                "Failed to set custom hosts: ${customHosts?.joinToString()} - AppMetrica is not activated yet"
+            )
+        }
+    }
+
     fun reportEvent(
         sender: String?,
         event: String?,

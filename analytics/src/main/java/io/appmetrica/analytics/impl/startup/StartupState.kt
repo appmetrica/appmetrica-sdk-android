@@ -18,6 +18,7 @@ internal class StartupState private constructor(
     val reportUrls: List<String>? = startupStateModel.reportUrls
     val hostUrlsFromStartup: List<String>? = startupStateModel.hostUrlsFromStartup
     val hostUrlsFromClient: List<String>? = startupStateModel.hostUrlsFromClient
+    val hostUrlsFromLibraryAdapter: List<String>? = startupStateModel.hostUrlsFromLibraryAdapter
     val diagnosticUrls: List<String>? = startupStateModel.diagnosticUrls
     val customSdkHosts: Map<String, List<String>>? = startupStateModel.customSdkHosts
     val getAdUrl: String? = startupStateModel.getAdUrl
@@ -64,6 +65,10 @@ internal class StartupState private constructor(
         fun withDeviceIdHash(value: String?) = this.also { deviceIdHash = value }
         fun withUuid(value: String?) = this.also { modelBuilder.withUuid(value) }
         fun withHostUrlsFromClient(value: List<String>?) = this.also { modelBuilder.withHostUrlsFromClient(value) }
+        fun withHostUrlsFromLibraryAdapter(value: List<String>?) = this.also {
+            modelBuilder.withHostUrlsFromLibraryAdapter(value)
+        }
+
         fun withReportUrls(value: List<String>?) = this.also { modelBuilder.withReportUrls(value) }
         fun withDiagnosticUrls(value: List<String>?) = this.also { modelBuilder.withDiagnosticUrls(value) }
         fun withHostUrlsFromStartup(value: List<String>?) = this.also { modelBuilder.withHostUrlsFromStartup(value) }

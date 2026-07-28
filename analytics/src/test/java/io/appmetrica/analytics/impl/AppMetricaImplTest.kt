@@ -305,6 +305,26 @@ internal class AppMetricaImplTest : CommonTest() {
     }
 
     @Test
+    fun `activate anonymously - sets library adapter custom hosts from config`() {
+        val customHosts = listOf("host1", "host2")
+        val configWithHosts = AppMetricaLibraryAdapterConfig.newConfigBuilder()
+            .withCustomHosts(customHosts)
+            .build()
+        val anonymousConfigProvider =
+            anonymousConfigProviderMockedConstructionRule.constructionMock.constructed().first()
+        whenever(anonymousConfigProvider.getConfig(configWithHosts)).thenReturn(anonymousConfig)
+        impl.activateAnonymously(configWithHosts)
+        verify(startupHelper).setLibraryAdapterCustomHosts(customHosts)
+    }
+
+    @Test
+    fun `setLibraryAdapterCustomHosts delegates to startup helper`() {
+        val customHosts = listOf("host1", "host2")
+        impl.setLibraryAdapterCustomHosts(customHosts)
+        verify(startupHelper).setLibraryAdapterCustomHosts(customHosts)
+    }
+
+    @Test
     fun `activate anonymously twice - setup startup helper`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(startupHelper)

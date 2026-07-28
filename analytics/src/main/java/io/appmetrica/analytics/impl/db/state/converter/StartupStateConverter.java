@@ -36,6 +36,11 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         if (value.hostUrlsFromClient != null) {
             state.hostUrlsFromClient = value.hostUrlsFromClient.toArray(new String[value.hostUrlsFromClient.size()]);
         }
+        if (value.hostUrlsFromLibraryAdapter != null) {
+            state.hostUrlsFromLibraryAdapter = value.hostUrlsFromLibraryAdapter.toArray(
+                new String[value.hostUrlsFromLibraryAdapter.size()]
+            );
+        }
         if (value.reportUrls != null) {
             state.reportUrls = value.reportUrls.toArray(new String[value.reportUrls.size()]);
         }
@@ -87,13 +92,14 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
     @Override
     public StartupStateModel toModel(@NonNull StartupStateProtobuf.StartupState nano) {
         StartupStateModel.StartupStateBuilder builder =
-                new StartupStateModel.StartupStateBuilder(mFlagsConverter.toModel(nano.flags))
+            new StartupStateModel.StartupStateBuilder(mFlagsConverter.toModel(nano.flags))
                 .withUuid(nano.uuid)
                 .withEncodedClidsFromResponse(nano.encodedClidsFromResponse)
                 .withGetAdUrl(nano.getAdUrl)
                 .withReportUrls(Arrays.asList(nano.reportUrls))
                 .withHostUrlsFromClient(Arrays.asList(nano.hostUrlsFromClient))
                 .withHostUrlsFromStartup(Arrays.asList(nano.hostUrlsFromStartup))
+                .withHostUrlsFromLibraryAdapter(Arrays.asList(nano.hostUrlsFromLibraryAdapter))
                 .withReportAdUrl(nano.reportAdUrl)
                 .withCertificateUrl(nano.certificateUrl)
                 .withDiagnosticUrls(Arrays.asList(nano.diagnosticUrls))

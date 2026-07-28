@@ -78,6 +78,7 @@ internal class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         whenever(barrier.activate(any(), any())).thenReturn(true)
         whenever(barrier.reportEvent(any(), any(), any())).thenReturn(true)
         whenever(barrier.setAdvIdentifiersTracking(any())).thenReturn(true)
+        whenever(barrier.setCustomHosts(any())).thenReturn(true)
         synchronousStageExecutor =
             synchronousStageExecutorRule.constructionMock.constructed().first()
         libraryEventConstructor =
@@ -128,6 +129,26 @@ internal class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         proxy.setAdvIdentifiersTracking(true)
         verifyNoInteractions(synchronousStageExecutor, executor)
         modulesFacadeRule.staticMock.verify({ ModulesFacade.setAdvIdentifiersTracking(any()) }, never())
+    }
+
+    @Test
+    fun setCustomHosts() {
+        val customHosts = arrayOf("host1", "host2")
+        proxy.setCustomHosts(customHosts)
+        verify(barrier).setCustomHosts(customHosts)
+        verify(synchronousStageExecutor).setCustomHosts(customHosts)
+        verify(clientServiceLocatorRule.appMetricaFacadeProvider)
+            .setLibraryAdapterCustomHosts(customHosts.toList())
+    }
+
+    @Test
+    fun `setCustomHosts if not valid`() {
+        val customHosts = arrayOf("host1", "host2")
+        whenever(barrier.setCustomHosts(customHosts)).thenReturn(false)
+        proxy.setCustomHosts(customHosts)
+        verifyNoInteractions(synchronousStageExecutor)
+        verify(clientServiceLocatorRule.appMetricaFacadeProvider, never())
+            .setLibraryAdapterCustomHosts(any())
     }
 
     @Test

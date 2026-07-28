@@ -122,6 +122,8 @@ public class CommonArgumentsTest extends CommonTest {
 
         boolean hasNewCustomHosts = false;
         List<String> newCustomHosts = null;
+        boolean hasNewLibraryAdapterCustomHosts = true;
+        List<String> newLibraryAdapterCustomHosts = Arrays.asList("adapter.host1", "adapter.host2");
         Map<String, String> clids = new HashMap<String, String>();
         clids.put("clid0", "0");
         clids.put("clid1", "1");
@@ -150,6 +152,8 @@ public class CommonArgumentsTest extends CommonTest {
         doReturn(referrerSource).when(processConfiguration).getInstallReferrerSource();
         doReturn(hasNewCustomHosts).when(processConfiguration).hasCustomHosts();
         doReturn(newCustomHosts).when(processConfiguration).getCustomHosts();
+        doReturn(hasNewLibraryAdapterCustomHosts).when(processConfiguration).hasLibraryAdapterCustomHosts();
+        doReturn(newLibraryAdapterCustomHosts).when(processConfiguration).getLibraryAdapterCustomHosts();
         doReturn(clids).when(processConfiguration).getClientClids();
 
         CommonArguments commonArguments = new CommonArguments(
@@ -184,6 +188,8 @@ public class CommonArgumentsTest extends CommonTest {
             Assertions.INSTANCE.ObjectPropertyAssertions(commonArguments.startupArguments);
         startupAssertions.checkField("hasNewCustomHosts", hasNewCustomHosts);
         startupAssertions.checkField("newCustomHosts", newCustomHosts);
+        startupAssertions.checkField("hasNewLibraryAdapterCustomHosts", hasNewLibraryAdapterCustomHosts);
+        startupAssertions.checkField("newLibraryAdapterCustomHosts", newLibraryAdapterCustomHosts);
         startupAssertions.checkField("clientClids", clids);
         startupAssertions.checkField("distributionReferrer", distributionReferrer);
         startupAssertions.checkField("installReferrerSource", referrerSource);

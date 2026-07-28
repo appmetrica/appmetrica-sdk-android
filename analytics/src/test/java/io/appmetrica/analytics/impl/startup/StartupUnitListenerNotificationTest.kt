@@ -20,13 +20,17 @@ import io.appmetrica.analytics.testutils.TestUtils
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 internal class StartupUnitListenerNotificationTest : CommonTest() {
@@ -127,6 +131,84 @@ internal class StartupUnitListenerNotificationTest : CommonTest() {
         whenever(startupRequestConfig.hasNewCustomHosts()).thenReturn(true)
         startupUnit.updateConfiguration(arguments)
         checkListenersNotified(2)
+    }
+
+    @Test
+    fun updateConfigurationResetsClientHostsWhenNewHostsAreEmpty() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        whenever(startupRequestConfig.newCustomHosts).thenReturn(null)
+        whenever(startupRequestConfig.startupHostsFromClient).thenReturn(mutableListOf("host"))
+        whenever(startupRequestConfig.hasNewCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        val stateCaptor = argumentCaptor<StartupState>()
+        verify(startupConfigurationHolder, times(2)).updateStartupState(stateCaptor.capture())
+        assertThat(stateCaptor.lastValue.hostUrlsFromClient).isNull()
+    }
+
+    @Test
+    fun updateConfigurationUpdatesClientHostsWhenChanged() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        val newHosts = listOf("newHost")
+        whenever(startupRequestConfig.newCustomHosts).thenReturn(newHosts)
+        whenever(startupRequestConfig.startupHostsFromClient).thenReturn(mutableListOf("oldHost"))
+        whenever(startupRequestConfig.hasNewCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        val stateCaptor = argumentCaptor<StartupState>()
+        verify(startupConfigurationHolder, times(2)).updateStartupState(stateCaptor.capture())
+        assertThat(stateCaptor.lastValue.hostUrlsFromClient).isEqualTo(newHosts)
+    }
+
+    @Test
+    fun updateConfigurationDoesNotUpdateClientHostsWhenUnchanged() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        val hosts = listOf("host")
+        whenever(startupRequestConfig.newCustomHosts).thenReturn(hosts)
+        whenever(startupRequestConfig.startupHostsFromClient).thenReturn(hosts)
+        whenever(startupRequestConfig.hasNewCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        verify(startupConfigurationHolder, times(1)).updateStartupState(any())
+    }
+
+    @Test
+    fun updateConfigurationResetsLibraryAdapterHostsWhenNewHostsAreEmpty() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        whenever(startupRequestConfig.newLibraryAdapterCustomHosts).thenReturn(null)
+        whenever(startupRequestConfig.startupHostsFromLibraryAdapter).thenReturn(mutableListOf("adapter.host"))
+        whenever(startupRequestConfig.hasNewLibraryAdapterCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        val stateCaptor = argumentCaptor<StartupState>()
+        verify(startupConfigurationHolder, times(2)).updateStartupState(stateCaptor.capture())
+        assertThat(stateCaptor.lastValue.hostUrlsFromLibraryAdapter).isNull()
+    }
+
+    @Test
+    fun updateConfigurationUpdatesLibraryAdapterHostsWhenChanged() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        val newHosts = listOf("adapter.newHost")
+        whenever(startupRequestConfig.newLibraryAdapterCustomHosts).thenReturn(newHosts)
+        whenever(startupRequestConfig.startupHostsFromLibraryAdapter).thenReturn(mutableListOf("adapter.oldHost"))
+        whenever(startupRequestConfig.hasNewLibraryAdapterCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        val stateCaptor = argumentCaptor<StartupState>()
+        verify(startupConfigurationHolder, times(2)).updateStartupState(stateCaptor.capture())
+        assertThat(stateCaptor.lastValue.hostUrlsFromLibraryAdapter).isEqualTo(newHosts)
+    }
+
+    @Test
+    fun updateConfigurationDoesNotUpdateLibraryAdapterHostsWhenUnchanged() {
+        createStartupUnitToNotModifyStartup()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        val hosts = listOf("adapter.host")
+        whenever(startupRequestConfig.newLibraryAdapterCustomHosts).thenReturn(hosts)
+        whenever(startupRequestConfig.startupHostsFromLibraryAdapter).thenReturn(hosts)
+        whenever(startupRequestConfig.hasNewLibraryAdapterCustomHosts()).thenReturn(true)
+        startupUnit.updateConfiguration(mock())
+        verify(startupConfigurationHolder, times(1)).updateStartupState(any())
     }
 
     private fun checkListenersNotified(times: Int) {

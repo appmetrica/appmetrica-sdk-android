@@ -20,6 +20,7 @@ message StartupState {
     optional string reportAdUrl = 5;
     repeated string hostUrlsFromStartup = 6;
     repeated string hostUrlsFromClient = 7;
+    repeated string hostUrlsFromLibraryAdapter = 33;
 
     message CustomSdkHostsPair {
         optional string key = 1;

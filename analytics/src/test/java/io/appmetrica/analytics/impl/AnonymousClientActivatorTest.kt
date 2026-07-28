@@ -73,7 +73,7 @@ internal class AnonymousClientActivatorTest : CommonTest() {
             runnableCaptor.firstValue.run()
             verify(appMetricaFacade).activateFull(configCaptor.capture())
             ObjectPropertyAssertions(configCaptor.firstValue)
-                .checkFieldsAreNull("advIdentifiersTracking")
+                .checkFieldsAreNull("advIdentifiersTracking", "customHosts")
                 .checkAll()
         }
     }

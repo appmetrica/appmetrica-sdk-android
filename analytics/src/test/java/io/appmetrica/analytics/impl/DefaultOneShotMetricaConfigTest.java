@@ -11,6 +11,7 @@ import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.Before;
@@ -18,7 +19,9 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class DefaultOneShotMetricaConfigTest extends CommonTest {
@@ -394,6 +397,33 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         config.setReportsHandler(mReportsHandler);
         config.setAdvIdentifiersTracking(true, true);
         verify(mReportsHandler).updatePreActivationConfig(null, null, true, true);
+    }
+
+    @Test
+    public void proxyLibraryAdapterCustomHosts() {
+        List<String> customHosts = Collections.singletonList("host1");
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setReportsHandler(mReportsHandler);
+        config.setLibraryAdapterCustomHosts(customHosts);
+        verify(mReportsHandler).setLibraryAdapterCustomHosts(customHosts);
+    }
+
+    @Test
+    public void setLibraryAdapterCustomHostsBeforeReportsHandlerAppliesOnSetReportsHandler() {
+        List<String> customHosts = Collections.singletonList("host1");
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setLibraryAdapterCustomHosts(customHosts);
+        config.setReportsHandler(mReportsHandler);
+        verify(mReportsHandler).setLibraryAdapterCustomHosts(customHosts);
+    }
+
+    @Test
+    public void setNullLibraryAdapterCustomHostsBeforeReportsHandlerIsNotApplied() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setLibraryAdapterCustomHosts(Collections.singletonList("host1"));
+        config.setLibraryAdapterCustomHosts(null);
+        config.setReportsHandler(mReportsHandler);
+        verify(mReportsHandler, never()).setLibraryAdapterCustomHosts(any());
     }
 
     @Test

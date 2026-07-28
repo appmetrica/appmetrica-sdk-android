@@ -150,6 +150,12 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
+    public void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        DebugLogger.INSTANCE.info(getTag(), "Set library adapter custom hosts: %s", customHosts);
+        mReportsHandler.setLibraryAdapterCustomHosts(customHosts);
+    }
+
+    @Override
     public List<String> getCustomHosts() {
         return mReporterEnvironment.getProcessConfiguration().getCustomHosts();
     }

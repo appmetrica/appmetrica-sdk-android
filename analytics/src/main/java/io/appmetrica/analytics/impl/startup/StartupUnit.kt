@@ -54,9 +54,26 @@ internal class StartupUnit(
                 .withDeviceId(deviceIdCandidate)
                 .withDeviceIdHash(StringUtils.EMPTY)
         }
-        startupStateBuilder.withHostUrlsFromClient(
-            startupUnitComponents.requestConfigArguments.newCustomHosts?.takeIf { it.isNotEmpty() }
+        DebugLogger.info(
+            tag,
+            "Seeding hosts from requestConfigArguments - hasNewCustomHosts: " +
+                "${startupUnitComponents.requestConfigArguments.hasNewCustomHosts}, newCustomHosts: " +
+                "${startupUnitComponents.requestConfigArguments.newCustomHosts}; " +
+                "hasNewLibraryAdapterCustomHosts: " +
+                "${startupUnitComponents.requestConfigArguments.hasNewLibraryAdapterCustomHosts}, " +
+                "newLibraryAdapterCustomHosts: " +
+                "${startupUnitComponents.requestConfigArguments.newLibraryAdapterCustomHosts}"
         )
+        if (startupUnitComponents.requestConfigArguments.hasNewCustomHosts) {
+            startupStateBuilder.withHostUrlsFromClient(
+                startupUnitComponents.requestConfigArguments.newCustomHosts?.takeIf { it.isNotEmpty() }
+            )
+        }
+        if (startupUnitComponents.requestConfigArguments.hasNewLibraryAdapterCustomHosts) {
+            startupStateBuilder.withHostUrlsFromLibraryAdapter(
+                startupUnitComponents.requestConfigArguments.newLibraryAdapterCustomHosts?.takeIf { it.isNotEmpty() }
+            )
+        }
         val updatedStartupState = startupStateBuilder.build()
         DebugLogger.info(
             tag,
@@ -164,6 +181,7 @@ internal class StartupUnit(
             .withGetAdUrl(result.getAdUrl)
             .withHostUrlsFromStartup(result.startupUrls)
             .withHostUrlsFromClient(requestConfig.startupHostsFromClient)
+            .withHostUrlsFromLibraryAdapter(requestConfig.startupHostsFromLibraryAdapter)
             .withReportUrls(result.reportHostUrls)
             .withReportAdUrl(result.reportAdUrl)
             .withCertificateUrl(result.certificateUrl)
@@ -262,6 +280,24 @@ internal class StartupUnit(
                     DebugLogger.info(tag, "Update custom hosts to $customHostUrls")
                     updateCurrentStartupDataAndNotifyListener(
                         startupState.buildUpon().withHostUrlsFromClient(customHostUrls).build()
+                    )
+                }
+            }
+        }
+        if (config.hasNewLibraryAdapterCustomHosts()) {
+            val customHostUrls = config.newLibraryAdapterCustomHosts
+            if (customHostUrls.isNullOrEmpty()) {
+                if (config.startupHostsFromLibraryAdapter?.isNotEmpty() == true) {
+                    DebugLogger.info(tag, "Reset library adapter custom hosts")
+                    updateCurrentStartupDataAndNotifyListener(
+                        startupState.buildUpon().withHostUrlsFromLibraryAdapter(null).build()
+                    )
+                }
+            } else {
+                if (!Utils.areEqual(customHostUrls, config.startupHostsFromLibraryAdapter)) {
+                    DebugLogger.info(tag, "Update library adapter custom hosts to $customHostUrls")
+                    updateCurrentStartupDataAndNotifyListener(
+                        startupState.buildUpon().withHostUrlsFromLibraryAdapter(customHostUrls).build()
                     )
                 }
             }

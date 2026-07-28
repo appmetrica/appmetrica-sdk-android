@@ -27,6 +27,8 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     private Boolean advIdentifiersTrackingEnabled;
     private Boolean isAdvIdentifiersTrackingEnabledForced = false;
     private Boolean dataSendingEnabled;
+    private List<String> libraryAdapterCustomHosts;
+    private boolean hasLibraryAdapterCustomHosts;
     private final Map<String, String> appEnvironment = new LinkedHashMap<>();
     private final Map<String, String> errorEnvironment = new LinkedHashMap<>();
 
@@ -81,6 +83,23 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     public Boolean isAdvIdentifiersTrackingEnabled() {
         return advIdentifiersTrackingEnabled;
+    }
+
+    @Override
+    public void setLibraryAdapterCustomHosts(@Nullable List<String> customHosts) {
+        DebugLogger.INSTANCE.info(TAG, "setLibraryAdapterCustomHosts: %s", customHosts);
+        List<String> newLibraryAdapterCustomHosts;
+        if (customHosts == null) {
+            hasLibraryAdapterCustomHosts = false;
+            newLibraryAdapterCustomHosts = null;
+        } else {
+            hasLibraryAdapterCustomHosts = true;
+            newLibraryAdapterCustomHosts = customHosts;
+        }
+        libraryAdapterCustomHosts = newLibraryAdapterCustomHosts;
+        if (mReportsHandler != null) {
+            mReportsHandler.setLibraryAdapterCustomHosts(newLibraryAdapterCustomHosts);
+        }
     }
 
     public Boolean isDataSendingEnabled() {
@@ -145,6 +164,8 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         advIdentifiersTrackingEnabled = null;
         isAdvIdentifiersTrackingEnabledForced = false;
         dataSendingEnabled = null;
+        libraryAdapterCustomHosts = null;
+        hasLibraryAdapterCustomHosts = false;
         appEnvironment.clear();
         errorEnvironment.clear();
 
@@ -358,6 +379,14 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
                 advIdentifiersTrackingEnabled,
                 isAdvIdentifiersTrackingEnabledForced
             );
+        }
+        if (hasLibraryAdapterCustomHosts) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Library adapter custom hosts were defined before activation. Apply pre-activation hosts: %s",
+                libraryAdapterCustomHosts
+            );
+            reportsHandler.setLibraryAdapterCustomHosts(libraryAdapterCustomHosts);
         }
         mReportsHandler = reportsHandler;
     }

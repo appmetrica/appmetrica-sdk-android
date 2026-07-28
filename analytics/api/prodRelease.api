@@ -199,21 +199,24 @@ public class io.appmetrica.analytics.AppMetricaLibraryAdapter {
     public static void activate([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig)
     public static void reportEvent([NonNull] String, [NonNull] String, [NonNull] String)
     public static void setAdvIdentifiersTracking(boolean)
+    public static void setCustomHosts([Nullable] String[])
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy])
     public static void subscribeForAutoCollectedData([NonNull] android.content.Context, [NonNull] String)
 }
 
 public class io.appmetrica.analytics.AppMetricaLibraryAdapterConfig {
     public final [Nullable] Boolean advIdentifiersTracking
+    public final [Nullable] java.util.List<String> customHosts
 
     public static io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder newConfigBuilder()
-    public [NonNull] String toString()
+    public String toString()
 }
 
 public static class io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder {
     public <init>()
     public [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig build()
     public [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder withAdvIdentifiersTracking(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder withCustomHosts([NonNull] java.util.List<String>)
 }
 
 public final class io.appmetrica.analytics.BuildConfig {

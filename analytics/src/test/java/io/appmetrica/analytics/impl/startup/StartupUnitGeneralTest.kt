@@ -68,6 +68,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         }
 
         val processConfiguration = mock<ProcessConfiguration> {
+            on { hasCustomHosts() } doReturn true
             on { customHosts } doReturn hosts
         }
 
@@ -85,6 +86,34 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val startupStateCaptor = argumentCaptor<StartupState>()
         verify(startupStateStorage).save(startupStateCaptor.capture())
         assertThat(startupStateCaptor.firstValue.hostUrlsFromClient).containsAll(hosts)
+    }
+
+    @Test
+    fun constructorWithLibraryAdapterCustomHosts() {
+        val hosts = listOf("adapter.first", "adapter.second")
+        val counterConfiguration = mock<CounterConfiguration> {
+            on { uuid } doReturn UUID.randomUUID().toString()
+        }
+
+        val processConfiguration = mock<ProcessConfiguration> {
+            on { hasLibraryAdapterCustomHosts() } doReturn true
+            on { libraryAdapterCustomHosts } doReturn hosts
+        }
+
+        val arguments = StartupRequestConfig.Arguments(
+            ClientConfiguration(
+                processConfiguration,
+                counterConfiguration
+            )
+        )
+        whenever(startupUnitComponents.requestConfigArguments)
+            .thenReturn(arguments)
+        whenever(startupUnitComponents.startupStateStorage).thenReturn(startupStateStorage)
+        val startupUnit = StartupUnit(startupUnitComponents)
+        startupUnit.init()
+        val startupStateCaptor = argumentCaptor<StartupState>()
+        verify(startupStateStorage).save(startupStateCaptor.capture())
+        assertThat(startupStateCaptor.firstValue.hostUrlsFromLibraryAdapter).containsAll(hosts)
     }
 
     @Test
@@ -133,6 +162,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val diagnosticUrls: List<String> = mutableListOf("diagnostic url")
         val hostUrlsFromStartup: List<String> = mutableListOf("startup url")
         val hostUrlsFromClient: List<String> = mutableListOf("client startup url")
+        val hostUrlsFromLibraryAdapter: List<String> = mutableListOf("adapter startup url")
         val getAdUrl = "some.get.tst.url"
         val reportAdUrl = "some.report.tst.url"
         val certificateUrl = "certificate.url"
@@ -172,6 +202,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(result.startupUrls).thenReturn(hostUrlsFromStartup)
         whenever(result.diagnosticUrls).thenReturn(diagnosticUrls)
         whenever(startupRequestConfig.startupHostsFromClient).thenReturn(hostUrlsFromClient)
+        whenever(startupRequestConfig.startupHostsFromLibraryAdapter).thenReturn(hostUrlsFromLibraryAdapter)
         whenever(result.encodedClids).thenReturn(encodedClids)
         whenever(result.collectionFlags).thenReturn(collectingFlags)
         whenever(startupRequestConfig.clidsFromClient).thenReturn(clientClids)
@@ -199,6 +230,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         assertions.checkField("certificateUrl", certificateUrl)
         assertions.checkField("hostUrlsFromStartup", hostUrlsFromStartup)
         assertions.checkField("hostUrlsFromClient", hostUrlsFromClient)
+        assertions.checkField("hostUrlsFromLibraryAdapter", hostUrlsFromLibraryAdapter)
         assertions.checkField("diagnosticUrls", diagnosticUrls)
         assertions.checkField("encodedClidsFromResponse", encodedClids)
         assertions.checkField(

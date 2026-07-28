@@ -30,6 +30,10 @@ internal class LibraryAdapterBarrier(
         return activationValidator.validate().isValid
     }
 
+    fun setCustomHosts(customHosts: Array<String>?): Boolean {
+        return activationValidator.validate().isValid
+    }
+
     fun reportEvent(
         sender: String?,
         event: String?,
