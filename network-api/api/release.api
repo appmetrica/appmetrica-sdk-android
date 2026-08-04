@@ -48,6 +48,7 @@ public abstract static class io.appmetrica.analytics.networkapi.NetworkClient$Bu
 }
 
 public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
+    public boolean equals([Nullable] Object)
     public final [Nullable] Long getCallTimeout()
     public final [Nullable] Boolean getCollectMetrics()
     public final [Nullable] Integer getConnectTimeout()
@@ -56,6 +57,7 @@ public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
     public final [Nullable] Integer getReadTimeout()
     public final [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
     public final [Nullable] Boolean getUseCaches()
+    public int hashCode()
     public [NonNull] String toString()
 }
 

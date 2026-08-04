@@ -27,6 +27,32 @@ class NetworkClientSettings private constructor(
     val collectMetrics: Boolean?,
 ) {
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NetworkClientSettings) return false
+        return connectTimeout == other.connectTimeout &&
+            readTimeout == other.readTimeout &&
+            callTimeout == other.callTimeout &&
+            // SSLSocketFactory has no value-equals; identity is the only safe comparison
+            sslSocketFactory === other.sslSocketFactory &&
+            useCaches == other.useCaches &&
+            instanceFollowRedirects == other.instanceFollowRedirects &&
+            maxResponseSize == other.maxResponseSize &&
+            collectMetrics == other.collectMetrics
+    }
+
+    override fun hashCode(): Int {
+        var result = connectTimeout ?: 0
+        result = 31 * result + (readTimeout ?: 0)
+        result = 31 * result + (callTimeout?.hashCode() ?: 0)
+        result = 31 * result + System.identityHashCode(sslSocketFactory)
+        result = 31 * result + (useCaches?.hashCode() ?: 0)
+        result = 31 * result + (instanceFollowRedirects?.hashCode() ?: 0)
+        result = 31 * result + maxResponseSize
+        result = 31 * result + (collectMetrics?.hashCode() ?: 0)
+        return result
+    }
+
     override fun toString(): String {
         return "NetworkClientSettings(" +
             "connectTimeout=$connectTimeout, " +
