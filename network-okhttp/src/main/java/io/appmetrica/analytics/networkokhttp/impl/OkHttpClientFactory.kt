@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networkokhttp.impl
 
+import android.util.LruCache
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.coreutils.internal.system.SystemPropertiesHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -12,7 +13,6 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.jvm.java
 
 internal class OkHttpClientFactory {
 
@@ -20,7 +20,15 @@ internal class OkHttpClientFactory {
     private val debugInterceptorProperty = "debug.yndx.iaa.okhttp.mock"
 
     fun createOkHttpClient(settings: NetworkClientSettings): OkHttpClient {
-        return OkHttpClient.Builder().apply {
+        clients.get(settings)?.let { return it }
+        synchronized(clients) {
+            clients.get(settings)?.let { return it }
+            return buildClient(settings).also { clients.put(settings, it) }
+        }
+    }
+
+    private fun buildClient(settings: NetworkClientSettings): OkHttpClient {
+        return baseClient.newBuilder().apply {
             protocols(listOf(Protocol.HTTP_2, Protocol.HTTP_1_1))
             settings.readTimeout?.let { readTimeout(it.toLong(), MILLISECONDS) }
             settings.connectTimeout?.let { connectTimeout(it.toLong(), MILLISECONDS) }
@@ -91,5 +99,17 @@ internal class OkHttpClientFactory {
             DebugLogger.warning(tag, "Failed to load debug interceptor: $interceptorClassName")
         }
         return interceptor
+    }
+
+    companion object {
+        internal const val MAX_CACHED_CLIENTS = 10
+
+        private val baseClient: OkHttpClient by lazy { OkHttpClient.Builder().build() }
+
+        private val clients = LruCache<NetworkClientSettings, OkHttpClient>(MAX_CACHED_CLIENTS)
+
+        internal fun clearClientsCache() {
+            clients.evictAll()
+        }
     }
 }
