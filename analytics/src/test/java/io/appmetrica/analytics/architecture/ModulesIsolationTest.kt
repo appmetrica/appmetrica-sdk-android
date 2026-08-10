@@ -2,6 +2,7 @@ package io.appmetrica.analytics.architecture
 
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses
+import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -10,17 +11,11 @@ class ModulesIsolationTest : CommonTest() {
 
     @Test
     fun productFlowClassesAreNotUsedInAnalyticsModule() {
-        val classes = ClassFileImporter()
-            .withImportOption { location ->
-                val path = location.asURI().toString()
-                // only main classes of the analytics module itself; AGP packs
-                // them into runtime_library_classes_jar for unit-test runtime.
-                "build/intermediates/runtime_library_classes_jar/" in path
-            }
-            .importPackages("io.appmetrica.analytics")
+        val analyticsClassesUrl = AppMetrica::class.java.protectionDomain.codeSource.location
+        val classes = ClassFileImporter().importUrl(analyticsClassesUrl)
 
         assertThat(classes)
-            .describedAs("ArchUnit did not import any class — check the location filter")
+            .describedAs("ArchUnit did not import any class — check the AppMetrica code source")
             .isNotEmpty
 
         noClasses()
