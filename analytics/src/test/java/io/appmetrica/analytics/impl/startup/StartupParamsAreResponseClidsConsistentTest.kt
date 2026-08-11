@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
+import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
@@ -47,13 +48,16 @@ internal class StartupParamsAreResponseClidsConsistentTest(
         on { getFeatures() } doReturn FeaturesInternal(null, IdentifierStatus.UNKNOWN, null)
         on { uuidResult } doReturn uuidResult
     }
+    private val multiProcessSafeUuidProvider = mock<MultiProcessSafeUuidProvider> {
+        on { readUuid() } doReturn uuidResult
+    }
 
     private lateinit var startupParams: StartupParams
 
     @Before
     fun setUp() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(storage)
-        startupParams = StartupParams(context, storage)
+        startupParams = StartupParams(storage, multiProcessSafeUuidProvider)
     }
 
     @Test

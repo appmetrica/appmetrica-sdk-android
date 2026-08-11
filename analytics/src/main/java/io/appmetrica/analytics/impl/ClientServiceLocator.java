@@ -235,7 +235,10 @@ public class ClientServiceLocator {
     public synchronized MultiProcessSafeUuidProvider getMultiProcessSafeUuidProvider(@NonNull Context context) {
         if (multiProcessSafeUuidProvider == null) {
             multiProcessSafeUuidProvider =
-                new MultiProcessSafeUuidProvider(context, new UuidFromClientPreferencesImporter());
+                new MultiProcessSafeUuidProvider(
+                    context,
+                    new UuidFromClientPreferencesImporter(getPreferencesClientDbStorage(context))
+                );
         }
         return multiProcessSafeUuidProvider;
     }
@@ -294,7 +297,10 @@ public class ClientServiceLocator {
             synchronized (this) {
                 local = startupParams;
                 if (local == null) {
-                    local = new StartupParams(context, getPreferencesClientDbStorage(context));
+                    local = new StartupParams(
+                        getPreferencesClientDbStorage(context),
+                        getMultiProcessSafeUuidProvider(context)
+                    );
                     startupParams = local;
                 }
             }

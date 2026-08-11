@@ -282,7 +282,9 @@ public class ClientServiceLocatorTest extends CommonTest {
             .hasSize(1);
 
         assertThat(uuidFromClientPreferencesImporterMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .isEmpty();
+            .containsExactly(
+                preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed().get(1)
+            );
     }
 
     @Test

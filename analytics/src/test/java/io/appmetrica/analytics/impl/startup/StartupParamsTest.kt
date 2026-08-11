@@ -224,7 +224,7 @@ internal class StartupParamsTest : CommonTest() {
     @Test
     fun deviceIdShouldNotBeClearedByReceiver() {
         val deviceId: String = UUID.randomUUID().toString()
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
         startupParams.setDeviceId(IdentifiersResult(deviceId, IdentifierStatus.OK, null))
         whenever(clientIdentifiersHolder.deviceId).thenReturn(null)
         startupParams.updateAllParamsByReceiver(clientIdentifiersHolder)
@@ -244,7 +244,7 @@ internal class StartupParamsTest : CommonTest() {
     fun hostsShouldNotBeClearedByReceiver() {
         defineTestHostsFromPreferences()
 
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
         whenever(clientIdentifiersHolder.getAdUrl).thenReturn(null)
         whenever(clientIdentifiersHolder.reportAdUrl).thenReturn(null)
         startupParams.updateAllParamsByReceiver(clientIdentifiersHolder)
@@ -266,7 +266,7 @@ internal class StartupParamsTest : CommonTest() {
         defineAllStartupParamsFromPreferences()
         defineEmptyUuidFromPreferences()
 
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
 
         assertThat(
             startupParams.containsIdentifiers(
@@ -284,7 +284,7 @@ internal class StartupParamsTest : CommonTest() {
         defineEmptyUuidFromPreferences()
         defineEmptyDeviceIdFromPreferences()
 
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
 
         assertThat(
             startupParams.containsIdentifiers(
@@ -298,7 +298,7 @@ internal class StartupParamsTest : CommonTest() {
 
     @Test
     fun someStartupParamsShouldNotBeValidIfNoneDefined() {
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
 
         assertThat(
             startupParams.containsIdentifiers(
@@ -314,7 +314,7 @@ internal class StartupParamsTest : CommonTest() {
     fun someStartupParamsShouldNotBeValidIfExtraDefined() {
         defineAllStartupParamsFromPreferences()
 
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
 
         assertThat(
             startupParams.containsIdentifiers(
@@ -330,7 +330,7 @@ internal class StartupParamsTest : CommonTest() {
     fun deviceIdShouldSaveCorrectly() {
         val deviceId = UUID.randomUUID().toString()
         whenever(preferences.deviceIdResult).thenReturn(IdentifiersResult(deviceId, IdentifierStatus.OK, null))
-        val startupParams = StartupParams(context, preferences)
+        val startupParams = StartupParams(preferences, uuidProvider)
 
         assertThat(startupParams.deviceId).isEqualTo(deviceId)
     }
@@ -342,7 +342,7 @@ internal class StartupParamsTest : CommonTest() {
         whenever(preferences.customSdkHosts).thenReturn(customSdkHostsResult)
 
         // Trigger saving values to preferences
-        StartupParams(context, preferences)
+        StartupParams(preferences, uuidProvider)
 
         verify(preferences).putAdUrlGetResult(testAdGetUrl)
         verify(preferences).putAdUrlReportResult(testAdUrlReport)
@@ -354,7 +354,7 @@ internal class StartupParamsTest : CommonTest() {
         whenever(preferences.getFeatures()).thenReturn(featuresInternal)
 
         // Trigger saving values to preferences
-        StartupParams(context, preferences)
+        StartupParams(preferences, uuidProvider)
 
         verify(preferences).putFeatures(featuresInternal)
     }
@@ -474,7 +474,7 @@ internal class StartupParamsTest : CommonTest() {
     fun setDifferentClientClids() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
         mockPreferencesWithValidValues()
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         val inOrder = inOrder(preferences)
         inOrder.verify(preferences).putResponseClidsResult(
@@ -501,7 +501,7 @@ internal class StartupParamsTest : CommonTest() {
     fun setSameClientClids() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
         mockPreferencesWithValidValues()
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         val inOrder = inOrder(preferences)
 
@@ -533,7 +533,7 @@ internal class StartupParamsTest : CommonTest() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
         mockPreferencesWithValidValues()
         whenever(preferences.getClientClids(anyOrNull())).thenReturn(null)
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         val inOrder = inOrder(preferences)
         inOrder.verify(preferences).putResponseClidsResult(
@@ -561,7 +561,7 @@ internal class StartupParamsTest : CommonTest() {
     fun setNullClientClidsAfterNotNull() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
         mockPreferencesWithValidValues()
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         val inOrder = inOrder(preferences)
         inOrder.verify(preferences).putResponseClidsResult(
@@ -894,7 +894,7 @@ internal class StartupParamsTest : CommonTest() {
         whenever(clientIdentifiersHolder.clientClidsForRequest)
             .thenReturn(IdentifiersResult(JsonHelper.clidsToString(TestData.TEST_CLIDS), IdentifierStatus.OK, null))
 
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         whenever(
             clidsStateChecker.doClientClidsMatchClientClidsForRequest(
@@ -937,7 +937,7 @@ internal class StartupParamsTest : CommonTest() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
         mockPreferencesWithValidValues()
 
-        startupParams = StartupParams(context, preferences)
+        startupParams = StartupParams(preferences, uuidProvider)
 
         whenever(clientIdentifiersHolder.gaid).thenReturn(nullIdentifierResult)
         whenever(clientIdentifiersHolder.hoaid).thenReturn(nullIdentifierResult)

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.startup;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -8,7 +7,6 @@ import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
-import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.SelfReportingUtils;
 import io.appmetrica.analytics.impl.Utils;
@@ -68,12 +66,15 @@ public class StartupParams {
     @NonNull
     private final UuidValidator uuidValidator;
 
-    public StartupParams(@NonNull Context context, @NonNull PreferencesClientDbStorage preferencesClientDbStorage) {
+    public StartupParams(
+        @NonNull PreferencesClientDbStorage preferencesClientDbStorage,
+        @NonNull MultiProcessSafeUuidProvider multiProcessSafeUuidProvider
+    ) {
         this(
             preferencesClientDbStorage,
             new AdvIdentifiersFromIdentifierResultConverter(),
             new ClidsStateChecker(),
-            ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context),
+            multiProcessSafeUuidProvider,
             new CustomSdkHostsHolder(),
             new FeaturesHolder(),
             new FeaturesConverter(),

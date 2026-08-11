@@ -2,9 +2,8 @@ package io.appmetrica.analytics.impl.startup.uuid;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.impl.ClientServiceLocator;
+import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -65,8 +63,8 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
         });
     }
 
-    @Rule
-    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+    @Mock
+    private PreferencesClientDbStorage preferencesClientDbStorage;
 
     private UuidFromClientPreferencesImporter uuidFromClientPreferencesImporter;
 
@@ -74,11 +72,9 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        when(context.getApplicationContext()).thenReturn(context);
-        when(ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context).getUuidResult())
-            .thenReturn(preferencesUuid);
+        when(preferencesClientDbStorage.getUuidResult()).thenReturn(preferencesUuid);
 
-        uuidFromClientPreferencesImporter = new UuidFromClientPreferencesImporter();
+        uuidFromClientPreferencesImporter = new UuidFromClientPreferencesImporter(preferencesClientDbStorage);
     }
 
     @Test
