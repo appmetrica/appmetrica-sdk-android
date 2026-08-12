@@ -27,7 +27,7 @@ internal class ReporterSynchronousStageExecutor {
 
     fun reportEvent(eventName: String, jsonValue: String?) {}
 
-    fun reportEvent(eventName: String, attributes: Map<String?, Any?>?) {}
+    fun reportEvent(eventName: String, attributes: Map<String, Any?>?) {}
 
     fun reportEvent(moduleEvent: ModuleEvent) {}
 

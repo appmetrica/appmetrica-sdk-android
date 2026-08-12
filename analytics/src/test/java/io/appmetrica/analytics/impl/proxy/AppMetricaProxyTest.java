@@ -451,7 +451,9 @@ public class AppMetricaProxyTest extends CommonTest {
     @Test
     public void testGetReporter() {
         String apiKey = TestsData.generateApiKey();
-        mProxy.getReporter(context, apiKey);
+        ReporterExtendedProxy reporter = mock(ReporterExtendedProxy.class);
+        when(mReporterProxyStorage.getOrCreate(applicationContext, apiKey)).thenReturn(reporter);
+        assertThat(mProxy.getReporter(context, apiKey)).isSameAs(reporter);
         InOrder inOrder = inOrder(mBarrier, mSynchronousStageExecutor, mReporterProxyStorage);
         inOrder.verify(mBarrier).getReporter(context, apiKey);
         inOrder.verify(mSynchronousStageExecutor).getReporter(applicationContext, apiKey);

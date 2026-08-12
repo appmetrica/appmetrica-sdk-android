@@ -231,7 +231,7 @@ internal class Barrier(
 
     fun reportEvent(
         eventName: String?,
-        attributes: Map<String?, Any?>?
+        attributes: Map<String, Any?>?
     ) {
         activationValidator.validate()
         eventNameValidator.validate(eventName)

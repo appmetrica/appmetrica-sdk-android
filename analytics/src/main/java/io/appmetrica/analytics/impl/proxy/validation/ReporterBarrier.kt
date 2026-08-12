@@ -60,7 +60,7 @@ internal class ReporterBarrier {
 
     fun reportEvent(
         eventName: String?,
-        attributes: Map<String?, Any?>?
+        attributes: Map<String, Any?>?
     ) {
         eventNameValidator.validate(eventName)
     }

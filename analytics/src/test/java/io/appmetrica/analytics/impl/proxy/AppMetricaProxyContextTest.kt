@@ -16,9 +16,11 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.Barrier
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
 import io.appmetrica.gradle.testutils.CommonTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,6 +41,8 @@ internal class AppMetricaProxyContextTest : CommonTest() {
     private val impl: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock()
     private val reporterProxyStorage: ReporterProxyStorage = mock()
+    private val reporter: ReporterExtendedProxy = mock()
+    private val uuidResult: IdentifiersResult = mock()
     private val barrier: Barrier = mock()
     private val applicationContext: Context = mock()
     private val context: Context = mock {
@@ -61,6 +65,10 @@ internal class AppMetricaProxyContextTest : CommonTest() {
         whenever(provider.peekInitializedImpl()).thenReturn(impl)
         whenever(provider.getInitializedImpl(context)).thenReturn(impl)
         whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
+        whenever(reporterProxyStorage.getOrCreate(applicationContext, apiKey)).thenReturn(reporter)
+        whenever(
+            ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(applicationContext).readUuid()
+        ).thenReturn(uuidResult)
         proxy = AppMetricaProxy(
             provider,
             barrier,
@@ -86,7 +94,7 @@ internal class AppMetricaProxyContextTest : CommonTest() {
 
     @Test
     fun getReporter() {
-        proxy.getReporter(context, apiKey)
+        assertThat(proxy.getReporter(context, apiKey)).isSameAs(reporter)
         verify(barrier).getReporter(context, apiKey)
         verify(synchronousStageExecutor).getReporter(applicationContext, apiKey)
     }
@@ -108,7 +116,7 @@ internal class AppMetricaProxyContextTest : CommonTest() {
 
     @Test
     fun getUuid() {
-        proxy.getUuid(context)
+        assertThat(proxy.getUuid(context)).isSameAs(uuidResult)
         verify(barrier).getUuid(context)
         verify(synchronousStageExecutor).getUuid(applicationContext)
     }

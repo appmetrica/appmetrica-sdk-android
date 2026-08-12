@@ -1,8 +1,10 @@
 package io.appmetrica.analytics.impl.proxy;
 
+import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
 import io.appmetrica.analytics.coreutils.internal.validation.Validator;
+import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
@@ -10,6 +12,7 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockProvider;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -64,15 +68,25 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
         IHandlerExecutor executor = MockProvider.mockedBlockingExecutorMock();
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(executor);
+        SynchronousStageExecutor synchronousStageExecutor = mock(SynchronousStageExecutor.class);
+        when(synchronousStageExecutor.reportError(any(String.class), any(Throwable.class)))
+            .thenReturn(mock(Throwable.class));
+        when(mReporterProxyStorage.getOrCreate(any(Context.class), any(String.class)))
+            .thenReturn(mock(ReporterExtendedProxy.class));
+        when(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(any(Context.class)).readUuid())
+            .thenReturn(mock(IdentifiersResult.class));
+        SessionsTrackingManager sessionsTrackingManager = mock(SessionsTrackingManager.class);
+        when(sessionsTrackingManager.startWatchingIfNotYet())
+            .thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING);
         mProxy = new AppMetricaProxy(
             mProvider,
             mBarrier,
             silentActivationValidator,
             mock(WebViewJsInterfaceHandler.class),
-            mock(SynchronousStageExecutor.class),
+            synchronousStageExecutor,
             mReporterProxyStorage,
             mock(DefaultOneShotMetricaConfig.class),
-            mock(SessionsTrackingManager.class)
+            sessionsTrackingManager
         );
     }
 
