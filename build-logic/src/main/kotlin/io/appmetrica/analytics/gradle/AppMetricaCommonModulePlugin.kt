@@ -125,6 +125,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             checkModule = true
             checkPom = true
             checkProguard = true
+            checkKotlinBytecode = true
             forbiddenImports = listOf(
                 "io.appmetrica.analytics.coreutils.asserts.DebugAssert",
                 "io.appmetrica.analytics.impl.utils.DebugAssert",
