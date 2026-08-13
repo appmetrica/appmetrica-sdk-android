@@ -45,45 +45,41 @@ public class ReporterProxyStorage {
                 @Override
                 public void run() {
                     DebugLogger.INSTANCE.info(TAG, "getInitializedImpl");
-                    mFacadeProvider.getInitializedImpl(context);
+                    if (mFacadeProvider.peekInitializedImpl() == null) {
+                        mFacadeProvider.getInitializedImpl(context);
+                    }
                 }
             });
         }
-        ReporterExtendedProxy proxy = new ReporterExtendedProxy(executor, context, apiKey);
-        mReportersProxies.put(apiKey, proxy);
-        return proxy;
+        return new ReporterExtendedProxy(executor, context, apiKey);
     }
 
     @NonNull
     public ReporterExtendedProxy getOrCreate(@NonNull final Context context, @NonNull String apiKey) {
-        ReporterExtendedProxy proxy = mReportersProxies.get(apiKey);
-        if (proxy == null) {
-            synchronized (mReportersProxies) {
-                proxy = mReportersProxies.get(apiKey);
-                if (proxy == null) {
-                    proxy = prepareImplAndCreate(context, apiKey);
-                    proxy.activate(apiKey);
-                }
+        synchronized (mReportersProxies) {
+            ReporterExtendedProxy proxy = mReportersProxies.get(apiKey);
+            if (proxy == null) {
+                proxy = prepareImplAndCreate(context, apiKey);
+                proxy.activate(apiKey);
+                mReportersProxies.put(apiKey, proxy);
             }
+            return proxy;
         }
-        return proxy;
     }
 
     @NonNull
     public ReporterExtendedProxy getOrCreate(@NonNull final Context context, @NonNull ReporterConfig config) {
         DebugLogger.INSTANCE.info(TAG, "getOrCreate");
-        ReporterExtendedProxy proxy = mReportersProxies.get(config.apiKey);
-        if (proxy == null) {
-            DebugLogger.INSTANCE.info(TAG, "needs create proxy");
-            synchronized (mReportersProxies) {
-                proxy = mReportersProxies.get(config.apiKey);
-                if (proxy == null) {
-                    DebugLogger.INSTANCE.info(TAG, "Create proxy...");
-                    proxy = prepareImplAndCreate(context, config.apiKey);
-                    proxy.activate(config);
-                }
+        synchronized (mReportersProxies) {
+            ReporterExtendedProxy proxy = mReportersProxies.get(config.apiKey);
+            if (proxy == null) {
+                DebugLogger.INSTANCE.info(TAG, "needs create proxy");
+                DebugLogger.INSTANCE.info(TAG, "Create proxy...");
+                proxy = prepareImplAndCreate(context, config.apiKey);
+                proxy.activate(config);
+                mReportersProxies.put(config.apiKey, proxy);
             }
+            return proxy;
         }
-        return proxy;
     }
 }
