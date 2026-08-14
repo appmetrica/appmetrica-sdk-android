@@ -59,13 +59,11 @@ import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
  * When split is enabled, tests run with these settings:
  *
  * Robolectric tests:
- * - forkEvery = 10 (restart JVM every 10 test methods)
  * - -Xmx6g (6GB heap memory)
  * - -XX:+UseG1GC -XX:MaxGCPauseMillis=100 (G1 garbage collector)
  * - JaCoCo: separate execution file (testXXXRobolectric.exec)
  *
  * Standard tests:
- * - forkEvery = 1000 (restart JVM every 1000 test methods)
  * - -Xmx4g (4GB heap memory from base config)
  * - Default GC
  * - JaCoCo: separate execution file (testXXXStandard.exec)
@@ -85,9 +83,7 @@ import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
  * Example - Enable with custom settings:
  *   testSplit {
  *       enabled.set(true)
- *       robolectricForkEvery.set(5)
  *       robolectricMemory.set("8g")
- *       standardForkEvery.set(2000)
  *   }
  *
  * Example - Disable (default):
@@ -155,7 +151,7 @@ class TestSplitPlugin : Plugin<Project> {
         val userTestFilters = detectUserTestFilters(project)
 
         val robolectricTask = createRobolectricTask(project, originalTest, extension)
-        val standardTask = createStandardJUnitTask(project, originalTest, extension, robolectricTask)
+        val standardTask = createStandardJUnitTask(project, originalTest, robolectricTask)
         val xmlReportTask = createXmlReportTask(project, originalTest, robolectricTask, standardTask)
         val htmlReportTask = createHtmlReportTask(project, originalTest, robolectricTask, standardTask)
         val mergeTask = createMergeTask(
@@ -256,8 +252,6 @@ class TestSplitPlugin : Plugin<Project> {
 
         classpath = originalTest.classpath
         testClassesDirs = originalTest.testClassesDirs
-        forkEvery = extension.robolectricForkEvery.get().toLong()
-
         // Configure base JVM args (includes -Xmx4g)
         TestJvmArgsConfigurator.configureBaseJvmArgs(this)
 
@@ -297,7 +291,6 @@ class TestSplitPlugin : Plugin<Project> {
     private fun createStandardJUnitTask(
         project: Project,
         originalTest: Test,
-        extension: TestSplitExtension,
         robolectricTask: TaskProvider<Test>,
     ) = project.tasks.register("${originalTest.name}Standard", Test::class.java) {
         description = "Runs standard (non-Robolectric) tests from ${originalTest.name}"
@@ -313,8 +306,6 @@ class TestSplitPlugin : Plugin<Project> {
 
         classpath = originalTest.classpath
         testClassesDirs = originalTest.testClassesDirs
-        forkEvery = extension.standardForkEvery.get().toLong()
-
         // Configure base JVM args (includes -Xmx4g)
         TestJvmArgsConfigurator.configureBaseJvmArgs(this)
 
