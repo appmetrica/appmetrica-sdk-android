@@ -2,8 +2,10 @@ package io.appmetrica.analytics.identifiers.impl
 
 import android.content.Context
 import android.content.Intent
+import android.os.RemoteException
 import androidx.annotation.VisibleForTesting
 import com.yandex.android.advid.service.YandexAdvIdInterface
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -28,19 +30,10 @@ internal class YandexAdvIdGetter @VisibleForTesting internal constructor(
         DebugLogger.info(tag, "getAdTrackingInfo. Connecting to service...")
         return try {
             tryToGetAdTrackingInfo(context)
-        } catch (noProviderException: NoProviderException) {
-            val message = noProviderException.message ?: "No yandex adv_id service"
-            DebugLogger.error(tag, noProviderException, message)
-            AdvIdResult(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, errorExplanation = message)
-        } catch (connectionException: ConnectionException) {
-            val message = connectionException.message ?: "unknown exception while binding yandex adv_id service"
-            DebugLogger.error(tag, connectionException, message)
-            AdvIdResult(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, errorExplanation = message)
-        } catch (e: Throwable) {
-            DebugLogger.error(tag, e, "can't fetch adv id")
-            AdvIdResult(
-                IdentifierStatus.UNKNOWN,
-                errorExplanation = "exception while fetching yandex adv_id: " + e.message
+        } catch (exception: RemoteException) {
+            throw AdvIdServiceCommunicationException(
+                "communication with yandex service failed",
+                exception
             )
         } finally {
             try {

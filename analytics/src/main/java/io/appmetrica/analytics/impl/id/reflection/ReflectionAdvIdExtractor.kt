@@ -7,7 +7,6 @@ import io.appmetrica.analytics.impl.id.AdvIdExtractor
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy
 import io.appmetrica.analytics.impl.id.RetryStrategy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
-import java.lang.reflect.InvocationTargetException
 
 internal class ReflectionAdvIdExtractor internal constructor(
     private val provider: String,
@@ -23,19 +22,10 @@ internal class ReflectionAdvIdExtractor internal constructor(
 
     override fun extractAdTrackingInfo(context: Context, retryStrategy: RetryStrategy): AdTrackingInfoResult {
         DebugLogger.info(tag, "getAdTrackingInfo. Connecting to library for %s adv_id", provider)
-        if (!advIdentifiersProviderReflection.isAvailable()) {
-            val errorMessage = "Module io.appmetrica.analytics:analytics-identifiers does not exist"
-            DebugLogger.info(tag, "[$provider] $errorMessage")
-            return AdTrackingInfoResult(
-                null,
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                errorMessage
-            )
-        }
-
-        var result: AdTrackingInfoResult? = null
         retryStrategy.reset()
-        while (retryStrategy.nextAttempt()) {
+        var lastFailure: AdTrackingInfoResult? = null
+        var shouldRetry = retryStrategy.nextAttempt()
+        while (shouldRetry) {
             try {
                 val adTrackingInfo = advIdentifiersProviderReflection.requestIdentifiers(context, provider)
                 if (adTrackingInfo != null) {
@@ -45,23 +35,24 @@ internal class ReflectionAdvIdExtractor internal constructor(
                     return AdTrackingInfoResult(
                         null,
                         IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        "provider $provider is not available"
+                        "identifier provider returned no result"
                     )
                 }
-            } catch (e: Throwable) {
-                DebugLogger.error(tag, e, "can't fetch adv id")
-                val message = (e as? InvocationTargetException)?.targetException?.message ?: e.message
-                result = AdTrackingInfoResult(
-                    null,
-                    IdentifierStatus.UNKNOWN,
-                    "exception while fetching $provider adv_id: $message"
-                )
-            }
-            try {
-                Thread.sleep(retryStrategy.timeout.toLong())
-            } catch (_: InterruptedException) {
+            } catch (exception: Throwable) {
+                DebugLogger.error(tag, exception, "can't fetch adv id")
+                val failure = AdvIdProviderExceptionMapper.map(exception)
+                lastFailure = failure.result
+                shouldRetry = failure.isRetryable && retryStrategy.nextAttempt()
+                if (shouldRetry) {
+                    try {
+                        Thread.sleep(retryStrategy.timeout.toLong())
+                    } catch (_: InterruptedException) {
+                        Thread.currentThread().interrupt()
+                        return failure.result
+                    }
+                }
             }
         }
-        return result ?: AdTrackingInfoResult()
+        return lastFailure ?: AdTrackingInfoResult()
     }
 }

@@ -2,13 +2,14 @@ package io.appmetrica.analytics.identifiers.impl.huawei
 
 import android.content.Context
 import android.content.Intent
+import android.os.RemoteException
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.identifiers.impl.AdvIdInfo
 import io.appmetrica.analytics.identifiers.impl.AdvIdProvider
 import io.appmetrica.analytics.identifiers.impl.AdvIdResult
 import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController
-import io.appmetrica.analytics.identifiers.impl.ConnectionException
 import io.appmetrica.analytics.identifiers.impl.Constants
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -32,18 +33,12 @@ internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
     override fun getAdTrackingInfo(context: Context): AdvIdResult {
         DebugLogger.info(tag, "getAdTrackingInfo. Connecting to service...")
         return try {
-            val service: OpenDeviceIdentifierService = connectionController.connect(context)
-            val oaid = service.oaid
-            DebugLogger.info(tag, "id fetched successfully: %s", oaid)
-            val isDisabled = service.isOaidTrackLimited
-            DebugLogger.info(tag, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
-            AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.HUAWEI, oaid, isDisabled))
-        } catch (connectionException: ConnectionException) {
-            val message = connectionException.message ?: "unknown exception during binding huawei services"
-            AdvIdResult.getProviderUnavailableResult(message)
-        } catch (e: Throwable) {
-            DebugLogger.error(tag, e, "can't fetch adv id.")
-            AdvIdResult.getProviderUnavailableResult("exception while fetching hoaid: " + e.message)
+            tryToGetAdTrackingInfo(context)
+        } catch (exception: RemoteException) {
+            throw AdvIdServiceCommunicationException(
+                "communication with huawei service failed",
+                exception
+            )
         } finally {
             try {
                 connectionController.disconnect(context)
@@ -51,5 +46,14 @@ internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
                 DebugLogger.error(tag, ex, "could not unbind from service")
             }
         }
+    }
+
+    private fun tryToGetAdTrackingInfo(context: Context): AdvIdResult {
+        val service: OpenDeviceIdentifierService = connectionController.connect(context)
+        val oaid = service.oaid
+        DebugLogger.info(tag, "id fetched successfully: %s", oaid)
+        val isDisabled = service.isOaidTrackLimited
+        DebugLogger.info(tag, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
+        return AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.HUAWEI, oaid, isDisabled))
     }
 }

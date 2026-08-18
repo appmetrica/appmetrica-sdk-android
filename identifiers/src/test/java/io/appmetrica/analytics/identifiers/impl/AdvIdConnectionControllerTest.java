@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.IBinder;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceBindingException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceConnectionTimeoutException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceNotFoundException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceResponseException;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
 import kotlin.jvm.functions.Function1;
@@ -99,7 +103,7 @@ public class AdvIdConnectionControllerTest {
                 controller.connect(context);
             }
         })
-                .isExactlyInstanceOf(NoProviderException.class)
+                .isExactlyInstanceOf(AdvIdServiceNotFoundException.class)
                 .hasMessage(String.format("could not resolve %s services", serviceShortTag));
 
         verify(connection, never()).bindService(context);
@@ -126,7 +130,7 @@ public class AdvIdConnectionControllerTest {
             public void call() throws Throwable {
                 controller.connect(context);
             }
-        }).isExactlyInstanceOf(ConnectionException.class)
+        }).isExactlyInstanceOf(AdvIdServiceBindingException.class)
                 .hasMessage(String.format("could not bind to %s services", serviceShortTag));
 
         verify(connection, never()).awaitBinding(anyLong());
@@ -152,8 +156,8 @@ public class AdvIdConnectionControllerTest {
                 controller.connect(context);
             }
         })
-                .isExactlyInstanceOf(ConnectionException.class)
-                .hasMessage(String.format("could not bind to %s services", serviceShortTag));
+                .isExactlyInstanceOf(AdvIdServiceConnectionTimeoutException.class)
+                .hasMessage(String.format("connection to %s service timed out", serviceShortTag));
 
         verify(connection).awaitBinding(timeout);
     }
@@ -168,8 +172,7 @@ public class AdvIdConnectionControllerTest {
                 controller.connect(context);
             }
         })
-                .isExactlyInstanceOf(ConnectionException.class)
-                .hasMessage(String.format("could not bind to %s services", serviceShortTag));
+                .isExactlyInstanceOf(RuntimeException.class);
 
         verify(connection, never()).awaitBinding(anyLong());
     }
@@ -185,8 +188,7 @@ public class AdvIdConnectionControllerTest {
                 controller.connect(context);
             }
         })
-                .isExactlyInstanceOf(ConnectionException.class)
-                .hasMessage(String.format("could not bind to %s services", serviceShortTag));
+                .isExactlyInstanceOf(RuntimeException.class);
 
         verify(connection, times(1)).awaitBinding(timeout);
     }
@@ -202,6 +204,17 @@ public class AdvIdConnectionControllerTest {
         doThrow(new RuntimeException()).when(connection).unbindService(context);
         controller.disconnect(context);
         verify(connection).unbindService(context);
+    }
+
+    @Test
+    public void connectWithNullBinding() {
+        when(connection.bindService(context)).thenReturn(true);
+        when(connection.awaitBinding(timeout)).thenReturn(null);
+        when(connection.getBindingState()).thenReturn(AdvIdServiceConnection.BindingState.NULL_BINDING);
+
+        assertThatThrownBy(() -> controller.connect(context))
+                .isExactlyInstanceOf(AdvIdServiceResponseException.class)
+                .hasMessage(String.format("%s service returned invalid binder", serviceShortTag));
     }
 
 }

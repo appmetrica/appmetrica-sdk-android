@@ -3,8 +3,10 @@ package io.appmetrica.analytics.identifiers.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.os.RemoteException;
-import androidx.annotation.NonNull;
 import com.yandex.android.advid.service.YandexAdvIdInterface;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceConnectionTimeoutException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceNotFoundException;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Random;
@@ -14,11 +16,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,7 +46,7 @@ public class YandexAdvIdGetterTest {
     }
 
     @Test
-    public void constuctor() throws Exception {
+    public void constructor() throws Exception {
         yandexAdvIdGetter = new YandexAdvIdGetter();
         Assertions.INSTANCE.ObjectPropertyAssertions(yandexAdvIdGetter)
             .withPrivateFields(true)
@@ -62,226 +63,63 @@ public class YandexAdvIdGetterTest {
     }
 
     @Test
-    public void connectThrowsNoProviderException() throws ConnectionException {
-        when(connectionController.connect(context)).thenThrow(new NoProviderException("some error"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "some error"
-                ));
-    }
+    public void propagatesProviderException() {
+        AdvIdServiceNotFoundException exception = new AdvIdServiceNotFoundException("service is absent");
+        when(connectionController.connect(context)).thenThrow(exception);
 
-    @Test
-    public void connectWithRetriesThrowsNoProviderExceptionAlways() throws ConnectionException {
-        when(connectionController.connect(context))
-                .thenThrow(new NoProviderException("some error"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "some error"
-                ));
-    }
+        assertThatThrownBy(() -> yandexAdvIdGetter.getAdTrackingInfo(context))
+            .isSameAs(exception);
 
-    @Test
-    public void connectWithRetriesThrowsNoProviderExceptionOnce() throws ConnectionException, RemoteException {
-        when(connectionController.connect(context)).thenAnswer(answerWithExceptionOnce(
-                new NoProviderException("some error"),
-                service
-        ));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "some error"
-                ));
         verify(connectionController).disconnect(context);
     }
 
     @Test
-    public void connectThrowsConnectionException() throws ConnectionException {
-        when(connectionController.connect(context))
-                .thenThrow(new ConnectionException("some error"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "some error"
-                ));
-    }
+    public void propagatesRetryableProviderException() {
+        AdvIdServiceConnectionTimeoutException exception = new AdvIdServiceConnectionTimeoutException("timed out");
+        when(connectionController.connect(context)).thenThrow(exception);
 
-    @Test
-    public void connectWithRetriesThrowsConnectionExceptionAlways() throws ConnectionException {
-        when(connectionController.connect(context))
-                .thenThrow(new ConnectionException("some error"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "some error"
-                ));
+        assertThatThrownBy(() -> yandexAdvIdGetter.getAdTrackingInfo(context))
+            .isSameAs(exception);
+
         verify(connectionController).disconnect(context);
     }
 
     @Test
-    public void connectThrowConnectionExceptionWithoutMessage() throws Exception {
-        when(connectionController.connect(context))
-                .thenThrow(
-                        new ConnectionException(null)
-                );
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                        null,
-                        "unknown exception while binding yandex adv_id service"
-                ));
-    }
-
-    @Test
-    public void connectNonConnectionException() throws Exception {
-        when(connectionController.connect(context))
-                .thenThrow(
-                        new RuntimeException("exception details")
-                );
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: exception details"
-                ));
-    }
-
-    @Test
-    public void connectWithRetriesNonConnectionExceptionAlways() throws Exception {
-        when(connectionController.connect(context))
-                .thenThrow(
-                        new RuntimeException("exception details")
-                );
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: exception details"
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void testHasServiceButGetAdvIdThrowsException() throws Throwable {
+    public void mapsRemoteExceptionToCommunicationException() throws RemoteException {
+        RemoteException remoteException = new RemoteException("connection lost");
         when(connectionController.connect(context)).thenReturn(service);
-        when(service.getAdvId()).thenThrow(new RuntimeException("some message"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: some message"
-                ));
+        when(service.getAdvId()).thenThrow(remoteException);
+
+        assertThatThrownBy(() -> yandexAdvIdGetter.getAdTrackingInfo(context))
+            .isInstanceOf(AdvIdServiceCommunicationException.class)
+            .hasCause(remoteException);
+
         verify(connectionController).disconnect(context);
     }
 
     @Test
-    public void withRetriesHasServiceButGetAdvIdThrowsExceptionAlways() throws Throwable {
+    public void propagatesUnexpectedException() {
+        RuntimeException exception = new RuntimeException("unexpected");
+        when(connectionController.connect(context)).thenThrow(exception);
+
+        assertThatThrownBy(() -> yandexAdvIdGetter.getAdTrackingInfo(context))
+            .isSameAs(exception);
+
+        verify(connectionController).disconnect(context);
+    }
+
+    @Test
+    public void returnsFetchedIdentifier() throws Exception {
         when(connectionController.connect(context)).thenReturn(service);
-        when(service.getAdvId()).thenThrow(new RuntimeException("some message"));
+
         assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: some message"
-                ));
+            .usingRecursiveComparison()
+            .isEqualTo(new AdvIdResult(
+                IdentifierStatus.OK,
+                new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
+                null
+            ));
+
         verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void testHasServiceButGetTrackingStatusThrowsException() throws Throwable {
-        when(connectionController.connect(context)).thenReturn(service);
-        when(service.isAdvIdTrackingLimited()).thenThrow(new RuntimeException("some message"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: some message"
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void withRetriesHasServiceButGetTrackingStatusThrowsExceptionAlways() throws Throwable {
-        when(connectionController.connect(context)).thenReturn(service);
-        when(service.isAdvIdTrackingLimited()).thenThrow(new RuntimeException("some message"));
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByField(new AdvIdResult(
-                        IdentifierStatus.UNKNOWN,
-                        null,
-                        "exception while fetching yandex adv_id: some message"
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void testHasServiceBindedOK() throws Throwable {
-        when(connectionController.connect(context)).thenReturn(service);
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
-                        IdentifierStatus.OK,
-                        new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
-                        null
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void withRetriesHasServiceBindedOK() throws Throwable {
-        when(connectionController.connect(context)).thenReturn(service);
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
-                        IdentifierStatus.OK,
-                        new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
-                        null
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    @Test
-    public void withRetriesHasServiceBindedOKOnce() throws Throwable {
-        when(connectionController.connect(context)).thenAnswer(new Answer<Object>() {
-
-            private int times = 0;
-
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                if (times == 0) {
-                    times++;
-                    return service;
-                } else {
-                    throw new RuntimeException();
-                }
-            }
-        });
-        assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
-                        IdentifierStatus.OK,
-                        new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
-                        null
-                ));
-        verify(connectionController).disconnect(context);
-    }
-
-    private Answer<Object> answerWithExceptionOnce(@NonNull final Throwable exception, @NonNull final Object returnObject) {
-        return new Answer<Object>() {
-
-            private int times = 0;
-
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                if (times == 0) {
-                    times++;
-                    throw exception;
-                } else {
-                    return returnObject;
-                }
-            }
-        };
     }
 }

@@ -253,6 +253,40 @@ public class io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
     public String toString()
 }
 
+public abstract class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException extends RuntimeException {
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceAccessDeniedException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceBindingException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceConnectionTimeoutException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceNotFoundException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceResponseException extends io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdProviderException {
+    public <init>([Nullable] String)
+    public <init>([Nullable] String, [Nullable] Throwable)
+}
+
 public class io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder {
     public <init>()
     public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult)

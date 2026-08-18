@@ -12,6 +12,16 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AdvIdServiceConnection implements ServiceConnection {
 
+    public enum BindingState {
+        WAITING,
+        CONNECTED,
+        NULL_BINDING,
+        DISCONNECTED,
+        BINDING_DIED,
+        INTERRUPTED,
+        TIMED_OUT
+    }
+
     private static final String TAG_PATTERN = "[AdvServiceConnection-%s]";
 
     @NonNull
@@ -21,6 +31,8 @@ public class AdvIdServiceConnection implements ServiceConnection {
     @Nullable
     private IBinder service;
     private final Object monitor = new Object();
+    @NonNull
+    private BindingState bindingState = BindingState.WAITING;
 
     public AdvIdServiceConnection(@NonNull Intent intent, @NonNull String serviceShortTag) {
         this.intent = intent;
@@ -29,30 +41,38 @@ public class AdvIdServiceConnection implements ServiceConnection {
 
     public boolean bindService(@NonNull Context context) {
         DebugLogger.INSTANCE.info(tag, "Bind service with intent = %s", intent);
+        synchronized (monitor) {
+            service = null;
+            bindingState = BindingState.WAITING;
+        }
         return context.bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
     public void unbindService(@NonNull Context context) {
         synchronized (monitor) {
             this.service = null;
+            bindingState = BindingState.DISCONNECTED;
             monitor.notifyAll();
         }
         context.unbindService(this);
     }
 
     public IBinder awaitBinding(long timeout) {
-        if (service == null) {
-            synchronized (monitor) {
-                if (service == null) {
-                    try {
-                        monitor.wait(timeout);
-                    } catch (InterruptedException e) {
-                        DebugLogger.INSTANCE.error(tag, e);
-                    }
+        synchronized (monitor) {
+            if (service == null && bindingState == BindingState.WAITING) {
+                try {
+                    monitor.wait(timeout);
+                } catch (InterruptedException exception) {
+                    bindingState = BindingState.INTERRUPTED;
+                    Thread.currentThread().interrupt();
+                    DebugLogger.INSTANCE.error(tag, exception);
                 }
             }
+            if (service == null && bindingState == BindingState.WAITING) {
+                bindingState = BindingState.TIMED_OUT;
+            }
+            return service;
         }
-        return service;
     }
 
     @Override
@@ -60,6 +80,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
         DebugLogger.INSTANCE.info(tag, "onServiceConnected for name = %s; service = %s", name, service);
         synchronized (monitor) {
             this.service = service;
+            bindingState = BindingState.CONNECTED;
             monitor.notifyAll();
         }
     }
@@ -69,6 +90,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
         DebugLogger.INSTANCE.info(tag, "onServiceDisconnected for name = %s", name);
         synchronized (monitor) {
             this.service = null;
+            bindingState = BindingState.DISCONNECTED;
             monitor.notifyAll();
         }
     }
@@ -78,6 +100,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
         DebugLogger.INSTANCE.info(tag, "onBindingDied for name = %s", name);
         synchronized (monitor) {
             this.service = null;
+            bindingState = BindingState.BINDING_DIED;
             monitor.notifyAll();
         }
     }
@@ -86,6 +109,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
     public void onNullBinding(ComponentName name) {
         DebugLogger.INSTANCE.info(tag, "onNullBinding for name = %s", name);
         synchronized (monitor) {
+            bindingState = BindingState.NULL_BINDING;
             monitor.notifyAll();
         }
     }
@@ -94,6 +118,13 @@ public class AdvIdServiceConnection implements ServiceConnection {
     @Nullable
     IBinder getBinder() {
         return this.service;
+    }
+
+    @NonNull
+    BindingState getBindingState() {
+        synchronized (monitor) {
+            return bindingState;
+        }
     }
 
     @NonNull

@@ -4,6 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceAccessDeniedException
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceBindingException
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceConnectionTimeoutException
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceNotFoundException
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceResponseException
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -30,35 +36,57 @@ internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal c
         SafePackageManager()
     )
 
-    @Throws(ConnectionException::class)
     fun connect(context: Context): T {
         val intent = connection.intent
         DebugLogger.info(tag, "Begin establish connection to service: %s...", intent)
         if (safePackageManager.resolveService(context, intent, 0) == null) {
-            throw NoProviderException("could not resolve $serviceShortTag services")
+            throw AdvIdServiceNotFoundException("could not resolve $serviceShortTag services")
         }
         DebugLogger.info(tag, "Intent (%s) resolved. Begin binding...", intent)
-        var service: IBinder? = null
         try {
             DebugLogger.info(tag, "Bind with intent = %s...", intent)
             val status = connection.bindService(context)
             DebugLogger.info(tag, "Bind with intent = %s... Status = %b", intent, status)
-            if (status) {
-                DebugLogger.info(
-                    tag,
-                    "Binding... Wait connection or binding for %d ms...",
-                    ATTEMPT_TIMEOUT
-                )
-                service = connection.awaitBinding(3000L)
+            if (!status) {
+                throw AdvIdServiceBindingException("could not bind to $serviceShortTag services")
             }
-        } catch (e: Throwable) {
-            DebugLogger.error(tag, e)
+            DebugLogger.info(
+                tag,
+                "Binding... Wait connection or binding for %d ms...",
+                ATTEMPT_TIMEOUT
+            )
+            val service = connection.awaitBinding(ATTEMPT_TIMEOUT)
+            DebugLogger.info(tag, "Binding... Service after waiting: %s", service)
+            if (service == null) {
+                throw connectionExceptionFor(connection.bindingState)
+            }
+            return converter(service) ?: throw AdvIdServiceResponseException(
+                "$serviceShortTag service returned invalid binder"
+            )
+        } catch (exception: SecurityException) {
+            throw AdvIdServiceAccessDeniedException(
+                "access to $serviceShortTag service denied",
+                exception
+            )
         }
-        DebugLogger.info(tag, "Binding... Service after waiting: %s", service)
-        if (service == null) {
-            throw ConnectionException("could not bind to $serviceShortTag services")
+    }
+
+    private fun connectionExceptionFor(state: AdvIdServiceConnection.BindingState?): RuntimeException {
+        return when (state) {
+            AdvIdServiceConnection.BindingState.NULL_BINDING -> AdvIdServiceResponseException(
+                "$serviceShortTag service returned invalid binder"
+            )
+            AdvIdServiceConnection.BindingState.BINDING_DIED,
+            AdvIdServiceConnection.BindingState.DISCONNECTED -> AdvIdServiceCommunicationException(
+                "connection to $serviceShortTag service was lost"
+            )
+            AdvIdServiceConnection.BindingState.INTERRUPTED -> AdvIdServiceConnectionTimeoutException(
+                "connection to $serviceShortTag service interrupted"
+            )
+            else -> AdvIdServiceConnectionTimeoutException(
+                "connection to $serviceShortTag service timed out"
+            )
         }
-        return converter(service)
     }
 
     fun disconnect(context: Context) {
@@ -73,7 +101,3 @@ internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal c
         }
     }
 }
-
-internal open class ConnectionException(message: String?) : Exception(message)
-
-internal class NoProviderException(message: String?) : ConnectionException(message)

@@ -2,11 +2,13 @@ package io.appmetrica.analytics.identifiers.impl.huawei;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.RemoteException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceCommunicationException;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvIdServiceNotFoundException;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.identifiers.impl.AdvIdInfo;
 import io.appmetrica.analytics.identifiers.impl.AdvIdResult;
 import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController;
-import io.appmetrica.analytics.identifiers.impl.ConnectionException;
 import io.appmetrica.analytics.identifiers.impl.Constants;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Random;
@@ -19,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,63 +61,34 @@ public class HuaweiAdvIdGetterTest {
     }
 
     @Test
-    public void connectThrowConnectionException() throws Exception {
-        when(connectionController.connect(mContext))
-                .thenThrow(new ConnectionException("could not resolve huawei services"));
-        AdvIdResult expected = new AdvIdResult(
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                null,
-                "could not resolve huawei services"
-        );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByField(expected);
-    }
+    public void propagatesProviderException() {
+        AdvIdServiceNotFoundException exception = new AdvIdServiceNotFoundException("service is absent");
+        when(connectionController.connect(mContext)).thenThrow(exception);
 
-    @Test
-    public void connectThrowConnectionExceptionWithoutMessage() throws Exception {
-        when(connectionController.connect(mContext)).thenThrow(new ConnectionException(null));
-
-        AdvIdResult expected = new AdvIdResult(
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                null,
-                "unknown exception during binding huawei services"
-        );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByField(expected);
-    }
-
-    @Test
-    public void connectNonConnectionException() throws Exception {
-        when(connectionController.connect(mContext)).thenThrow(new RuntimeException("exception details"));
-        AdvIdResult expected = new AdvIdResult(
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                null,
-                "exception while fetching hoaid: exception details"
-        );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByField(expected);
-    }
-
-    @Test
-    public void testHasServiceButGetOaidThrowException() throws Throwable {
-        when(connectionController.connect(mContext)).thenReturn(service);
-        when(service.getOaid()).thenThrow(new RuntimeException("some message"));
-        AdvIdResult expected = new AdvIdResult(
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                null,
-                "exception while fetching hoaid: some message"
-        );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByField(expected);
+        assertThatThrownBy(() -> mHuaweiAdvIdGetter.getAdTrackingInfo(mContext))
+                .isSameAs(exception);
         verify(connectionController).disconnect(mContext);
     }
 
     @Test
-    public void testHasServiceBugGetTrackingStatusThrowException() throws Throwable {
+    public void mapsRemoteExceptionToCommunicationException() throws Throwable {
+        RemoteException exception = new RemoteException("connection lost");
         when(connectionController.connect(mContext)).thenReturn(service);
-        when(service.isOaidTrackLimited()).thenThrow(new RuntimeException("some message"));
-        AdvIdResult expected = new AdvIdResult(
-                IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
-                null,
-                "exception while fetching hoaid: some message"
-        );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByField(expected);
+        when(service.getOaid()).thenThrow(exception);
+
+        assertThatThrownBy(() -> mHuaweiAdvIdGetter.getAdTrackingInfo(mContext))
+                .isInstanceOf(AdvIdServiceCommunicationException.class)
+                .hasCause(exception);
+        verify(connectionController).disconnect(mContext);
+    }
+
+    @Test
+    public void propagatesUnexpectedException() {
+        RuntimeException exception = new RuntimeException("unexpected");
+        when(connectionController.connect(mContext)).thenThrow(exception);
+
+        assertThatThrownBy(() -> mHuaweiAdvIdGetter.getAdTrackingInfo(mContext))
+                .isSameAs(exception);
         verify(connectionController).disconnect(mContext);
     }
 
