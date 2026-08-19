@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
 import android.content.Context;
-import android.util.Pair;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
@@ -407,10 +406,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testAddAppEnvironmentValue() {
-        Pair<String, String> environment = new Pair<String, String>("aaa", "bbb");
-        when(mCounterReport.getAppEnvironment()).thenReturn(environment);
+        when(mCounterReport.getValue()).thenReturn("{\"aaa\":\"bbb\"}");
         mComponentUnit.addAppEnvironmentValue(mCounterReport);
-        verify(mAppEnvironment).add(environment);
+        verify(mAppEnvironment).add("aaa", "bbb");
         verify(mAppEnvironmentProvider).commitIfNeeded(mRevision, mComponentPreferences);
     }
 

@@ -333,6 +333,17 @@ public class ClientCounterReportTest extends CommonTest {
     }
 
     @Test
+    public void formAppEnvironmentChangedReport() {
+        CounterReport counterReport = ClientCounterReport.formAppEnvironmentChangedReport("key", "value");
+
+        SoftAssertions softAssertions = new SoftAssertions();
+        softAssertions.assertThat(counterReport.getType())
+            .isEqualTo(InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED.getTypeId());
+        softAssertions.assertThat(counterReport.getValue()).isEqualTo("{\"key\":\"value\"}");
+        softAssertions.assertAll();
+    }
+
+    @Test
     public void testFormUserProfileEvent() {
         CounterReport counterReport = ClientCounterReport.formUserProfileEvent();
 

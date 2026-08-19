@@ -380,8 +380,6 @@ public class CounterReportTest extends CommonTest {
         final String userInfo = "userInfo";
         final String eventEnvironment = "eventEnvironment";
         final String event = "event";
-        final String appEnvKey = "key";
-        final String appEnvValue = "value";
         final int bytesTruncated = 20;
         final String profileId = "profileId";
         final long creationEllapsedRealtime = 21212121L;
@@ -403,7 +401,6 @@ public class CounterReportTest extends CommonTest {
         counterReport.setValue(value);
         counterReport.setEventEnvironment(eventEnvironment);
         counterReport.setName(event);
-        counterReport.setAppEnvironment(appEnvKey, appEnvValue);
         counterReport.setBytesTruncated(bytesTruncated);
         counterReport.setProfileID(profileId);
         counterReport.setCreationEllapsedRealtime(creationEllapsedRealtime);
@@ -425,8 +422,6 @@ public class CounterReportTest extends CommonTest {
         assertions.assertThat(fromParcel.getValue()).isEqualTo(value);
         assertions.assertThat(fromParcel.getEventEnvironment()).isEqualTo(eventEnvironment);
         assertions.assertThat(fromParcel.getName()).isEqualTo(event);
-        assertions.assertThat(fromParcel.getAppEnvironment().first).isEqualTo(appEnvKey);
-        assertions.assertThat(fromParcel.getAppEnvironment().second).isEqualTo(appEnvValue);
         assertions.assertThat(fromParcel.getBytesTruncated()).isEqualTo(bytesTruncated);
         assertions.assertThat(fromParcel.getProfileID()).isEqualTo(profileId);
         assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(creationEllapsedRealtime);
@@ -454,7 +449,6 @@ public class CounterReportTest extends CommonTest {
         assertions.assertThat(fromParcel.getValue()).isEmpty();
         assertions.assertThat(fromParcel.getEventEnvironment()).isNull();
         assertions.assertThat(fromParcel.getName()).isNull();
-        assertions.assertThat(fromParcel.getAppEnvironment()).isNull();
         assertions.assertThat(fromParcel.getBytesTruncated()).isEqualTo(0);
         assertions.assertThat(fromParcel.getProfileID()).isNull();
         assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(0);

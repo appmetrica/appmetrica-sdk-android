@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Pair;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
@@ -125,7 +124,6 @@ public class CounterReportMetaDataTest extends CommonTest {
         originalReport.setName("original event");
         originalReport.setValue(originalValue);
         originalReport.setEventEnvironment(originalEventEnvironment);
-        originalReport.setAppEnvironment("original key", "original value");
         originalReport.setProfileID(originalProfileId);
         originalReport.setBytesTruncated(4);
         originalReport.setFirstOccurrenceStatus(FirstOccurrenceStatus.FIRST_OCCURRENCE);
@@ -151,7 +149,6 @@ public class CounterReportMetaDataTest extends CommonTest {
             .checkField("eventEnvironment", originalEventEnvironment)
             .checkField("type", expectedType)
             .checkField("customType", 0)
-            .checkField("appEnvironmentDiff", new Pair<String, String>("original key", "original value"))
             .checkField("bytesTruncated", 0)
             .checkField("profileID", originalProfileId)
             .checkField("creationElapsedRealtime", originalElapsedRealtime)

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -83,14 +82,7 @@ public class AppEnvironment {
         mValues = new MeasuredJsonMap();
     }
 
-    public synchronized void add(@NonNull Pair<String, String> pair) {
-        if (mSimpleMapLimitation.tryToAddValue(mValues, pair.first, pair.second)) {
-            mChanged = true;
-        }
-    }
-
-    @VisibleForTesting
-    synchronized void add(@NonNull String key, String value) {
+    public synchronized void add(@NonNull String key, String value) {
         if (mSimpleMapLimitation.tryToAddValue(mValues, key, value)) {
             mChanged = true;
         }

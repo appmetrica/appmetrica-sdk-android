@@ -8,8 +8,6 @@ final class CounterReportBundleKeys {
     static final String CUSTOM_TYPE = COUNTER_REPORT_KEY_PREFIX + "CustomType";
     static final String VALUE = COUNTER_REPORT_KEY_PREFIX + "Value";
     static final String ENVIRONMENT = COUNTER_REPORT_KEY_PREFIX + "Environment";
-    static final String APP_ENVIRONMENT_DIFF_KEY = COUNTER_REPORT_KEY_PREFIX + "AppEnvironmentDiffKey";
-    static final String APP_ENVIRONMENT_DIFF_VALUE = COUNTER_REPORT_KEY_PREFIX + "AppEnvironmentDiffValue";
     static final String TRUNCATED = COUNTER_REPORT_KEY_PREFIX + "TRUNCATED";
     static final String PROFILE_ID = COUNTER_REPORT_KEY_PREFIX + "ProfileID";
     static final String CREATION_ELAPSED_REALTIME = COUNTER_REPORT_KEY_PREFIX + "CreationElapsedRealtime";

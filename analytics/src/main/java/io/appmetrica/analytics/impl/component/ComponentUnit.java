@@ -31,10 +31,12 @@ import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
+import java.util.Map;
 
 /**
  * Represents bound component (application, library) with API key.
@@ -303,7 +305,12 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     }
 
     public void addAppEnvironmentValue(CounterReport report) {
-        mAppEnvironment.add(report.getAppEnvironment());
+        Map<String, String> environment = JsonHelper.jsonToMap(report.getValue());
+        if (environment != null) {
+            for (Map.Entry<String, String> entry : environment.entrySet()) {
+                mAppEnvironment.add(entry.getKey(), entry.getValue());
+            }
+        }
         AppEnvironment.EnvironmentRevision revision = mAppEnvironment.getLastRevision();
         if (mAppEnvironmentProvider.commitIfNeeded(revision, mComponentPreferences)) {
             mPublicLogger.info("Save new app environment for %s. Value: %s", getComponentId(), revision.value);

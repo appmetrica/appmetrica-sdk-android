@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
-import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi;
@@ -58,9 +57,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         if (null != eventEnvironment) {
             reportData.putString(CounterReportBundleKeys.ENVIRONMENT, eventEnvironment);
         }
-        if (appEnvironmentDiff != null) {
-            putAppEnvironmentToBundle(reportData, appEnvironmentDiff);
-        }
         reportData.putLong(CounterReportBundleKeys.CREATION_ELAPSED_REALTIME, creationElapsedRealtime);
         reportData.putLong(CounterReportBundleKeys.CREATION_TIMESTAMP, creationTimestamp);
         if (source != null) {
@@ -97,7 +93,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
                     StringUtils.EMPTY));
                 result.setEventEnvironment(data.getString(CounterReportBundleKeys.ENVIRONMENT));
                 result.setName(data.getString(CounterReportBundleKeys.EVENT));
-                result.setAppEnvironmentDiff(readAppEnvironmentDiff(data));
                 result.setBytesTruncated(data.getInt(CounterReportBundleKeys.TRUNCATED));
                 result.setProfileID(data.getString(CounterReportBundleKeys.PROFILE_ID));
                 result.setCreationEllapsedRealtime(data.getLong(
@@ -132,8 +127,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
     private String eventEnvironment;
     private int type;
     private int customType;
-    @Nullable
-    private Pair<String, String> appEnvironmentDiff;
     private int bytesTruncated;
     @Nullable
     private String profileID;
@@ -240,23 +233,8 @@ public class CounterReport implements CounterReportApi, Parcelable {
         return eventEnvironment;
     }
 
-    @Nullable
-    public Pair<String, String> getAppEnvironment() {
-        return appEnvironmentDiff;
-    }
-
     public void setEventEnvironment(@Nullable String environment) {
         eventEnvironment = environment;
-    }
-
-    void setAppEnvironment(@NonNull String key, @Nullable String value) {
-        if (appEnvironmentDiff == null) {
-            appEnvironmentDiff = new Pair<>(key, value);
-        }
-    }
-
-    private void setAppEnvironmentDiff(@Nullable Pair<String, String> diff) {
-        appEnvironmentDiff = diff;
     }
 
     @Override
@@ -383,23 +361,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
 
     //region Static helpers
 
-    private static void putAppEnvironmentToBundle(@NonNull Bundle data, @NonNull Pair<String, String> environment) {
-        data.putString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_KEY, environment.first);
-        data.putString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_VALUE, environment.second);
-    }
-
-    @Nullable
-    private static Pair<String, String> readAppEnvironmentDiff(@NonNull Bundle data) {
-        if (data.containsKey(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_KEY) &&
-            data.containsKey(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_VALUE)) {
-            String key = data.getString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_KEY);
-            String value = data.getString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_VALUE);
-            return new Pair<>(key, value);
-        } else {
-            return null;
-        }
-    }
-
     @NonNull
     public static CounterReport fromBundle(@Nullable Bundle bundle) {
         if (null != bundle) {
@@ -428,7 +389,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         CounterReport counterReport = new CounterReport();
         counterReport.setCreationTimestamp(reportData.getCreationTimestamp());
         counterReport.setCreationEllapsedRealtime(reportData.getCreationElapsedRealtime());
-        counterReport.setAppEnvironmentDiff(reportData.getAppEnvironment());
         counterReport.setEventEnvironment(reportData.getEventEnvironment());
         counterReport.setPayload(reportData.getPayload());
         counterReport.setExtras(reportData.extras);

@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.coreutils.internal.limitation.StringTrimmer;
@@ -206,7 +207,9 @@ public class ClientCounterReport extends CounterReport {
     public static CounterReport formAppEnvironmentChangedReport(String key, String value) {
         CounterReport counterReport = new CounterReport();
         counterReport.setType(InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED.getTypeId());
-        counterReport.setAppEnvironment(key, value);
+        HashMap<String, String> environment = new HashMap<>();
+        environment.put(key, value);
+        counterReport.setValue(JsonHelper.mapToJsonString(environment));
         return counterReport;
     }
 

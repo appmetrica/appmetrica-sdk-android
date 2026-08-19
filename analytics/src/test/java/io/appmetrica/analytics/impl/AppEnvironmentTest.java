@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.util.Pair;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
@@ -124,13 +123,6 @@ public class AppEnvironmentTest extends CommonTest {
     public void testAdd() {
         AppEnvironment environment = new AppEnvironment("{\"b\":\"2\"}", 0, mSimpleMapLimitation);
         environment.add("c", "3");
-        verify(mSimpleMapLimitation).tryToAddValue(environment.getValues(), "c", "3");
-    }
-
-    @Test
-    public void testAddPair() {
-        AppEnvironment environment = new AppEnvironment("{\"b\":\"2\"}", 0, mSimpleMapLimitation);
-        environment.add(new Pair<String, String>("c", "3"));
         verify(mSimpleMapLimitation).tryToAddValue(environment.getValues(), "c", "3");
     }
 
