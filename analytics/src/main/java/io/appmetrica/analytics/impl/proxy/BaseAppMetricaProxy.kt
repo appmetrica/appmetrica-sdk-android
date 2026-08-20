@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 
 internal open class BaseAppMetricaProxy protected constructor(
     protected val provider: AppMetricaFacadeProvider,
@@ -16,13 +17,22 @@ internal open class BaseAppMetricaProxy protected constructor(
     protected val executor: ICommonExecutor =
         ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
-    protected fun dispatch(task: Runnable) {
-        executor.execute(task)
-    }
-
     protected fun dispatchSafely(task: Runnable) {
         executor.execute(object : SafeRunnable() {
-            override fun runSafety() = task.run()
+            override fun runSafety() {
+                try {
+                    task.run()
+                } catch (error: Throwable) {
+                    try {
+                        AppMetricaSelfReportFacade.getReporter().reportError(
+                            "Exception during asynchronous AppMetrica proxy task",
+                            error
+                        )
+                    } catch (_: Throwable) {
+                    }
+                    throw error
+                }
+            }
         })
     }
 }

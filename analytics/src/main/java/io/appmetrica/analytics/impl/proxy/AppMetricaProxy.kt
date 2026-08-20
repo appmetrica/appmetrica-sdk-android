@@ -79,7 +79,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun activate(context: Context, config: AppMetricaConfig) {
         barrier.activate(context, config)
         synchronousStageExecutor.activate(context.applicationContext, config)
-        dispatch {
+        dispatchSafely {
             provider.getInitializedImpl(context.applicationContext).activateFull(
                 defaultOneShotConfig.mergeWithUserConfig(config)
             )
@@ -90,25 +90,25 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun sendEventsBuffer() {
         barrier.sendEventsBuffer()
         synchronousStageExecutor.sendEventsBuffer()
-        dispatch { mainReporter.sendEventsBuffer() }
+        dispatchSafely { mainReporter.sendEventsBuffer() }
     }
 
     fun resumeSession(activity: Activity?) {
         barrier.resumeSession()
         synchronousStageExecutor.resumeSession(activity)
-        dispatch { sessionsTrackingManager.resumeActivityManually(activity, mainReporter) }
+        dispatchSafely { sessionsTrackingManager.resumeActivityManually(activity, mainReporter) }
     }
 
     fun pauseSession(activity: Activity?) {
         barrier.pauseSession()
         synchronousStageExecutor.pauseSession(activity)
-        dispatch { sessionsTrackingManager.pauseActivityManually(activity, mainReporter) }
+        dispatchSafely { sessionsTrackingManager.pauseActivityManually(activity, mainReporter) }
     }
 
     fun enableActivityAutoTracking(application: Application) {
         barrier.enableActivityAutoTracking(application)
         synchronousStageExecutor.enableActivityAutoTracking(application)
-        dispatch {
+        dispatchSafely {
             val status = sessionsTrackingManager.startWatchingIfNotYet()
             mainReporter.onEnableAutoTrackingAttemptOccurred(status)
         }
@@ -117,122 +117,122 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun reportEvent(eventName: String) {
         barrier.reportEvent(eventName)
         synchronousStageExecutor.reportEvent(eventName)
-        dispatch { mainReporter.reportEvent(eventName) }
+        dispatchSafely { mainReporter.reportEvent(eventName) }
     }
 
     fun reportEvent(eventName: String, jsonValue: String?) {
         barrier.reportEvent(eventName, jsonValue)
         synchronousStageExecutor.reportEvent(eventName, jsonValue)
-        dispatch { mainReporter.reportEvent(eventName, jsonValue) }
+        dispatchSafely { mainReporter.reportEvent(eventName, jsonValue) }
     }
 
     fun reportEvent(eventName: String, attributes: Map<String, Any?>?) {
         barrier.reportEvent(eventName, attributes)
         synchronousStageExecutor.reportEvent(eventName, attributes)
         val entries = CollectionUtils.getListFromMap(attributes)
-        dispatch { mainReporter.reportEvent(eventName, CollectionUtils.getMapFromList(entries)) }
+        dispatchSafely { mainReporter.reportEvent(eventName, CollectionUtils.getMapFromList(entries)) }
     }
 
     fun reportError(message: String, error: Throwable?) {
         barrier.reportError(message, error)
         val nonNullError = synchronousStageExecutor.reportError(message, error)
-        dispatch { mainReporter.reportError(message, nonNullError) }
+        dispatchSafely { mainReporter.reportError(message, nonNullError) }
     }
 
     fun reportError(identifier: String, message: String?, error: Throwable?) {
         barrier.reportError(identifier, message, error)
         synchronousStageExecutor.reportError(identifier, message, error)
-        dispatch { mainReporter.reportError(identifier, message, error) }
+        dispatchSafely { mainReporter.reportError(identifier, message, error) }
     }
 
     fun reportUnhandledException(exception: Throwable) {
         barrier.reportUnhandledException(exception)
         synchronousStageExecutor.reportUnhandledException(exception)
-        dispatch { mainReporter.reportUnhandledException(exception) }
+        dispatchSafely { mainReporter.reportUnhandledException(exception) }
     }
 
     fun reportAppOpen(activity: Activity) {
         barrier.reportAppOpen(activity)
         val openIntent = synchronousStageExecutor.reportAppOpen(activity)
-        dispatch { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(openIntent) }
+        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(openIntent) }
     }
 
     fun reportAppOpen(deeplink: String) {
         barrier.reportAppOpen(deeplink)
         synchronousStageExecutor.reportAppOpen(deeplink)
-        dispatch { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(deeplink) }
+        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(deeplink) }
     }
 
     fun reportAppOpen(intent: Intent) {
         barrier.reportAppOpen(intent)
         synchronousStageExecutor.reportAppOpen(intent)
-        dispatch { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(intent) }
+        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(intent) }
     }
 
     fun setLocation(location: Location?) {
         barrier.setLocation(location)
         synchronousStageExecutor.setLocation(location)
-        dispatch { provider.setLocation(location) }
+        dispatchSafely { provider.setLocation(location) }
     }
 
     fun setLocationTracking(enabled: Boolean) {
         barrier.setLocationTracking(enabled)
         synchronousStageExecutor.setLocationTracking(enabled)
-        dispatch { provider.setLocationTracking(enabled) }
+        dispatchSafely { provider.setLocationTracking(enabled) }
     }
 
     fun setAdvIdentifiersTracking(enabled: Boolean) {
         barrier.setAdvIdentifiersTracking(enabled)
         synchronousStageExecutor.setAdvIdentifiersTracking(enabled)
-        dispatch { provider.setAdvIdentifiersTracking(enabled) }
+        dispatchSafely { provider.setAdvIdentifiersTracking(enabled) }
     }
 
     fun setDataSendingEnabled(enabled: Boolean) {
         barrier.setDataSendingEnabled(enabled)
         synchronousStageExecutor.setDataSendingEnabled(enabled)
-        dispatch { provider.setDataSendingEnabled(enabled) }
+        dispatchSafely { provider.setDataSendingEnabled(enabled) }
     }
 
     fun setUserProfileID(userProfileID: String?) {
         barrier.setUserProfileID(userProfileID)
         synchronousStageExecutor.setUserProfileID(userProfileID)
-        dispatch { provider.setUserProfileID(userProfileID) }
+        dispatchSafely { provider.setUserProfileID(userProfileID) }
     }
 
     fun reportUserProfile(profile: UserProfile) {
         barrier.reportUserProfile(profile)
         synchronousStageExecutor.reportUserProfile(profile)
-        dispatch { mainReporter.reportUserProfile(profile) }
+        dispatchSafely { mainReporter.reportUserProfile(profile) }
     }
 
     fun reportRevenue(revenue: Revenue) {
         barrier.reportRevenue(revenue)
         synchronousStageExecutor.reportRevenue(revenue)
-        dispatch { mainReporter.reportRevenue(revenue) }
+        dispatchSafely { mainReporter.reportRevenue(revenue) }
     }
 
     fun reportAdRevenue(adRevenue: AdRevenue) {
         barrier.reportAdRevenue(adRevenue)
         synchronousStageExecutor.reportAdRevenue(adRevenue)
-        dispatch { mainReporter.reportAdRevenue(adRevenue) }
+        dispatchSafely { mainReporter.reportAdRevenue(adRevenue) }
     }
 
     fun reportECommerce(event: ECommerceEvent) {
         barrier.reportECommerce(event)
         synchronousStageExecutor.reportECommerce(event)
-        dispatch { mainReporter.reportECommerce(event) }
+        dispatchSafely { mainReporter.reportECommerce(event) }
     }
 
     fun requestDeferredDeeplinkParameters(listener: DeferredDeeplinkParametersListener) {
         barrier.requestDeferredDeeplinkParameters(listener)
         synchronousStageExecutor.requestDeferredDeeplinkParameters(listener)
-        dispatch { provider.peekInitializedImpl()!!.requestDeferredDeeplinkParameters(listener) }
+        dispatchSafely { provider.peekInitializedImpl()!!.requestDeferredDeeplinkParameters(listener) }
     }
 
     fun requestDeferredDeeplink(listener: DeferredDeeplinkListener) {
         barrier.requestDeferredDeeplink(listener)
         synchronousStageExecutor.requestDeferredDeeplink(listener)
-        dispatch { provider.peekInitializedImpl()!!.requestDeferredDeeplink(listener) }
+        dispatchSafely { provider.peekInitializedImpl()!!.requestDeferredDeeplink(listener) }
     }
 
     fun getReporter(context: Context, apiKey: String): IReporterExtended {
@@ -251,13 +251,13 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun putErrorEnvironmentValue(key: String, value: String?) {
         barrier.putErrorEnvironmentValue(key, value)
         synchronousStageExecutor.putErrorEnvironmentValue(key, value)
-        dispatch { provider.putErrorEnvironmentValue(key, value) }
+        dispatchSafely { provider.putErrorEnvironmentValue(key, value) }
     }
 
     fun initWebViewReporting(webView: WebView) {
         barrier.initWebViewReporting(webView)
         synchronousStageExecutor.initWebViewReporting(webView, this)
-        dispatch { mainReporter.onWebViewReportingInit(webViewJsInterfaceHandler) }
+        dispatchSafely { mainReporter.onWebViewReportingInit(webViewJsInterfaceHandler) }
     }
 
     fun reportJsEvent(eventName: String, eventValue: String?) {
@@ -269,7 +269,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
             return
         }
         synchronousStageExecutor.reportJsEvent(eventName, eventValue)
-        dispatch { mainReporter.reportJsEvent(eventName, eventValue) }
+        dispatchSafely { mainReporter.reportJsEvent(eventName, eventValue) }
     }
 
     fun reportJsInitEvent(value: String) {
@@ -288,7 +288,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
             return
         }
         synchronousStageExecutor.reportJsInitEvent(value)
-        dispatch { mainReporter.reportJsInitEvent(value) }
+        dispatchSafely { mainReporter.reportJsInitEvent(value) }
     }
 
     fun getDeviceId(context: Context): String? {
@@ -308,19 +308,19 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun putAppEnvironmentValue(key: String, value: String?) {
         barrier.putAppEnvironmentValue(key, value)
         synchronousStageExecutor.putAppEnvironmentValue(key, value)
-        dispatch { provider.putAppEnvironmentValue(key, value) }
+        dispatchSafely { provider.putAppEnvironmentValue(key, value) }
     }
 
     fun clearAppEnvironment() {
         barrier.clearAppEnvironment()
         synchronousStageExecutor.clearAppEnvironment()
-        dispatch { provider.clearAppEnvironment() }
+        dispatchSafely { provider.clearAppEnvironment() }
     }
 
     fun clearErrorEnvironment() {
         barrier.clearErrorEnvironment()
         synchronousStageExecutor.clearErrorEnvironment()
-        dispatch { provider.clearErrorEnvironment() }
+        dispatchSafely { provider.clearErrorEnvironment() }
     }
 
     fun requestStartupParams(
@@ -331,7 +331,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
         DebugLogger.info("[AppMetricaProxy]", "requestStartupParams for keys: $params")
         barrier.requestStartupParams(context, callback, params)
         synchronousStageExecutor.requestStartupParams(context.applicationContext, callback, params)
-        dispatch {
+        dispatchSafely {
             provider.getInitializedImpl(context.applicationContext).requestStartupParams(callback, params)
         }
     }
@@ -339,19 +339,19 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun registerAnrListener(listener: AnrListener) {
         barrier.registerAnrListener(listener)
         synchronousStageExecutor.registerAnrListener(listener)
-        dispatch { mainReporter.registerAnrListener(listener) }
+        dispatchSafely { mainReporter.registerAnrListener(listener) }
     }
 
     fun reportExternalAttribution(value: ExternalAttribution) {
         barrier.reportExternalAttribution(value)
         synchronousStageExecutor.reportExternalAttribution(value)
-        dispatch { mainReporter.reportExternalAttribution(value) }
+        dispatchSafely { mainReporter.reportExternalAttribution(value) }
     }
 
     fun reportExternalAdRevenue(vararg values: Any) {
         barrier.reportExternalAdRevenue(*values)
         synchronousStageExecutor.reportExternalAdRevenue(*values)
-        dispatch {
+        dispatchSafely {
             val processor: ModuleAdRevenueProcessor? =
                 ClientServiceLocator.getInstance().modulesController.getModuleAdRevenueProcessor()
             processor?.process(*values)
@@ -362,7 +362,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
         barrier.reportAnr(allThreads)
         synchronousStageExecutor.reportAnr(allThreads)
         val entries = CollectionUtils.getListFromMap(allThreads)
-        dispatch { mainReporter.reportAnr(CollectionUtils.getMapFromList(entries)) }
+        dispatchSafely { mainReporter.reportAnr(CollectionUtils.getMapFromList(entries)) }
     }
 
     fun warmUpForSelfProcess(context: Context) {
@@ -374,7 +374,7 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun reportEvent(event: AppMetricaEvent) {
         barrier.reportEvent(event)
         synchronousStageExecutor.reportEvent(event)
-        dispatch { mainReporter.reportEvent(event) }
+        dispatchSafely { mainReporter.reportEvent(event) }
     }
 
     @VisibleForTesting
