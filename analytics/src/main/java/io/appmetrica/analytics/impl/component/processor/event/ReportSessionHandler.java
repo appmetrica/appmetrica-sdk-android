@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.EventSessionProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.ReportingReportProcessor;
@@ -21,8 +21,8 @@ public class ReportSessionHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull CounterReport reportData) {
-        return mReportSessionProcessor.process(reportData);
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
+        return mReportSessionProcessor.process(serviceEvent);
     }
 
     @VisibleForTesting

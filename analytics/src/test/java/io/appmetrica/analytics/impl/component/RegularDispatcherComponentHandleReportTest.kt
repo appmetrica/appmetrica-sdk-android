@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component
 
 import android.content.Context
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest
@@ -43,7 +43,7 @@ internal class RegularDispatcherComponentHandleReportTest(
     }
 
     private val lifecycleManager: ComponentLifecycleManager<ClientUnit?> = mock()
-    private val counterReport: CounterReport = CounterReport(null, eventType)
+    private val serviceEvent: ServiceEvent = ServiceEvent().apply { type = eventType }
 
     private val regularDispatcherComponent: RegularDispatcherComponent<ComponentUnit> by setUp {
         RegularDispatcherComponent(
@@ -58,8 +58,8 @@ internal class RegularDispatcherComponentHandleReportTest(
 
     @Test
     fun handleReport() {
-        regularDispatcherComponent.handleReport(counterReport, CommonArgumentsTestUtils.createMockedArguments())
-        verify(reportingComponent).handleReport(counterReport)
+        regularDispatcherComponent.handleReport(serviceEvent, CommonArgumentsTestUtils.createMockedArguments())
+        verify(reportingComponent).handleReport(serviceEvent)
         verify(reportingComponent, times(if (shouldUpdateConfig) 1 else 0)).updateSdkConfig(reportArguments)
     }
 

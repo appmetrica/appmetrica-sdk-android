@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -26,7 +26,7 @@ public class ReportFirstHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final CounterReport reportData) {
+    public boolean process(@NonNull final ServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         if (!vitalComponentDataProvider.isFirstEventDone()) {
             DebugLogger.INSTANCE.info(
@@ -41,7 +41,7 @@ public class ReportFirstHandler extends ReportComponentHandler {
                     component.getComponentId()
                 );
                 component.getEventSaver().identifyAndSaveFirstEventReport(
-                        CounterReport.formFirstEventReportData(reportData)
+                        ServiceEvent.formFirstEventReportData(serviceEvent)
                 );
             }
             vitalComponentDataProvider.setFirstEventDone(true);

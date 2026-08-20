@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -21,15 +21,15 @@ internal class ModulesEventHandler(component: ComponentUnit) : ReportComponentHa
             it.value to ModuleEventHandlerContextProvider(component, it.key)
         }
 
-    override fun process(reportData: CounterReport): Boolean {
+    override fun process(serviceEvent: ServiceEvent): Boolean {
         if (component.vitalComponentDataProvider.isFirstEventDone) {
             DebugLogger.info(
                 tag,
                 "Apply ${processingChain.size} module handlers to report with type = " +
-                    "${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"
+                    "${serviceEvent.type}; customType = ${serviceEvent.customType}; name = ${serviceEvent.name}"
             )
             return processingChain.any { (handler, contextProvider) ->
-                handler.handle(contextProvider.getContext(reportData), reportData)
+                handler.handle(contextProvider.getContext(serviceEvent), serviceEvent)
             }
         } else {
             DebugLogger.info(tag, "First event hasn't happened yet. Ignore.")

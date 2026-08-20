@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionHelper
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionTypeConverter
 import io.appmetrica.analytics.impl.component.ComponentUnit
@@ -14,13 +14,13 @@ internal class ExternalAttributionHandler(
 
     private val externalAttributionHelper = ExternalAttributionHelper(component, timeProvider)
 
-    override fun process(reportData: CounterReport): Boolean {
+    override fun process(serviceEvent: ServiceEvent): Boolean {
         if (!externalAttributionHelper.isInAttributionCollectingWindow()) {
             component.publicLogger.info("Ignoring attribution since out of collecting interval")
             return true
         }
 
-        val attribution = ClientExternalAttribution.parseFrom(reportData.valueBytes)
+        val attribution = ClientExternalAttribution.parseFrom(serviceEvent.valueBytes)
         val attributionType = attribution.attributionType
         val attributionJson = String(attribution.value)
 

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import android.util.Base64;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class ExternallyEncryptedEventCrypterTests extends CommonTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testEncryptThrowException() {
-        mEventEncrypter.encrypt(mock(CounterReport.class));
+        mEventEncrypter.encrypt(mock(ServiceEvent.class));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
@@ -44,21 +44,21 @@ public class BaseReportProcessorTest extends CommonTest {
     @Test
     public void testProcess() {
         BaseReportProcessor.ProcessItem item = mock(BaseReportProcessor.ProcessItem.class);
-        doReturn(false).when(item).process(any(), any(CounterReport.class));
-        CounterReport report = new CounterReport();
-        mProcessor.process(report, item);
-        verify(item, times(1)).process(mHandler1, report);
-        verify(item, times(1)).process(mHandler2, report);
+        doReturn(false).when(item).process(any(), any(ServiceEvent.class));
+        ServiceEvent serviceEvent = new ServiceEvent();
+        mProcessor.process(serviceEvent, item);
+        verify(item, times(1)).process(mHandler1, serviceEvent);
+        verify(item, times(1)).process(mHandler2, serviceEvent);
     }
 
     @Test
     public void testBreakChain() {
         BaseReportProcessor.ProcessItem item = mock(BaseReportProcessor.ProcessItem.class);
-        CounterReport report = new CounterReport();
-        doReturn(true).when(item).process(mHandler1, report);
-        doReturn(false).when(item).process(mHandler2, report);
-        mProcessor.process(report, item);
-        verify(item, times(1)).process(mHandler1, report);
-        verify(item, never()).process(mHandler2, report);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        doReturn(true).when(item).process(mHandler1, serviceEvent);
+        doReturn(false).when(item).process(mHandler2, serviceEvent);
+        mProcessor.process(serviceEvent, item);
+        verify(item, times(1)).process(mHandler1, serviceEvent);
+        verify(item, never()).process(mHandler2, serviceEvent);
     }
 }

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.session;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
@@ -35,21 +35,21 @@ public class ReportSessionStopDueCrashHandlerTest extends CommonTest {
 
     @Test
     public void testSessionStopped() {
-        CounterReport reportData = new CounterReport();
-        reportSessionStopDueCrashHandler.process(reportData);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        reportSessionStopDueCrashHandler.process(serviceEvent);
 
-        verify(sessionManager, times(1)).stopCurrentSessionDueToCrash(reportData);
+        verify(sessionManager, times(1)).stopCurrentSessionDueToCrash(serviceEvent);
     }
 
     @Test
     public void testProcessShouldTrigger() {
-        reportSessionStopDueCrashHandler.process(new CounterReport());
+        reportSessionStopDueCrashHandler.process(new ServiceEvent());
         verify(conditionalEventTrigger).trigger();
     }
 
     @Test
     public void testProcessShouldBreakProcessing() {
-        assertThat(reportSessionStopDueCrashHandler.process(new CounterReport())).isTrue();
+        assertThat(reportSessionStopDueCrashHandler.process(new ServiceEvent())).isTrue();
     }
 
 }

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -14,7 +14,7 @@ public class BaseReportProcessor<T, C extends IComponent> {
 
     protected interface ProcessItem<T> {
 
-        boolean process(T handler, CounterReport report);
+        boolean process(T handler, ServiceEvent serviceEvent);
 
     }
 
@@ -27,23 +27,23 @@ public class BaseReportProcessor<T, C extends IComponent> {
         mComponent = component;
     }
 
-    protected boolean process(@NonNull CounterReport report,
+    protected boolean process(@NonNull ServiceEvent serviceEvent,
                               @NonNull ProcessItem<T> processItem) {
-        List<? extends  T> handlers = getStrategy(report).getEventHandlers();
+        List<? extends  T> handlers = getStrategy(serviceEvent).getEventHandlers();
         for (T handler : handlers) {
             DebugLogger.INSTANCE.info(
                 TAG,
                 "For component %s processing report (of type %s) %s with handler: %s",
                 mComponent.getComponentId(),
-                InternalEvents.valueOf(report.getType()).getInfo(),
-                report,
+                InternalEvents.valueOf(serviceEvent.getType()).getInfo(),
+                serviceEvent,
                 handler.getClass().getSimpleName()
             );
-            if (processItem.process(handler, report)) {
+            if (processItem.process(handler, serviceEvent)) {
                 DebugLogger.INSTANCE.info(
                     TAG,
                     "Stop processing report %s because %s returned true",
-                    report,
+                    serviceEvent,
                     handler.getClass().getSimpleName()
                 );
                 return true;
@@ -52,8 +52,8 @@ public class BaseReportProcessor<T, C extends IComponent> {
         return false;
     }
 
-    EventProcessingStrategy<T> getStrategy(final CounterReport report) {
-        return mProcessingStrategyFactory.getProcessingStrategy(report.getType());
+    EventProcessingStrategy<T> getStrategy(final ServiceEvent serviceEvent) {
+        return mProcessingStrategyFactory.getProcessingStrategy(serviceEvent.getType());
     }
 
     protected C getComponent() {

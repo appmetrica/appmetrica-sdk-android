@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.AppStandbyBucketConverter;
 import io.appmetrica.analytics.impl.AvailableProvidersRetriever;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsStateProvider;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
@@ -63,7 +63,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
         mAvailableProvidersRetriever = availableProvidersRetriever;
     }
 
-    public boolean process(@NonNull CounterReport reportData) {
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         String componentIdName = component.getComponentId().toString();
 
@@ -85,7 +85,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
                     DebugLogger.INSTANCE.info(TAG, "Resend all permissions");
                     reportPermissions(
                         oldAppPermissionsState,
-                        reportData,
+                        serviceEvent,
                         component.getEventSaver()
                     );
                 }
@@ -93,7 +93,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
                 DebugLogger.INSTANCE.info(TAG, "Send permissions diff: %s", newAppPermissionsState);
                 reportPermissions(
                     newAppPermissionsState,
-                    reportData,
+                    serviceEvent,
                     component.getEventSaver()
                 );
                 mPermissionsStorage.save(newAppPermissionsState);
@@ -141,15 +141,21 @@ public class ReportPermissionHandler extends ReportComponentHandler {
     }
 
     private void reportPermissions(@NonNull AppPermissionsState appPermissionsState,
-                                   @NonNull CounterReport reportData,
+                                   @NonNull ServiceEvent serviceEvent,
                                    @NonNull EventSaver eventSaver) {
-        CounterReport permissionsReport = CounterReport.formPermissionsReportData(
-            reportData,
+        String appStandbyBucket = null;
+        if (appPermissionsState.mBackgroundRestrictionsState != null) {
+            appStandbyBucket = mAppStandbyBucketConverter.fromAppStandbyBucketToString(
+                appPermissionsState.mBackgroundRestrictionsState.mAppStandByBucket
+            );
+        }
+        ServiceEvent permissionsServiceEvent = ServiceEvent.formPermissionsReportData(
+            serviceEvent,
             appPermissionsState.mPermissionStateList,
             appPermissionsState.mBackgroundRestrictionsState,
-            mAppStandbyBucketConverter,
+            appStandbyBucket,
             appPermissionsState.mAvailableProviders
         );
-        eventSaver.savePermissionsReport(permissionsReport);
+        eventSaver.savePermissionsReport(permissionsServiceEvent);
     }
 }

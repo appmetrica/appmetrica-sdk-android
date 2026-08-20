@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 
 public class ReportAppEnvironmentClearedHandler extends ReportComponentHandler {
@@ -11,7 +11,7 @@ public class ReportAppEnvironmentClearedHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull CounterReport reportData) {
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
         getComponent().clearAppEnvironment();
         return false;
     }

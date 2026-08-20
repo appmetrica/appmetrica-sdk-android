@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -32,14 +32,14 @@ public class ReportSaveToDatabaseHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldSaveReportToDatabase() {
-        mReportSaveToDatabaseHandler.process(new CounterReport());
+        mReportSaveToDatabaseHandler.process(new ServiceEvent());
 
-        ArgumentCaptor<CounterReport> arg = ArgumentCaptor.forClass(CounterReport.class);
+        ArgumentCaptor<ServiceEvent> arg = ArgumentCaptor.forClass(ServiceEvent.class);
         verify(mEventSaver, times(1)).identifyAndSaveReport(arg.capture());
     }
 
     @Test
     public void testProcessShouldNotBreakEventProcessing() {
-        assertThat(mReportSaveToDatabaseHandler.process(new CounterReport())).isFalse();
+        assertThat(mReportSaveToDatabaseHandler.process(new ServiceEvent())).isFalse();
     }
 }

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.AppStandbyBucketConverter;
 import io.appmetrica.analytics.impl.AvailableProvidersRetriever;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsStateProvider;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -106,11 +106,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver, times(1)).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver, times(1)).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, times(1)).save(argThat(matches(mocks, null, mOldProviders)));
     }
 
@@ -121,11 +121,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(null).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver, times(1)).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver, times(1)).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, times(1)).save(argThat(matches(mocks, null, mOldProviders)));
     }
 
@@ -136,11 +136,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(mOldBgRestrictionStateCopy).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver, times(1)).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver, times(1)).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, times(1)).save(argThat(matches(mocks, mOldBgRestrictionState, mOldProviders)));
     }
 
@@ -152,11 +152,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
             new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.FREQUENT, false);
         doReturn(newBackgroundRestrictionsState).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver, times(1)).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver, times(1)).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, times(1)).save(argThat(matches(mOldPermissions, newBackgroundRestrictionsState, mOldProviders)));
     }
 
@@ -167,11 +167,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
         doReturn(null).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(mOldBgRestrictionStateCopy).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, never()).save(any(AppPermissionsState.class));
     }
 
@@ -182,11 +182,11 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
         doReturn(null).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(mOldBgRestrictionStateCopy).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
 
-        mReportPermissionsHandler.process(report);
+        mReportPermissionsHandler.process(serviceEvent);
 
-        verify(mEventSaver, never()).savePermissionsReport(any(CounterReport.class));
+        verify(mEventSaver, never()).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage, never()).save(any(AppPermissionsState.class));
     }
 
@@ -198,8 +198,8 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, false)).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
         when(mAppStandbyBucketConverter.fromAppStandbyBucketToString(BackgroundRestrictionsState.AppStandByBucket.RARE)).thenReturn("rare");
-        mReportPermissionsHandler.process(new CounterReport());
-        ArgumentCaptor<CounterReport> captor = ArgumentCaptor.forClass(CounterReport.class);
+        mReportPermissionsHandler.process(new ServiceEvent());
+        ArgumentCaptor<ServiceEvent> captor = ArgumentCaptor.forClass(ServiceEvent.class);
         verify(mEventSaver).savePermissionsReport(captor.capture());
         assertThat(captor.getValue().getValue()).contains("\"background_restrictions\":{\"background_restricted\":false,\"app_standby_bucket\":\"rare\"}");
     }
@@ -212,8 +212,8 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(null).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(mOldBgRestrictionState).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
-        mReportPermissionsHandler.process(new CounterReport());
-        verify(mEventSaver).savePermissionsReport(any(CounterReport.class));
+        mReportPermissionsHandler.process(new ServiceEvent());
+        verify(mEventSaver).savePermissionsReport(any(ServiceEvent.class));
         verify(mPermissionsStorage).save(argThat(matches(mOldPermissions, mOldBgRestrictionState, newProviders)));
     }
 

@@ -7,31 +7,14 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi;
-import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
-import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ALIVE;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_FEATURES;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_UPDATE;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_FIRST_ACTIVATION;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_INIT;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PERMISSIONS;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
 
 public class CounterReport implements CounterReportApi, Parcelable {
-
-    private static final String TAG = "[CounterReport]";
 
     @Override
     public int describeContents() {
@@ -48,7 +31,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         reportData.putInt(CounterReportBundleKeys.CUSTOM_TYPE, customType);
         reportData.putInt(CounterReportBundleKeys.TRUNCATED, bytesTruncated);
         reportData.putString(CounterReportBundleKeys.PROFILE_ID, profileID);
-        reportData.putInt(CounterReportBundleKeys.UNIQUENESS_STATUS, firstOccurrenceStatus.mStatusCode);
 
         if (payload != null) {
             reportData.putParcelable(CounterReportBundleKeys.PAYLOAD, payload);
@@ -61,12 +43,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         reportData.putLong(CounterReportBundleKeys.CREATION_TIMESTAMP, creationTimestamp);
         if (source != null) {
             reportData.putInt(CounterReportBundleKeys.SOURCE, source.code);
-        }
-        if (attributionIdChanged != null) {
-            reportData.putBoolean(CounterReportBundleKeys.ATTRIBUTION_ID_CHANGED, attributionIdChanged);
-        }
-        if (openId != null) {
-            reportData.putInt(CounterReportBundleKeys.OPEN_ID, openId);
         }
         reportData.putBundle(CounterReportBundleKeys.EXTRAS, CollectionUtils.mapToBundle(extras));
         if (valueProtocolVersion != null) {
@@ -98,14 +74,8 @@ public class CounterReport implements CounterReportApi, Parcelable {
                 result.setCreationEllapsedRealtime(data.getLong(
                     CounterReportBundleKeys.CREATION_ELAPSED_REALTIME));
                 result.setCreationTimestamp(data.getLong(CounterReportBundleKeys.CREATION_TIMESTAMP));
-                result.setFirstOccurrenceStatus(FirstOccurrenceStatus.fromStatusCode(
-                    data.getInt(CounterReportBundleKeys.UNIQUENESS_STATUS)));
                 result.setSource(eventSource);
                 result.setPayload(data.getBundle(CounterReportBundleKeys.PAYLOAD));
-                result.setAttributionIdChanged(
-                    Utils.getBooleanOrNull(data, CounterReportBundleKeys.ATTRIBUTION_ID_CHANGED)
-                );
-                result.setOpenId(Utils.getIntOrNull(data, CounterReportBundleKeys.OPEN_ID));
                 result.setExtras(CollectionUtils.bundleToMap(data.getBundle(CounterReportBundleKeys.EXTRAS)));
                 result.setValueProtocolVersion(
                     Utils.getIntOrNull(data, CounterReportBundleKeys.VALUE_PROTOCOL_VERSION)
@@ -132,16 +102,10 @@ public class CounterReport implements CounterReportApi, Parcelable {
     private String profileID;
     private long creationElapsedRealtime;
     private long creationTimestamp;
-    @NonNull
-    private FirstOccurrenceStatus firstOccurrenceStatus = FirstOccurrenceStatus.UNKNOWN;
     @Nullable
     private EventSource source;
     @Nullable
     private Bundle payload;
-    @Nullable
-    private Boolean attributionIdChanged;
-    @Nullable
-    private Integer openId;
     @NonNull
     private Map<String, byte[]> extras = new HashMap<>();
     @Nullable
@@ -254,14 +218,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         this.payload = payload;
     }
 
-    public boolean isNoEvent() {
-        return null == name;
-    }
-
-    public boolean isUndefinedType() {
-        return InternalEvents.EVENT_TYPE_UNDEFINED.getTypeId() == type;
-    }
-
     @Override
     public int getBytesTruncated() {
         return bytesTruncated;
@@ -276,15 +232,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
         this.profileID = profileID;
     }
 
-    @NonNull
-    public FirstOccurrenceStatus getFirstOccurrenceStatus() {
-        return firstOccurrenceStatus;
-    }
-
-    public void setFirstOccurrenceStatus(@NonNull FirstOccurrenceStatus firstOccurrenceStatus) {
-        this.firstOccurrenceStatus = firstOccurrenceStatus;
-    }
-
     @Nullable
     public EventSource getSource() {
         return source;
@@ -292,24 +239,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
 
     public void setSource(@Nullable EventSource value) {
         source = value;
-    }
-
-    @Nullable
-    public Boolean getAttributionIdChanged() {
-        return attributionIdChanged;
-    }
-
-    public void setAttributionIdChanged(@Nullable Boolean attributionIdChanged) {
-        this.attributionIdChanged = attributionIdChanged;
-    }
-
-    @Nullable
-    public Integer getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(@Nullable Integer openId) {
-        this.openId = openId;
     }
 
     @Override
@@ -374,101 +303,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
             }
         }
         return new CounterReport();
-    }
-
-    @NonNull
-    private static CounterReport formReportCopyingMetaDataWithType(@NonNull CounterReport reportData,
-                                                                   @NonNull InternalEvents event) {
-        final CounterReport resultData = formReportCopyingMetadata(reportData);
-        resultData.setType(event.getTypeId());
-        return resultData;
-    }
-
-    @NonNull
-    public static CounterReport formReportCopyingMetadata(@NonNull CounterReport reportData) {
-        CounterReport counterReport = new CounterReport();
-        counterReport.setCreationTimestamp(reportData.getCreationTimestamp());
-        counterReport.setCreationEllapsedRealtime(reportData.getCreationElapsedRealtime());
-        counterReport.setEventEnvironment(reportData.getEventEnvironment());
-        counterReport.setPayload(reportData.getPayload());
-        counterReport.setExtras(reportData.extras);
-        counterReport.setValueProtocolVersion(reportData.getValueProtocolVersion());
-        counterReport.setProfileID(reportData.getProfileID());
-        return counterReport;
-    }
-
-    @NonNull
-    public static CounterReport formAliveReportData(@NonNull CounterReport reportData) {
-        return formReportCopyingMetaDataWithType(reportData, EVENT_TYPE_ALIVE);
-    }
-
-    @NonNull
-    public static CounterReport formSessionStartReportData(@NonNull CounterReport reportData,
-                                                           @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever) {
-        final CounterReport startReport = formReportCopyingMetaDataWithType(reportData, EVENT_TYPE_START);
-        EventStart eventStart = new EventStart(extraMetaInfoRetriever.getBuildId());
-        startReport.setValueBytes(MessageNano.toByteArray(new EventStartConverter().fromModel(eventStart)));
-        startReport.setCreationTimestamp(reportData.getCreationTimestamp());
-        startReport.setCreationEllapsedRealtime(reportData.creationElapsedRealtime);
-        return startReport;
-
-    }
-
-    @NonNull
-    public static CounterReport formInitReportData(@NonNull CounterReport reportData) {
-        return formReportCopyingMetaDataWithType(reportData, EVENT_TYPE_INIT);
-    }
-
-    @NonNull
-    public static CounterReport formPermissionsReportData(@NonNull CounterReport report,
-                                                          @NonNull Collection<PermissionState> newPermissions,
-                                                          @Nullable BackgroundRestrictionsState bgRestrictionsState,
-                                                          @NonNull AppStandbyBucketConverter converter,
-                                                          @NonNull List<String> availableProviders) {
-        CounterReport resultData = formReportCopyingMetadata(report);
-        String value = StringUtils.EMPTY;
-        try {
-            JSONArray permissions = new JSONArray();
-            for (PermissionState state : newPermissions) {
-                permissions.put(new JSONObject().put("name", state.name).put("granted", state.granted));
-            }
-            JSONObject backgroundRestrictions = new JSONObject();
-            if (bgRestrictionsState != null) {
-                backgroundRestrictions.put("background_restricted", bgRestrictionsState.mBackgroundRestricted);
-                backgroundRestrictions.put("app_standby_bucket",
-                    converter.fromAppStandbyBucketToString(bgRestrictionsState.mAppStandByBucket));
-            }
-
-            value = new JSONObject()
-                .put("permissions", permissions)
-                .put("background_restrictions", backgroundRestrictions)
-                .put("available_providers", new JSONArray(availableProviders))
-                .toString();
-        } catch (Throwable e) {
-            DebugLogger.INSTANCE.error(TAG, e, "error while forming permissions value");
-        }
-        resultData.setType(EVENT_TYPE_PERMISSIONS.getTypeId());
-        resultData.setValue(value);
-        return resultData;
-    }
-
-    @NonNull
-    public static CounterReport formFeaturesReportData(@NonNull CounterReport report,
-                                                       @Nullable String value) {
-        CounterReport resultData = formReportCopyingMetadata(report);
-        resultData.setType(EVENT_TYPE_APP_FEATURES.getTypeId());
-        resultData.setValue(value);
-        return resultData;
-    }
-
-    @NonNull
-    public static CounterReport formFirstEventReportData(@NonNull CounterReport reportData) {
-        return formReportCopyingMetaDataWithType(reportData, EVENT_TYPE_FIRST_ACTIVATION);
-    }
-
-    @NonNull
-    public static CounterReport formUpdateReportData(@NonNull CounterReport reportData) {
-        return formReportCopyingMetaDataWithType(reportData, EVENT_TYPE_APP_UPDATE);
     }
 
     @NonNull

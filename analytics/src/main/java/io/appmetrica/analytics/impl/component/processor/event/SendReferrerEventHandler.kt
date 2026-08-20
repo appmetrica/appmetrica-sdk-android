@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListener
@@ -12,7 +12,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 internal class SendReferrerEventHandler(component: ComponentUnit) : ReportComponentHandler(component) {
     private val tag = "[SendReferrerEventHandler]"
 
-    override fun process(reportData: CounterReport): Boolean {
+    override fun process(serviceEvent: ServiceEvent): Boolean {
         if (!isAlreadySend()) {
             DebugLogger.info(tag, "Request referrer for send event")
             GlobalServiceLocator.getInstance().getReferrerManager()
@@ -58,10 +58,10 @@ internal class SendReferrerEventHandler(component: ComponentUnit) : ReportCompon
         }
 
         fun sendReferrer(referrer: ReferrerInfo) {
-            val referrerReport = CounterReport()
-            referrerReport.valueBytes = referrer.toProto()
-            referrerReport.type = InternalEvents.EVENT_TYPE_SEND_REFERRER.typeId
-            component.handleReport(referrerReport)
+            val serviceEvent = ServiceEvent()
+            serviceEvent.valueBytes = referrer.toProto()
+            serviceEvent.type = InternalEvents.EVENT_TYPE_SEND_REFERRER.typeId
+            component.handleReport(serviceEvent)
         }
     }
 }

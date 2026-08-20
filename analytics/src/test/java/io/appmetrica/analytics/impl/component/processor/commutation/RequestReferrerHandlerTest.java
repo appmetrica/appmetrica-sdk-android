@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import android.os.Bundle;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
@@ -22,7 +22,7 @@ public class RequestReferrerHandlerTest extends CommonTest {
     @Mock
     private CommutationClientUnit clientUnit;
     @Mock
-    private CounterReport counterReport;
+    private ServiceEvent serviceEvent;
     private RequestReferrerHandler requestReferrerHandler;
 
     @Before
@@ -33,8 +33,8 @@ public class RequestReferrerHandlerTest extends CommonTest {
 
     @Test
     public void nullBundle() {
-        when(counterReport.getPayload()).thenReturn(null);
-        requestReferrerHandler.process(counterReport, clientUnit);
+        when(serviceEvent.getPayload()).thenReturn(null);
+        requestReferrerHandler.process(serviceEvent, clientUnit);
         verify(component).requestReferrer(null);
     }
 
@@ -42,8 +42,8 @@ public class RequestReferrerHandlerTest extends CommonTest {
     public void emptyBundle() {
         Bundle bundle = mock(Bundle.class);
         when(bundle.getParcelable(ReferrerResultReceiver.BUNDLE_KEY)).thenReturn(null);
-        when(counterReport.getPayload()).thenReturn(bundle);
-        requestReferrerHandler.process(counterReport, clientUnit);
+        when(serviceEvent.getPayload()).thenReturn(bundle);
+        requestReferrerHandler.process(serviceEvent, clientUnit);
         verify(component).requestReferrer(null);
     }
 
@@ -52,8 +52,8 @@ public class RequestReferrerHandlerTest extends CommonTest {
         ReferrerResultReceiver receiver = mock(ReferrerResultReceiver.class);
         Bundle bundle = mock(Bundle.class);
         when(bundle.getParcelable(ReferrerResultReceiver.BUNDLE_KEY)).thenReturn(receiver);
-        when(counterReport.getPayload()).thenReturn(bundle);
-        requestReferrerHandler.process(counterReport, clientUnit);
+        when(serviceEvent.getPayload()).thenReturn(bundle);
+        requestReferrerHandler.process(serviceEvent, clientUnit);
         verify(component).requestReferrer(receiver);
     }
 

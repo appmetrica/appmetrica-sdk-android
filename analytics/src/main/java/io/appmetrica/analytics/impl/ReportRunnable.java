@@ -17,17 +17,17 @@ class ReportRunnable implements Runnable {
 
     @NonNull
     private final Context mContext;
-    private final CounterReport mReport;
+    private final ServiceEvent mServiceEvent;
     private final Bundle mExtras;
     @NonNull
     private final ClientRepository mClientRepository;
 
     ReportRunnable(@NonNull Context context,
-                   final CounterReport report,
+                   final ServiceEvent serviceEvent,
                    final Bundle extras,
                    @NonNull ClientRepository clientRepository) {
         mContext = context;
-        mReport = report;
+        mServiceEvent = serviceEvent;
         mExtras = extras;
         mClientRepository = clientRepository;
     }
@@ -40,7 +40,7 @@ class ReportRunnable implements Runnable {
                 TAG,
                 "Handle new report with sdkConfig: %s; report = %s",
                 sdkConfig,
-                mReport
+                mServiceEvent
             );
             if (sdkConfig == null) {
                 return;
@@ -59,12 +59,12 @@ class ReportRunnable implements Runnable {
             CommonArguments arguments = new CommonArguments(sdkConfig);
             ClientUnit clientUnit = mClientRepository.getOrCreateClient(clientDescription, arguments);
 
-            clientUnit.handle(mReport, arguments);
+            clientUnit.handle(mServiceEvent, arguments);
         } catch (Throwable e) {
             DebugLogger.INSTANCE.error(TAG, e);
             AppMetricaSelfReportFacade.getReporter().reportError(
-                "Exception during processing event with type: " + mReport.getType() +
-                    " (" + mReport.getCustomType() + "): " + e.getMessage(),
+                "Exception during processing event with type: " + mServiceEvent.getType() +
+                    " (" + mServiceEvent.getCustomType() + "): " + e.getMessage(),
                 e
             );
         }

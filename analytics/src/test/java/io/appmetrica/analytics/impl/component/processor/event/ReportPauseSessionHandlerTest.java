@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -29,13 +29,13 @@ public class ReportPauseSessionHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldUpdateAliveTime() {
-        mReportPauseSessionHandler.process(new CounterReport());
+        mReportPauseSessionHandler.process(new ServiceEvent());
 
-        verify(mSessionManager, times(1)).heartbeat(any(CounterReport.class));
+        verify(mSessionManager, times(1)).heartbeat(any(ServiceEvent.class));
     }
 
     @Test
     public void testProcessShouldNotBreakProcessing() {
-        assertThat(mReportPauseSessionHandler.process(new CounterReport())).isFalse();
+        assertThat(mReportPauseSessionHandler.process(new ServiceEvent())).isFalse();
     }
 }

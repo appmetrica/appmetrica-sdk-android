@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
@@ -31,7 +31,7 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
     private val mComponentUnit: ComponentUnit = mock {
         on { vitalComponentDataProvider } doReturn vitalComponentDataProvider
     }
-    private val report: CounterReport = mock()
+    private val serviceEvent: ServiceEvent = mock()
 
     private val referrerManager: ReferrerManager by setUp { GlobalServiceLocator.getInstance().getReferrerManager() }
 
@@ -39,20 +39,20 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
 
     @Test
     fun `process returns false`() {
-        assertThat(sendReferrerEventHandler.process(report)).isFalse()
+        assertThat(sendReferrerEventHandler.process(serviceEvent)).isFalse()
     }
 
     @Test
     fun `process does not request referrer when already handled`() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(true)
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
         verify(referrerManager, never()).requestReferrer(any())
     }
 
     @Test
     fun `process requests referrer when not handled yet`() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(false)
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
         verify(referrerManager).requestReferrer(any())
     }
 
@@ -63,10 +63,10 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
     }
 
     @Test
-    fun `onResult does not handle report when referrerInfo is null`() {
+    fun `onResult does not handle serviceEvent when referrerInfo is null`() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(false)
 
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
 
         val result: ReferrerResult = mock {
             on { this.referrerInfo } doReturn null
@@ -78,10 +78,10 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
     }
 
     @Test
-    fun `onResult does not handle report when referrer already sent`() {
+    fun `onResult does not handle serviceEvent when referrer already sent`() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(false)
 
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
 
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(true)
 
@@ -95,10 +95,10 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
     }
 
     @Test
-    fun `onResult handles report and marks referrer as handled`() {
+    fun `onResult handles serviceEvent and marks referrer as handled`() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(false)
 
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
 
         val referrerInfo: ReferrerInfo = mock()
         val result: ReferrerResult = mock {
@@ -106,12 +106,12 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
         }
         sendReferrer(result)
 
-        val reportCaptor = argumentCaptor<CounterReport>()
+        val reportCaptor = argumentCaptor<ServiceEvent>()
         verify(mComponentUnit).handleReport(reportCaptor.capture())
 
-        val report = reportCaptor.firstValue
-        assertThat(report.type).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REFERRER.typeId)
-        assertThat(report.valueBytes).isEqualTo(referrerInfo.toProto())
+        val serviceEvent = reportCaptor.firstValue
+        assertThat(serviceEvent.type).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REFERRER.typeId)
+        assertThat(serviceEvent.valueBytes).isEqualTo(referrerInfo.toProto())
 
         verify(vitalComponentDataProvider).referrerHandled = true
     }
@@ -121,7 +121,7 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
         whenever(vitalComponentDataProvider.referrerHandled).doReturn(false)
         doThrow(RuntimeException("Test exception")).whenever(mComponentUnit).handleReport(any())
 
-        sendReferrerEventHandler.process(report)
+        sendReferrerEventHandler.process(serviceEvent)
 
         val result: ReferrerResult = mock {
             on { this.referrerInfo } doReturn mock()

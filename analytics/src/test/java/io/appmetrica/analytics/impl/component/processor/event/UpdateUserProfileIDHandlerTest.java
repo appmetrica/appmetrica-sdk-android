@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
@@ -22,9 +22,9 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Mock
     private ComponentUnit mUnit;
     @Captor
-    private ArgumentCaptor<CounterReport> mReportArgumentCaptor;
+    private ArgumentCaptor<ServiceEvent> mReportArgumentCaptor;
     private UpdateUserProfileIDHandler mHandler;
-    private final CounterReport mReport = new CounterReport();
+    private final ServiceEvent mServiceEvent = new ServiceEvent();
 
     @Before
     public void setUp() throws Exception {
@@ -36,8 +36,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void testSetUserProfileIDIfProfileIDsAreNull() {
         when(mUnit.getProfileID()).thenReturn(null);
-        mReport.setProfileID(null);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(null);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(null);
     }
 
@@ -45,8 +45,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     public void testSetUserProfileIDIfProfileIDsAreEquals() {
         String profileID = "User profile ID";
         when(mUnit.getProfileID()).thenReturn(profileID);
-        mReport.setProfileID(profileID);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(profileID);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(profileID);
     }
 
@@ -54,24 +54,24 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     public void testSetUserProfileIDIfProfileIDsAreDifferent() {
         when(mUnit.getProfileID()).thenReturn("Old profile ID");
         String newProfileID = "New profile id";
-        mReport.setProfileID(newProfileID);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(newProfileID);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(newProfileID);
     }
 
     @Test
     public void testSetUserProfileIDIfNewProfileIDIsNull() {
         when(mUnit.getProfileID()).thenReturn("Old profile ID");
-        mReport.setProfileID(null);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(null);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(null);
     }
 
     @Test
     public void testSetUserProfileIDIfNewProfileIDIsEmpty() {
         when(mUnit.getProfileID()).thenReturn("Old profile ID");
-        mReport.setProfileID("");
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID("");
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID("");
     }
 
@@ -79,8 +79,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     public void testSetUserProfileIDIfOldProfileIDIsNull() {
         String newProfileID = "new profile ID";
         when(mUnit.getProfileID()).thenReturn(null);
-        mReport.setProfileID(newProfileID);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(newProfileID);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(newProfileID);
     }
 
@@ -88,33 +88,33 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     public void testSetUserProfileIDIfOldProfileIDIsEmpty() {
         String newProfileID = "new profile ID";
         when(mUnit.getProfileID()).thenReturn("");
-        mReport.setProfileID(newProfileID);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(newProfileID);
+        mHandler.process(mServiceEvent);
         verify(mUnit).setProfileID(newProfileID);
     }
 
     @Test
     public void testDoesNotSendUserProfileIDProfileIdsAreNull() {
         when(mUnit.getProfileID()).thenReturn(null);
-        mReport.setProfileID(null);
-        mHandler.process(mReport);
-        verify(mUnit, never()).handleReport(any(CounterReport.class));
+        mServiceEvent.setProfileID(null);
+        mHandler.process(mServiceEvent);
+        verify(mUnit, never()).handleReport(any(ServiceEvent.class));
     }
 
     @Test
     public void testDoesNotSendUserProfileIDProfileIdsAreEquals() {
         String profileId = "test profile id";
         when(mUnit.getProfileID()).thenReturn(profileId);
-        mReport.setProfileID(profileId);
-        mHandler.process(mReport);
-        verify(mUnit, never()).handleReport(any(CounterReport.class));
+        mServiceEvent.setProfileID(profileId);
+        mHandler.process(mServiceEvent);
+        verify(mUnit, never()).handleReport(any(ServiceEvent.class));
     }
 
     @Test
     public void testSendUserProfileIfProfileIDsAreDifferent() {
         when(mUnit.getProfileID()).thenReturn("old profile id");
-        mReport.setProfileID("new profile id");
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID("new profile id");
+        mHandler.process(mServiceEvent);
         verify(mUnit).handleReport(mReportArgumentCaptor.capture());
         assertThatProfileEventIsValid(mReportArgumentCaptor.getValue());
     }
@@ -122,8 +122,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void testSendUserProfileIdIfNewProfileIDIsNull() {
         when(mUnit.getProfileID()).thenReturn("old profile id");
-        mReport.setProfileID(null);
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID(null);
+        mHandler.process(mServiceEvent);
         verify(mUnit).handleReport(mReportArgumentCaptor.capture());
         assertThatProfileEventIsValid(mReportArgumentCaptor.getValue());
     }
@@ -131,8 +131,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void testSendUserProfileIdIfNewProfileIDIsEmpty() {
         when(mUnit.getProfileID()).thenReturn("old profile id");
-        mReport.setProfileID("");
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID("");
+        mHandler.process(mServiceEvent);
         verify(mUnit).handleReport(mReportArgumentCaptor.capture());
         assertThatProfileEventIsValid(mReportArgumentCaptor.getValue());
     }
@@ -140,8 +140,8 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void testSendUserProfileIDIfOldProfileIDIsNull() {
         when(mUnit.getProfileID()).thenReturn(null);
-        mReport.setProfileID("New profile id");
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID("New profile id");
+        mHandler.process(mServiceEvent);
         verify(mUnit).handleReport(mReportArgumentCaptor.capture());
         assertThatProfileEventIsValid(mReportArgumentCaptor.getValue());
     }
@@ -149,17 +149,17 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void testSendUserProfileIDIfOldProfileIDIsEmpty() {
         when(mUnit.getProfileID()).thenReturn("");
-        mReport.setProfileID("New profile id");
-        mHandler.process(mReport);
+        mServiceEvent.setProfileID("New profile id");
+        mHandler.process(mServiceEvent);
         verify(mUnit).handleReport(mReportArgumentCaptor.capture());
         assertThatProfileEventIsValid(mReportArgumentCaptor.getValue());
     }
 
-    private void assertThatProfileEventIsValid(CounterReport counterReport) {
+    private void assertThatProfileEventIsValid(ServiceEvent serviceEvent) {
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(counterReport.getType())
+        softAssertions.assertThat(serviceEvent.getType())
             .isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
-        softAssertions.assertThat(counterReport.getValue()).isEmpty();
+        softAssertions.assertThat(serviceEvent.getValue()).isNullOrEmpty();
         softAssertions.assertAll();
     }
 }

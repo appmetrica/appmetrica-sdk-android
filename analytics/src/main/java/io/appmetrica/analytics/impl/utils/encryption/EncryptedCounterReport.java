@@ -1,18 +1,18 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 
 public class EncryptedCounterReport {
 
     @NonNull
-    public final CounterReport mCounterReport;
+    public final ServiceEvent mServiceEvent;
     @NonNull
     public final EventEncryptionMode mEventEncryptionMode;
 
-    public EncryptedCounterReport(@NonNull CounterReport counterReport,
+    public EncryptedCounterReport(@NonNull ServiceEvent serviceEvent,
                                   @NonNull EventEncryptionMode eventEncryptionMode) {
-        mCounterReport = counterReport;
+        mServiceEvent = serviceEvent;
         mEventEncryptionMode = eventEncryptionMode;
     }
 }

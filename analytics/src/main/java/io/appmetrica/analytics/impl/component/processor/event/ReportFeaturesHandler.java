@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
@@ -38,7 +38,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
         mSafePackageManager = safePackageManager;
     }
 
-    public boolean process(@NonNull CounterReport reportData) {
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
 
         VitalComponentDataProvider vitalComponentDataProvider = component.getVitalComponentDataProvider();
@@ -55,8 +55,9 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
                         newFeatures.put(description.toJSON());
                     }
                     String featuresToSend = new JSONObject().put("features", newFeatures).toString();
-                    CounterReport permissionsReport = CounterReport.formFeaturesReportData(reportData, featuresToSend);
-                    component.getEventSaver().saveFeaturesReport(permissionsReport);
+                    ServiceEvent permissionsServiceEvent =
+                        ServiceEvent.formFeaturesReportData(serviceEvent, featuresToSend);
+                    component.getEventSaver().saveFeaturesReport(permissionsServiceEvent);
                     componentPreferences.putApplicationFeatures(newFeatures.toString());
                 }
             } catch (Throwable e) {

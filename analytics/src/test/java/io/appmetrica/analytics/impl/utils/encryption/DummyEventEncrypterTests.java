@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Before;
@@ -25,13 +25,13 @@ public class DummyEventEncrypterTests extends CommonTest {
 
     @Test
     public void testEncryptDoesNotModifyCounterReport() {
-        CounterReport counterReport = mock(CounterReport.class);
-        assertThat(mDummyEventEncrypter.encrypt(counterReport).mCounterReport).isEqualTo(counterReport);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        assertThat(mDummyEventEncrypter.encrypt(serviceEvent).mServiceEvent).isEqualTo(serviceEvent);
     }
 
     @Test
     public void testEncryptSetExpectedEncryptionMode() {
-        assertThat(mDummyEventEncrypter.encrypt(mock(CounterReport.class)).mEventEncryptionMode)
+        assertThat(mDummyEventEncrypter.encrypt(mock(ServiceEvent.class)).mEventEncryptionMode)
             .isEqualTo(EventEncryptionMode.NONE);
     }
 

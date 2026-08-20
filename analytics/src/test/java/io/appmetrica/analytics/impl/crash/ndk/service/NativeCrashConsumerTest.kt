@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.crash.ndk.service
 
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportConsumer
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
@@ -36,9 +36,9 @@ internal class NativeCrashConsumerTest : CommonTest() {
 
     private val nativeCrashDump = "Native crash dump"
 
-    private val counterReport: CounterReport = mock()
+    private val serviceEvent: ServiceEvent = mock()
     private val reportCreator: NativeCrashReportCreator = mock {
-        on { create(nativeCrashDump) } doReturn counterReport
+        on { create(nativeCrashDump) } doReturn serviceEvent
     }
 
     @get:Rule
@@ -64,7 +64,7 @@ internal class NativeCrashConsumerTest : CommonTest() {
     @Test
     fun consume() {
         nativeCrashConsumer.consume(nativeCrashDump)
-        verify(reportConsumer).consumeCrash(clientDescription, counterReport, commonArguments)
+        verify(reportConsumer).consumeCrash(clientDescription, serviceEvent, commonArguments)
     }
 
     @Test

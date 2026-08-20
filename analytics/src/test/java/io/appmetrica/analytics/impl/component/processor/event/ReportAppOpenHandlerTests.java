@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import android.util.Pair;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
@@ -326,25 +326,25 @@ public class ReportAppOpenHandlerTests extends CommonTest {
 
     @Test
     public void testProcessHandleOpenEvent() {
-        CounterReport counterReport = new CounterReport();
-        counterReport.setValue(mInput);
-        mReportAppOpenHandler.process(counterReport);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        serviceEvent.setValue(mInput);
+        mReportAppOpenHandler.process(serviceEvent);
         verify(vitalComponentDataProvider, times(shouldIncrementOpenId ? 1 : 0)).incrementOpenId();
         if (mShouldHandleDeeplink) {
             verify(vitalComponentDataProvider, times(1)).incrementAttributionId();
             verify(mComponent, times(1)).resetConfigHolder();
             verify(mEventFirstOccurrenceService, times(1)).reset();
-            assertThat(counterReport.getAttributionIdChanged()).isTrue();
+            assertThat(serviceEvent.getAttributionIdChanged()).isTrue();
         } else {
             verify(vitalComponentDataProvider, never()).incrementAttributionId();
             verify(mComponent, never()).resetConfigHolder();
             verifyNoMoreInteractions(mEventFirstOccurrenceService);
-            assertThat(counterReport.getAttributionIdChanged()).isNull();
+            assertThat(serviceEvent.getAttributionIdChanged()).isNull();
         }
     }
 
     @Test
     public void testProcessDoesNotBreakProcessing() {
-        assertThat(mReportAppOpenHandler.process(new CounterReport())).isFalse();
+        assertThat(mReportAppOpenHandler.process(new ServiceEvent())).isFalse();
     }
 }

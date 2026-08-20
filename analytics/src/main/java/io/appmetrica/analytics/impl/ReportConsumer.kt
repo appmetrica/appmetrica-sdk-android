@@ -19,31 +19,32 @@ internal class ReportConsumer(
     private val tasksExecutor: ICommonExecutor =
         GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor
 
-    fun consumeReport(reportData: CounterReport, extras: Bundle?) {
+    fun consumeReport(serviceEvent: ServiceEvent, extras: Bundle?) {
         DebugLogger.info(
             tag,
-            "reportData: type = ${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"
+            "serviceEvent: type = ${serviceEvent.type}; " +
+                "customType = ${serviceEvent.customType}; name = ${serviceEvent.name}"
         )
-        if (!reportData.isUndefinedType) {
+        if (!serviceEvent.isUndefinedType) {
             tasksExecutor.execute(
-                ReportRunnable(context, reportData, extras, clientRepository)
+                ReportRunnable(context, serviceEvent, extras, clientRepository)
             )
         } else {
-            DebugLogger.warning(tag, "Undefined report type: ${reportData.type}")
+            DebugLogger.warning(tag, "Undefined report type: ${serviceEvent.type}")
         }
     }
 
     override fun consumeCrash(
         clientDescription: ClientDescription,
-        counterReport: CounterReport,
+        serviceEvent: ServiceEvent,
         commonArguments: CommonArguments
     ) {
         DebugLogger.info(
             tag,
-            "consumeCrash with type: ${counterReport.type} and name: ${counterReport.name}: $clientDescription"
+            "consumeCrash with type: ${serviceEvent.type} and name: ${serviceEvent.name}: $clientDescription"
         )
         val unit = clientRepository.getOrCreateClient(clientDescription, commonArguments)
-        unit.handle(counterReport, commonArguments)
+        unit.handle(serviceEvent, commonArguments)
         clientRepository.remove(
             clientDescription.packageName,
             clientDescription.processID,

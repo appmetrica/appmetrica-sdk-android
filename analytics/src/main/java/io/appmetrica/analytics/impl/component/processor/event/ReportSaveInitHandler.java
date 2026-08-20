@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -59,15 +59,15 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final CounterReport reportData) {
+    public boolean process(@NonNull final ServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         if (vitalComponentDataProvider.isInitEventDone() == false) {
-            CounterReport reportToSave;
+            ServiceEvent serviceEventToSave;
 
             if (component.getFreshReportRequestConfig().isFirstActivationAsUpdate()) {
-                reportToSave = CounterReport.formUpdateReportData(reportData);
+                serviceEventToSave = ServiceEvent.formUpdateReportData(serviceEvent);
             } else {
-                reportToSave = CounterReport.formInitReportData(reportData);
+                serviceEventToSave = ServiceEvent.formInitReportData(serviceEvent);
             }
             final JSONObject eventValue = new JSONObject();
             final String packageInstaller = WrapUtils.getOrDefault(
@@ -88,8 +88,8 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
                 DebugLogger.INSTANCE.error(TAG, ex);
             }
             DebugLogger.INSTANCE.info(TAG, "save init event: %s", eventValue);
-            reportToSave.setValue(eventValue.toString());
-            component.getEventSaver().identifyAndSaveReport(reportToSave);
+            serviceEventToSave.setValue(eventValue.toString());
+            component.getEventSaver().identifyAndSaveReport(serviceEventToSave);
             vitalComponentDataProvider.setInitEventDone(true);
             vitalComponentDataProvider.setExternalAttributionWindowStart(timeProvider.currentTimeMillis());
         } else {

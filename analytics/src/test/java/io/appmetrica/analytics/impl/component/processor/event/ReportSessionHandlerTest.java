@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.ReportingReportProcessor;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -27,12 +27,12 @@ public class ReportSessionHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldInvokeReportSessionProcessor() {
-        CounterReport report = new CounterReport();
-        mReportSessionHandler.process(report);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        mReportSessionHandler.process(serviceEvent);
 
-        ArgumentCaptor<CounterReport> arg = ArgumentCaptor.forClass(CounterReport.class);
+        ArgumentCaptor<ServiceEvent> arg = ArgumentCaptor.forClass(ServiceEvent.class);
 
         verify(mReportSessionProcessor, times(1)).process(arg.capture());
-        assertThat(arg.getValue()).isEqualTo(report);
+        assertThat(arg.getValue()).isEqualTo(serviceEvent);
     }
 }

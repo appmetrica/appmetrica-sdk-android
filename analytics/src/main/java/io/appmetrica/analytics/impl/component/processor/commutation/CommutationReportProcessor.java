@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.BaseReportProcessor;
@@ -15,11 +15,11 @@ public class CommutationReportProcessor<T extends CommutationHandler, C extends 
         super(processingStrategyFactory, component);
     }
 
-    public boolean process(@NonNull CounterReport report, @NonNull final CommutationClientUnit clientUnit) {
-        return process(report, new ProcessItem<T>() {
+    public boolean process(@NonNull ServiceEvent serviceEvent, @NonNull final CommutationClientUnit clientUnit) {
+        return process(serviceEvent, new ProcessItem<T>() {
             @Override
-            public boolean process(T handler, CounterReport report) {
-                return handler.process(report, clientUnit);
+            public boolean process(T handler, ServiceEvent serviceEvent) {
+                return handler.process(serviceEvent, clientUnit);
             }
         });
     }

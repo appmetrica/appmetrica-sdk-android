@@ -4,8 +4,8 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleC
 
 internal class ServiceModuleCounterReportToCounterReportConverter {
 
-    fun convert(report: ServiceModuleCounterReport): CounterReport {
-        return CounterReport().apply {
+    fun convert(report: ServiceModuleCounterReport): ServiceEvent {
+        return ServiceEvent().apply {
             type = report.type
             report.name?.let { name = it }
             if (report.valueBytes == null) {

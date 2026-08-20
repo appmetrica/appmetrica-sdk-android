@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.ModuleEvent;
@@ -116,8 +115,6 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_CLEANUP.getTypeId()
     );
 
-    public static final String PAYLOAD_CRASH_ID = "payload_crash_id";
-
     // Prevent installation
     private EventsManager() {}
 
@@ -151,29 +148,6 @@ public final class EventsManager {
 
     public static boolean shouldGenerateGlobalNumber(int eventType) {
         return !EVENTS_WITHOUT_GLOBAL_NUMBER.contains(InternalEvents.valueOf(eventType));
-    }
-
-    public static CounterReport nativeCrashEntry(@NonNull InternalEvents eventType,
-                                                 @NonNull String nativeCrash,
-                                                 @NonNull String uuid,
-                                                 @NonNull PublicLogger logger,
-                                                 long creationTimestamp) {
-        Bundle payload = new Bundle();
-        payload.putString(PAYLOAD_CRASH_ID, uuid);
-        CounterReport counterReport = nativeCrashEntry(nativeCrash, eventType, logger, creationTimestamp);
-        counterReport.setPayload(payload);
-        return counterReport;
-    }
-
-    private static CounterReport nativeCrashEntry(@Nullable String nativeCrash,
-                                                  @NonNull InternalEvents eventType,
-                                                  @NonNull PublicLogger logger,
-                                                  long creationTimestamp) {
-        ClientCounterReport report = new ClientCounterReport(eventType.getTypeId(), logger, creationTimestamp);
-        if (nativeCrash != null) {
-            report.withExtendedValue(nativeCrash);
-        }
-        return report;
     }
 
     public static CounterReport reportEntry(InternalEvents eventType, @NonNull PublicLogger logger) {

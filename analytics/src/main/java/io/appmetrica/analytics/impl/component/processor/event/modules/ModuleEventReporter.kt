@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerReporter
@@ -10,13 +10,13 @@ internal class ModuleEventReporter(
     override val apiKey: String?,
     override val isMain: Boolean,
     private val eventSaver: EventSaver,
-    private val prototype: CounterReport
+    private val prototypeServiceEvent: ServiceEvent
 ) : ModuleEventServiceHandlerReporter {
 
     private val tag = "[ModuleEventReporter]"
 
     override fun report(report: CounterReportApi) {
-        val newReport = CounterReport.formReportCopyingMetadata(prototype).apply {
+        val serviceEvent = ServiceEvent.formReportCopyingMetadata(prototypeServiceEvent).apply {
             type = report.type
             customType = report.customType
             name = report.name
@@ -25,7 +25,7 @@ internal class ModuleEventReporter(
             valueProtocolVersion = report.valueProtocolVersion
             bytesTruncated = report.bytesTruncated
         }
-        DebugLogger.info(tag, "new report: $newReport")
-        eventSaver.identifyAndSaveReport(newReport)
+        DebugLogger.info(tag, "new report: $serviceEvent")
+        eventSaver.identifyAndSaveReport(serviceEvent)
     }
 }

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -19,15 +19,15 @@ public class SelfDiagnosticClientUnit implements ClientUnit {
     }
 
     @Override
-    public void handle(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
+    public void handle(@NonNull ServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
         if (mComponentUnit != null) {
-            DebugLogger.INSTANCE.info(TAG, "handle report %s with sdkConfig %s", report, sdkConfig);
-            mComponentUnit.handleReport(report, sdkConfig);
+            DebugLogger.INSTANCE.info(TAG, "handle serviceEvent %s with sdkConfig %s", serviceEvent, sdkConfig);
+            mComponentUnit.handleReport(serviceEvent, sdkConfig);
         } else {
             DebugLogger.INSTANCE.info(
                 TAG,
-                "ComponentUnit is null. Will not handle report %s with sdkConfig",
-                report,
+                "ComponentUnit is null. Will not handle serviceEvent %s with sdkConfig",
+                serviceEvent,
                 sdkConfig
             );
         }

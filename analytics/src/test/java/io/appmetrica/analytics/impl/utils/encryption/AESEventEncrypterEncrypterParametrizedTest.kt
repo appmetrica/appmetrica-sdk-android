@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.utils.encryption
 
 import android.util.Base64
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.gradle.testutils.data.RandomStringGenerator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -20,7 +20,7 @@ internal class AESEventEncrypterEncrypterParametrizedTest(
     @Suppress("unused") inputCaption: String
 ) : AESEventEncrypterTestBase() {
     private lateinit var aesEncrypter: AESEncrypter
-    private lateinit var counterReport: CounterReport
+    private lateinit var serviceEvent: ServiceEvent
     private lateinit var encryptedCounterReport: EncryptedCounterReport
     private var encryptedValue: String? = null
 
@@ -29,10 +29,10 @@ internal class AESEventEncrypterEncrypterParametrizedTest(
         super.setUp()
         aesEncrypter = createAESEncrypterMock()
         aesEventEncrypter = AESEventEncrypter(aesEncrypter)
-        counterReport = CounterReport()
-        counterReport.value = input
-        encryptedCounterReport = aesEventEncrypter.encrypt(counterReport)
-        encryptedValue = encryptedCounterReport.mCounterReport.value
+        serviceEvent = ServiceEvent()
+        serviceEvent.value = input
+        encryptedCounterReport = aesEventEncrypter.encrypt(serviceEvent)
+        encryptedValue = encryptedCounterReport.mServiceEvent.value
     }
 
     @Test

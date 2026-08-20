@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.component.processor.commutation
 
 import android.os.Bundle
 import android.os.ResultReceiver
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.IdentifiersData
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit
@@ -51,7 +51,7 @@ internal class ForceStartupHandlerTest : CommonTest() {
         on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifiersData
     }
 
-    private val counterReport: CounterReport = mock {
+    private val serviceEvent: ServiceEvent = mock {
         on { payload } doReturn bundle
     }
 
@@ -62,8 +62,8 @@ internal class ForceStartupHandlerTest : CommonTest() {
 
     @Test
     fun nullBundle() {
-        whenever(counterReport.payload).thenReturn(null)
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        whenever(serviceEvent.payload).thenReturn(null)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(null)
     }
 
@@ -72,8 +72,8 @@ internal class ForceStartupHandlerTest : CommonTest() {
         val emptyBundle: Bundle = mock {
             on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn null
         }
-        whenever(counterReport.payload).thenReturn(emptyBundle)
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        whenever(serviceEvent.payload).thenReturn(emptyBundle)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(null)
     }
 
@@ -83,14 +83,14 @@ internal class ForceStartupHandlerTest : CommonTest() {
         val filledBundle: Bundle = mock {
             on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifiersData
         }
-        whenever(counterReport.payload).thenReturn(filledBundle)
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        whenever(serviceEvent.payload).thenReturn(filledBundle)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(identifiersData)
     }
 
     @Test
     fun `process if force send refresh is true`() {
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verify(GlobalServiceLocator.getInstance().advertisingIdGetter).setInitialStateFromClientConfigIfNotDefined(true)
         verify(GlobalServiceLocator.getInstance().dataSendingRestrictionController)
             .setEnabledFromMainReporterIfNotYet(true)
@@ -107,8 +107,8 @@ internal class ForceStartupHandlerTest : CommonTest() {
         val bundleWithFalse: Bundle = mock {
             on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifierDataWithFalse
         }
-        whenever(counterReport.payload).thenReturn(bundleWithFalse)
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        whenever(serviceEvent.payload).thenReturn(bundleWithFalse)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         val arguments = CommonArguments.ReporterArguments(counterConfiguration, emptyMap())
         whenever(commutationDispatcherComponent.configuration).thenReturn(arguments)
         verifyNoInteractions(
@@ -119,8 +119,8 @@ internal class ForceStartupHandlerTest : CommonTest() {
 
     @Test
     fun `process force send refresh if payload is null`() {
-        whenever(counterReport.payload).thenReturn(null)
-        forceStartupHandler.process(counterReport, commutationClientUnit)
+        whenever(serviceEvent.payload).thenReturn(null)
+        forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verifyNoInteractions(
             GlobalServiceLocator.getInstance().advertisingIdGetter,
             GlobalServiceLocator.getInstance().dataSendingRestrictionController

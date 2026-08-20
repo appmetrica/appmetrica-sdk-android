@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
@@ -13,9 +13,9 @@ public class EncryptionCounterReportTests extends CommonTest {
 
     @Test
     public void testEncryptedCounterReportContainsCounterReportFromConstructor() {
-        CounterReport counterReport = mock(CounterReport.class);
-        mEncryptedCounterReport = new EncryptedCounterReport(counterReport, EventEncryptionMode.NONE);
-        assertThat(mEncryptedCounterReport.mCounterReport).isEqualTo(counterReport);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        mEncryptedCounterReport = new EncryptedCounterReport(serviceEvent, EventEncryptionMode.NONE);
+        assertThat(mEncryptedCounterReport.mServiceEvent).isEqualTo(serviceEvent);
     }
 
     @Test

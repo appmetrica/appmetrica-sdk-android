@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import android.location.Location;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -36,7 +36,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     @Mock
     private CommutationDispatcherComponent mRegularDispatcherComponent;
     @Mock
-    private CounterReport mCounterReport;
+    private ServiceEvent mServiceEvent;
     @Mock
     private CounterConfiguration mCounterConfiguration;
     @Mock
@@ -55,7 +55,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     public void testRestriction() {
         doReturn(null).when(mCounterConfiguration).getDataSendingEnabled();
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(mRestrictionController).setEnabledFromMainReporter(null);
     }
 
@@ -63,7 +63,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     public void advIdentifiersTrackingStatusForNull() {
         when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(null);
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()).updateStateFromClientConfig(true);
     }
 
@@ -71,7 +71,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     public void advIdentifiersTrackingStatusForTrue() {
         when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(true);
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter())
             .updateStateFromClientConfig(true);
     }
@@ -80,7 +80,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     public void advIdentifiersTrackingStatusForFalse() {
         when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(false);
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter())
             .updateStateFromClientConfig(false);
     }
@@ -90,7 +90,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         Location location = mock(Location.class);
         when(mCounterConfiguration.getManualLocation()).thenReturn(location);
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getLocationClientApi()).updateLocationFromClient(location);
     }
 
@@ -98,7 +98,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     public void updateLocationForNull() {
         when(mCounterConfiguration.getManualLocation()).thenReturn(null);
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
-        mHandler.process(mCounterReport, mClientUnit);
+        mHandler.process(mServiceEvent, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getLocationClientApi()).updateLocationFromClient(null);
     }
 }

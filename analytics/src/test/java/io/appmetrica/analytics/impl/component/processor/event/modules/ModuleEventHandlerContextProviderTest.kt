@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.EventSaver
@@ -38,8 +38,8 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
 
     private val moduleIdentifier = "Module id"
 
-    private val firstReport = mock<CounterReport>()
-    private val secondReport = mock<CounterReport>()
+    private val firstReport = mock<ServiceEvent>()
+    private val secondReport = mock<ServiceEvent>()
 
     @get:Rule
     val legacyModulePreferencesAdapterMockedConstructionRule =

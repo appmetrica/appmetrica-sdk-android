@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
 import io.appmetrica.analytics.IReporter;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -28,7 +28,7 @@ public class ReportCrashMetaInformationTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
     @Mock
-    private CounterReport counterReport;
+    private ServiceEvent serviceEvent;
 
     private ReportCrashMetaInformation handler;
 
@@ -36,17 +36,17 @@ public class ReportCrashMetaInformationTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         handler = new ReportCrashMetaInformation(componentUnit, reporter);
-        doReturn(InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()).when(counterReport).getType();
+        doReturn(InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()).when(serviceEvent).getType();
     }
 
     @Test
     public void testReturnFalse() {
-        assertThat(handler.process(counterReport)).isFalse();
+        assertThat(handler.process(serviceEvent)).isFalse();
     }
 
     @Test
     public void testReporting() {
-        handler.process(counterReport);
+        handler.process(serviceEvent);
         ArgumentCaptor<HashMap> mapCaptor = ArgumentCaptor.forClass(HashMap.class);
         verify(reporter).reportEvent(eq("crash_saved"), mapCaptor.capture());
         HashMap map = mapCaptor.getValue();

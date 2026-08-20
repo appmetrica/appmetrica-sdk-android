@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.utils.ServerTime;
@@ -35,7 +35,7 @@ public class ApplySettingsFromActivationConfigHandler extends ReportComponentHan
     }
 
     @Override
-    public boolean process(@NonNull CounterReport reportData) {
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         if (!vitalComponentDataProvider.isFirstEventDone() && !vitalComponentDataProvider.isInitEventDone()) {
             DebugLogger.INSTANCE.info(

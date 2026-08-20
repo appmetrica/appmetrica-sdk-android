@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import android.util.Base64;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ExternallyEncryptedEventCrypter implements EventEncrypter {
 
     private static final String TAG = "[ExternallyEncryptedEventCrypter]";
 
-    public EncryptedCounterReport encrypt(CounterReport input) {
+    public EncryptedCounterReport encrypt(ServiceEvent serviceEvent) {
         throw new UnsupportedOperationException();
     }
 

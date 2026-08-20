@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -31,8 +31,8 @@ public class SavePreloadInfoHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull CounterReport reportData) {
-        final String reportValue = reportData.getValue();
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
+        final String reportValue = serviceEvent.getValue();
         JSONObject preloadInfoJson = null;
         try {
             JSONObject valueJson = new JSONObject(reportValue);

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.clients;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
@@ -26,7 +26,7 @@ public class RegularClientUnitTest extends CommonTest {
     @Mock
     private RegularDispatcherComponent<ComponentUnit> mComponentUnit;
     @Mock
-    private CounterReport mReport;
+    private ServiceEvent mServiceEvent;
     @Mock
     private CommonArguments mClientConfiguration;
 
@@ -40,8 +40,8 @@ public class RegularClientUnitTest extends CommonTest {
 
     @Test
     public void testReport() {
-        mClientUnit.handle(mReport, mClientConfiguration);
-        verify(mComponentUnit, times(1)).handleReport(mReport, mClientConfiguration);
+        mClientUnit.handle(mServiceEvent, mClientConfiguration);
+        verify(mComponentUnit, times(1)).handleReport(mServiceEvent, mClientConfiguration);
     }
 
 }

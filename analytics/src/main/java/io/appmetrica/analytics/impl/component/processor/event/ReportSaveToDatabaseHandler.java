@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 
 public class ReportSaveToDatabaseHandler extends ReportComponentHandler {
@@ -11,8 +11,8 @@ public class ReportSaveToDatabaseHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final CounterReport reportData) {
-        getComponent().getEventSaver().identifyAndSaveReport(reportData);
+    public boolean process(@NonNull final ServiceEvent serviceEvent) {
+        getComponent().getEventSaver().identifyAndSaveReport(serviceEvent);
         return false;
     }
 }

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -71,7 +71,7 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     @Test
     public void testNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
         doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
             "feature_name",
             false
@@ -80,15 +80,15 @@ public class ReportFeaturesHandlerTest extends CommonTest {
             new FeatureDescription("feature_name", false),
             new FeatureDescription("feature_name_2", 2, true)
         ))).when(handler).getFeaturesFromSystem();
-        handler.process(report);
-        verify(mEventSaver, times(1)).saveFeaturesReport(any(CounterReport.class));
+        handler.process(serviceEvent);
+        verify(mEventSaver, times(1)).saveFeaturesReport(any(ServiceEvent.class));
         verify(mPreferencesComponentDbStorage, times(1)).putApplicationFeatures(anyString());
     }
 
     @Test
     public void testNoNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
         doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
             "feature_name",
             false
@@ -96,18 +96,18 @@ public class ReportFeaturesHandlerTest extends CommonTest {
         doReturn(new ArrayList<FeatureDescription>(Collections.singletonList(
             new FeatureDescription("feature_name", false)
         ))).when(handler).getFeaturesFromSystem();
-        handler.process(report);
+        handler.process(serviceEvent);
         verify(mComponentUnit, times(1)).markFeaturesChecked();
     }
 
     @Test
     public void testNoFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        CounterReport report = mock(CounterReport.class);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
         doReturn(null).when(handler).parseFeaturesFromStorage();
         doReturn(new ArrayList<FeatureDescription>()).when(handler).getFeaturesFromSystem();
-        handler.process(report);
-        verify(mEventSaver, times(1)).saveFeaturesReport(any(CounterReport.class));
+        handler.process(serviceEvent);
+        verify(mEventSaver, times(1)).saveFeaturesReport(any(ServiceEvent.class));
         verify(mPreferencesComponentDbStorage, times(1)).putApplicationFeatures(eq("[]"));
     }
 

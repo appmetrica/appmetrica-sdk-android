@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
@@ -50,13 +50,13 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
 
     @Test
     public void processShouldNotBreakEventProcessing() {
-        assertThat(mHandler.process(new CounterReport())).isFalse();
+        assertThat(mHandler.process(new ServiceEvent())).isFalse();
     }
 
     @Test
     public void nothingIsDoneIfFirstStateExists() {
         when(vitalComponentDataProvider.isFirstEventDone()).thenReturn(true);
-        mHandler.process(new CounterReport());
+        mHandler.process(new ServiceEvent());
         verifyNoMoreInteractions(mEventFirstOccurrenceService);
         verify(mConfig, never()).isFirstActivationAsUpdate();
     }
@@ -64,7 +64,7 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
     @Test
     public void nothingIsDoneIfInitStateExists() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
-        mHandler.process(new CounterReport());
+        mHandler.process(new ServiceEvent());
         verifyNoMoreInteractions(mEventFirstOccurrenceService);
         verify(mConfig, never()).isFirstActivationAsUpdate();
     }
@@ -72,20 +72,20 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
     @Test
     public void processShouldDisableProbablyTimeFromPastCheckingIfFirstActivationIsUpdate() {
         doReturn(true).when(mConfig).isFirstActivationAsUpdate();
-        mHandler.process(new CounterReport());
+        mHandler.process(new ServiceEvent());
         verify(mServerTime).disableTimeDifferenceChecking();
     }
 
     @Test
     public void processShouldNotDisableProbablyTimeFromPastCheckingIfFistActivationIsNotUpdate() {
         doReturn(false).when(mConfig).isFirstActivationAsUpdate();
-        mHandler.process(new CounterReport());
+        mHandler.process(new ServiceEvent());
         verify(mServerTime, never()).disableTimeDifferenceChecking();
     }
 
     @Test
     public void processResetEventFirstOccurrenceService() {
-        mHandler.process(new CounterReport());
+        mHandler.process(new ServiceEvent());
         verify(mEventFirstOccurrenceService).reset();
     }
 }

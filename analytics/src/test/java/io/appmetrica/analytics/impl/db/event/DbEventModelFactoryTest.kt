@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.db.event
 
 import android.content.Context
 import io.appmetrica.analytics.impl.AppEnvironment
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.session.SessionState
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
@@ -53,7 +53,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         "key" to "value".toByteArray()
     )
     private val valueProtocolVersion = 2
-    private val reportData: CounterReport = mock {
+    private val serviceEvent: ServiceEvent = mock {
         on { type } doReturn type
         on { customType } doReturn customType
         on { name } doReturn name
@@ -88,7 +88,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         on { getAndIncrementEventGlobalNumber() } doReturn globalNumber
         on { getAndIncrementNumberOfType(reportType) } doReturn numberOfType
     }
-    private val encryptedCounterReport = EncryptedCounterReport(reportData, eventEncryptionMode)
+    private val encryptedCounterReport = EncryptedCounterReport(serviceEvent, eventEncryptionMode)
     private val reportRequestConfig: ReportRequestConfig = mock()
     private val environmentRevision = AppEnvironment.EnvironmentRevision(environmentRevisionValue, revisionNumber)
     private val eventExtrasConverter: EventExtrasConverter = mock {

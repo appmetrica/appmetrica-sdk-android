@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -22,8 +22,8 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final CounterReport reportData) {
-        String eventValue = reportData.getValue();
+    public boolean process(@NonNull final ServiceEvent serviceEvent) {
+        String eventValue = serviceEvent.getValue();
         if (TextUtils.isEmpty(eventValue) == false) {
             try {
                 JSONObject jsonObject = new JSONObject(eventValue);
@@ -32,7 +32,7 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                     getComponent().getVitalComponentDataProvider().incrementOpenId();
                     String deeplink = jsonObject.optString(EventsManager.EVENT_OPEN_LINK_KEY);
                     if (isReattribution(deeplink)) {
-                        reportData.setAttributionIdChanged(true);
+                        serviceEvent.setAttributionIdChanged(true);
                         handleReattributionParameter();
                     }
                 }

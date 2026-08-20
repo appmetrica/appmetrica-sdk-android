@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -33,8 +33,8 @@ public class AESEventEncrypter implements EventEncrypter {
     }
 
     @NonNull
-    public EncryptedCounterReport encrypt(@NonNull final CounterReport counterReport) {
-        String inputValue = counterReport.getValue();
+    public EncryptedCounterReport encrypt(@NonNull final ServiceEvent serviceEvent) {
+        String inputValue = serviceEvent.getValue();
         String result = null;
         if (TextUtils.isEmpty(inputValue) == false) {
             try {
@@ -47,8 +47,8 @@ public class AESEventEncrypter implements EventEncrypter {
                 DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             }
         }
-        counterReport.setValue(result);
-        return new EncryptedCounterReport(counterReport, getEncryptionMode());
+        serviceEvent.setValue(result);
+        return new EncryptedCounterReport(serviceEvent, getEncryptionMode());
     }
 
     @NonNull

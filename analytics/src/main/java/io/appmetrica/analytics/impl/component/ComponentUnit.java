@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.ReportingTaskProcessor;
@@ -173,8 +173,8 @@ public class ComponentUnit implements IReportableComponent, IComponent,
             this,
             vitalComponentDataProvider,
             new SessionManagerStateMachine.EventSaver() {
-                public void saveEvent(@NonNull CounterReport reportData, @NonNull SessionState sessionState) {
-                    mEventSaver.saveReport(reportData, sessionState);
+                public void saveEvent(@NonNull ServiceEvent serviceEvent, @NonNull SessionState sessionState) {
+                    mEventSaver.saveReport(serviceEvent, sessionState);
                 }
             }
         );
@@ -228,14 +228,14 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     }
 
     @Override
-    public void handleReport(@NonNull CounterReport reportData) {
+    public void handleReport(@NonNull ServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(
             TAG,
             "A new report for component \"%s\", data: %s",
             mComponentId,
-            reportData
+            serviceEvent
         );
-        logEvent(reportData, "Event received on service");
+        logEvent(serviceEvent, "Event received on service");
 
         // Just to be sure. Don't report if API key isn't defined for some reasons
         if (!Utils.isApiKeyDefined(mComponentId.getApiKey())) {
@@ -243,7 +243,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
             return;
         }
 
-        mReportProcessor.process(reportData);
+        mReportProcessor.process(serviceEvent);
     }
 
     @Override
@@ -304,8 +304,8 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         mEventSaver.saveFeaturesCheckVersion();
     }
 
-    public void addAppEnvironmentValue(CounterReport report) {
-        Map<String, String> environment = JsonHelper.jsonToMap(report.getValue());
+    public void addAppEnvironmentValue(ServiceEvent serviceEvent) {
+        Map<String, String> environment = JsonHelper.jsonToMap(serviceEvent.getValue());
         if (environment != null) {
             for (Map.Entry<String, String> entry : environment.entrySet()) {
                 mAppEnvironment.add(entry.getKey(), entry.getValue());
@@ -453,8 +453,8 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         return autoCollectedDataSubscribersHolder;
     }
 
-    private void logEvent(final CounterReport reportData, String msg) {
-        String log = PublicLogConstructor.constructCounterReportLog(reportData, msg);
+    private void logEvent(final ServiceEvent serviceEvent, String msg) {
+        String log = PublicLogConstructor.constructCounterReportLog(serviceEvent, msg);
         if (log != null) {
             mPublicLogger.info(log);
         }

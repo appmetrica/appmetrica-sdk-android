@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.encryption
 
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,9 +16,8 @@ internal class EventEncrypterProviderByEventTypeTests(
 
     @Test
     fun returnExpectedEncryption() {
-        val counterReport = CounterReport()
-        counterReport.type = eventTypeId
-        assertThat(eventEncrypterProvider.getEventEncrypter(counterReport).javaClass.getName())
+        val serviceEvent = ServiceEvent().apply { type = eventTypeId }
+        assertThat(eventEncrypterProvider.getEventEncrypter(serviceEvent).javaClass.getName())
             .isEqualTo(eventEncrypterClassName)
     }
 

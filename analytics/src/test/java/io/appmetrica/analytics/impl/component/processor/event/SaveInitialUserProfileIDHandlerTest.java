@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class SaveInitialUserProfileIDHandlerTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
 
-    private final CounterReport report = new CounterReport();
+    private final ServiceEvent serviceEvent = new ServiceEvent();
 
     private SaveInitialUserProfileIDHandler handler;
 
@@ -31,22 +31,22 @@ public class SaveInitialUserProfileIDHandlerTest extends CommonTest {
     @Test
     public void process() {
         String userProfileID = "user_profile_id";
-        report.setProfileID(userProfileID);
-        handler.process(report);
+        serviceEvent.setProfileID(userProfileID);
+        handler.process(serviceEvent);
         verify(componentUnit).setProfileID(userProfileID);
     }
 
     @Test
     public void processForNullUserProfileID() {
-        report.setProfileID(null);
-        handler.process(report);
+        serviceEvent.setProfileID(null);
+        handler.process(serviceEvent);
         verify(componentUnit, never()).setProfileID(nullable(String.class));
     }
 
     @Test
     public void processForEmptyUserProfileID() {
-        report.setProfileID("");
-        handler.process(report);
+        serviceEvent.setProfileID("");
+        handler.process(serviceEvent);
         verify(componentUnit, never()).setProfileID(nullable(String.class));
     }
 }

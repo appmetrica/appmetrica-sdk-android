@@ -1,25 +1,29 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
+import android.annotation.SuppressLint
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.gradle.testutils.CommonTest
-import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
+@SuppressLint("RobolectricUsage")
+@RunWith(RobolectricTestRunner::class)
 internal class ModuleEventReporterTest : CommonTest() {
 
     private val eventSaver = mock<EventSaver>()
 
-    private val prototypeReport = mock<CounterReport>()
+    private val prototypeServiceEvent = ServiceEvent()
 
     private val apiKey = UUID.randomUUID().toString()
     private val typeValue = 22
@@ -40,81 +44,76 @@ internal class ModuleEventReporterTest : CommonTest() {
         on { bytesTruncated } doReturn bytesTruncatedValue
     }
 
-    private val newReport = mock<CounterReport>()
     private val isMain = true
-
-    @get:Rule
-    val counterReportMockedStaticRule = MockedStaticRule(CounterReport::class.java)
 
     private lateinit var moduleEventReporter: ModuleEventReporter
 
     @Before
     fun setUp() {
-        whenever(CounterReport.formReportCopyingMetadata(prototypeReport)).thenReturn(newReport)
-        moduleEventReporter = ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport)
+        moduleEventReporter = ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent)
     }
 
     @Test
     fun report() {
         moduleEventReporter.report(moduleReport)
-        inOrder(newReport, eventSaver) {
-            verify(newReport).type = typeValue
-            verify(newReport).customType = customTypeValue
-            verify(newReport).name = nameValue
-            verify(newReport).value = reportValue
-            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
-            verify(newReport).bytesTruncated = bytesTruncatedValue
-            verify(eventSaver).identifyAndSaveReport(newReport)
-        }
+        val captor = argumentCaptor<ServiceEvent>()
+        verify(eventSaver).identifyAndSaveReport(captor.capture())
+        val saved = captor.firstValue
+        assertThat(saved.type).isEqualTo(typeValue)
+        assertThat(saved.customType).isEqualTo(customTypeValue)
+        assertThat(saved.name).isEqualTo(nameValue)
+        assertThat(saved.valueBytes).isEqualTo(valueBytesValue)
+        assertThat(saved.valueProtocolVersion).isEqualTo(valueProtocolVersionValue)
+        assertThat(saved.bytesTruncated).isEqualTo(bytesTruncatedValue)
     }
 
     @Test
     fun `report without string value`() {
         whenever(moduleReport.value).thenReturn(null)
         moduleEventReporter.report(moduleReport)
-        inOrder(newReport, eventSaver) {
-            verify(newReport).type = typeValue
-            verify(newReport).customType = customTypeValue
-            verify(newReport).name = nameValue
-            verify(newReport).valueBytes = valueBytesValue
-            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
-            verify(newReport).bytesTruncated = bytesTruncatedValue
-            verify(eventSaver).identifyAndSaveReport(newReport)
-        }
+        val captor = argumentCaptor<ServiceEvent>()
+        verify(eventSaver).identifyAndSaveReport(captor.capture())
+        val saved = captor.firstValue
+        assertThat(saved.type).isEqualTo(typeValue)
+        assertThat(saved.customType).isEqualTo(customTypeValue)
+        assertThat(saved.name).isEqualTo(nameValue)
+        assertThat(saved.valueBytes).isEqualTo(valueBytesValue)
+        assertThat(saved.valueProtocolVersion).isEqualTo(valueProtocolVersionValue)
+        assertThat(saved.bytesTruncated).isEqualTo(bytesTruncatedValue)
     }
 
     @Test
     fun `report without bytes value`() {
         whenever(moduleReport.valueBytes).thenReturn(null)
         moduleEventReporter.report(moduleReport)
-        inOrder(newReport, eventSaver) {
-            verify(newReport).type = typeValue
-            verify(newReport).customType = customTypeValue
-            verify(newReport).name = nameValue
-            verify(newReport).value = reportValue
-            verify(newReport).valueProtocolVersion = valueProtocolVersionValue
-            verify(newReport).bytesTruncated = bytesTruncatedValue
-            verify(eventSaver).identifyAndSaveReport(newReport)
-        }
+        val captor = argumentCaptor<ServiceEvent>()
+        verify(eventSaver).identifyAndSaveReport(captor.capture())
+        val saved = captor.firstValue
+        assertThat(saved.type).isEqualTo(typeValue)
+        assertThat(saved.customType).isEqualTo(customTypeValue)
+        assertThat(saved.name).isEqualTo(nameValue)
+        assertThat(saved.value).isEqualTo(reportValue)
+        assertThat(saved.valueProtocolVersion).isEqualTo(valueProtocolVersionValue)
+        assertThat(saved.bytesTruncated).isEqualTo(bytesTruncatedValue)
     }
 
     @Test
     fun `main for true`() {
-        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport).isMain).isTrue()
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent).isMain).isTrue()
     }
 
     @Test
     fun `main for false`() {
-        assertThat(ModuleEventReporter(apiKey, false, eventSaver, prototypeReport).isMain).isFalse()
+        assertThat(ModuleEventReporter(apiKey, false, eventSaver, prototypeServiceEvent).isMain).isFalse()
     }
 
     @Test
     fun `api key`() {
-        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport).apiKey).isEqualTo(apiKey)
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent).apiKey).isEqualTo(apiKey)
     }
 
     @Test
     fun `api key for null`() {
-        assertThat(ModuleEventReporter(null, isMain, eventSaver, prototypeReport).apiKey).isNull()
+        assertThat(ModuleEventReporter(null, isMain, eventSaver, prototypeServiceEvent).apiKey).isNull()
     }
 }

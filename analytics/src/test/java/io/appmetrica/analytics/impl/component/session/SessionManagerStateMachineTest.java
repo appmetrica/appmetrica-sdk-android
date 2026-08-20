@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.session;
 
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
@@ -56,18 +56,18 @@ public class SessionManagerStateMachineTest extends CommonTest {
     @Mock
     private Session mBgSession;
     @Mock
-    private CounterReport mCounterReport;
+    private ServiceEvent mServiceEvent;
     @Mock
     private VitalComponentDataProvider vitalComponentDataProvider;
     @Mock
     private DatabaseHelper mDatabaseHelper;
 
     @Rule
-    public final MockedConstructionRule<CounterReport> counterReportMockRule =
-        new MockedConstructionRule<>(CounterReport.class);
+    public final MockedConstructionRule<ServiceEvent> counterReportMockRule =
+        new MockedConstructionRule<>(ServiceEvent.class);
 
     @Rule
-    public final MockedStaticRule<CounterReport> counterReportStaticRule = new MockedStaticRule<>(CounterReport.class);
+    public final MockedStaticRule<ServiceEvent> counterReportStaticRule = new MockedStaticRule<>(ServiceEvent.class);
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -96,71 +96,71 @@ public class SessionManagerStateMachineTest extends CommonTest {
 
     @Test
     public void testCreateBackgroundSession() {
-        mManager.getSomeSession(mCounterReport);
+        mManager.getSomeSession(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
         verify(mComponentUnit.getPublicLogger()).info("Start background session");
     }
 
     @Test
     public void testCreateForeground() {
-        mManager.heartbeat(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
         verify(mComponentUnit.getPublicLogger()).info("Start foreground session");
     }
 
     @Test
     public void testCreateBackgroundSessionIfLoggerDisabled() {
-        mManager.getSomeSession(mCounterReport);
+        mManager.getSomeSession(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
     }
 
     @Test
     public void testCreateForegroundIfLoggerDisabled() {
-        mManager.heartbeat(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
     }
 
     @Test
     public void testCreateNewForeground() throws InterruptedException {
-        mManager.heartbeat(mCounterReport);
-        Session oldSession = mManager.getSomeSession(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
+        Session oldSession = mManager.getSomeSession(mServiceEvent);
         long oldSessionId = oldSession.getId();
 
         doReturn(false).when(oldSession).isValid(anyLong());
 
-        mManager.heartbeat(mCounterReport);
-        assertThat(mManager.getSomeSession(mCounterReport).getId()).isNotEqualTo(oldSessionId);
+        mManager.heartbeat(mServiceEvent);
+        assertThat(mManager.getSomeSession(mServiceEvent).getId()).isNotEqualTo(oldSessionId);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
     }
 
     @Test
     public void testToggleForegroundToBackground() throws InterruptedException {
-        mManager.heartbeat(mCounterReport);
-        Session oldSession = mManager.getSomeSession(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
+        Session oldSession = mManager.getSomeSession(mServiceEvent);
         long oldSessionType = oldSession.getType().getCode();
         doReturn(false).when(oldSession).isValid(anyLong());
 
-        assertThat(mManager.getSomeSession(mCounterReport).getType().getCode()).isNotEqualTo(oldSessionType);
+        assertThat(mManager.getSomeSession(mServiceEvent).getType().getCode()).isNotEqualTo(oldSessionType);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
     }
 
     @Test
     public void testToggleBackgroundToForeground() {
-        CounterReport aliveReport = mock(CounterReport.class);
-        when(CounterReport.formAliveReportData(mCounterReport)).thenReturn(aliveReport);
-        mManager.getSomeSession(mCounterReport);
+        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        when(ServiceEvent.formAliveReportData(mServiceEvent)).thenReturn(serviceEvent);
+        mManager.getSomeSession(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
-        assertThat(mManager.getSomeSession(mCounterReport).getType()).isEqualTo(SessionType.BACKGROUND);
+        assertThat(mManager.getSomeSession(mServiceEvent).getType()).isEqualTo(SessionType.BACKGROUND);
 
-        final SessionState current = mManager.getCurrentSessionState(mCounterReport);
+        final SessionState current = mManager.getCurrentSessionState(mServiceEvent);
 
-        mManager.heartbeat(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
 
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
-        assertThat(mManager.getSomeSession(mCounterReport).getType()).isEqualTo(SessionType.FOREGROUND);
+        assertThat(mManager.getSomeSession(mServiceEvent).getType()).isEqualTo(SessionType.FOREGROUND);
 
         verify(mManager.getSaver(), times(1)).saveEvent(
-            eq(aliveReport),
+            eq(serviceEvent),
             argThat(argument ->
                 argument.getSessionId() == current.getSessionId()
                     && argument.getSessionType() == current.getSessionType()
@@ -170,8 +170,8 @@ public class SessionManagerStateMachineTest extends CommonTest {
 
     @Test
     public void testCrashInBackground() {
-        Session session = mManager.getSomeSession(mCounterReport);
-        mManager.stopCurrentSessionDueToCrash(mCounterReport);
+        Session session = mManager.getSomeSession(mServiceEvent);
+        mManager.stopCurrentSessionDueToCrash(mServiceEvent);
         assertThat(mManager.getState()).isNull();
         verify(session).markSessionAsCrashed();
         verify(session).updateAliveReportNeeded(false);
@@ -180,9 +180,9 @@ public class SessionManagerStateMachineTest extends CommonTest {
 
     @Test
     public void testCrashInForeground() {
-        mManager.heartbeat(mCounterReport);
-        Session session = mManager.getSomeSession(mCounterReport);
-        mManager.stopCurrentSessionDueToCrash(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
+        Session session = mManager.getSomeSession(mServiceEvent);
+        mManager.stopCurrentSessionDueToCrash(mServiceEvent);
         assertThat(mManager.getState()).isNull();
         verify(session).markSessionAsCrashed();
         verify(session).updateAliveReportNeeded(false);
@@ -191,43 +191,43 @@ public class SessionManagerStateMachineTest extends CommonTest {
 
     @Test
     public void testCrashInBackgroundIfLoggerIsDisabled() {
-        Session session = mManager.getSomeSession(mCounterReport);
-        mManager.stopCurrentSessionDueToCrash(mCounterReport);
+        Session session = mManager.getSomeSession(mServiceEvent);
+        mManager.stopCurrentSessionDueToCrash(mServiceEvent);
         verify(session).markSessionAsCrashed();
         verify(session).updateAliveReportNeeded(false);
     }
 
     @Test
     public void testCrashInForegroundIfLoggerIsDisabled() {
-        mManager.heartbeat(mCounterReport);
-        Session session = mManager.getSomeSession(mCounterReport);
-        mManager.stopCurrentSessionDueToCrash(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
+        Session session = mManager.getSomeSession(mServiceEvent);
+        mManager.stopCurrentSessionDueToCrash(mServiceEvent);
         verify(session).markSessionAsCrashed();
         verify(session).updateAliveReportNeeded(false);
     }
 
     @Test
     public void testGetBackgroundAndUpdateLastActiveTime() {
-        mManager.getSomeSession(mCounterReport);
-        Session session = mManager.getSomeSession(mCounterReport);
+        mManager.getSomeSession(mServiceEvent);
+        Session session = mManager.getSomeSession(mServiceEvent);
         assertThat(session.getType()).isEqualTo(SessionType.BACKGROUND);
         verify(session, times(1)).updateLastActiveTime(anyLong());
     }
 
     @Test
     public void testNoUpdateLastActiveTimeForForegroundSession() {
-        mManager.heartbeat(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
-        Session session = mManager.getSomeSession(mCounterReport);
+        Session session = mManager.getSomeSession(mServiceEvent);
         assertThat(session.getType()).isEqualTo(SessionType.FOREGROUND);
         verify(session, never()).updateLastActiveTime(anyLong());
     }
 
     @Test
     public void testHeartbeatForForegroundSession() {
-        mManager.heartbeat(mCounterReport);
-        Session session = mManager.getSomeSession(mCounterReport);
-        mManager.heartbeat(mCounterReport);
+        mManager.heartbeat(mServiceEvent);
+        Session session = mManager.getSomeSession(mServiceEvent);
+        mManager.heartbeat(mServiceEvent);
         assertThat(session.getType()).isEqualTo(SessionType.FOREGROUND);
         verify(session, times(1)).updateLastActiveTime(anyLong());
     }
@@ -236,17 +236,18 @@ public class SessionManagerStateMachineTest extends CommonTest {
     public void testGetCurrentSessionStateTimeOffsetIfReportDataDoesNotContainCreationElapsedRealtime() {
         SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
         when(systemTimeProvider.elapsedRealtime()).thenReturn(0L);
-        CounterReport counterReport = new CounterReport("Test value", "Test event",
-            InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
-        assertThat(mManager.getCurrentSessionState(counterReport).getReportTime()).isLessThan(1000);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        serviceEvent.setName("Test event");
+        serviceEvent.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
+        assertThat(mManager.getCurrentSessionState(serviceEvent).getReportTime()).isLessThan(1000);
     }
 
     @Test
     public void testGetCurrentSessionStateTimeOffsetIfReportContainsElapsedReatime() {
         long creationElapsedRealtime = TimeUnit.SECONDS.toMillis(61);
-        CounterReport counterReport = mock();
-        when(counterReport.getCreationElapsedRealtime()).thenReturn(creationElapsedRealtime);
-        SessionState sessionState = mManager.getCurrentSessionState(counterReport);
+        ServiceEvent serviceEvent = mock();
+        when(serviceEvent.getCreationElapsedRealtime()).thenReturn(creationElapsedRealtime);
+        SessionState sessionState = mManager.getCurrentSessionState(serviceEvent);
         long sessionStateTime = sessionState.getReportTime();
         assertThat(sessionStateTime).isEqualTo(61);
     }
@@ -264,7 +265,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
+        SessionState currentSessionState = mManager.peekCurrentSessionState(mServiceEvent);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
         assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(currentSessionState.getReportTime()).isEqualTo(0);
@@ -287,7 +288,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
+        SessionState currentSessionState = mManager.peekCurrentSessionState(mServiceEvent);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
         assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(currentSessionState.getReportTime()).isEqualTo(lastEventTimeOffset);
@@ -311,7 +312,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
+        SessionState currentSessionState = mManager.peekCurrentSessionState(mServiceEvent);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
         assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.BACKGROUND);
         assertThat(currentSessionState.getReportTime()).isEqualTo(lastEventTimeOffset);
@@ -329,7 +330,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        assertThat(mManager.peekCurrentSessionState(mCounterReport)).isNull();
+        assertThat(mManager.peekCurrentSessionState(mServiceEvent)).isNull();
     }
 
     @Test
@@ -349,8 +350,8 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mFgSession.isSessionCrashed()).thenReturn(true);
         when(mDatabaseHelper.getSessionRequestParams(sessionId, SessionType.FOREGROUND))
             .thenReturn(sessionRequestParams);
-        when(mCounterReport.getCreationTimestamp()).thenReturn(reportTimestamp);
-        when(mCounterReport.getCreationElapsedRealtime()).thenReturn(reportElapsedRealtime);
+        when(mServiceEvent.getCreationTimestamp()).thenReturn(reportTimestamp);
+        when(mServiceEvent.getCreationElapsedRealtime()).thenReturn(reportElapsedRealtime);
         when(mSessionFromPastFactory.create(any())).thenReturn(fromPastSession);
         mManager = new SessionManagerStateMachine(
             mComponentUnit,
@@ -360,7 +361,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mSessionFromPastFactory
         );
 
-        SessionState result = mManager.peekCurrentSessionState(mCounterReport);
+        SessionState result = mManager.peekCurrentSessionState(mServiceEvent);
 
         assertThat(result).isNotNull();
         assertThat(result.getSessionId()).isEqualTo(fromPastSessionId);
@@ -392,8 +393,8 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        mManager.heartbeat(new CounterReport());
-        SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
+        mManager.heartbeat(new ServiceEvent());
+        SessionState currentSessionState = mManager.peekCurrentSessionState(mServiceEvent);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
         assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(currentSessionState.getReportTime()).isEqualTo(lastEventTimeOffset);
@@ -423,14 +424,14 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        manager.heartbeat(mCounterReport);
+        manager.heartbeat(mServiceEvent);
 
         // gap between first and current is small — threshold stays at firstSessionId
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(fgId);
 
         // Session is recreated with a large ID gap (simulates long-lived process) — threshold slides
         when(mFgSession.isValid(anyLong())).thenReturn(false);
-        manager.heartbeat(mCounterReport);
+        manager.heartbeat(mServiceEvent);
 
         assertThat(manager.getThresholdSessionIdForActualSessions())
             .isEqualTo(newFgId - SessionManagerStateMachine.SESSION_PROTECTION_WINDOW);
@@ -452,7 +453,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        manager.getSomeSession(mCounterReport);
+        manager.getSomeSession(mServiceEvent);
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(bgId);
     }
 
@@ -472,7 +473,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        manager.getSomeSession(mCounterReport);
+        manager.getSomeSession(mServiceEvent);
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(createdBgId);
     }
 
@@ -494,7 +495,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
             mBgSessionFactory,
             mSessionFromPastFactory
         );
-        manager.heartbeat(mCounterReport);
+        manager.heartbeat(mServiceEvent);
 
         long expectedThreshold = latestSessionId - SessionManagerStateMachine.SESSION_PROTECTION_WINDOW;
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(expectedThreshold);

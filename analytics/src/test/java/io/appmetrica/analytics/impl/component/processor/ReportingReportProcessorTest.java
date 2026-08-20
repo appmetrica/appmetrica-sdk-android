@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.EventHandler;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -34,9 +34,9 @@ public class ReportingReportProcessorTest extends CommonTest {
 
     @Test
     public void testHandlerCalledWithClientUnit() {
-        CounterReport report = new CounterReport();
-        mProcessor.process(report);
-        verify(mHandler, times(1)).process(report);
+        ServiceEvent serviceEvent = new ServiceEvent();
+        mProcessor.process(serviceEvent);
+        verify(mHandler, times(1)).process(serviceEvent);
     }
 
 }

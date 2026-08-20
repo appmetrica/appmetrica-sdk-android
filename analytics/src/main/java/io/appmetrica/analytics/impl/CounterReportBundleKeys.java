@@ -12,11 +12,8 @@ final class CounterReportBundleKeys {
     static final String PROFILE_ID = COUNTER_REPORT_KEY_PREFIX + "ProfileID";
     static final String CREATION_ELAPSED_REALTIME = COUNTER_REPORT_KEY_PREFIX + "CreationElapsedRealtime";
     static final String CREATION_TIMESTAMP = COUNTER_REPORT_KEY_PREFIX + "CreationTimestamp";
-    static final String UNIQUENESS_STATUS = COUNTER_REPORT_KEY_PREFIX + "UniquenessStatus";
     static final String SOURCE = COUNTER_REPORT_KEY_PREFIX + "Source";
     static final String PAYLOAD = COUNTER_REPORT_KEY_PREFIX + "Payload";
-    static final String ATTRIBUTION_ID_CHANGED = COUNTER_REPORT_KEY_PREFIX + "AttributionIdChanged";
-    static final String OPEN_ID = COUNTER_REPORT_KEY_PREFIX + "OpenId";
     static final String EXTRAS = COUNTER_REPORT_KEY_PREFIX + "Extras";
     static final String VALUE_PROTOCOL_VERSION = COUNTER_REPORT_KEY_PREFIX + "ValueProtocolVersion";
 }

@@ -14,14 +14,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Predicate;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-
-import static org.mockito.Mockito.mock;
 
 @SuppressLint("RobolectricUsage") // Parcelable
 @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -33,71 +29,71 @@ public class CounterReportMetaDataTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
     public static Collection<Object[]> getData() {
         return Arrays.asList(
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formAliveReportData(input);
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formAliveReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_ALIVE, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formFeaturesReportData(input, "some value");
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formFeaturesReportData(serviceEvent, "some value");
                 }
             }, InternalEvents.EVENT_TYPE_APP_FEATURES, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formFirstEventReportData(input);
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formFirstEventReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formInitReportData(input);
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formInitReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_INIT, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formPermissionsReportData(
-                        input,
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formPermissionsReportData(
+                        serviceEvent,
                         new ArrayList<PermissionState>(),
                         null,
-                        mock(AppStandbyBucketConverter.class),
+                        null,
                         new ArrayList<String>()
                     );
                 }
             }, InternalEvents.EVENT_TYPE_PERMISSIONS, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formSessionStartReportData(input, mock(ExtraMetaInfoRetriever.class));
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formSessionStartReportData(serviceEvent, null);
                 }
             }, InternalEvents.EVENT_TYPE_START, ""},
-            new Object[]{new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
 
                 @Override
-                public CounterReport apply(CounterReport input) {
-                    return CounterReport.formUpdateReportData(input);
+                public ServiceEvent apply(ServiceEvent serviceEvent) {
+                    return ServiceEvent.formUpdateReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_APP_UPDATE, ""}
         );
     }
 
     @NonNull
-    private final Function<CounterReport, CounterReport> reportProvider;
+    private final Function<ServiceEvent, ServiceEvent> reportProvider;
     @NonNull
     private final String expectedName;
     private final int expectedType;
 
-    public CounterReportMetaDataTest(@NonNull Function<CounterReport, CounterReport> reportProvider,
+    public CounterReportMetaDataTest(@NonNull Function<ServiceEvent, ServiceEvent> reportProvider,
                                      @NonNull InternalEvents expectedType,
                                      @NonNull String expectedName) {
         this.reportProvider = reportProvider;
@@ -112,40 +108,30 @@ public class CounterReportMetaDataTest extends CommonTest {
         String originalEventEnvironment = "original event environment";
         long originalElapsedRealtime = 7090;
         long originalCreationTimestamp = 666777;
-        boolean attributionIdChanged = new Random().nextBoolean();
-        final int openId = 8000;
         Bundle originalPayload = new Bundle();
         originalPayload.putInt("some key", 100);
         Map<String, byte[]> extras = Collections.singletonMap("key", new byte[]{1, 3, 5, 7});
         int valueProtocolVersion = 2;
-        CounterReport originalReport = new CounterReport();
-        originalReport.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
-        originalReport.setCustomType(InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId());
-        originalReport.setName("original event");
-        originalReport.setValue(originalValue);
-        originalReport.setEventEnvironment(originalEventEnvironment);
-        originalReport.setProfileID(originalProfileId);
-        originalReport.setBytesTruncated(4);
-        originalReport.setFirstOccurrenceStatus(FirstOccurrenceStatus.FIRST_OCCURRENCE);
-        originalReport.setCreationEllapsedRealtime(originalElapsedRealtime);
-        originalReport.setCreationTimestamp(originalCreationTimestamp);
-        originalReport.setSource(EventSource.JS);
-        originalReport.setPayload(originalPayload);
-        originalReport.setAttributionIdChanged(attributionIdChanged);
-        originalReport.setOpenId(openId);
-        originalReport.setExtras(extras);
-        originalReport.setValueProtocolVersion(valueProtocolVersion);
-        Assertions.INSTANCE.ObjectPropertyAssertions(reportProvider.apply(originalReport))
-            .withIgnoredFields("systemTimeProvider")
+        ServiceEvent originalServiceEvent = new ServiceEvent();
+        originalServiceEvent.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
+        originalServiceEvent.setCustomType(InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId());
+        originalServiceEvent.setName("original event");
+        originalServiceEvent.setValue(originalValue);
+        originalServiceEvent.setEventEnvironment(originalEventEnvironment);
+        originalServiceEvent.setProfileID(originalProfileId);
+        originalServiceEvent.setBytesTruncated(4);
+        originalServiceEvent.setCreationElapsedRealtime(originalElapsedRealtime);
+        originalServiceEvent.setCreationTimestamp(originalCreationTimestamp);
+        originalServiceEvent.setSource(EventSource.JS);
+        originalServiceEvent.setPayload(originalPayload);
+        originalServiceEvent.setExtras(extras);
+        originalServiceEvent.setValueProtocolVersion(valueProtocolVersion);
+        ServiceEvent resultServiceEvent = reportProvider.apply(originalServiceEvent);
+        Assertions.INSTANCE.ObjectPropertyAssertions(resultServiceEvent)
+            .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "isUndefinedType")
             .withPrivateFields(true)
             .withFinalFieldOnly(false)
             .checkField("name", expectedName)
-            .checkFieldMatchPredicate("value", new Predicate<String>() {
-                @Override
-                public boolean test(String s) {
-                    return !originalValue.equals(s);
-                }
-            })
             .checkField("eventEnvironment", originalEventEnvironment)
             .checkField("type", expectedType)
             .checkField("customType", 0)
@@ -155,11 +141,14 @@ public class CounterReportMetaDataTest extends CommonTest {
             .checkField("creationTimestamp", originalCreationTimestamp)
             .checkField("firstOccurrenceStatus", FirstOccurrenceStatus.UNKNOWN)
             .checkFieldIsNull("source")
-            .checkField("payload", originalPayload)
             .checkFieldIsNull("attributionIdChanged")
             .checkFieldIsNull("openId")
+            .checkField("payload", originalPayload)
             .checkField("extras", extras)
             .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll();
+        if (resultServiceEvent.getValue() != null) {
+            org.assertj.core.api.Assertions.assertThat(resultServiceEvent.getValue()).isNotEqualTo(originalValue);
+        }
     }
 }

@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -25,11 +25,11 @@ public class MainReporterClientUnit extends AbstractClientUnit {
     }
 
     @Override
-    protected void handleReport(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
+    protected void handleReport(@NonNull ServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
         updateLocationTracking(sdkConfig);
         Boolean advIdentifiersTracking = sdkConfig.componentArguments.advIdentifiersTrackingEnabled;
         updateAdvIdentifiersTracking(advIdentifiersTracking);
-        getComponentUnit().handleReport(report, sdkConfig);
+        getComponentUnit().handleReport(serviceEvent, sdkConfig);
     }
 
     private void updateLocationTracking(CommonArguments sdkConfig) {

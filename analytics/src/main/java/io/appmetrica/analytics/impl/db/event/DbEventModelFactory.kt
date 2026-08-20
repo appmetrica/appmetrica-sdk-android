@@ -25,13 +25,13 @@ internal class DbEventModelFactory @JvmOverloads constructor(
     private val eventExtrasConverter: EventExtrasConverter = EventExtrasConverter(),
     private val dbLocationModelFactory: DbLocationModelFactory = DbLocationModelFactory(reportRequestConfig)
 ) {
-    private val reportData = encryptedCounterReport.mCounterReport
+    private val serviceEvent = encryptedCounterReport.mServiceEvent
 
     fun create() = DbEventModel(
         session = sessionState.sessionId,
         sessionType = sessionState.sessionType,
         numberInSession = sessionState.reportId,
-        type = InternalEvents.valueOf(reportData.type),
+        type = InternalEvents.valueOf(serviceEvent.type),
         globalNumber = if (EventsManager.shouldGenerateGlobalNumber(reportType)) {
             vitalComponentDataProvider.getAndIncrementEventGlobalNumber()
         } else { 0 },
@@ -41,25 +41,25 @@ internal class DbEventModelFactory @JvmOverloads constructor(
 
     private fun getEventDescription(): DbEventModel.Description {
         return DbEventModel.Description(
-            customType = reportData.customType,
-            name = reportData.name,
-            value = reportData.value,
+            customType = serviceEvent.customType,
+            name = serviceEvent.name,
+            value = serviceEvent.value,
             numberOfType = vitalComponentDataProvider.getAndIncrementNumberOfType(reportType),
             locationInfo = dbLocationModelFactory.create(),
-            errorEnvironment = reportData.eventEnvironment,
+            errorEnvironment = serviceEvent.eventEnvironment,
             appEnvironment = environmentRevision.value,
             appEnvironmentRevision = environmentRevision.revisionNumber,
-            truncated = reportData.bytesTruncated,
+            truncated = serviceEvent.bytesTruncated,
             connectionType = PhoneUtils.getConnectionTypeInServerFormat(context),
             cellularConnectionType = getMobileConnectionDescription(),
             encryptingMode = encryptedCounterReport.mEventEncryptionMode,
-            profileId = reportData.profileID,
-            firstOccurrenceStatus = reportData.firstOccurrenceStatus,
-            source = reportData.source,
-            attributionIdChanged = reportData.attributionIdChanged,
-            openId = reportData.openId,
-            extras = eventExtrasConverter.fromModel(reportData.extras),
-            valueProtocolVersion = reportData.valueProtocolVersion
+            profileId = serviceEvent.profileID,
+            firstOccurrenceStatus = serviceEvent.firstOccurrenceStatus,
+            source = serviceEvent.source,
+            attributionIdChanged = serviceEvent.attributionIdChanged,
+            openId = serviceEvent.openId,
+            extras = eventExtrasConverter.fromModel(serviceEvent.extras),
+            valueProtocolVersion = serviceEvent.valueProtocolVersion
         )
     }
 

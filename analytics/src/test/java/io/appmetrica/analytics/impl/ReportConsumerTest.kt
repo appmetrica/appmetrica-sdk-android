@@ -39,7 +39,7 @@ internal class ReportConsumerTest : CommonTest() {
     private val clientRepository: ClientRepository = mock {
         on { getOrCreateClient(clientDescription, commonArguments) } doReturn clientUnit
     }
-    private val counterReport: CounterReport = mock()
+    private val serviceEvent: ServiceEvent = mock()
     private val extras: Bundle = mock()
     private val reportExecutor: IHandlerExecutor = mock()
 
@@ -60,25 +60,25 @@ internal class ReportConsumerTest : CommonTest() {
 
     @Test
     fun `consumeReport if non undefined type`() {
-        reportConsumer.consumeReport(counterReport, extras)
+        reportConsumer.consumeReport(serviceEvent, extras)
         verify(reportExecutor).execute(reportRunnableMockedConstructionRule.constructionMock.constructed().first())
         assertThat(reportRunnableMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(reportRunnableMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, counterReport, extras, clientRepository)
+            .containsExactly(context, serviceEvent, extras, clientRepository)
     }
 
     @Test
     fun `consumeReport if undefined type`() {
-        whenever(counterReport.isUndefinedType).thenReturn(true)
-        reportConsumer.consumeReport(counterReport, extras)
+        whenever(serviceEvent.isUndefinedType).thenReturn(true)
+        reportConsumer.consumeReport(serviceEvent, extras)
         verifyNoInteractions(reportExecutor)
         assertThat(reportRunnableMockedConstructionRule.constructionMock.constructed()).isEmpty()
     }
 
     @Test
     fun consumeCrash() {
-        reportConsumer.consumeCrash(clientDescription, counterReport, commonArguments)
-        verify(clientUnit).handle(counterReport, commonArguments)
+        reportConsumer.consumeCrash(clientDescription, serviceEvent, commonArguments)
+        verify(clientUnit).handle(serviceEvent, commonArguments)
         verify(clientRepository).remove(packageName, processId, processSessionID)
     }
 }

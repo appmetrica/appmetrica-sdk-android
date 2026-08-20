@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.utils.MapWithDefault;
 
@@ -41,8 +41,8 @@ public class EventEncrypterProvider {
     }
 
     @NonNull
-    public EventEncrypter getEventEncrypter(@NonNull final CounterReport counterReport) {
-        int eventTypeCode = counterReport.getType();
+    public EventEncrypter getEventEncrypter(@NonNull final ServiceEvent serviceEvent) {
+        int eventTypeCode = serviceEvent.getType();
         InternalEvents eventType = InternalEvents.valueOf(eventTypeCode);
         return getEventEncrypter(eventType);
     }

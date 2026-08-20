@@ -32,7 +32,7 @@ import org.mockito.kotlin.whenever
 internal class ReportRunnableTest : CommonTest() {
 
     private val context: Context = mock()
-    private val counterReport: CounterReport = mock()
+    private val serviceEvent: ServiceEvent = mock()
     private val extras: Bundle = mock()
     private val clientDescription: ClientDescription = mock()
     private val clientUnit: ClientUnit = mock()
@@ -81,7 +81,7 @@ internal class ReportRunnableTest : CommonTest() {
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
     private val reportRunnable by setUp {
-        ReportRunnable(context, counterReport, extras, clientRepository)
+        ReportRunnable(context, serviceEvent, extras, clientRepository)
     }
 
     @Test
@@ -93,7 +93,7 @@ internal class ReportRunnableTest : CommonTest() {
         inOrder(sdkEnvironmentHolder, clientUnit) {
             verify(sdkEnvironmentHolder).mayBeUpdateAppVersion(appVersionName, appBuildNumber)
             verify(sdkEnvironmentHolder).mayBeUpdateDeviceTypeFromClient(deviceType)
-            verify(clientUnit).handle(eq(counterReport), commonArgumentsCaptor.capture())
+            verify(clientUnit).handle(eq(serviceEvent), commonArgumentsCaptor.capture())
             verifyNoMoreInteractions()
         }
 
@@ -111,8 +111,8 @@ internal class ReportRunnableTest : CommonTest() {
     fun `run if exception is thrown`() {
         val type = 100500
         val customType = 200500
-        whenever(counterReport.type).thenReturn(type)
-        whenever(counterReport.customType).thenReturn(customType)
+        whenever(serviceEvent.type).thenReturn(type)
+        whenever(serviceEvent.customType).thenReturn(customType)
         whenever(clientUnit.handle(any(), any())).thenThrow(RuntimeException())
         reportRunnable.run()
         verify(reporter).reportError(

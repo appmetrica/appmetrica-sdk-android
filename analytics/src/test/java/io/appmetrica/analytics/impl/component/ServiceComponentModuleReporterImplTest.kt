@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.ServiceModuleCounterReportToCounterReportConverter
 import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
@@ -12,10 +12,10 @@ import org.mockito.kotlin.verify
 internal class ServiceComponentModuleReporterImplTest : CommonTest() {
 
     private val report: ServiceModuleCounterReport = mock()
-    private val counterReport: CounterReport = mock()
+    private val serviceEvent: ServiceEvent = mock()
     private val componentUnit: ComponentUnit = mock()
     private val converter: ServiceModuleCounterReportToCounterReportConverter = mock {
-        on { convert(report) } doReturn counterReport
+        on { convert(report) } doReturn serviceEvent
     }
 
     private val reporter = ServiceComponentModuleReporterImpl(
@@ -27,6 +27,6 @@ internal class ServiceComponentModuleReporterImplTest : CommonTest() {
     fun handleReport() {
         reporter.handleReport(report)
 
-        verify(componentUnit).handleReport(counterReport)
+        verify(componentUnit).handleReport(serviceEvent)
     }
 }

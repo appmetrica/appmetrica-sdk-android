@@ -2,9 +2,8 @@ package io.appmetrica.analytics.impl.crash.jvm.service
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
-import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable
@@ -33,17 +32,15 @@ internal class ReportCrashRunnableProvider(
 
     private val crashConsumer = Consumer<JvmCrash> {
         val clientDescription = ClientDescription(it.apiKey, it.packageName, it.pid, it.psid, it.reporterType)
-        val event = EventsManager.unhandledExceptionFromFileReportEntry(
+        val serviceEvent = ServiceEvent.unhandledExceptionFromFileReportEntry(
             eventType,
             it.name,
             it.crashValue,
             it.bytesTruncated,
-            it.trimmedFields,
             it.environment,
-            LoggerStorage.getOrCreatePublicLogger(it.apiKey),
             timestampProvider.getTimestamp(it)
         )
-        crashEventConsumer.consumeCrash(clientDescription, event, arguments)
+        crashEventConsumer.consumeCrash(clientDescription, serviceEvent, arguments)
     }
 
     fun get(crashFile: File): ReadAndReportRunnable<JvmCrash> {

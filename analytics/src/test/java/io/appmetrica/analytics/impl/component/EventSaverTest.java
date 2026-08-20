@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.AppEnvironment;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.session.SessionType;
@@ -49,7 +49,7 @@ public class EventSaverTest extends CommonTest {
     @Mock
     private TimeProvider mTimeProvider;
     @Mock
-    private CounterReport mCounterReport;
+    private ServiceEvent mServiceEvent;
     @Mock
     private SessionState mSessionState;
     @Mock
@@ -71,7 +71,7 @@ public class EventSaverTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mCounterReport.getType()).thenReturn(mReportType);
+        when(mServiceEvent.getType()).thenReturn(mReportType);
         when(mPreferences.getPermissionsEventSendTime()).thenReturn(mPermissionsCheckTime);
         when(mPreferences.putPermissionsCheckTime(anyLong())).thenReturn(mPreferences);
         when(mPreferences.putLastAppVersionWithFeatures(anyInt())).thenReturn(mPreferences);
@@ -81,7 +81,7 @@ public class EventSaverTest extends CommonTest {
         mRevision = new AppEnvironment.EnvironmentRevision("value", 5);
         when(mAppEnvironment.getLastRevision()).thenReturn(mRevision);
 
-        when(mCounterReport.getExtras()).thenReturn(extras);
+        when(mServiceEvent.getExtras()).thenReturn(extras);
 
         mEventSaver = createReportSaverWithLastAppVersionsWithFeatures(curAppVersion);
     }
@@ -123,11 +123,11 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void testSaveReport() {
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
-        mEventSaver.saveReport(mCounterReport, mSessionState);
-        verify(mCounterReport).setProfileID(mProfileId);
-        verify(mCounterReport).setOpenId(openId);
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
+        mEventSaver.saveReport(mServiceEvent, mSessionState);
+        verify(mServiceEvent).setProfileID(mProfileId);
+        verify(mServiceEvent).setOpenId(openId);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
@@ -136,9 +136,9 @@ public class EventSaverTest extends CommonTest {
     @Test
     public void saveReportWithoutExtrasAndSessionExtras() {
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
-        mEventSaver.saveReport(mCounterReport, mSessionState);
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
+        mEventSaver.saveReport(mServiceEvent, mSessionState);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
@@ -152,9 +152,9 @@ public class EventSaverTest extends CommonTest {
         byte[] extraValue = new byte[]{1, 5, 7, 1, 6};
         extras.put(extraKey, extraValue);
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
-        mEventSaver.saveReport(mCounterReport, mSessionState);
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
+        mEventSaver.saveReport(mServiceEvent, mSessionState);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
@@ -168,9 +168,9 @@ public class EventSaverTest extends CommonTest {
         byte[] sessionExtraValue = "Session extra value".getBytes(StandardCharsets.UTF_8);
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
-        mEventSaver.saveReport(mCounterReport, mSessionState);
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
+        mEventSaver.saveReport(mServiceEvent, mSessionState);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
@@ -193,9 +193,9 @@ public class EventSaverTest extends CommonTest {
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
 
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
-        mEventSaver.saveReport(mCounterReport, mSessionState);
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
+        mEventSaver.saveReport(mServiceEvent, mSessionState);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
@@ -205,61 +205,61 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void testIdentifyAndSaveReport() {
-        prepareReportSaver(mCounterReport);
-        mEventSaver.identifyAndSaveReport(mCounterReport);
-        verifyReportSaved(mCounterReport);
+        prepareReportSaver(mServiceEvent);
+        mEventSaver.identifyAndSaveReport(mServiceEvent);
+        verifyReportSaved(mServiceEvent);
     }
 
     @Test
     public void testSavePermissionsReport() {
-        prepareReportSaver(mCounterReport);
+        prepareReportSaver(mServiceEvent);
         final long currentTime = 1100;
         when(mTimeProvider.currentTimeSeconds()).thenReturn(currentTime);
-        mEventSaver.savePermissionsReport(mCounterReport);
-        verifyReportSaved(mCounterReport);
+        mEventSaver.savePermissionsReport(mServiceEvent);
+        verifyReportSaved(mServiceEvent);
         verify(mPreferences).putPermissionsCheckTime(currentTime);
     }
 
     @Test
     public void testSaveFeaturesReport() {
-        prepareReportSaver(mCounterReport);
-        mEventSaver.saveFeaturesReport(mCounterReport);
-        verifyReportSaved(mCounterReport);
+        prepareReportSaver(mServiceEvent);
+        mEventSaver.saveFeaturesReport(mServiceEvent);
+        verifyReportSaved(mServiceEvent);
         verify(mPreferences).putLastAppVersionWithFeatures(curAppVersion);
     }
 
     @Test
     public void testIdentifyAndSaveFirstEventReport() {
-        prepareReportSaver(mCounterReport);
-        mEventSaver.identifyAndSaveFirstEventReport(mCounterReport);
-        verify(mSessionManager).getSomeSession(mCounterReport);
+        prepareReportSaver(mServiceEvent);
+        mEventSaver.identifyAndSaveFirstEventReport(mServiceEvent);
+        verify(mSessionManager).getSomeSession(mServiceEvent);
     }
 
     @Test
     public void testSaveReportWithCurrentSession() {
         final long timestamp = 123456000;
-        when(mCounterReport.getCreationTimestamp()).thenReturn(timestamp);
-        prepareReportSaver(mCounterReport);
+        when(mServiceEvent.getCreationTimestamp()).thenReturn(timestamp);
+        prepareReportSaver(mServiceEvent);
         SessionState sessionState = mock(SessionState.class);
         when(sessionState.getSessionType()).thenReturn(SessionType.FOREGROUND);
-        when(mSessionManager.peekCurrentSessionState(mCounterReport)).thenReturn(sessionState);
-        mEventSaver.saveReportFromPrevSession(mCounterReport);
-        verifyReportSaved(mCounterReport, sessionState);
+        when(mSessionManager.peekCurrentSessionState(mServiceEvent)).thenReturn(sessionState);
+        mEventSaver.saveReportFromPrevSession(mServiceEvent);
+        verifyReportSaved(mServiceEvent, sessionState);
     }
 
-    private void prepareReportSaver(CounterReport counterReport) {
-        when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(counterReport)).thenReturn(mEncryptedCounterReport);
-        when(mSessionManager.getCurrentSessionState(counterReport)).thenReturn(mSessionState);
+    private void prepareReportSaver(ServiceEvent serviceEvent) {
+        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
+        when(mEventEncrypter.encrypt(serviceEvent)).thenReturn(mEncryptedCounterReport);
+        when(mSessionManager.getCurrentSessionState(serviceEvent)).thenReturn(mSessionState);
     }
 
-    private void verifyReportSaved(CounterReport counterReport) {
-        verifyReportSaved(counterReport, mSessionState);
+    private void verifyReportSaved(ServiceEvent serviceEvent) {
+        verifyReportSaved(serviceEvent, mSessionState);
     }
 
-    private void verifyReportSaved(CounterReport counterReport, SessionState sessionState) {
-        verify(counterReport).setProfileID(mProfileId);
-        verify(counterReport).setOpenId(openId);
+    private void verifyReportSaved(ServiceEvent serviceEvent, SessionState sessionState) {
+        verify(serviceEvent).setProfileID(mProfileId);
+        verify(serviceEvent).setOpenId(openId);
         verify(mDbHelper)
             .saveReport(mEncryptedCounterReport, mReportType, sessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();

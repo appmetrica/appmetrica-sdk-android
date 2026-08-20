@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.AppEnvironment;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
@@ -96,35 +96,35 @@ public class EventSaver {
 
     }
 
-    public void identifyAndSaveFirstEventReport(CounterReport reportData) {
-        mSessionManager.getSomeSession(reportData); //workaround for first event
+    public void identifyAndSaveFirstEventReport(ServiceEvent serviceEvent) {
+        mSessionManager.getSomeSession(serviceEvent); //workaround for first event
     }
 
-    public void savePermissionsReport(CounterReport report) {
-        identifyAndSaveReport(report);
+    public void savePermissionsReport(ServiceEvent serviceEvent) {
+        identifyAndSaveReport(serviceEvent);
         savePermissionsCheckTime();
     }
 
-    public void saveFeaturesReport(CounterReport report) {
-        identifyAndSaveReport(report);
+    public void saveFeaturesReport(ServiceEvent serviceEvent) {
+        identifyAndSaveReport(serviceEvent);
         saveFeaturesCheckVersion();
     }
 
-    public void identifyAndSaveReport(final CounterReport reportData) {
-        saveReport(reportData, mSessionManager.getCurrentSessionState(reportData));
+    public void identifyAndSaveReport(final ServiceEvent serviceEvent) {
+        saveReport(serviceEvent, mSessionManager.getCurrentSessionState(serviceEvent));
     }
 
-    public boolean saveReportFromPrevSession(@NonNull CounterReport report) {
-        SessionState sessionState = mSessionManager.peekCurrentSessionState(report);
+    public boolean saveReportFromPrevSession(@NonNull ServiceEvent serviceEvent) {
+        SessionState sessionState = mSessionManager.peekCurrentSessionState(serviceEvent);
         DebugLogger.INSTANCE.info(
             TAG,
             "saveReportFromPrevSession: %s of type: %d; sessionState",
-            report.getName(),
-            report.getType(),
+            serviceEvent.getName(),
+            serviceEvent.getType(),
             sessionState
         );
         if (sessionState != null) {
-            saveReport(report, sessionState);
+            saveReport(serviceEvent, sessionState);
             return true;
         } else {
             DebugLogger.INSTANCE.error(TAG, "saveReportFromPrevSession: sessionState is null");
@@ -133,21 +133,21 @@ public class EventSaver {
     }
 
     @VisibleForTesting
-    public void saveReport(@NonNull final CounterReport reportData, @NonNull final SessionState sessionState) {
+    public void saveReport(@NonNull final ServiceEvent serviceEvent, @NonNull final SessionState sessionState) {
         DebugLogger.INSTANCE.info(
             TAG,
             "saveReport: %s of type: %d",
-            reportData.getName(),
-            reportData.getType()
+            serviceEvent.getName(),
+            serviceEvent.getType()
         );
-        reportData.getExtras().putAll(sessionExtrasHolder.getSnapshot());
-        reportData.setProfileID(mPreferences.getProfileID());
-        reportData.setOpenId(vitalComponentDataProvider.getOpenId());
+        serviceEvent.getExtras().putAll(sessionExtrasHolder.getSnapshot());
+        serviceEvent.setProfileID(mPreferences.getProfileID());
+        serviceEvent.setOpenId(vitalComponentDataProvider.getOpenId());
         AppEnvironment.EnvironmentRevision revision = mAppEnvironment.getLastRevision();
-        EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(reportData);
+        EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(serviceEvent);
         mDbHelper.saveReport(
-                eventEncrypter.encrypt(reportData),
-                reportData.getType(),
+                eventEncrypter.encrypt(serviceEvent),
+                serviceEvent.getType(),
                 sessionState,
                 revision,
                 vitalComponentDataProvider

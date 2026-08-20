@@ -47,10 +47,6 @@ import static org.mockito.Mockito.when;
 public class CounterReportTest extends CommonTest {
 
     @Mock
-    private AppStandbyBucketConverter mAppStandbyBucketConverter;
-    @Mock
-    private ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
-    @Mock
     private ComponentUnit componentUnit;
     @Mock
     private ReportRequestConfig reportRequestConfig;
@@ -96,14 +92,12 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testPermissionsAndRestrictionsAndProviders() throws Exception {
-        BackgroundRestrictionsState.AppStandByBucket appStandByBucket = BackgroundRestrictionsState.AppStandByBucket.RARE;
         String appStandbyBucketString = "expected string";
-        when(mAppStandbyBucketConverter.fromAppStandbyBucketToString(appStandByBucket)).thenReturn(appStandbyBucketString);
-        CounterReport report = CounterReport.formPermissionsReportData(
-            mock(CounterReport.class),
+        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
+            mock(ServiceEvent.class),
             Arrays.asList(new PermissionState("1", false), new PermissionState("2", true)),
-            new BackgroundRestrictionsState(appStandByBucket, true),
-            mAppStandbyBucketConverter,
+            new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, true),
+            appStandbyBucketString,
             Arrays.asList("gps", "passive")
         );
         JSONAssert.assertEquals(
@@ -129,18 +123,18 @@ public class CounterReportTest extends CommonTest {
                         .put("gps")
                         .put("passive")
                 ),
-            new JSONObject(report.getValue()),
+            new JSONObject(serviceEvent.getValue()),
             true
         );
     }
 
     @Test
     public void testNoPermissionsNullRestrictionsNoProviders() throws Exception {
-        CounterReport report = CounterReport.formPermissionsReportData(
-            mock(CounterReport.class),
+        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
+            mock(ServiceEvent.class),
             new ArrayList<PermissionState>(),
             null,
-            mAppStandbyBucketConverter,
+            null,
             mProviders
         );
         JSONAssert.assertEquals(
@@ -148,18 +142,18 @@ public class CounterReportTest extends CommonTest {
                 .put("permissions", new JSONArray())
                 .put("background_restrictions", new JSONObject())
                 .put("available_providers", new JSONArray()),
-            new JSONObject(report.getValue()),
+            new JSONObject(serviceEvent.getValue()),
             true
         );
     }
 
     @Test
     public void testNoPermissionsNoProvidersAndAppStandByBucketIsNull() throws Exception {
-        CounterReport report = CounterReport.formPermissionsReportData(
-            mock(CounterReport.class),
+        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
+            mock(ServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(null, false),
-            mAppStandbyBucketConverter,
+            null,
             mProviders
         );
         JSONAssert.assertEquals(
@@ -168,19 +162,18 @@ public class CounterReportTest extends CommonTest {
                 .put("background_restrictions",
                     new JSONObject().put("background_restricted", false))
                 .put("available_providers", new JSONArray()),
-            new JSONObject(report.getValue()),
+            new JSONObject(serviceEvent.getValue()),
             true
         );
     }
 
     @Test
     public void testNoPermissionsNoProvidersAndBackgroundRestrictedIsNull() throws Exception {
-        when(mAppStandbyBucketConverter.fromAppStandbyBucketToString(BackgroundRestrictionsState.AppStandByBucket.RARE)).thenReturn("rare");
-        CounterReport report = CounterReport.formPermissionsReportData(
-            mock(CounterReport.class),
+        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
+            mock(ServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, null),
-            mAppStandbyBucketConverter,
+            "rare",
             mProviders
         );
         JSONAssert.assertEquals(
@@ -190,18 +183,18 @@ public class CounterReportTest extends CommonTest {
                     new JSONObject().put("app_standby_bucket", "rare")
                 )
                 .put("available_providers", new JSONArray()),
-            new JSONObject(report.getValue()),
+            new JSONObject(serviceEvent.getValue()),
             true)
         ;
     }
 
     @Test
     public void testNoPermissionsNoPermissionsNullRestrictionsValues() throws Exception {
-        CounterReport report = CounterReport.formPermissionsReportData(
-            mock(CounterReport.class),
+        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
+            mock(ServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(null, null),
-            mAppStandbyBucketConverter,
+            null,
             mProviders
         );
         JSONAssert.assertEquals(
@@ -209,7 +202,7 @@ public class CounterReportTest extends CommonTest {
                 .put("permissions", new JSONArray())
                 .put("background_restrictions", new JSONObject())
                 .put("available_providers", new JSONArray()),
-            new JSONObject(report.getValue()),
+            new JSONObject(serviceEvent.getValue()),
             true
         );
     }
@@ -224,15 +217,15 @@ public class CounterReportTest extends CommonTest {
                         .put("version", 1)
                         .put("required", false))
             );
-        CounterReport report = CounterReport.formFeaturesReportData(mock(CounterReport.class), features.toString());
-        JSONAssert.assertEquals(features, new JSONObject(report.getValue()), true);
+        ServiceEvent serviceEvent = ServiceEvent.formFeaturesReportData(mock(ServiceEvent.class), features.toString());
+        JSONAssert.assertEquals(features, new JSONObject(serviceEvent.getValue()), true);
     }
 
     @Test
     public void testEmptyFeatures() throws JSONException {
         JSONObject features = new JSONObject().put("features", new JSONArray());
-        CounterReport report = CounterReport.formFeaturesReportData(mock(CounterReport.class), features.toString());
-        JSONAssert.assertEquals(features, new JSONObject(report.getValue()), true);
+        ServiceEvent serviceEvent = ServiceEvent.formFeaturesReportData(mock(ServiceEvent.class), features.toString());
+        JSONAssert.assertEquals(features, new JSONObject(serviceEvent.getValue()), true);
     }
 
     @Test
@@ -270,11 +263,10 @@ public class CounterReportTest extends CommonTest {
     @Test
     public void testFormNewSessionReportValue() throws InvalidProtocolBufferNanoException {
         String buildId = "12345678";
-        when(mExtraMetaInfoRetriever.getBuildId()).thenReturn(buildId);
         assertThat(
             new String(
                 EventStart.Value.parseFrom(
-                    CounterReport.formSessionStartReportData(new CounterReport(), mExtraMetaInfoRetriever)
+                    ServiceEvent.formSessionStartReportData(new ServiceEvent(), buildId)
                         .getValueBytes()
                 ).buildId
             )
@@ -283,8 +275,7 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testFormNewSessionReportNoBuilId() throws InvalidProtocolBufferNanoException {
-        when(mExtraMetaInfoRetriever.getBuildId()).thenReturn(null);
-        assertThat(EventStart.Value.parseFrom(CounterReport.formSessionStartReportData(new CounterReport(), mExtraMetaInfoRetriever).getValueBytes()).buildId)
+        assertThat(EventStart.Value.parseFrom(ServiceEvent.formSessionStartReportData(new ServiceEvent(), null).getValueBytes()).buildId)
             .isEmpty();
     }
 
@@ -347,14 +338,6 @@ public class CounterReportTest extends CommonTest {
     }
 
     @Test
-    public void testFirstOccurrenceStatus() {
-        FirstOccurrenceStatus firstOccurrenceStatus = FirstOccurrenceStatus.FIRST_OCCURRENCE;
-        CounterReport counterReport = new CounterReport();
-        counterReport.setFirstOccurrenceStatus(firstOccurrenceStatus);
-        assertThat(counterReport.getFirstOccurrenceStatus()).isEqualTo(firstOccurrenceStatus);
-    }
-
-    @Test
     public void testFormPreActivationConfigUpdate() {
         assertThat(CounterReport.formUpdatePreActivationConfig().getType()).isEqualTo(
             InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG.getTypeId()
@@ -384,10 +367,7 @@ public class CounterReportTest extends CommonTest {
         final String profileId = "profileId";
         final long creationEllapsedRealtime = 21212121L;
         final long creationTimestamp = 32323232L;
-        final FirstOccurrenceStatus firstOccurrenceStatus = FirstOccurrenceStatus.FIRST_OCCURRENCE;
         final EventSource source = EventSource.JS;
-        final boolean attributionIdchanged = true;
-        final int openId = 888999;
         String extraKey = "extra key";
         byte[] extraValue = new byte[]{1, 2, 3, 4, 5};
         Map<String, byte[]> extras = Collections.singletonMap(extraKey, extraValue);
@@ -405,11 +385,8 @@ public class CounterReportTest extends CommonTest {
         counterReport.setProfileID(profileId);
         counterReport.setCreationEllapsedRealtime(creationEllapsedRealtime);
         counterReport.setCreationTimestamp(creationTimestamp);
-        counterReport.setFirstOccurrenceStatus(firstOccurrenceStatus);
         counterReport.setSource(source);
         counterReport.setPayload(payload);
-        counterReport.setAttributionIdChanged(attributionIdchanged);
-        counterReport.setOpenId(openId);
         counterReport.setExtras(extras);
 
         Parcel parcel = Parcel.obtain();
@@ -426,10 +403,7 @@ public class CounterReportTest extends CommonTest {
         assertions.assertThat(fromParcel.getProfileID()).isEqualTo(profileId);
         assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(creationEllapsedRealtime);
         assertions.assertThat(fromParcel.getCreationTimestamp()).isEqualTo(creationTimestamp);
-        assertions.assertThat(fromParcel.getFirstOccurrenceStatus()).isEqualTo(firstOccurrenceStatus);
         assertions.assertThat(fromParcel.getSource()).isEqualTo(source);
-        assertions.assertThat(fromParcel.getAttributionIdChanged()).isEqualTo(attributionIdchanged);
-        assertions.assertThat(fromParcel.getOpenId()).isEqualTo(openId);
         assertions.assertThat(fromParcel.getExtras()).containsAllEntriesOf(extras);
         Bundle actualPayload = fromParcel.getPayload();
         assertThat(actualPayload.keySet()).containsOnly("key1", "key2");
@@ -453,11 +427,8 @@ public class CounterReportTest extends CommonTest {
         assertions.assertThat(fromParcel.getProfileID()).isNull();
         assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(0);
         assertions.assertThat(fromParcel.getCreationTimestamp()).isEqualTo(0);
-        assertions.assertThat(fromParcel.getFirstOccurrenceStatus()).isEqualTo(FirstOccurrenceStatus.UNKNOWN);
         assertions.assertThat(fromParcel.getSource()).isNull();
         assertions.assertThat(fromParcel.getPayload()).isNull();
-        assertions.assertThat(fromParcel.getAttributionIdChanged()).isNull();
-        assertions.assertThat(fromParcel.getOpenId()).isNull();
         assertions.assertThat(fromParcel.getExtras()).isEqualTo(Collections.emptyMap());
 
         assertions.assertAll();

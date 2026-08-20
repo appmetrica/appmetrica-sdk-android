@@ -237,19 +237,20 @@ public class EventsManagerTest extends CommonTest {
     public void testNativeCrashEntryCurrentSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
         long creationTimestamp = 1700000000000L;
-        CounterReport report = EventsManager.nativeCrashEntry(
+        ServiceEvent serviceEvent = ServiceEvent.nativeCrashEntry(
             InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             value,
             "uuid",
             mPublicLogger,
-            creationTimestamp
+            creationTimestamp,
+            null
         );
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
-        assertions.assertThat(report.getValue()).isEqualTo(value);
-        assertions.assertThat(report.getName()).isEmpty();
-        assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
-        assertions.assertThat(report.getCreationTimestamp()).isEqualTo(creationTimestamp);
+        assertions.assertThat(serviceEvent.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
+        assertions.assertThat(serviceEvent.getValue()).isEqualTo(value);
+        assertions.assertThat(serviceEvent.getName()).isEmpty();
+        assertions.assertThat(serviceEvent.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(serviceEvent.getCreationTimestamp()).isEqualTo(creationTimestamp);
         assertions.assertAll();
     }
 
@@ -257,19 +258,20 @@ public class EventsManagerTest extends CommonTest {
     public void testNativeCrashEntryPrevSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
         long creationTimestamp = 1700000000000L;
-        CounterReport report = EventsManager.nativeCrashEntry(
+        ServiceEvent serviceEvent = ServiceEvent.nativeCrashEntry(
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             value,
             "uuid",
             mPublicLogger,
-            creationTimestamp
+            creationTimestamp,
+            null
         );
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
-        assertions.assertThat(report.getValue()).isEqualTo(value);
-        assertions.assertThat(report.getName()).isEmpty();
-        assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
-        assertions.assertThat(report.getCreationTimestamp()).isEqualTo(creationTimestamp);
+        assertions.assertThat(serviceEvent.getType()).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
+        assertions.assertThat(serviceEvent.getValue()).isEqualTo(value);
+        assertions.assertThat(serviceEvent.getName()).isEmpty();
+        assertions.assertThat(serviceEvent.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(serviceEvent.getCreationTimestamp()).isEqualTo(creationTimestamp);
         assertions.assertAll();
     }
 

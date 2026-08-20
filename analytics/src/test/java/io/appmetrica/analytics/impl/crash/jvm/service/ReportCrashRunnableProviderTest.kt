@@ -1,12 +1,10 @@
 package io.appmetrica.analytics.impl.crash.jvm.service
 
+import android.annotation.SuppressLint
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
-import io.appmetrica.analytics.impl.ClientCounterReport
-import io.appmetrica.analytics.impl.CounterReport
-import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable
@@ -16,22 +14,24 @@ import io.appmetrica.analytics.impl.crash.service.ShouldSendCrashNowPredicate
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
-import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
-import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
 import java.io.File
 
+@SuppressLint("RobolectricUsage")
+@RunWith(RobolectricTestRunner::class)
 internal class ReportCrashRunnableProviderTest : CommonTest() {
 
     private val apiKey = "api key"
@@ -43,7 +43,6 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
     private val name = "name"
     private val crashValue = "crash value".toByteArray()
     private val bytesTruncated = 100
-    private val trimmedFields = hashMapOf<ClientCounterReport.TrimmedField, Int>()
     private val environment = "environment"
 
     private val context: Context = mock()
@@ -70,30 +69,7 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
     val clientDescriptionMockedConstructionRule = constructionRule<ClientDescription>()
     private val clientDescription: ClientDescription by clientDescriptionMockedConstructionRule
 
-    private val counterReport: CounterReport = mock()
-
-    private val publicLogger: PublicLogger = mock()
-
-    @get:Rule
-    val loggerStorageMockedStaticRule = staticRule<LoggerStorage> {
-        on { LoggerStorage.getOrCreatePublicLogger(apiKey) } doReturn publicLogger
-    }
-
-    @get:Rule
-    val eventsManagerMockedStaticRule = staticRule<EventsManager> {
-        on {
-            EventsManager.unhandledExceptionFromFileReportEntry(
-                eventType,
-                name,
-                crashValue,
-                bytesTruncated,
-                trimmedFields,
-                environment,
-                publicLogger,
-                creationTimestamp
-            )
-        } doReturn counterReport
-    }
+    private val counterReportCaptor = argumentCaptor<ServiceEvent>()
 
     private val fileLocksHolder: FileLocksHolder = mock()
 
@@ -110,7 +86,6 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
         on { name } doReturn name
         on { crashValue } doReturn crashValue
         on { bytesTruncated } doReturn bytesTruncated
-        on { trimmedFields } doReturn trimmedFields
         on { environment } doReturn environment
         on { apiKey } doReturn apiKey
         on { packageName } doReturn packageName
@@ -171,7 +146,14 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
             readAndReportRunnableMockedConstructionRule.argumentInterceptor.flatArguments()[3] as Consumer<JvmCrash>
 
         consumer.consume(jvmCrash)
-        verify(crashEventConsumer).consumeCrash(clientDescription, counterReport, commonArguments)
+        verify(crashEventConsumer).consumeCrash(
+            org.mockito.kotlin.eq(clientDescription),
+            counterReportCaptor.capture(),
+            org.mockito.kotlin.eq(commonArguments)
+        )
+        val capturedReport = counterReportCaptor.firstValue
+        assertThat(capturedReport.type).isEqualTo(eventType.typeId)
+        assertThat(capturedReport.creationTimestamp).isEqualTo(creationTimestamp)
 
         assertThat(clientDescriptionMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(clientDescriptionMockedConstructionRule.argumentInterceptor.flatArguments())

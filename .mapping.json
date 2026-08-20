@@ -460,6 +460,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorage.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorage.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SelfProcessReporter.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SelfProcessReporter.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SelfReportingUtils.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SelfReportingUtils.kt",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/ServiceEvent.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ServiceEvent.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ServiceLifecycleObserver.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ServiceLifecycleObserver.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ServiceModuleCounterReportToCounterReportConverter.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ServiceModuleCounterReportToCounterReportConverter.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SessionResultBuilder.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SessionResultBuilder.kt",

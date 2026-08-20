@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionHelper
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 internal class ExternalAttributionHandlerTest : CommonTest() {
 
     private val valueBytes = "string".toByteArray()
-    private val counterReport: CounterReport = mock {
+    private val serviceEvent: ServiceEvent = mock {
         on { valueBytes } doReturn valueBytes
     }
 
@@ -60,7 +60,7 @@ internal class ExternalAttributionHandlerTest : CommonTest() {
 
     @Test
     fun process() {
-        val result = handler.process(counterReport)
+        val result = handler.process(serviceEvent)
 
         verify(externalAttributionHelperRule.constructionMock.constructed().first()).saveAttribution(type, json)
         assertThat(result).isFalse()
@@ -70,7 +70,7 @@ internal class ExternalAttributionHandlerTest : CommonTest() {
     fun processIfNotNewAttribution() {
         whenever(externalAttributionHelperRule.constructionMock.constructed().first().isNewAttribution(type, json))
             .thenReturn(false)
-        val result = handler.process(counterReport)
+        val result = handler.process(serviceEvent)
 
         assertThat(result).isTrue()
     }
@@ -79,7 +79,7 @@ internal class ExternalAttributionHandlerTest : CommonTest() {
     fun processIfOutOfCollectingInterval() {
         whenever(externalAttributionHelperRule.constructionMock.constructed().first().isInAttributionCollectingWindow())
             .thenReturn(false)
-        val result = handler.process(counterReport)
+        val result = handler.process(serviceEvent)
 
         assertThat(result).isTrue()
     }

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.session;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler;
 
@@ -12,9 +12,9 @@ public class ReportSessionStopDueCrashHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final CounterReport reportData) {
+    public boolean process(@NonNull final ServiceEvent serviceEvent) {
         getComponent().getEventTrigger().trigger();
-        getComponent().getSessionManager().stopCurrentSessionDueToCrash(reportData);
+        getComponent().getSessionManager().stopCurrentSessionDueToCrash(serviceEvent);
         return true;
     }
 }

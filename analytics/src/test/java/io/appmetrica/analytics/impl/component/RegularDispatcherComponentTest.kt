@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component
 
 import android.content.Context
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
@@ -80,18 +80,24 @@ internal class RegularDispatcherComponentTest : CommonTest() {
 
     @Test
     fun handleReport() {
-        val activationReport = CounterReport()
-        activationReport.type = InternalEvents.EVENT_TYPE_ACTIVATION.typeId
-        val regularReport = CounterReport()
-        regularReport.type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-        val startReport = CounterReport()
-        startReport.type = InternalEvents.EVENT_TYPE_START.typeId
-        regularDispatcherComponent.handleReport(activationReport, CommonArgumentsTestUtils.createMockedArguments())
-        regularDispatcherComponent.handleReport(regularReport, CommonArgumentsTestUtils.createMockedArguments())
-        regularDispatcherComponent.handleReport(startReport, CommonArgumentsTestUtils.createMockedArguments())
-        verify(reportingComponent).handleReport(activationReport)
-        verify(reportingComponent).handleReport(regularReport)
-        verify(reportingComponent).handleReport(startReport)
+        val activationServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_ACTIVATION.typeId }
+        val regularServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_REGULAR.typeId }
+        val startServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_START.typeId }
+        regularDispatcherComponent.handleReport(
+            activationServiceEvent,
+            CommonArgumentsTestUtils.createMockedArguments()
+        )
+        regularDispatcherComponent.handleReport(
+            regularServiceEvent,
+            CommonArgumentsTestUtils.createMockedArguments()
+        )
+        regularDispatcherComponent.handleReport(
+            startServiceEvent,
+            CommonArgumentsTestUtils.createMockedArguments()
+        )
+        verify(reportingComponent).handleReport(activationServiceEvent)
+        verify(reportingComponent).handleReport(regularServiceEvent)
+        verify(reportingComponent).handleReport(startServiceEvent)
     }
 
     @Test
@@ -165,10 +171,10 @@ internal class RegularDispatcherComponentTest : CommonTest() {
     }
 
     private fun warmUpAllComponents() {
-        val regularReport = CounterReport()
-        regularReport.type = InternalEvents.EVENT_TYPE_REGULAR.typeId
+        val serviceEvent = ServiceEvent()
+        serviceEvent.type = InternalEvents.EVENT_TYPE_REGULAR.typeId
         regularDispatcherComponent.handleReport(
-            regularReport,
+            serviceEvent,
             CommonArgumentsTestUtils.createMockedArguments()
         )
     }

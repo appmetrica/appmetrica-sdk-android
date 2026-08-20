@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.ClientIdentifiersChangedListener;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IdentifiersData;
@@ -179,14 +179,14 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         );
     }
 
-    public void handleReport(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
+    public void handleReport(@NonNull ServiceEvent serviceEvent, @NonNull CommutationClientUnit clientUnit) {
         DebugLogger.INSTANCE.info(
             TAG,
             "handle report for componentId: %s; data: %s",
             mComponentId,
-            reportData
+            serviceEvent
         );
-        mReportProcessor.process(reportData, clientUnit);
+        mReportProcessor.process(serviceEvent, clientUnit);
     }
 
     @NonNull

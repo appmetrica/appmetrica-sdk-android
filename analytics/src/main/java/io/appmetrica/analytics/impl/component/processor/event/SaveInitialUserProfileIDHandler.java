@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
@@ -15,8 +15,8 @@ public class SaveInitialUserProfileIDHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull CounterReport reportData) {
-        String userProfileID = reportData.getProfileID();
+    public boolean process(@NonNull ServiceEvent serviceEvent) {
+        String userProfileID = serviceEvent.getProfileID();
         if (!StringUtils.isNullOrEmpty(userProfileID)) {
             DebugLogger.INSTANCE.info(TAG, "save initial userProfileID = %s", userProfileID);
             getComponent().setProfileID(userProfileID);
