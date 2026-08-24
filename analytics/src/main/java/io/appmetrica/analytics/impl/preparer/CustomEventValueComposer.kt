@@ -1,12 +1,10 @@
 package io.appmetrica.analytics.impl.preparer
 
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider
 
 internal class CustomEventValueComposer(
     val valueComposer: ValueComposer,
-    val legacyValueComposer: ValueComposer,
-    val eventEncrypterProvider: EventEncrypterProvider
+    val legacyValueComposer: ValueComposer
 ) : ValueComposer {
 
     override fun getValue(event: EventFromDbModel, config: ReportRequestConfig): ByteArray {

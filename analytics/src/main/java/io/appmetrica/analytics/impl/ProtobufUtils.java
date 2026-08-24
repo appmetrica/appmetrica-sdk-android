@@ -28,7 +28,6 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collections;
@@ -173,8 +172,7 @@ public final class ProtobufUtils {
         ValueComposer base64DecodedValueComposer = new BytesValueComposer();
         ValueComposer customEventBase64DecodedValueComposer = new CustomEventValueComposer(
             base64DecodedValueComposer,
-            new StringValueComposer(),
-            new EventEncrypterProvider()
+            new StringValueComposer()
         );
         ValueComposer unGzippedBase64DecodedValueComposer = new UnGzipBytesValueComposer();
         ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
