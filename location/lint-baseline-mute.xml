@@ -7,7 +7,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/DataCacheConsumerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/DataCacheConsumerTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/DataCacheTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/DataCacheTest.kt"
             line="21"
             column="1"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/LocationCoreTests.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/LocationCoreTests.kt"
             line="29"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/LocationDataCacheTests.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/LocationDataCacheTests.kt"
             line="14"
             column="1"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/LocationListenerWrapperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/LocationListenerWrapperTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/LocationStreamDispatcherTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/LocationStreamDispatcherTests.java"
             line="30"
             column="1"/>
     </issue>
@@ -73,8 +73,8 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/location/impl/SingleProviderLocationFiltratorTests.kt"
-            line="24"
+            file="src/testDebug/java/io/appmetrica/analytics/location/impl/SingleProviderLocationFiltratorTests.kt"
+            line="23"
             column="1"/>
     </issue>
 

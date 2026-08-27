@@ -2,7 +2,6 @@ package io.appmetrica.analytics.coreutils
 
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
-import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 

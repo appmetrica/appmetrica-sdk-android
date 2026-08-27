@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db.storage;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CoverageUtils;
+import io.appmetrica.analytics.testutils.CoverageUtils;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.lang.reflect.Method;

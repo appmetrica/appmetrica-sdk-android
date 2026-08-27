@@ -15,6 +15,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 import org.mockito.stubbing.Answer
+import java.io.Serializable
 import java.util.concurrent.Callable
 import java.util.concurrent.Future
 
@@ -249,7 +250,7 @@ object MockProvider {
             }
             on { getSerializable(any()) } doAnswer {
                 val key = it.arguments[0] as String
-                dataMap[key] as? java.io.Serializable
+                dataMap[key] as? Serializable
             }
             on { getBundle(any()) } doAnswer {
                 val key = it.arguments[0] as String

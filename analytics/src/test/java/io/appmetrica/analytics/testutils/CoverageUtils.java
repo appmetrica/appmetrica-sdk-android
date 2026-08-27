@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl;
+package io.appmetrica.analytics.testutils;
 
 import androidx.annotation.NonNull;
 import java.lang.reflect.Method;

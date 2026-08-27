@@ -7,7 +7,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/logger/common/impl/LogMessageSplitterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/logger/common/impl/LogMessageSplitterTest.java"
             line="19"
             column="1"/>
     </issue>

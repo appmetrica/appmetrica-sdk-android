@@ -14,7 +14,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/adrevenue/other/impl/config/client/BundleToClientSideAdRevenueOtherConfigConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/adrevenue/other/impl/config/client/BundleToClientSideAdRevenueOtherConfigConverterTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -25,7 +25,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/adrevenue/other/impl/BundleToJsonConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/adrevenue/other/impl/BundleToJsonConverterTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -36,7 +36,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/adrevenue/other/impl/fb/FBAdRevenueConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/adrevenue/other/impl/fb/FBAdRevenueConverterTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -47,7 +47,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/adrevenue/other/impl/fb/FBAdRevenueDataListenerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/adrevenue/other/impl/fb/FBAdRevenueDataListenerTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -58,7 +58,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/adrevenue/other/impl/config/service/ServiceSideAdRevenueOtherConfigToBundleConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/adrevenue/other/impl/config/service/ServiceSideAdRevenueOtherConfigToBundleConverterTest.kt"
             line="11"
             column="1"/>
     </issue>

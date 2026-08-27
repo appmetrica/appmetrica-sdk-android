@@ -7,7 +7,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
             line="30"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/screenshot/impl/config/client/BundleToClientSideScreenshotConfigConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/screenshot/impl/config/client/BundleToClientSideScreenshotConfigConverterTest.kt"
             line="16"
             column="1"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/ContentObserverScreenshotCaptorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/screenshot/impl/captor/ContentObserverScreenshotCaptorTest.kt"
             line="35"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
             line="29"
             column="1"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/screenshot/impl/config/service/ServiceSideScreenshotConfigToBundleConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/screenshot/impl/config/service/ServiceSideScreenshotConfigToBundleConverterTest.kt"
             line="14"
             column="1"/>
     </issue>

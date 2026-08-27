@@ -7,7 +7,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/appsetid/internal/AppSetIdRetrieverScopeConvertionTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/appsetid/internal/AppSetIdRetrieverScopeConvertionTest.kt"
             line="21"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/appsetid/internal/AppSetIdRetrieverTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/appsetid/internal/AppSetIdRetrieverTest.kt"
             line="24"
             column="1"/>
     </issue>

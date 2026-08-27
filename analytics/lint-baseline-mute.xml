@@ -7,7 +7,7 @@
         errorLine1="        Context context = mock(Context.class);"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ActivityLifecycleManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ActivityLifecycleManagerTest.java"
             line="99"
             column="27"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="        final Context context = mock(Context.class);"
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/id/AdvIdExtractorWrapperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/id/AdvIdExtractorWrapperTest.java"
             line="30"
             column="33"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="            Context context = mock(Context.class);"
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/proxy/CallProxyVerifier.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/proxy/CallProxyVerifier.java"
             line="36"
             column="31"/>
     </issue>
@@ -40,8 +40,8 @@
         errorLine1="    private Context context = mock(Context.class);"
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ClientServiceLocatorTest.java"
-            line="42"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ClientServiceLocatorTest.java"
+            line="40"
             column="31"/>
     </issue>
 
@@ -51,7 +51,7 @@
         errorLine1="        Context context = mock(Context.class);"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/UtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/UtilsTest.java"
             line="402"
             column="27"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="        Context context = mock(Context.class);"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/UtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/UtilsTest.java"
             line="409"
             column="27"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="        Context context = mock(Context.class);"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/UtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/UtilsTest.java"
             line="416"
             column="27"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/encryption/AESEventEncrypterEncrypterParametrizedTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/encryption/AESEventEncrypterEncrypterParametrizedTest.kt"
             line="15"
             column="1"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/parsing/AllParsedParametersAreRequestedTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/parsing/AllParsedParametersAreRequestedTest.java"
             line="45"
             column="1"/>
     </issue>
@@ -106,62 +106,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppEnvironmentTest.java"
-            line="27"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/AppMetricaConfigTest.kt"
-            line="23"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/service/AppMetricaCoreServiceTest.kt"
-            line="17"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner.class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/stub/AppMetricaCoreStubTest.java"
-            line="25"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner.class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaFacadeObjectTest.java"
-            line="42"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner.class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaFacadeTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppEnvironmentTest.java"
             line="26"
             column="1"/>
     </issue>
@@ -172,7 +117,62 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/AppMetricaConfigTest.kt"
+            line="24"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/service/AppMetricaCoreServiceTest.kt"
+            line="17"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/stub/AppMetricaCoreStubTest.java"
+            line="25"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaFacadeObjectTest.java"
+            line="42"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaFacadeTest.java"
+            line="26"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
             line="16"
             column="1"/>
     </issue>
@@ -183,7 +183,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
             line="28"
             column="5"/>
     </issue>
@@ -194,7 +194,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/ndk/AppMetricaNativeCrashMetadataSerializerTest.kt"
             line="96"
             column="5"/>
     </issue>
@@ -205,7 +205,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplStaticTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplStaticTests.java"
             line="38"
             column="1"/>
     </issue>
@@ -216,7 +216,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplTests.java"
             line="51"
             column="1"/>
     </issue>
@@ -227,7 +227,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/AppMetricaServiceTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/AppMetricaServiceTest.kt"
             line="19"
             column="1"/>
     </issue>
@@ -238,7 +238,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterPTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterPTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -249,7 +249,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterPrePTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterPrePTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -260,7 +260,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterRTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppStandbyBucketConverterRTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -271,7 +271,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/profile/AttributeTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/profile/AttributeTest.java"
             line="18"
             column="1"/>
     </issue>
@@ -282,8 +282,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/state/converter/AttributionConfigConverterTest.java"
-            line="17"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/state/converter/AttributionConfigConverterTest.java"
+            line="16"
             column="1"/>
     </issue>
 
@@ -293,7 +293,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/parsing/AttributionConfigParserTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/parsing/AttributionConfigParserTest.java"
             line="27"
             column="1"/>
     </issue>
@@ -304,7 +304,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/AttributionConfigTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/AttributionConfigTest.java"
             line="14"
             column="1"/>
     </issue>
@@ -315,7 +315,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/BackgroundRestrictionsStateProviderPrePTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/BackgroundRestrictionsStateProviderPrePTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -326,7 +326,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/session/BackgroundSessionTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/session/BackgroundSessionTest.java"
             line="6"
             column="1"/>
     </issue>
@@ -337,7 +337,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
             line="152"
             column="5"/>
     </issue>
@@ -348,7 +348,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
             line="231"
             column="5"/>
     </issue>
@@ -359,7 +359,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
             line="277"
             column="5"/>
     </issue>
@@ -370,7 +370,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/BatteryChargeTypeListenerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/BatteryChargeTypeListenerTest.java"
             line="34"
             column="1"/>
     </issue>
@@ -381,7 +381,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/BinaryDataHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/BinaryDataHelperTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -392,7 +392,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preparer/BytesValueComposerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/BytesValueComposerTest.java"
             line="23"
             column="1"/>
     </issue>
@@ -403,7 +403,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/CertificatesFingerprintsProviderPTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/CertificatesFingerprintsProviderPTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -414,7 +414,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/CertificatesFingerprintsProviderPrePTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/CertificatesFingerprintsProviderPrePTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -425,7 +425,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/clids/ClidsDataParserTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/clids/ClidsDataParserTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -436,7 +436,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ClientConfigConverterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ClientConfigConverterTest.java"
             line="20"
             column="1"/>
     </issue>
@@ -447,7 +447,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ClientConfigSerializerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ClientConfigSerializerTest.kt"
             line="25"
             column="1"/>
     </issue>
@@ -458,7 +458,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/executors/ClientExecutorFactoryTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/executors/ClientExecutorFactoryTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -469,7 +469,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ClientIdentifiersHolderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ClientIdentifiersHolderTest.java"
             line="42"
             column="1"/>
     </issue>
@@ -480,7 +480,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ClientIdentifiersProviderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ClientIdentifiersProviderTest.java"
             line="40"
             column="1"/>
     </issue>
@@ -491,7 +491,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/clients/ClientRepositoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/clients/ClientRepositoryTest.java"
             line="27"
             column="1"/>
     </issue>
@@ -502,7 +502,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/CommutationDispatcherComponentTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/CommutationDispatcherComponentTest.java"
             line="61"
             column="1"/>
     </issue>
@@ -513,7 +513,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/CommutationProcessingStrategyFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/CommutationProcessingStrategyFactoryTest.java"
             line="27"
             column="1"/>
     </issue>
@@ -524,7 +524,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/CommutationReporterEnvironmentTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/CommutationReporterEnvironmentTest.java"
             line="13"
             column="1"/>
     </issue>
@@ -535,7 +535,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/ComponentTablesMigrationTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/ComponentTablesMigrationTest.java"
             line="30"
             column="1"/>
     </issue>
@@ -546,7 +546,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/ComponentUnitFieldsFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/ComponentUnitFieldsFactoryTest.java"
             line="49"
             column="1"/>
     </issue>
@@ -557,7 +557,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
             line="26"
             column="1"/>
     </issue>
@@ -568,7 +568,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ContentProviderFirstLaunchHelperTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ContentProviderFirstLaunchHelperTest.kt"
             line="20"
             column="1"/>
     </issue>
@@ -579,7 +579,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/CounterConfigurationReporterTypeTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/CounterConfigurationReporterTypeTest.kt"
             line="10"
             column="1"/>
     </issue>
@@ -590,7 +590,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/CounterConfigurationTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/CounterConfigurationTest.kt"
             line="19"
             column="1"/>
     </issue>
@@ -601,7 +601,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/CrashToFileWriterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/CrashToFileWriterTest.java"
             line="29"
             column="1"/>
     </issue>
@@ -612,7 +612,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/DataResultReceiverTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/DataResultReceiverTest.java"
             line="21"
             column="1"/>
     </issue>
@@ -623,7 +623,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerImplRestrictedForReporterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerImplRestrictedForReporterTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -634,7 +634,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerImplRestrictedForSdkTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerImplRestrictedForSdkTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -645,7 +645,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerIsRestrictedForMainReporterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/DataSendingRestrictionControllerIsRestrictedForMainReporterTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -656,7 +656,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
             line="50"
             column="1"/>
     </issue>
@@ -667,7 +667,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/DatabaseStorageMigrationComplexTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/DatabaseStorageMigrationComplexTest.kt"
             line="15"
             column="1"/>
     </issue>
@@ -678,7 +678,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DatabaseStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseStorageTest.java"
             line="29"
             column="1"/>
     </issue>
@@ -689,7 +689,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DbCleanupFirstHighestPriorityEventsAreNotRemovedTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DbCleanupFirstHighestPriorityEventsAreNotRemovedTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -700,7 +700,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DbCleanupImportantEventsAreRemovedTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DbCleanupImportantEventsAreRemovedTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -711,7 +711,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DbCleanupSecondHighestPriorityEventsAreNotRemovedTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DbCleanupSecondHighestPriorityEventsAreNotRemovedTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -722,7 +722,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbEventModelConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbEventModelConverterTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -733,7 +733,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbSessionModelConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbSessionModelConverterTest.kt"
             line="17"
             column="1"/>
     </issue>
@@ -744,7 +744,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/DeviceIdGeneratorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/DeviceIdGeneratorTest.kt"
             line="24"
             column="1"/>
     </issue>
@@ -755,7 +755,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/DeviceTypeProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/DeviceTypeProviderTest.kt"
             line="26"
             column="1"/>
     </issue>
@@ -766,7 +766,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preparer/EncryptedStringValueComposerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/EncryptedStringValueComposerTest.java"
             line="22"
             column="1"/>
     </issue>
@@ -777,7 +777,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/remarketing/EventHashesStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/remarketing/EventHashesStorageTest.java"
             line="30"
             column="1"/>
     </issue>
@@ -788,7 +788,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/constants/migration/EventMigratorToV112CommonCasesTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/constants/migration/EventMigratorToV112CommonCasesTest.kt"
             line="32"
             column="1"/>
     </issue>
@@ -799,7 +799,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/constants/migration/EventMigratorToV112SpecialCasesTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/constants/migration/EventMigratorToV112SpecialCasesTest.kt"
             line="26"
             column="1"/>
     </issue>
@@ -810,8 +810,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preparer/EventToPreparerSpecialCasesTest.java"
-            line="24"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/EventToPreparerSpecialCasesTest.java"
+            line="25"
             column="1"/>
     </issue>
 
@@ -821,7 +821,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/executors/ExecutorWrapperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/executors/ExecutorWrapperTest.java"
             line="23"
             column="1"/>
     </issue>
@@ -832,7 +832,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/encryption/ExternallyEncryptedEventCrypterTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/encryption/ExternallyEncryptedEventCrypterTests.java"
             line="15"
             column="1"/>
     </issue>
@@ -843,7 +843,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/features/FeatureAdapterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/features/FeatureAdapterTest.java"
             line="22"
             column="1"/>
     </issue>
@@ -854,7 +854,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/FeaturesInternalTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/FeaturesInternalTest.kt"
             line="16"
             column="1"/>
     </issue>
@@ -865,7 +865,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/concurrency/FileLockerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/concurrency/FileLockerTest.java"
             line="25"
             column="1"/>
     </issue>
@@ -876,7 +876,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/FirstLaunchDetectorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/FirstLaunchDetectorTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -887,7 +887,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/session/ForegroundSessionTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/session/ForegroundSessionTest.java"
             line="6"
             column="1"/>
     </issue>
@@ -898,7 +898,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preparer/FullExtrasComposerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/FullExtrasComposerTest.kt"
             line="14"
             column="1"/>
     </issue>
@@ -909,7 +909,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/utils/FullStateConverterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/utils/FullStateConverterTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -920,7 +920,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/profile/GenderAttributeTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/profile/GenderAttributeTest.java"
             line="22"
             column="1"/>
     </issue>
@@ -931,7 +931,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/HashCodeEqualsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/HashCodeEqualsTest.kt"
             line="27"
             column="1"/>
     </issue>
@@ -942,7 +942,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/HashCodeEqualsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/HashCodeEqualsTest.kt"
             line="64"
             column="1"/>
     </issue>
@@ -953,7 +953,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/IdentifiersDataTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/IdentifiersDataTest.java"
             line="30"
             column="1"/>
     </issue>
@@ -964,7 +964,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/IdentifiersResultTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/IdentifiersResultTest.java"
             line="14"
             column="1"/>
     </issue>
@@ -975,7 +975,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
             line="36"
             column="1"/>
     </issue>
@@ -986,7 +986,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
             line="247"
             column="5"/>
     </issue>
@@ -997,7 +997,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="44"
             column="1"/>
     </issue>
@@ -1008,7 +1008,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="169"
             column="5"/>
     </issue>
@@ -1019,7 +1019,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="325"
             column="5"/>
     </issue>
@@ -1030,7 +1030,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="418"
             column="5"/>
     </issue>
@@ -1041,7 +1041,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/LocalesHelperForNTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/LocalesHelperForNTest.kt"
             line="16"
             column="1"/>
     </issue>
@@ -1052,7 +1052,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/connectors/LockedOnFileDBConnectorTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/connectors/LockedOnFileDBConnectorTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -1063,7 +1063,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/MainReporterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/MainReporterTest.java"
             line="41"
             column="1"/>
     </issue>
@@ -1074,8 +1074,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ManualReporterTest.java"
-            line="21"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ManualReporterTest.java"
+            line="26"
             column="1"/>
     </issue>
 
@@ -1085,7 +1085,7 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/MapWithDefaultTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/MapWithDefaultTests.java"
             line="40"
             column="5"/>
     </issue>
@@ -1096,7 +1096,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/MetaInformationTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/MetaInformationTest.java"
             line="13"
             column="1"/>
     </issue>
@@ -1107,7 +1107,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/MigrationManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/MigrationManagerTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -1118,7 +1118,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/preferences/NameSpacedPreferenceDbStorageTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/preferences/NameSpacedPreferenceDbStorageTest.kt"
             line="15"
             column="1"/>
     </issue>
@@ -1129,7 +1129,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/executors/NamedThreadFactoryTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/executors/NamedThreadFactoryTests.java"
             line="12"
             column="1"/>
     </issue>
@@ -1140,7 +1140,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ObfuscatorReservedKeysTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ObfuscatorReservedKeysTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -1151,7 +1151,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/PhoneUtilsConnectionTypeTests.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/PhoneUtilsConnectionTypeTests.kt"
             line="22"
             column="1"/>
     </issue>
@@ -1162,7 +1162,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/PhoneUtilsGetConnectionTypeInServerFormatTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/PhoneUtilsGetConnectionTypeInServerFormatTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -1173,7 +1173,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/crash/jvm/converter/PlatformConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/crash/jvm/converter/PlatformConverterTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -1184,7 +1184,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/preferences/PreferencesClientDbStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/preferences/PreferencesClientDbStorageTest.java"
             line="42"
             column="1"/>
     </issue>
@@ -1195,7 +1195,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/preferences/PreferencesServiceDbStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/preferences/PreferencesServiceDbStorageTest.java"
             line="34"
             column="1"/>
     </issue>
@@ -1206,7 +1206,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoCandidatesHelperTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoCandidatesHelperTest.kt"
             line="12"
             column="1"/>
     </issue>
@@ -1217,7 +1217,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="31"
             column="1"/>
     </issue>
@@ -1228,7 +1228,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoDataParserTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoDataParserTest.kt"
             line="17"
             column="1"/>
     </issue>
@@ -1239,7 +1239,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoFromSatelliteProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoFromSatelliteProviderTest.kt"
             line="24"
             column="1"/>
     </issue>
@@ -1250,7 +1250,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoPriorityProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preloadinfo/PreloadInfoPriorityProviderTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -1261,7 +1261,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/referrer/client/ReferrerHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/referrer/client/ReferrerHelperTest.java"
             line="31"
             column="1"/>
     </issue>
@@ -1272,7 +1272,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ReferrerParserTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ReferrerParserTest.java"
             line="14"
             column="1"/>
     </issue>
@@ -1283,19 +1283,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/referrer/common/ReferrerResultReceiverTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/referrer/common/ReferrerResultReceiverTest.java"
             line="22"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/id/reflection/ReflectionAdvIdProviderTest.kt"
-            line="32"
             column="1"/>
     </issue>
 
@@ -1305,7 +1294,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/RegularDispatcherComponentHandleReportTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/RegularDispatcherComponentHandleReportTest.kt"
             line="22"
             column="1"/>
     </issue>
@@ -1316,7 +1305,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/RemoveBackgroundSessionIDTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/RemoveBackgroundSessionIDTest.java"
             line="30"
             column="1"/>
     </issue>
@@ -1327,7 +1316,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/event/ReportAppOpenHandlerTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportAppOpenHandlerTests.java"
             line="31"
             column="1"/>
     </issue>
@@ -1338,7 +1327,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportArgumentsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportArgumentsTest.java"
             line="22"
             column="1"/>
     </issue>
@@ -1349,7 +1338,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
             line="44"
             column="1"/>
     </issue>
@@ -1360,7 +1349,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/event/ReportCrashMetaInformationTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportCrashMetaInformationTest.java"
             line="23"
             column="1"/>
     </issue>
@@ -1371,7 +1360,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
             line="35"
             column="1"/>
     </issue>
@@ -1382,7 +1371,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
             line="77"
             column="5"/>
     </issue>
@@ -1393,7 +1382,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
             line="39"
             column="1"/>
     </issue>
@@ -1404,19 +1393,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
             line="40"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/impl/ReportTaskTest.kt"
-            line="65"
             column="1"/>
     </issue>
 
@@ -1426,7 +1404,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/ReporterArgumentsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/ReporterArgumentsTest.java"
             line="20"
             column="1"/>
     </issue>
@@ -1437,8 +1415,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/proxy/ReporterProxyStorageTest.java"
-            line="25"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/proxy/ReporterProxyStorageTest.java"
+            line="36"
             column="1"/>
     </issue>
 
@@ -1448,8 +1426,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ReportsHandlerTest.java"
-            line="71"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ReportsHandlerTest.java"
+            line="75"
             column="1"/>
     </issue>
 
@@ -1459,7 +1437,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/RevenueWrapperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/RevenueWrapperTest.java"
             line="22"
             column="1"/>
     </issue>
@@ -1470,7 +1448,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/clids/SatelliteClidsInfoProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/clids/SatelliteClidsInfoProviderTest.kt"
             line="23"
             column="1"/>
     </issue>
@@ -1481,8 +1459,8 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ScreenInfoExtractorTest.kt"
-            line="31"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ScreenInfoExtractorTest.kt"
+            line="35"
             column="1"/>
     </issue>
 
@@ -1492,7 +1470,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/ScreenInfoRetrieverTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ScreenInfoRetrieverTest.kt"
             line="25"
             column="1"/>
     </issue>
@@ -1503,7 +1481,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SdkEnvironmentHolderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SdkEnvironmentHolderTest.kt"
             line="34"
             column="1"/>
     </issue>
@@ -1514,7 +1492,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java"
             line="18"
             column="1"/>
     </issue>
@@ -1525,7 +1503,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java"
             line="26"
             column="1"/>
     </issue>
@@ -1536,8 +1514,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/selfreporting/SelfReporterWrapperTest.java"
-            line="35"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/selfreporting/SelfReporterWrapperTest.java"
+            line="36"
             column="1"/>
     </issue>
 
@@ -1547,7 +1525,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/SendingDataTaskHelperParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/SendingDataTaskHelperParamsAppenderTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -1558,7 +1536,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/executors/ServiceExecutorFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/executors/ServiceExecutorFactoryTest.java"
             line="13"
             column="1"/>
     </issue>
@@ -1569,7 +1547,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationManagerTest.java"
             line="47"
             column="1"/>
     </issue>
@@ -1580,7 +1558,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationScriptToV112Test.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationScriptToV112Test.kt"
             line="45"
             column="1"/>
     </issue>
@@ -1591,7 +1569,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/session/SessionManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/session/SessionManagerTest.java"
             line="41"
             column="1"/>
     </issue>
@@ -1602,7 +1580,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/session/SessionTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/session/SessionTests.java"
             line="27"
             column="1"/>
     </issue>
@@ -1613,7 +1591,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SessionTypeToInternalTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SessionTypeToInternalTest.java"
             line="16"
             column="1"/>
     </issue>
@@ -1624,7 +1602,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/constants/migration/SessionsMigratorToV112CommonCasesTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/constants/migration/SessionsMigratorToV112CommonCasesTest.kt"
             line="29"
             column="1"/>
     </issue>
@@ -1635,7 +1613,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/constants/migration/SessionsMigratorToV112SpecialCasesTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/constants/migration/SessionsMigratorToV112SpecialCasesTest.kt"
             line="24"
             column="1"/>
     </issue>
@@ -1646,7 +1624,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/telephony/SimInfoHelperForQTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/telephony/SimInfoHelperForQTest.kt"
             line="14"
             column="1"/>
     </issue>
@@ -1657,7 +1635,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupCenterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupCenterTest.java"
             line="34"
             column="1"/>
     </issue>
@@ -1668,7 +1646,7 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupErrorTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupErrorTest.java"
             line="22"
             column="5"/>
     </issue>
@@ -1679,7 +1657,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupHelperTest.java"
             line="35"
             column="1"/>
     </issue>
@@ -1690,7 +1668,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderClidsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderClidsTest.java"
             line="31"
             column="1"/>
     </issue>
@@ -1701,7 +1679,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
             line="44"
             column="1"/>
     </issue>
@@ -1712,8 +1690,8 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="386"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
+            line="398"
             column="5"/>
     </issue>
 
@@ -1723,8 +1701,8 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="467"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
+            line="479"
             column="5"/>
     </issue>
 
@@ -1734,8 +1712,8 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="539"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
+            line="551"
             column="5"/>
     </issue>
 
@@ -1745,7 +1723,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/parsing/StartupParserTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/parsing/StartupParserTests.java"
             line="39"
             column="1"/>
     </issue>
@@ -1756,7 +1734,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/StartupRequestConfigLoaderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/StartupRequestConfigLoaderTest.java"
             line="25"
             column="1"/>
     </issue>
@@ -1767,7 +1745,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupUnitClidsFromStartupTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupUnitClidsFromStartupTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -1778,7 +1756,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupUnitStartupDidNotOverrideClidsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupUnitStartupDidNotOverrideClidsTest.kt"
             line="19"
             column="1"/>
     </issue>
@@ -1789,7 +1767,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/utils/StartupUtilsEncodeClidsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/StartupUtilsEncodeClidsTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -1800,7 +1778,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/profile/StringUpdatePatcherTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/profile/StringUpdatePatcherTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -1811,7 +1789,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/TempCacheDbHelperTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/TempCacheDbHelperTest.kt"
             line="29"
             column="1"/>
     </issue>
@@ -1822,7 +1800,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/profile/TypesToNameMappingTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/profile/TypesToNameMappingTest.java"
             line="14"
             column="1"/>
     </issue>
@@ -1833,7 +1811,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/events/UrgentEventTypesTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/events/UrgentEventTypesTest.kt"
             line="12"
             column="1"/>
     </issue>
@@ -1844,7 +1822,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/profile/UserProfileStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/profile/UserProfileStorageTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -1855,7 +1833,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/UtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/UtilsTest.java"
             line="43"
             column="1"/>
     </issue>
@@ -1866,7 +1844,7 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/UtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/UtilsTest.java"
             line="237"
             column="5"/>
     </issue>
@@ -1877,7 +1855,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/uuid/UuidValidatorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/uuid/UuidValidatorTest.kt"
             line="12"
             column="1"/>
     </issue>
@@ -1888,7 +1866,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/preparer/ValueWithPreloadInfoComposerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/ValueWithPreloadInfoComposerTest.java"
             line="28"
             column="1"/>
     </issue>
@@ -1899,7 +1877,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/VitalCommonDataProviderMergerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/VitalCommonDataProviderMergerTest.kt"
             line="22"
             column="1"/>
     </issue>
@@ -1910,7 +1888,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/VitalComponentDataProviderMergerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/VitalComponentDataProviderMergerTest.kt"
             line="25"
             column="1"/>
     </issue>
@@ -1921,7 +1899,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/YLocationTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/YLocationTest.java"
             line="11"
             column="1"/>
     </issue>
@@ -1932,7 +1910,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaFacadeObjectTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaFacadeObjectTest.java"
             line="72"
             column="20"/>
     </issue>
@@ -1943,7 +1921,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaFacadeTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaFacadeTest.java"
             line="67"
             column="20"/>
     </issue>
@@ -1954,8 +1932,8 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplStaticTests.java"
-            line="104"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplStaticTests.java"
+            line="106"
             column="20"/>
     </issue>
 
@@ -1965,7 +1943,7 @@
         errorLine1="        mProvider = new BackgroundRestrictionsStateProvider(RuntimeEnvironment.getApplication());"
         errorLine2="                                                            ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/BackgroundRestrictionsStateProviderPrePTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/BackgroundRestrictionsStateProviderPrePTest.java"
             line="22"
             column="61"/>
     </issue>
@@ -1976,7 +1954,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/clients/ClientRepositoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/clients/ClientRepositoryTest.java"
             line="45"
             column="20"/>
     </issue>
@@ -1987,7 +1965,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/CommutationDispatcherComponentTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/CommutationDispatcherComponentTest.java"
             line="111"
             column="20"/>
     </issue>
@@ -1998,7 +1976,7 @@
         errorLine1="                        new ProcessConfiguration(RuntimeEnvironment.getApplication(), null)"
         errorLine2="                                                 ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/CommutationReporterEnvironmentTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/CommutationReporterEnvironmentTest.java"
             line="19"
             column="50"/>
     </issue>
@@ -2009,7 +1987,7 @@
         errorLine1="    Context mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                       ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/ComponentUnitFieldsFactoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/ComponentUnitFieldsFactoryTest.java"
             line="52"
             column="24"/>
     </issue>
@@ -2020,7 +1998,7 @@
         errorLine1="    private final ComponentsRepository mComponentsRepository = new ComponentsRepository(RuntimeEnvironment.getApplication());"
         errorLine2="                                                                                        ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
             line="29"
             column="89"/>
     </issue>
@@ -2031,7 +2009,7 @@
         errorLine1="    private final Context mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/clients/ComponentsRepositoryTest.java"
             line="47"
             column="38"/>
     </issue>
@@ -2042,7 +2020,7 @@
         errorLine1="        context = RuntimeEnvironment.getApplication();"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
             line="89"
             column="19"/>
     </issue>
@@ -2053,7 +2031,7 @@
         errorLine1="        context = RuntimeEnvironment.getApplication()"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/DatabaseStorageMigrationComplexTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/DatabaseStorageMigrationComplexTest.kt"
             line="354"
             column="19"/>
     </issue>
@@ -2064,7 +2042,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/DatabaseStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseStorageTest.java"
             line="51"
             column="20"/>
     </issue>
@@ -2075,7 +2053,7 @@
         errorLine1="    private final Context mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/remarketing/EventHashesStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/remarketing/EventHashesStorageTest.java"
             line="50"
             column="38"/>
     </issue>
@@ -2086,7 +2064,7 @@
         errorLine1="            RuntimeEnvironment.getApplication(),"
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="371"
             column="13"/>
     </issue>
@@ -2097,7 +2075,7 @@
         errorLine1="        DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), &quot;test&quot;, sDatabaseManagerProvider.buildServiceDatabaseManager());"
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="386"
             column="55"/>
     </issue>
@@ -2108,7 +2086,7 @@
         errorLine1="        DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), &quot;test&quot;, sDatabaseManagerProvider.buildServiceDatabaseManager());"
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="397"
             column="55"/>
     </issue>
@@ -2119,7 +2097,7 @@
         errorLine1="        DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), &quot;test&quot;, sDatabaseManagerProvider.buildServiceDatabaseManager());"
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="409"
             column="55"/>
     </issue>
@@ -2130,7 +2108,7 @@
         errorLine1="            DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), &quot;test&quot;, sDatabaseManagerProvider.buildServiceDatabaseManager());"
         errorLine2="                                                          ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
             line="450"
             column="59"/>
     </issue>
@@ -2141,7 +2119,7 @@
         errorLine1="            &quot;content://&quot; + RuntimeEnvironment.getApplication().packageName + AUTHORITY_SUFFIX + &quot;/preloadinfo&quot;"
         errorLine2="                           ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="55"
             column="28"/>
     </issue>
@@ -2152,7 +2130,7 @@
         errorLine1="            &quot;content://&quot; + RuntimeEnvironment.getApplication().packageName + AUTHORITY_SUFFIX + &quot;/clids&quot;"
         errorLine2="                           ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="58"
             column="28"/>
     </issue>
@@ -2163,7 +2141,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="78"
             column="35"/>
     </issue>
@@ -2174,7 +2152,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="86"
             column="35"/>
     </issue>
@@ -2185,7 +2163,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="111"
             column="35"/>
     </issue>
@@ -2196,7 +2174,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="120"
             column="35"/>
     </issue>
@@ -2207,7 +2185,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="128"
             column="35"/>
     </issue>
@@ -2218,7 +2196,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="138"
             column="35"/>
     </issue>
@@ -2229,7 +2207,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="147"
             column="35"/>
     </issue>
@@ -2240,7 +2218,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="174"
             column="35"/>
     </issue>
@@ -2251,7 +2229,7 @@
         errorLine1="        verify(preloadInfoHelper).handle(RuntimeEnvironment.getApplication(), values)"
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="177"
             column="42"/>
     </issue>
@@ -2262,7 +2240,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="184"
             column="35"/>
     </issue>
@@ -2273,7 +2251,7 @@
         errorLine1="        verify(clidsInfoHelper).handle(RuntimeEnvironment.getApplication(), values)"
         errorLine2="                                       ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="187"
             column="40"/>
     </issue>
@@ -2284,7 +2262,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="194"
             column="35"/>
     </issue>
@@ -2295,7 +2273,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="207"
             column="35"/>
     </issue>
@@ -2306,7 +2284,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="220"
             column="35"/>
     </issue>
@@ -2317,7 +2295,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="228"
             column="35"/>
     </issue>
@@ -2328,7 +2306,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="236"
             column="35"/>
     </issue>
@@ -2339,7 +2317,7 @@
         errorLine1="        setContentProviderContext(RuntimeEnvironment.getApplication())"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/internal/PreloadInfoContentProviderTest.kt"
             line="260"
             column="35"/>
     </issue>
@@ -2350,7 +2328,7 @@
         errorLine1="        when(componentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());"
         errorLine2="                                                    ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
             line="77"
             column="53"/>
     </issue>
@@ -2361,7 +2339,7 @@
         errorLine1="        doReturn(new ComponentId(RuntimeEnvironment.getApplication().getPackageName(), apiKey))"
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportConfigLoaderTest.java"
             line="83"
             column="34"/>
     </issue>
@@ -2372,7 +2350,7 @@
         errorLine1="        GlobalServiceLocator.init(RuntimeEnvironment.getApplication());"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
             line="62"
             column="35"/>
     </issue>
@@ -2383,7 +2361,7 @@
         errorLine1="            GlobalServiceLocator.init(RuntimeEnvironment.getApplication());"
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/ReportParamsAppenderTest.java"
             line="116"
             column="39"/>
     </issue>
@@ -2394,7 +2372,7 @@
         errorLine1="        doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();"
         errorLine2="                 ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
             line="74"
             column="18"/>
     </issue>
@@ -2405,7 +2383,7 @@
         errorLine1="        when(componentId.getPackage()).thenReturn(RuntimeEnvironment.getApplication().getPackageName());"
         errorLine2="                                                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/request/ReportRequestConfigLoaderClidsTest.java"
             line="75"
             column="51"/>
     </issue>
@@ -2416,7 +2394,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
             line="72"
             column="20"/>
     </issue>
@@ -2427,7 +2405,7 @@
         errorLine1="        mContext = RuntimeEnvironment.getApplication();"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java"
             line="30"
             column="20"/>
     </issue>
@@ -2438,7 +2416,7 @@
         errorLine1="        context = RuntimeEnvironment.getApplication();"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java"
             line="49"
             column="19"/>
     </issue>
@@ -2449,7 +2427,7 @@
         errorLine1="    private final Context context = RuntimeEnvironment.getApplication().getApplicationContext();"
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/service/migration/ServiceMigrationManagerTest.java"
             line="54"
             column="37"/>
     </issue>
@@ -2460,7 +2438,7 @@
         errorLine1="    private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();"
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/component/session/SessionManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/component/session/SessionManagerTest.java"
             line="51"
             column="38"/>
     </issue>
@@ -2471,7 +2449,7 @@
         errorLine1="        context = RuntimeEnvironment.getApplication();"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/impl/startup/StartupCenterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupCenterTest.java"
             line="56"
             column="19"/>
     </issue>

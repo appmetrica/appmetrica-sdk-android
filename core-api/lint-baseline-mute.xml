@@ -7,7 +7,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreapi/identifiers/AdTrackingInfoResultTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreapi/identifiers/AdTrackingInfoResultTest.java"
             line="16"
             column="1"/>
     </issue>
@@ -18,8 +18,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreapi/identifiers/AdvertisingIdsHolderTest.java"
-            line="14"
+            file="src/testDebug/java/io/appmetrica/analytics/coreapi/identifiers/AdvertisingIdsHolderTest.java"
+            line="13"
             column="1"/>
     </issue>
 
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreapi/identifiers/AppSetIdScopeTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreapi/identifiers/AppSetIdScopeTest.kt"
             line="10"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreapi/identifiers/IdentifierStatusTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreapi/identifiers/IdentifierStatusTest.java"
             line="15"
             column="1"/>
     </issue>

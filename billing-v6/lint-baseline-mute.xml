@@ -7,7 +7,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/library/BillingClientStateListenerImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/library/BillingClientStateListenerImplTest.kt"
             line="28"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/storage/BillingInfoManagerImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/storage/BillingInfoManagerImplTest.kt"
             line="17"
             column="1"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/library/BillingLibraryConnectionHolderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/library/BillingLibraryConnectionHolderTest.kt"
             line="12"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/internal/BillingLibraryMonitorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/internal/BillingLibraryMonitorTest.kt"
             line="28"
             column="1"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/library/ProductDetailsResponseListenerImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/library/ProductDetailsResponseListenerImplTest.kt"
             line="27"
             column="1"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/ProductTypeParserTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/ProductTypeParserTest.kt"
             line="12"
             column="1"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/library/PurchaseHistoryResponseListenerImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/library/PurchaseHistoryResponseListenerImplTest.kt"
             line="32"
             column="1"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/library/PurchaseResponseListenerImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/library/PurchaseResponseListenerImplTest.kt"
             line="28"
             column="1"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billingv6/impl/update/UpdatePolicyImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billingv6/impl/update/UpdatePolicyImplTest.kt"
             line="18"
             column="1"/>
     </issue>

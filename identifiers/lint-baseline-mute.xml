@@ -7,8 +7,8 @@
         errorLine1="        context = mock(Context.class);"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdConnectionControllerTest.java"
-            line="56"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdConnectionControllerTest.java"
+            line="60"
             column="19"/>
     </issue>
 
@@ -18,7 +18,7 @@
         errorLine1="        context = mock(Context.class);"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdServiceConnectionTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdServiceConnectionTest.java"
             line="37"
             column="19"/>
     </issue>
@@ -29,8 +29,8 @@
         errorLine1="        mContext = mock(Context.class);"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/huawei/HuaweiAdvIdGetterTest.java"
-            line="39"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/huawei/HuaweiAdvIdGetterTest.java"
+            line="42"
             column="20"/>
     </issue>
 
@@ -40,8 +40,8 @@
         errorLine1="        context = mock(Context.class);"
         errorLine2="                  ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/YandexAdvIdGetterTest.java"
-            line="41"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/YandexAdvIdGetterTest.java"
+            line="42"
             column="19"/>
     </issue>
 
@@ -51,8 +51,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdConnectionControllerTest.java"
-            line="28"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdConnectionControllerTest.java"
+            line="32"
             column="1"/>
     </issue>
 
@@ -62,7 +62,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdInfoTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdInfoTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdResultTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdResultTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdRetrieverTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdRetrieverTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/AdvIdServiceConnectionTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/AdvIdServiceConnectionTest.java"
             line="19"
             column="1"/>
     </issue>
@@ -106,7 +106,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/GoogleAdvIdGetterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/GoogleAdvIdGetterTest.kt"
             line="19"
             column="1"/>
     </issue>
@@ -117,8 +117,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/huawei/HuaweiAdvIdGetterTest.java"
-            line="26"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/huawei/HuaweiAdvIdGetterTest.java"
+            line="29"
             column="1"/>
     </issue>
 
@@ -128,8 +128,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/identifiers/impl/YandexAdvIdGetterTest.java"
-            line="26"
+            file="src/testDebug/java/io/appmetrica/analytics/identifiers/impl/YandexAdvIdGetterTest.java"
+            line="27"
             column="1"/>
     </issue>
 

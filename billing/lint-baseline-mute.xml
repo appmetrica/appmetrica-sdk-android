@@ -7,7 +7,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/storage/AutoInappCollectingInfoConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/storage/AutoInappCollectingInfoConverterTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/storage/AutoInappCollectingInfoSerializerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/storage/AutoInappCollectingInfoSerializerTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/storage/BillingInfoConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/storage/BillingInfoConverterTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/sender/BillingInfoSenderImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/sender/BillingInfoSenderImplTest.kt"
             line="20"
             column="1"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/storage/BillingInfoStorageImplTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/storage/BillingInfoStorageImplTest.kt"
             line="15"
             column="1"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/BillingMonitorProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/BillingMonitorProviderTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/BillingMonitorWrapperTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/BillingMonitorWrapperTest.kt"
             line="41"
             column="1"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/billing/impl/sender/ProductInfoConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/billing/impl/sender/ProductInfoConverterTest.kt"
             line="16"
             column="1"/>
     </issue>

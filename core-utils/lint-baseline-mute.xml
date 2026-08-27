@@ -7,7 +7,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/encryption/AESEncrypterTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/encryption/AESEncrypterTests.java"
             line="14"
             column="1"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/encryption/AESRSAEncrypterTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/encryption/AESRSAEncrypterTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/AndroidUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/AndroidUtilsTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/ApiKeyUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/ApiKeyUtilsTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsDecodingTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsDecodingTest.java"
             line="13"
             column="1"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/CachedDataProviderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/cache/CachedDataProviderTest.java"
             line="12"
             column="1"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
             line="24"
             column="1"/>
     </issue>
@@ -106,7 +106,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTest.java"
             line="23"
             column="1"/>
     </issue>
@@ -117,7 +117,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTestKt.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTestKt.kt"
             line="11"
             column="1"/>
     </issue>
@@ -128,7 +128,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/db/DBUtilsTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/db/DBUtilsTest.java"
             line="12"
             column="1"/>
     </issue>
@@ -139,7 +139,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/DataCacheTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/cache/DataCacheTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -161,7 +161,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/FileUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/io/FileUtilsTest.kt"
             line="19"
             column="1"/>
     </issue>
@@ -172,7 +172,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
             line="24"
             column="1"/>
     </issue>
@@ -183,7 +183,7 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
             line="97"
             column="5"/>
     </issue>
@@ -194,7 +194,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionDelayCheckerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionDelayCheckerTest.java"
             line="12"
             column="1"/>
     </issue>
@@ -205,7 +205,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FrameworkDetectorTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/FrameworkDetectorTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -216,7 +216,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/GZIPCompressorTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/io/GZIPCompressorTests.java"
             line="14"
             column="1"/>
     </issue>
@@ -227,7 +227,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/InputStreamUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/io/InputStreamUtilsTest.kt"
             line="15"
             column="1"/>
     </issue>
@@ -238,7 +238,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/LocationDataCacheUpdateSchedulerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/cache/LocationDataCacheUpdateSchedulerTest.java"
             line="27"
             column="1"/>
     </issue>
@@ -249,7 +249,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/LocationUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/LocationUtilsTest.kt"
             line="10"
             column="1"/>
     </issue>
@@ -260,7 +260,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/PackageManagerUtilsTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/PackageManagerUtilsTest.kt"
             line="18"
             column="1"/>
     </issue>
@@ -271,7 +271,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerTest.java"
             line="38"
             column="1"/>
     </issue>
@@ -282,7 +282,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsGetUtf8BytesForStringListTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/StringUtilsGetUtf8BytesForStringListTest.java"
             line="14"
             column="1"/>
     </issue>
@@ -293,7 +293,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
             line="17"
             column="1"/>
     </issue>
@@ -304,7 +304,7 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
             line="148"
             column="5"/>
     </issue>
@@ -315,7 +315,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeOffsetProviderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeOffsetProviderTest.java"
             line="17"
             column="1"/>
     </issue>
@@ -326,7 +326,7 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeProviderTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeProviderTest.java"
             line="15"
             column="1"/>
     </issue>
@@ -337,7 +337,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/TimePassedCheckerTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/time/TimePassedCheckerTest.kt"
             line="11"
             column="1"/>
     </issue>
@@ -348,7 +348,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/network/UserAgentTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/network/UserAgentTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -359,7 +359,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderGetterTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderGetterTest.kt"
             line="9"
             column="1"/>
     </issue>
@@ -370,7 +370,7 @@
         errorLine1="@RunWith(RobolectricTestRunner::class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderTest.kt"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderTest.kt"
             line="13"
             column="1"/>
     </issue>
@@ -381,7 +381,7 @@
         errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
             line="31"
             column="1"/>
     </issue>
@@ -392,7 +392,7 @@
         errorLine1="    @RunWith(RobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
             line="95"
             column="5"/>
     </issue>
@@ -403,8 +403,8 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
-            line="14"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
+            line="16"
             column="1"/>
     </issue>
 
@@ -414,8 +414,8 @@
         errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/test/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
-            line="142"
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
+            line="144"
             column="5"/>
     </issue>
 
