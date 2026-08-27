@@ -1377,7 +1377,6 @@
   "analytics/src/test/java/io/appmetrica/analytics/testutils/ClientServiceLocatorRule.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/ClientServiceLocatorRule.java",
   "analytics/src/test/java/io/appmetrica/analytics/testutils/CollectionTrimInfoConsumer.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/CollectionTrimInfoConsumer.java",
   "analytics/src/test/java/io/appmetrica/analytics/testutils/ContextCoverageUtils.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/ContextCoverageUtils.kt",
-  "analytics/src/test/java/io/appmetrica/analytics/testutils/CoverageUtils.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/CoverageUtils.java",
   "analytics/src/test/java/io/appmetrica/analytics/testutils/GlobalServiceLocatorRule.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/GlobalServiceLocatorRule.kt",
   "analytics/src/test/java/io/appmetrica/analytics/testutils/MockProvider.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/MockProvider.kt",
   "analytics/src/test/java/io/appmetrica/analytics/testutils/MockProviderBundleTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/testutils/MockProviderBundleTest.kt",

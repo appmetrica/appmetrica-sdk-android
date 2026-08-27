@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils;
 
-import io.appmetrica.analytics.testutils.CoverageUtils;
+import io.appmetrica.gradle.testutils.reflect.CoverageUtils;
 import io.appmetrica.gradle.testutils.CommonTest;
 
 import org.junit.Test;
