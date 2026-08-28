@@ -14,6 +14,7 @@ import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
+import io.appmetrica.analytics.impl.ServiceEvent;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionRequestParams;
@@ -32,7 +33,6 @@ import io.appmetrica.analytics.impl.db.session.DbSessionModelFactory;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.events.UrgentEvents;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
-import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -208,7 +208,7 @@ public class DatabaseHelper {
         addSessionValues(sessionValues);
     }
 
-    public void saveReport(@NonNull final EncryptedCounterReport reportData,
+    public void saveReport(@NonNull final ServiceEvent serviceEvent,
                            final int reportType,
                            @NonNull final SessionState sessionState,
                            @NonNull final AppEnvironment.EnvironmentRevision environmentRevision,
@@ -218,7 +218,7 @@ public class DatabaseHelper {
             sessionState,
             reportType,
             vitalComponentDataProvider,
-            reportData,
+            serviceEvent,
             mComponent.getFreshReportRequestConfig(),
             environmentRevision
         ).create();

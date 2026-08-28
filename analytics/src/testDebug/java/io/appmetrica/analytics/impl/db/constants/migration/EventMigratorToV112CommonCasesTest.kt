@@ -12,7 +12,6 @@ import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.gradle.androidtestutils.rules.LogRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
@@ -53,7 +52,7 @@ internal class EventMigratorToV112CommonCasesTest(
             val appEnvironment: Any? = "App environment",
             val appEnvironmentRevision: Any? = 64L,
             val truncated: Any? = 1132,
-            val encryptingMode: Any? = EventEncryptionMode.AES_VALUE_ENCRYPTION.modeId,
+            val encryptingMode: Any? = 2,
             val profileId: Any? = "Profile id",
             val firstOccurrenceStatus: Any? = FirstOccurrenceStatus.FIRST_OCCURRENCE.mStatusCode,
             val source: Any? = EventSource.NATIVE.code,
@@ -230,48 +229,6 @@ internal class EventMigratorToV112CommonCasesTest(
             arrayOf("truncated = 0", EventCursorRecord(truncated = 0), EventCursorRecord(truncated = 0)),
             arrayOf("truncated = positive", EventCursorRecord(truncated = 150), EventCursorRecord(truncated = 150)),
             arrayOf("truncated = string value", EventCursorRecord(truncated = "string value"), null),
-            // endregion
-            // region encryptingMode
-            arrayOf(
-                "encryptingMode = NONE",
-                EventCursorRecord(encryptingMode = EventEncryptionMode.NONE.modeId),
-                EventCursorRecord(encryptingMode = EventEncryptionMode.NONE.modeId)
-            ),
-            arrayOf(
-                "encryptingMode = EXTERNALLY_ENCRYPTED_EVENT_CRYPTER",
-                EventCursorRecord(encryptingMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.modeId),
-                EventCursorRecord(encryptingMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.modeId)
-            ),
-            arrayOf(
-                "encryptingMode = AES_VALUE_ENCRYPTION",
-                EventCursorRecord(encryptingMode = EventEncryptionMode.AES_VALUE_ENCRYPTION.modeId),
-                EventCursorRecord(encryptingMode = EventEncryptionMode.AES_VALUE_ENCRYPTION.modeId)
-            ),
-            arrayOf(
-                "encryptingMode = null",
-                EventCursorRecord(encryptingMode = null),
-                EventCursorRecord(encryptingMode = EventEncryptionMode.NONE.modeId)
-            ),
-            arrayOf(
-                "encryptingMode = negative",
-                EventCursorRecord(encryptingMode = -1),
-                EventCursorRecord(encryptingMode = null)
-            ),
-            arrayOf(
-                "encryptingMode = 0",
-                EventCursorRecord(encryptingMode = 0),
-                EventCursorRecord(encryptingMode = EventEncryptionMode.NONE.modeId)
-            ),
-            arrayOf(
-                "encryptingMode = unknown value",
-                EventCursorRecord(encryptingMode = 100500),
-                EventCursorRecord(encryptingMode = null)
-            ),
-            arrayOf(
-                "encryptingMode = wrong format",
-                EventCursorRecord(encryptingMode = "wrong format"),
-                null
-            ),
             // endregion
             // region profileId
             arrayOf("profileId = null", EventCursorRecord(profileId = null), EventCursorRecord(profileId = null)),
@@ -469,10 +426,6 @@ internal class EventMigratorToV112CommonCasesTest(
                         .checkField("appEnvironment", expectedRecord.appEnvironment)
                         .checkField("appEnvironmentRevision", expectedRecord.appEnvironmentRevision)
                         .checkField("truncated", expectedRecord.truncated)
-                        .checkField(
-                            "encryptingMode",
-                            expectedRecord.encryptingMode?.let { EventEncryptionMode.valueOf(it as Int) }
-                        )
                         .checkField("profileId", expectedRecord.profileId)
                         .checkField(
                             "firstOccurrenceStatus",

@@ -39,7 +39,7 @@ message EventDescription {
   optional int32 truncated = 9 [default = -1];
   optional int32 connection_type = 10 [default = -1];
   optional string cellular_connection_type = 11 [default = ""];
-  optional int32 encrypting_mode = 12 [default = -1];
+  reserved 12;
   optional string profile_id = 13 [default = ""];
   optional int32 first_occurrence_status = 14 [default = -1];
   optional int32 source = 15 [default = -1];

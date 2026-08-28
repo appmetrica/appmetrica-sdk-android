@@ -4,7 +4,6 @@ import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.component.session.SessionType
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
 internal class DbEventModel(
     val session: Long?,
@@ -28,7 +27,6 @@ internal class DbEventModel(
         val truncated: Int?,
         val connectionType: Int?,
         val cellularConnectionType: String?,
-        val encryptingMode: EventEncryptionMode?,
         val profileId: String?,
         val firstOccurrenceStatus: FirstOccurrenceStatus?,
         val source: EventSource?,

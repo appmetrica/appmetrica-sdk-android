@@ -10,9 +10,6 @@ import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -26,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,8 +41,6 @@ public class EventSaverTest extends CommonTest {
     @Mock
     private AppEnvironment mAppEnvironment;
     @Mock
-    private EventEncrypterProvider mEventEncrypterProvider;
-    @Mock
     private EventSaver.ReportSavedListener mReportSavedListener;
     @Mock
     private TimeProvider mTimeProvider;
@@ -52,10 +48,6 @@ public class EventSaverTest extends CommonTest {
     private ServiceEvent mServiceEvent;
     @Mock
     private SessionState mSessionState;
-    @Mock
-    private EncryptedCounterReport mEncryptedCounterReport;
-    @Mock
-    private EventEncrypter mEventEncrypter;
     @Mock
     private SessionExtrasHolder sessionExtrasHolder;
     private AppEnvironment.EnvironmentRevision mRevision;
@@ -123,24 +115,30 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void testSaveReport() {
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mServiceEvent, mSessionState);
         verify(mServiceEvent).setProfileID(mProfileId);
         verify(mServiceEvent).setOpenId(openId);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(mServiceEvent),
+            eq(mReportType),
+            eq(mSessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
     }
 
     @Test
     public void saveReportWithoutExtrasAndSessionExtras() {
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mServiceEvent, mSessionState);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(mServiceEvent),
+            eq(mReportType),
+            eq(mSessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).isEmpty();
@@ -152,11 +150,14 @@ public class EventSaverTest extends CommonTest {
         byte[] extraValue = new byte[]{1, 5, 7, 1, 6};
         extras.put(extraKey, extraValue);
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mServiceEvent, mSessionState);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(mServiceEvent),
+            eq(mReportType),
+            eq(mSessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(Collections.singletonMap(extraKey, extraValue));
@@ -168,11 +169,14 @@ public class EventSaverTest extends CommonTest {
         byte[] sessionExtraValue = "Session extra value".getBytes(StandardCharsets.UTF_8);
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mServiceEvent, mSessionState);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(mServiceEvent),
+            eq(mReportType),
+            eq(mSessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
@@ -193,11 +197,14 @@ public class EventSaverTest extends CommonTest {
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
 
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(mServiceEvent)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mServiceEvent, mSessionState);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(mServiceEvent),
+            eq(mReportType),
+            eq(mSessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(expectedExtras);
@@ -248,8 +255,6 @@ public class EventSaverTest extends CommonTest {
     }
 
     private void prepareReportSaver(ServiceEvent serviceEvent) {
-        when(mEventEncrypterProvider.getEventEncrypter(mServiceEvent)).thenReturn(mEventEncrypter);
-        when(mEventEncrypter.encrypt(serviceEvent)).thenReturn(mEncryptedCounterReport);
         when(mSessionManager.getCurrentSessionState(serviceEvent)).thenReturn(mSessionState);
     }
 
@@ -260,8 +265,13 @@ public class EventSaverTest extends CommonTest {
     private void verifyReportSaved(ServiceEvent serviceEvent, SessionState sessionState) {
         verify(serviceEvent).setProfileID(mProfileId);
         verify(serviceEvent).setOpenId(openId);
-        verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, sessionState, mRevision, vitalComponentDataProvider);
+        verify(mDbHelper).saveReport(
+            eq(serviceEvent),
+            eq(mReportType),
+            eq(sessionState),
+            eq(mRevision),
+            eq(vitalComponentDataProvider)
+        );
         verify(mReportSavedListener).onReportSaved();
     }
 
@@ -274,7 +284,6 @@ public class EventSaverTest extends CommonTest {
             mSessionManager,
             mDbHelper,
             mAppEnvironment,
-            mEventEncrypterProvider,
             sessionExtrasHolder,
             curAppVersion,
             mReportSavedListener,

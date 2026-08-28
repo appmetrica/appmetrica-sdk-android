@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.preparer;
 
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
@@ -12,17 +11,7 @@ public class NoneEncodingTypeProviderTest extends CommonTest {
     private final NoneEncodingTypeProvider mProvider = new NoneEncodingTypeProvider();
 
     @Test
-    public void testGetEncryptionModeExternallyEncrypted() {
-        assertThat(mProvider.getEncodingType(EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER)).isEqualTo(EventProto.ReportMessage.Session.Event.NONE);
-    }
-
-    @Test
-    public void testGetEncryptionModeAes() {
-        assertThat(mProvider.getEncodingType(EventEncryptionMode.AES_VALUE_ENCRYPTION)).isEqualTo(EventProto.ReportMessage.Session.Event.NONE);
-    }
-
-    @Test
-    public void testGetEncryptionModeNone() {
-        assertThat(mProvider.getEncodingType(EventEncryptionMode.NONE)).isEqualTo(EventProto.ReportMessage.Session.Event.NONE);
+    public void testGetEncodingType() {
+        assertThat(mProvider.getEncodingType()).isEqualTo(EventProto.ReportMessage.Session.Event.NONE);
     }
 }

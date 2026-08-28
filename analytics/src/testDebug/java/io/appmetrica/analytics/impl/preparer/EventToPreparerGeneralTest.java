@@ -132,7 +132,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
             {
                 InternalEvents.EVENT_TYPE_APP_OPEN,
                 defaultComposers()
-                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+                    .withCustomValueComposerClass(StringValueComposer.class)
             },
             {
                 InternalEvents.EVENT_TYPE_APP_UPDATE,
@@ -168,7 +168,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
             {
                 InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
                 defaultComposers()
-                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+                    .withCustomValueComposerClass(StringValueComposer.class)
             },
             {
                 InternalEvents.EVENT_TYPE_INIT,
@@ -185,7 +185,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
             {
                 InternalEvents.EVENT_TYPE_REGULAR,
                 defaultComposers()
-                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+                    .withCustomValueComposerClass(StringValueComposer.class)
             },
             {
                 InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT,
@@ -239,7 +239,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
             {
                 InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
                 defaultComposers()
-                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+                    .withCustomValueComposerClass(StringValueComposer.class)
             },
             {InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA, defaultComposers()},
             {

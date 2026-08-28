@@ -8,7 +8,6 @@ import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage
 import io.appmetrica.analytics.impl.protobuf.client.EventExtrasProto.EventExtras
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
@@ -17,7 +16,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.nullable
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
@@ -32,7 +30,6 @@ internal class EventPreparerTest : CommonTest() {
     private val numberOfType = 12L
     private val time = 24761523L
     private val bytesTruncated = 144
-    private val encryptionMode = EventEncryptionMode.AES_VALUE_ENCRYPTION
     private val profileId = "profile id"
     private val firstOccurrenceStatus = FirstOccurrenceStatus.FIRST_OCCURRENCE
     private val inputLocation: DbLocationModel = mock()
@@ -83,7 +80,6 @@ internal class EventPreparerTest : CommonTest() {
         whenever(eventFromDbModel.connectionType).thenReturn(connectionType)
         whenever(eventFromDbModel.cellularConnectionType).thenReturn(cellularConnectionType)
         whenever(eventFromDbModel.profileID).thenReturn(profileId)
-        whenever(eventFromDbModel.eventEncryptionMode).thenReturn(encryptionMode)
         whenever(eventFromDbModel.firstOccurrenceStatus).thenReturn(firstOccurrenceStatus)
         whenever(eventFromDbModel.source).thenReturn(source)
         whenever(eventFromDbModel.attributionIdChanged).thenReturn(attributionIdChanged)
@@ -116,7 +112,7 @@ internal class EventPreparerTest : CommonTest() {
 
         whenever(nameComposer.getName(name)).thenReturn(composedName)
         whenever(valueComposer.getValue(eventFromDbModel, mConfig)).thenReturn(composedValue.toByteArray())
-        whenever(encodingTypeProvider.getEncodingType(encryptionMode)).thenReturn(providedEncryptionMode)
+        whenever(encodingTypeProvider.getEncodingType()).thenReturn(providedEncryptionMode)
         whenever(eventTypeComposer.getEventType(eventFromDbModel)).thenReturn(composedType)
         whenever(locationInfoComposer.getLocation(inputLocation)).thenReturn(location)
         whenever(networkInfoComposer.getNetworkInfo(connectionType, cellularConnectionType)).thenReturn(networkInfo)
@@ -158,7 +154,7 @@ internal class EventPreparerTest : CommonTest() {
 
         whenever(nameComposer.getName(nullable(String::class.java))).thenReturn(null)
         whenever(valueComposer.getValue(event, mConfig)).thenReturn(ByteArray(0))
-        whenever(encodingTypeProvider.getEncodingType(any())).thenReturn(ReportMessage.Session.Event.NONE)
+        whenever(encodingTypeProvider.getEncodingType()).thenReturn(ReportMessage.Session.Event.NONE)
         whenever(eventTypeComposer.getEventType(event)).thenReturn(composedType)
         whenever(extrasComposer.getExtras(null)).thenReturn(ReportMessage.Session.Event.ExtrasEntry.emptyArray())
 

@@ -8,7 +8,6 @@ import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
@@ -35,7 +34,6 @@ internal class EventFromDbModelTest : CommonTest() {
     private val connectionType = 5
     private val cellConnectionType = "cellular connection type"
     private val profileId = "profile id"
-    private val encryptionMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER
     private val firstOccurrenceStatus = FirstOccurrenceStatus.NON_FIRST_OCCURENCE
     private val source = EventSource.JS
     private val attributionIdChanged = true
@@ -71,7 +69,6 @@ internal class EventFromDbModelTest : CommonTest() {
         whenever(modelDescription.truncated).thenReturn(truncated)
         whenever(modelDescription.connectionType).thenReturn(connectionType)
         whenever(modelDescription.cellularConnectionType).thenReturn(cellConnectionType)
-        whenever(modelDescription.encryptingMode).thenReturn(encryptionMode)
         whenever(modelDescription.profileId).thenReturn(profileId)
         whenever(modelDescription.firstOccurrenceStatus).thenReturn(firstOccurrenceStatus)
         whenever(modelDescription.source).thenReturn(source)
@@ -104,7 +101,6 @@ internal class EventFromDbModelTest : CommonTest() {
             .checkField("connectionType", connectionType)
             .checkField("cellularConnectionType", cellConnectionType)
             .checkField("profileID", profileId)
-            .checkField("eventEncryptionMode", encryptionMode)
             .checkField("firstOccurrenceStatus", firstOccurrenceStatus)
             .checkField("source", source)
             .checkField("attributionIdChanged", attributionIdChanged)
@@ -114,15 +110,6 @@ internal class EventFromDbModelTest : CommonTest() {
             .checkField("appEnvironmentRevision", appEnvironmentRevision)
             .checkField("valueProtocolVersion", valueProtocolVersion)
             .checkAll()
-    }
-
-    @Test
-    fun constructorIfNoEncryptingMode() {
-        whenever(modelDescription.encryptingMode).thenReturn(null)
-
-        val event = EventFromDbModel(contentValues)
-
-        assertThat(event.eventEncryptionMode).isEqualTo(EventEncryptionMode.NONE)
     }
 
     @Test

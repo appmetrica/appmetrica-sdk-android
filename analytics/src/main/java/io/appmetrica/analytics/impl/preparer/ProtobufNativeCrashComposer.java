@@ -5,12 +5,11 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 
 public class ProtobufNativeCrashComposer implements ValueComposer, EncodingTypeProvider {
 
     @Override
-    public int getEncodingType(@NonNull EventEncryptionMode encryptionMode) {
+    public int getEncodingType() {
         return EventProto.ReportMessage.Session.Event.GZIP;
     }
 

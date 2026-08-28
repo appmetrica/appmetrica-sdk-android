@@ -13,7 +13,6 @@ import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
@@ -159,7 +158,6 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
         private val oldKeyAppEnvironmentRevision = "app_environment_revision"
         private val oldKeyTruncated = "truncated"
         private val oldKeyCustomType = "custom_type"
-        private val oldKeyEncryptingMode = "encrypting_mode"
         private val oldKeyProfileId = "profile_id"
         private val oldKeyFirstOccurrenceStatus = "first_occurrence_status"
         private val oldKeySource = "source"
@@ -241,8 +239,6 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                     truncated = cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyTruncated)),
                     connectionType = null,
                     cellularConnectionType = null,
-                    encryptingMode =
-                    encryptingModeByCode(cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyEncryptingMode))),
                     profileId = cursor.getString(cursor.getColumnIndexOrThrow(oldKeyProfileId)),
                     firstOccurrenceStatus = extractFirstOccurrenceStatus(cursor),
                     source = extractSource(cursor),
@@ -301,14 +297,6 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
         private fun sessionTypeByCode(sessionType: Int?): SessionType? = when (sessionType) {
             SessionType.FOREGROUND.code -> SessionType.FOREGROUND
             SessionType.BACKGROUND.code -> SessionType.BACKGROUND
-            else -> null
-        }
-
-        private fun encryptingModeByCode(code: Int?): EventEncryptionMode? = when (code) {
-            EventEncryptionMode.NONE.modeId -> EventEncryptionMode.NONE
-            EventEncryptionMode.AES_VALUE_ENCRYPTION.modeId -> EventEncryptionMode.AES_VALUE_ENCRYPTION
-            EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.modeId ->
-                EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER
             else -> null
         }
 

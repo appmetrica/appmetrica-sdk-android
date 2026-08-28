@@ -13,8 +13,6 @@ import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
@@ -68,7 +66,6 @@ internal class DbEventModelFactoryTest : CommonTest() {
         on { extras } doReturn extras
         on { valueProtocolVersion } doReturn valueProtocolVersion
     }
-    private val eventEncryptionMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER
     private val environmentRevisionValue = "environmentRevisionValue string"
     private val revisionNumber = 14432L
     private val convertedExtras = "convertedExtras".toByteArray()
@@ -88,7 +85,6 @@ internal class DbEventModelFactoryTest : CommonTest() {
         on { getAndIncrementEventGlobalNumber() } doReturn globalNumber
         on { getAndIncrementNumberOfType(reportType) } doReturn numberOfType
     }
-    private val encryptedCounterReport = EncryptedCounterReport(serviceEvent, eventEncryptionMode)
     private val reportRequestConfig: ReportRequestConfig = mock()
     private val environmentRevision = AppEnvironment.EnvironmentRevision(environmentRevisionValue, revisionNumber)
     private val eventExtrasConverter: EventExtrasConverter = mock {
@@ -115,7 +111,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         sessionState,
         reportType,
         vitalComponentDataProvider,
-        encryptedCounterReport,
+        serviceEvent,
         reportRequestConfig,
         environmentRevision,
         eventExtrasConverter,
@@ -155,7 +151,6 @@ internal class DbEventModelFactoryTest : CommonTest() {
                         .checkField("appEnvironmentRevision", revisionNumber)
                         .checkField("truncated", bytesTruncated)
                         .checkField("connectionType", connectionTypeInServerFormat)
-                        .checkField("encryptingMode", eventEncryptionMode)
                         .checkField("profileId", profileId)
                         .checkField("firstOccurrenceStatus", firstOccurrenceStatus)
                         .checkField("source", source)

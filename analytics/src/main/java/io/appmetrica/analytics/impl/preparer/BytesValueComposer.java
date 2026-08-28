@@ -2,27 +2,12 @@ package io.appmetrica.analytics.impl.preparer;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class BytesValueComposer implements ValueComposer {
 
     private static final String TAG = "[BytesValueComposer]";
-
-    @NonNull
-    private final EventEncrypterProvider mEventEncrypterProvider;
-
-    public BytesValueComposer() {
-        this(new EventEncrypterProvider());
-    }
-
-    @VisibleForTesting
-    BytesValueComposer(@NonNull EventEncrypterProvider eventEncrypterProvider) {
-        mEventEncrypterProvider = eventEncrypterProvider;
-    }
 
     @NonNull
     @Override
@@ -39,7 +24,6 @@ public class BytesValueComposer implements ValueComposer {
                 );
             }
         }
-        EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(event.getEventEncryptionMode());
-        return eventEncrypter.decrypt(value);
+        return value;
     }
 }

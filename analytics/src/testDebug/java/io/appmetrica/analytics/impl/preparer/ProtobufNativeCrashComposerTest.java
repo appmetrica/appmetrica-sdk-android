@@ -9,7 +9,6 @@ import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.protobuf.client.DbProto;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockProvider;
@@ -82,20 +81,8 @@ public class ProtobufNativeCrashComposerTest extends CommonTest {
     }
 
     @Test
-    public void encodingTypeForNonEncryption() {
-        assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.NONE))
-            .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
-    }
-
-    @Test
-    public void encodingTypeForNonEncryptionForExternallyEventCrypter() {
-        assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER))
-            .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
-    }
-
-    @Test
-    public void encodingTypeForAesValueEncryption() {
-        assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.AES_VALUE_ENCRYPTION))
+    public void encodingType() {
+        assertThat(protobufNativeCrashComposer.getEncodingType())
             .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
     }
 }

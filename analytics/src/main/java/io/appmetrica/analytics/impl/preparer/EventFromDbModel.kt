@@ -7,7 +7,6 @@ import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
 internal class EventFromDbModel(cv: ContentValues) {
 
@@ -27,8 +26,6 @@ internal class EventFromDbModel(cv: ContentValues) {
     val connectionType: Int? = dbEventModel.description.connectionType
     val cellularConnectionType: String? = dbEventModel.description.cellularConnectionType
     val profileID: String? = dbEventModel.description.profileId
-    val eventEncryptionMode: EventEncryptionMode = dbEventModel.description.encryptingMode
-        ?: EventEncryptionMode.valueOf(null as Int?)
     val firstOccurrenceStatus: FirstOccurrenceStatus = dbEventModel.description.firstOccurrenceStatus
         ?: FirstOccurrenceStatus.fromStatusCode(null)
     val source: EventSource? = dbEventModel.description.source

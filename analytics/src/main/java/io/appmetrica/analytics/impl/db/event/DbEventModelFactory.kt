@@ -6,27 +6,25 @@ import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
+import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.session.SessionState
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.telephony.MobileConnectionDescription
 import io.appmetrica.analytics.impl.telephony.TelephonyInfoAdapter
-import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport
 
 internal class DbEventModelFactory @JvmOverloads constructor(
     private val context: Context,
     private val sessionState: SessionState,
     private val reportType: Int,
     private val vitalComponentDataProvider: VitalComponentDataProvider,
-    private val encryptedCounterReport: EncryptedCounterReport,
+    private val serviceEvent: ServiceEvent,
     private val reportRequestConfig: ReportRequestConfig,
     private val environmentRevision: AppEnvironment.EnvironmentRevision,
     private val eventExtrasConverter: EventExtrasConverter = EventExtrasConverter(),
     private val dbLocationModelFactory: DbLocationModelFactory = DbLocationModelFactory(reportRequestConfig)
 ) {
-    private val serviceEvent = encryptedCounterReport.mServiceEvent
-
     fun create() = DbEventModel(
         session = sessionState.sessionId,
         sessionType = sessionState.sessionType,
@@ -52,7 +50,6 @@ internal class DbEventModelFactory @JvmOverloads constructor(
             truncated = serviceEvent.bytesTruncated,
             connectionType = PhoneUtils.getConnectionTypeInServerFormat(context),
             cellularConnectionType = getMobileConnectionDescription(),
-            encryptingMode = encryptedCounterReport.mEventEncryptionMode,
             profileId = serviceEvent.profileID,
             firstOccurrenceStatus = serviceEvent.firstOccurrenceStatus,
             source = serviceEvent.source,

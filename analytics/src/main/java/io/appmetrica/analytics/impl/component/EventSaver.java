@@ -12,8 +12,6 @@ import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class EventSaver {
@@ -34,8 +32,6 @@ public class EventSaver {
     @NonNull
     private DatabaseHelper mDbHelper;
     @NonNull
-    private final EventEncrypterProvider mEventEncrypterProvider;
-    @NonNull
     private final SessionExtrasHolder sessionExtrasHolder;
     @NonNull
     private final AppEnvironment mAppEnvironment;
@@ -52,7 +48,6 @@ public class EventSaver {
                       @NonNull SessionManagerStateMachine sessionManager,
                       @NonNull DatabaseHelper dbHelper,
                       @NonNull AppEnvironment appEnvironment,
-                      @NonNull EventEncrypterProvider eventEncrypterProvider,
                       @NonNull SessionExtrasHolder sessionExtrasHolder,
                       final int currentAppVersion,
                       @NonNull ReportSavedListener reportSavedListener) {
@@ -62,7 +57,6 @@ public class EventSaver {
                 sessionManager,
                 dbHelper,
                 appEnvironment,
-                eventEncrypterProvider,
                 sessionExtrasHolder,
                 currentAppVersion,
                 reportSavedListener,
@@ -76,7 +70,6 @@ public class EventSaver {
                       @NonNull SessionManagerStateMachine sessionManager,
                       @NonNull DatabaseHelper dbHelper,
                       @NonNull AppEnvironment appEnvironment,
-                      @NonNull EventEncrypterProvider eventEncrypterProvider,
                       @NonNull SessionExtrasHolder sessionExtrasHolder,
                       final int currentAppVersion,
                       @NonNull ReportSavedListener reportSavedListener,
@@ -86,7 +79,6 @@ public class EventSaver {
         mSessionManager = sessionManager;
         mDbHelper = dbHelper;
         mAppEnvironment = appEnvironment;
-        mEventEncrypterProvider = eventEncrypterProvider;
         this.sessionExtrasHolder = sessionExtrasHolder;
         mCurrentAppVersion = currentAppVersion;
         mTimeProvider = timeProvider;
@@ -144,9 +136,8 @@ public class EventSaver {
         serviceEvent.setProfileID(mPreferences.getProfileID());
         serviceEvent.setOpenId(vitalComponentDataProvider.getOpenId());
         AppEnvironment.EnvironmentRevision revision = mAppEnvironment.getLastRevision();
-        EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(serviceEvent);
         mDbHelper.saveReport(
-                eventEncrypter.encrypt(serviceEvent),
+                serviceEvent,
                 serviceEvent.getType(),
                 sessionState,
                 revision,

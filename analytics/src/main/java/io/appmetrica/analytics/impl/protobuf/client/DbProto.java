@@ -468,9 +468,6 @@ public interface DbProto {
     // optional string cellular_connection_type = 11 [default = ""];
     public java.lang.String cellularConnectionType;
 
-    // optional int32 encrypting_mode = 12 [default = -1];
-    public int encryptingMode;
-
     // optional string profile_id = 13 [default = ""];
     public java.lang.String profileId;
 
@@ -508,7 +505,6 @@ public interface DbProto {
       truncated = -1;
       connectionType = -1;
       cellularConnectionType = "";
-      encryptingMode = -1;
       profileId = "";
       firstOccurrenceStatus = -1;
       source = -1;
@@ -555,9 +551,6 @@ public interface DbProto {
       }
       if (!this.cellularConnectionType.equals("")) {
         output.writeString(11, this.cellularConnectionType);
-      }
-      if (this.encryptingMode != -1) {
-        output.writeInt32(12, this.encryptingMode);
       }
       if (!this.profileId.equals("")) {
         output.writeString(13, this.profileId);
@@ -629,10 +622,6 @@ public interface DbProto {
       if (!this.cellularConnectionType.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
             .computeStringSize(11, this.cellularConnectionType);
-      }
-      if (this.encryptingMode != -1) {
-        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-            .computeInt32Size(12, this.encryptingMode);
       }
       if (!this.profileId.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
@@ -725,10 +714,6 @@ public interface DbProto {
           }
           case 90: {
             this.cellularConnectionType = input.readString();
-            break;
-          }
-          case 96: {
-            this.encryptingMode = input.readInt32();
             break;
           }
           case 106: {

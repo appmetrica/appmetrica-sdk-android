@@ -204,7 +204,7 @@ public class EventPreparer {
         if (value.getBytesTruncated() != null) {
             eventBuilder.bytesTruncated = value.getBytesTruncated();
         }
-        eventBuilder.encodingType = mEncodingTypeProvider.getEncodingType(value.getEventEncryptionMode());
+        eventBuilder.encodingType = mEncodingTypeProvider.getEncodingType();
         eventBuilder.locationTrackingEnabled = getTrackLocationEnabled(value.getLocationData());
         if (value.getProfileID() != null) {
             eventBuilder.profileId = value.getProfileID().getBytes();

@@ -5,7 +5,6 @@ import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
@@ -27,7 +26,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     private val truncated = 321
     private val connectionType = 234
     private val cellularConnectionType = "cellular connection type string"
-    private val encryptingMode = EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER
     private val profileId = "profile id string"
     private val firstOccurrenceStatus = FirstOccurrenceStatus.FIRST_OCCURRENCE
     private val source = EventSource.JS
@@ -70,7 +68,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             truncated,
             connectionType,
             cellularConnectionType,
-            encryptingMode,
             profileId,
             firstOccurrenceStatus,
             source,
@@ -92,7 +89,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("truncated", truncated)
             .checkField("connectionType", connectionType)
             .checkField("cellularConnectionType", cellularConnectionType)
-            .checkField("encryptingMode", encryptingMode.modeId)
             .checkField("profileId", profileId)
             .checkField("firstOccurrenceStatus", firstOccurrenceStatus.mStatusCode)
             .checkField("source", source.code)
@@ -107,7 +103,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     fun fromModelIfNullFields() {
         val model = DbEventModel.Description(
             null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null
+            null, null, null, null, null, null, null
         )
         val proto = converter.fromModel(model)
         ProtoObjectPropertyAssertions(proto)
@@ -122,7 +118,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("truncated", -1)
             .checkField("connectionType", -1)
             .checkField("cellularConnectionType", "")
-            .checkField("encryptingMode", -1)
             .checkField("profileId", "")
             .checkField("firstOccurrenceStatus", -1)
             .checkField("source", -1)
@@ -147,7 +142,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.truncated = truncated
             it.connectionType = connectionType
             it.cellularConnectionType = cellularConnectionType
-            it.encryptingMode = encryptingMode.modeId
             it.profileId = profileId
             it.firstOccurrenceStatus = firstOccurrenceStatus.mStatusCode
             it.source = source.code
@@ -169,7 +163,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("truncated", truncated)
             .checkField("connectionType", connectionType)
             .checkField("cellularConnectionType", cellularConnectionType)
-            .checkField("encryptingMode", encryptingMode)
             .checkField("profileId", profileId)
             .checkField("firstOccurrenceStatus", firstOccurrenceStatus)
             .checkField("source", source)
@@ -197,7 +190,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "truncated",
                 "connectionType",
                 "cellularConnectionType",
-                "encryptingMode",
                 "profileId",
                 "firstOccurrenceStatus",
                 "source",
@@ -222,7 +214,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.truncated = -1
             it.connectionType = -1
             it.cellularConnectionType = ""
-            it.encryptingMode = -1
             it.profileId = ""
             it.firstOccurrenceStatus = -1
             it.source = -1
@@ -245,7 +236,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "truncated",
                 "connectionType",
                 "cellularConnectionType",
-                "encryptingMode",
                 "profileId",
                 "firstOccurrenceStatus",
                 "source",
@@ -273,7 +263,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 truncated,
                 connectionType,
                 cellularConnectionType,
-                encryptingMode,
                 profileId,
                 firstOccurrenceStatus,
                 source,
@@ -303,7 +292,6 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 truncated,
                 connectionType,
                 cellularConnectionType,
-                encryptingMode,
                 profileId,
                 firstOccurrenceStatus,
                 source,

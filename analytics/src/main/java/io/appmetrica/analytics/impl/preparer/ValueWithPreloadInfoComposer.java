@@ -13,15 +13,15 @@ public class ValueWithPreloadInfoComposer implements ValueComposer {
     private static final String TAG = "[ValueWithPreloadInfoComposer]";
 
     @NonNull
-    private final EncryptedStringValueComposer mEncryptedStringValueComposer;
+    private final StringValueComposer mStringValueComposer;
 
     public ValueWithPreloadInfoComposer() {
-        this(new EncryptedStringValueComposer());
+        this(new StringValueComposer());
     }
 
     @VisibleForTesting
-    ValueWithPreloadInfoComposer(@NonNull EncryptedStringValueComposer composer) {
-        mEncryptedStringValueComposer = composer;
+    ValueWithPreloadInfoComposer(@NonNull StringValueComposer composer) {
+        mStringValueComposer = composer;
     }
 
     @NonNull
@@ -40,6 +40,6 @@ public class ValueWithPreloadInfoComposer implements ValueComposer {
                 }
             }
         }
-        return mEncryptedStringValueComposer.getValue(event, config);
+        return mStringValueComposer.getValue(event, config);
     }
 }

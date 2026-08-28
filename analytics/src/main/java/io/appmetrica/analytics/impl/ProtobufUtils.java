@@ -12,7 +12,6 @@ import io.appmetrica.analytics.impl.preparer.DummyLocationInfoComposer;
 import io.appmetrica.analytics.impl.preparer.DummyNetworkInfoComposer;
 import io.appmetrica.analytics.impl.preparer.EmptyNameComposer;
 import io.appmetrica.analytics.impl.preparer.EmptyValueComposer;
-import io.appmetrica.analytics.impl.preparer.EncryptedStringValueComposer;
 import io.appmetrica.analytics.impl.preparer.EventFromDbModel;
 import io.appmetrica.analytics.impl.preparer.EventPreparer;
 import io.appmetrica.analytics.impl.preparer.EventTypeComposer;
@@ -167,12 +166,12 @@ public final class ProtobufUtils {
 
         Map<InternalEvents, EventPreparer> eventsMapping = new HashMap<InternalEvents, EventPreparer>();
         NameComposer emptyNameComposer = new EmptyNameComposer();
-        ValueComposer encryptedValueComposer = new EncryptedStringValueComposer();
+        ValueComposer stringValueComposer = new StringValueComposer();
         ValueComposer emptyValueComposer = new EmptyValueComposer();
         ValueComposer base64DecodedValueComposer = new BytesValueComposer();
         ValueComposer customEventBase64DecodedValueComposer = new CustomEventValueComposer(
             base64DecodedValueComposer,
-            new StringValueComposer()
+            stringValueComposer
         );
         ValueComposer unGzippedBase64DecodedValueComposer = new UnGzipBytesValueComposer();
         ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
@@ -180,8 +179,8 @@ public final class ProtobufUtils {
                 .withValueComposer(protobufNativeCrashComposer)
                 .withEncodingTypeProvider(protobufNativeCrashComposer)
                 .build();
-        EventPreparer preparerWithEncryptedValue =
-                EventPreparer.builderWithDefaults().withValueComposer(encryptedValueComposer).build();
+        EventPreparer preparerWithStringValue =
+                EventPreparer.builderWithDefaults().withValueComposer(stringValueComposer).build();
         EventPreparer preparerWithBase64DecodedValue =
                 EventPreparer.builderWithDefaults().withValueComposer(base64DecodedValueComposer).build();
         EventPreparer preparerWithUnGzippedBase64DecodedValue = EventPreparer.builderWithDefaults()
@@ -190,7 +189,7 @@ public final class ProtobufUtils {
                 EventPreparer.builderWithDefaults().withNameComposer(emptyNameComposer).build();
         EventPreparer preparerWithPreloadInfoHandling = EventPreparer.builderWithDefaults()
                 .withValueComposer(new ValueWithPreloadInfoComposer()).build();
-        eventsMapping.put(InternalEvents.EVENT_TYPE_REGULAR, preparerWithEncryptedValue);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_REGULAR, preparerWithStringValue);
         eventsMapping.put(
                 InternalEvents.EVENT_TYPE_SEND_REFERRER,
                 EventPreparer.builderWithDefaults().withValueComposer(new ValueComposer() {
@@ -254,7 +253,7 @@ public final class ProtobufUtils {
         eventsMapping.put(
                 InternalEvents.EVENT_TYPE_START,
                 EventPreparer.builderWithDefaults()
-                        .withNameComposer(new EmptyNameComposer())
+                        .withNameComposer(emptyNameComposer)
                         .withValueComposer(base64DecodedValueComposer)
                         .build()
         );
@@ -270,7 +269,7 @@ public final class ProtobufUtils {
                             }
                         }).build()
         );
-        eventsMapping.put(InternalEvents.EVENT_TYPE_APP_OPEN, preparerWithEncryptedValue);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_APP_OPEN, preparerWithStringValue);
         eventsMapping.put(InternalEvents.EVENT_TYPE_PERMISSIONS, preparerWithoutName);
         eventsMapping.put(InternalEvents.EVENT_TYPE_APP_FEATURES, preparerWithoutName);
         eventsMapping.put(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE, preparerWithBase64DecodedValue);
@@ -279,8 +278,8 @@ public final class ProtobufUtils {
         eventsMapping.put(InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT, preparerWithUnGzippedBase64DecodedValue);
         eventsMapping.put(InternalEvents.EVENT_TYPE_INIT, preparerWithPreloadInfoHandling);
         eventsMapping.put(InternalEvents.EVENT_TYPE_APP_UPDATE, preparerWithPreloadInfoHandling);
-        eventsMapping.put(InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, preparerWithEncryptedValue);
-        eventsMapping.put(InternalEvents.EVENT_TYPE_WEBVIEW_SYNC, preparerWithEncryptedValue);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, preparerWithStringValue);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_WEBVIEW_SYNC, preparerWithStringValue);
         eventsMapping.put(InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION, preparerWithBase64DecodedValue);
         INTERNAL_TO_PROTOBUF_EVENTS_MAPPING = Collections.unmodifiableMap(eventsMapping);
     }

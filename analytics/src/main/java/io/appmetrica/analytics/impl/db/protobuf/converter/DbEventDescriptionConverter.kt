@@ -6,7 +6,6 @@ import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
-import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
 internal class DbEventDescriptionConverter(
     private val optionalBoolConverter: OptionalBoolConverter = OptionalBoolConverter(),
@@ -47,9 +46,6 @@ internal class DbEventDescriptionConverter(
         value.cellularConnectionType?.let {
             proto.cellularConnectionType = it
         }
-        value.encryptingMode?.let {
-            proto.encryptingMode = it.modeId
-        }
         value.profileId?.let {
             proto.profileId = it
         }
@@ -87,8 +83,6 @@ internal class DbEventDescriptionConverter(
             value.truncated.takeIf { it != defaultModel.truncated },
             value.connectionType.takeIf { it != defaultModel.connectionType },
             value.cellularConnectionType.takeIf { it != defaultModel.cellularConnectionType },
-            value.encryptingMode.takeIf { it != defaultModel.encryptingMode }
-                ?.let { EventEncryptionMode.valueOf(it) },
             value.profileId.takeIf { it != defaultModel.profileId },
             value.firstOccurrenceStatus.takeIf { it != defaultModel.firstOccurrenceStatus }
                 ?.let { FirstOccurrenceStatus.fromStatusCode(it) },

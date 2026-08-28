@@ -81,17 +81,6 @@
     <issue
         id="RobolectricUsage"
         message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/encryption/AESEventEncrypterEncrypterParametrizedTest.kt"
-            line="15"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -393,7 +382,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/BytesValueComposerTest.java"
-            line="23"
+            line="19"
             column="1"/>
     </issue>
 
@@ -766,17 +755,6 @@
         errorLine1="@RunWith(RobolectricTestRunner.class)"
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/EncryptedStringValueComposerTest.java"
-            line="22"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner.class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/remarketing/EventHashesStorageTest.java"
             line="30"
             column="1"/>
@@ -789,7 +767,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/constants/migration/EventMigratorToV112CommonCasesTest.kt"
-            line="32"
+            line="31"
             column="1"/>
     </issue>
 
@@ -823,17 +801,6 @@
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/utils/executors/ExecutorWrapperTest.java"
             line="23"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner.class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/testDebug/java/io/appmetrica/analytics/impl/utils/encryption/ExternallyEncryptedEventCrypterTests.java"
-            line="15"
             column="1"/>
     </issue>
 
@@ -1867,7 +1834,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/ValueWithPreloadInfoComposerTest.java"
-            line="28"
+            line="27"
             column="1"/>
     </issue>
 

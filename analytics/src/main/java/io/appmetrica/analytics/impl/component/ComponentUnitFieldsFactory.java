@@ -28,7 +28,6 @@ import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
-import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 class ComponentUnitFieldsFactory {
@@ -88,8 +87,6 @@ class ComponentUnitFieldsFactory {
     @NonNull
     private final ReportRequestConfig.DataSendingStrategy mDataSendingStrategy;
     @NonNull
-    private final EventEncrypterProvider mEventEncrypterProvider;
-    @NonNull
     private final ICommonExecutor mTaskExecutor;
     @NonNull
     private final LifecycleDependentComponentManager lifecycleDependentComponentManager;
@@ -115,7 +112,6 @@ class ComponentUnitFieldsFactory {
             startupState,
             statSendingStrategy,
             taskExecutor,
-            new EventEncrypterProvider(),
             currentAppVersion,
             new LoggerProvider(sdkConfig.apiKey),
             new PreferencesProvider(context, componentId),
@@ -132,7 +128,6 @@ class ComponentUnitFieldsFactory {
                                @NonNull StartupState startupState,
                                @NonNull ReportRequestConfig.DataSendingStrategy statSendingStrategy,
                                @NonNull ICommonExecutor taskExecutor,
-                               @NonNull EventEncrypterProvider eventEncrypterProvider,
                                final int currentAppVersion,
                                @NonNull LoggerProvider loggerProvider,
                                @NonNull PreferencesProvider preferencesProvider,
@@ -145,7 +140,6 @@ class ComponentUnitFieldsFactory {
         mStartupState = startupState;
         mDataSendingStrategy = statSendingStrategy;
         mTaskExecutor = taskExecutor;
-        mEventEncrypterProvider = eventEncrypterProvider;
         mCurrentAppVersion = currentAppVersion;
         mLoggerProvider = loggerProvider;
         mPreferencesProvider = preferencesProvider;
@@ -220,7 +214,6 @@ class ComponentUnitFieldsFactory {
             sessionManager,
             databaseHelper,
             appEnvironment,
-            mEventEncrypterProvider,
             sessionExtrasHolder,
             mCurrentAppVersion,
             new EventSaver.ReportSavedListener() {
