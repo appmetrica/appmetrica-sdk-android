@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.session;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
@@ -90,16 +90,16 @@ public class SessionManagerTest extends CommonTest {
 
     @Test
     public void testSessionStateValidForNewForegroundSession() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         serviceEvent.setType(EVENT_TYPE_REGULAR.getTypeId());
 
-        mManager.stopCurrentSessionDueToCrash(new ServiceEvent());
+        mManager.stopCurrentSessionDueToCrash(new CoreServiceEvent());
         mManager.heartbeat(serviceEvent); //alive report
 
-        SessionState sessionState = mManager.getCurrentSessionState(new ServiceEvent());
+        SessionState sessionState = mManager.getCurrentSessionState(new CoreServiceEvent());
 
         assertThat(sessionState.getSessionId()).isEqualTo(
-            mManager.getSomeSession(new ServiceEvent()).getId()
+            mManager.getSomeSession(new CoreServiceEvent()).getId()
         );
         assertThat(sessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(sessionState.getReportId()).isEqualTo(1);
@@ -110,12 +110,12 @@ public class SessionManagerTest extends CommonTest {
     public void testAliveReportForForegroundSessionCreated() throws Exception {
         SessionManagerStateMachine.EventSaver saver = mock(SessionManagerStateMachine.EventSaver.class);
         SessionManagerStateMachine sessionManager = new SessionManagerStateMachine(mComponentUnit, sessionIDProvider, saver);
-        sessionManager.heartbeat(new ServiceEvent());
+        sessionManager.heartbeat(new CoreServiceEvent());
 
-        sessionManager.stopCurrentSessionDueToCrash(mock(ServiceEvent.class));
-        verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<ServiceEvent>() {
+        sessionManager.stopCurrentSessionDueToCrash(mock(CoreServiceEvent.class));
+        verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<CoreServiceEvent>() {
             @Override
-            public boolean matches(ServiceEvent serviceEvent) {
+            public boolean matches(CoreServiceEvent serviceEvent) {
                 return serviceEvent.getType() == InternalEvents.EVENT_TYPE_START.getTypeId();
             }
         }), any(SessionState.class));
@@ -135,8 +135,8 @@ public class SessionManagerTest extends CommonTest {
             sessionFromPastFactory
         );
 
-        sessionManager.heartbeat(new ServiceEvent());
-        sessionManager.heartbeat(new ServiceEvent());
+        sessionManager.heartbeat(new CoreServiceEvent());
+        sessionManager.heartbeat(new CoreServiceEvent());
 
         verify(foregroundSessionFactory, times(1)).create(any(SessionArguments.class));
         verify(backgroundSessionFactory, never()).create(any(SessionArguments.class));
@@ -147,14 +147,14 @@ public class SessionManagerTest extends CommonTest {
         SessionManagerStateMachine.EventSaver saver = mock(SessionManagerStateMachine.EventSaver.class);
         SessionManagerStateMachine sessionManager = new SessionManagerStateMachine(mComponentUnit, sessionIDProvider, saver);
 
-        sessionManager.heartbeat(new ServiceEvent());
-        sessionManager.stopCurrentSessionDueToCrash(new ServiceEvent());
-        sessionManager.getSomeSession(new ServiceEvent());
+        sessionManager.heartbeat(new CoreServiceEvent());
+        sessionManager.stopCurrentSessionDueToCrash(new CoreServiceEvent());
+        sessionManager.getSomeSession(new CoreServiceEvent());
 
         assertThat(sessionManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
-        verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<ServiceEvent>() {
+        verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<CoreServiceEvent>() {
             @Override
-            public boolean matches(ServiceEvent serviceEvent) {
+            public boolean matches(CoreServiceEvent serviceEvent) {
                 return serviceEvent.getType() == InternalEvents.EVENT_TYPE_START.getTypeId();
             }
         }), any(SessionState.class));
@@ -192,9 +192,9 @@ public class SessionManagerTest extends CommonTest {
             sessionIDProvider,
             mock(SessionManagerStateMachine.EventSaver.class)
         );
-        manager.heartbeat(mock(ServiceEvent.class));
+        manager.heartbeat(mock(CoreServiceEvent.class));
         doReturn(INITIAL_SESSION_ID + 10).when(sessionIDProvider).getNextSessionId();
-        manager.heartbeat(mock(ServiceEvent.class));
+        manager.heartbeat(mock(CoreServiceEvent.class));
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(INITIAL_SESSION_ID);
     }
 }

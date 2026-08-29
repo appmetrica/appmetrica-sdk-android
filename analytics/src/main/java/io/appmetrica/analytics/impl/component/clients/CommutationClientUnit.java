@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.ClientIdentifiersChangedListener;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
@@ -43,7 +43,7 @@ public class CommutationClientUnit implements ClientIdentifiersChangedListener, 
     }
 
     @Override
-    public void handle(@NonNull ServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
+    public void handle(@NonNull CoreServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
         mComponentUnit.updateConfig(sdkConfig);
         mComponentUnit.handleReport(serviceEvent, this);
     }

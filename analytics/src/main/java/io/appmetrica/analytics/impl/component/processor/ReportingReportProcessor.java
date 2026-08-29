@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.EventHandler;
 
@@ -12,10 +12,10 @@ public class ReportingReportProcessor<T extends EventHandler, C extends Componen
         super(processingStrategyFactory, component);
     }
 
-    public boolean process(final ServiceEvent serviceEvent) {
+    public boolean process(final CoreServiceEvent serviceEvent) {
         return process(serviceEvent, new ProcessItem<T>() {
             @Override
-            public boolean process(T handler, ServiceEvent serviceEvent) {
+            public boolean process(T handler, CoreServiceEvent serviceEvent) {
                 return handler.process(serviceEvent);
             }
         });

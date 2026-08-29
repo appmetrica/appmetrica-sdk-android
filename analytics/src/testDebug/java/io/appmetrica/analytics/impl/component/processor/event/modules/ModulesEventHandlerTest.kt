@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
@@ -40,7 +40,7 @@ internal class ModulesEventHandlerTest : CommonTest() {
         on { vitalComponentDataProvider } doReturn vitalComponentDataProvider
     }
 
-    private val currentReport = mock<ServiceEvent>()
+    private val currentReport = mock<CoreServiceEvent>()
 
     private val firstIdentifier = "First identifier"
     private val firstModuleEventHandler = mock<ModuleServiceEventHandler>()

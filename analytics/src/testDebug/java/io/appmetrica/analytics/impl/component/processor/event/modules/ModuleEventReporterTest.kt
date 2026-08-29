@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event.modules
 
 import android.annotation.SuppressLint
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
-import io.appmetrica.analytics.impl.ServiceEvent
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ internal class ModuleEventReporterTest : CommonTest() {
 
     private val eventSaver = mock<EventSaver>()
 
-    private val prototypeServiceEvent = ServiceEvent()
+    private val prototype = CoreServiceEvent()
 
     private val apiKey = UUID.randomUUID().toString()
     private val typeValue = 22
@@ -50,13 +50,13 @@ internal class ModuleEventReporterTest : CommonTest() {
 
     @Before
     fun setUp() {
-        moduleEventReporter = ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent)
+        moduleEventReporter = ModuleEventReporter(apiKey, isMain, eventSaver, prototype)
     }
 
     @Test
     fun report() {
         moduleEventReporter.report(moduleReport)
-        val captor = argumentCaptor<ServiceEvent>()
+        val captor = argumentCaptor<CoreServiceEvent>()
         verify(eventSaver).identifyAndSaveReport(captor.capture())
         val saved = captor.firstValue
         assertThat(saved.type).isEqualTo(typeValue)
@@ -71,7 +71,7 @@ internal class ModuleEventReporterTest : CommonTest() {
     fun `report without string value`() {
         whenever(moduleReport.value).thenReturn(null)
         moduleEventReporter.report(moduleReport)
-        val captor = argumentCaptor<ServiceEvent>()
+        val captor = argumentCaptor<CoreServiceEvent>()
         verify(eventSaver).identifyAndSaveReport(captor.capture())
         val saved = captor.firstValue
         assertThat(saved.type).isEqualTo(typeValue)
@@ -86,7 +86,7 @@ internal class ModuleEventReporterTest : CommonTest() {
     fun `report without bytes value`() {
         whenever(moduleReport.valueBytes).thenReturn(null)
         moduleEventReporter.report(moduleReport)
-        val captor = argumentCaptor<ServiceEvent>()
+        val captor = argumentCaptor<CoreServiceEvent>()
         verify(eventSaver).identifyAndSaveReport(captor.capture())
         val saved = captor.firstValue
         assertThat(saved.type).isEqualTo(typeValue)
@@ -99,21 +99,21 @@ internal class ModuleEventReporterTest : CommonTest() {
 
     @Test
     fun `main for true`() {
-        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent).isMain).isTrue()
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototype).isMain).isTrue()
     }
 
     @Test
     fun `main for false`() {
-        assertThat(ModuleEventReporter(apiKey, false, eventSaver, prototypeServiceEvent).isMain).isFalse()
+        assertThat(ModuleEventReporter(apiKey, false, eventSaver, prototype).isMain).isFalse()
     }
 
     @Test
     fun `api key`() {
-        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeServiceEvent).apiKey).isEqualTo(apiKey)
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototype).apiKey).isEqualTo(apiKey)
     }
 
     @Test
     fun `api key for null`() {
-        assertThat(ModuleEventReporter(null, isMain, eventSaver, prototypeServiceEvent).apiKey).isNull()
+        assertThat(ModuleEventReporter(null, isMain, eventSaver, prototype).apiKey).isNull()
     }
 }

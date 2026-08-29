@@ -14,7 +14,7 @@ import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionRequestParams;
@@ -208,7 +208,7 @@ public class DatabaseHelper {
         addSessionValues(sessionValues);
     }
 
-    public void saveReport(@NonNull final ServiceEvent serviceEvent,
+    public void saveReport(@NonNull final CoreServiceEvent serviceEvent,
                            final int reportType,
                            @NonNull final SessionState sessionState,
                            @NonNull final AppEnvironment.EnvironmentRevision environmentRevision,

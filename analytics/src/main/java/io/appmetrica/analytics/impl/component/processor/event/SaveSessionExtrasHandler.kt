@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
-import io.appmetrica.analytics.impl.ServiceEvent
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -9,7 +9,7 @@ internal class SaveSessionExtrasHandler(component: ComponentUnit) : ReportCompon
     private val tag =
         "[SaveSessionExtrasHandler-${component.componentId.anonymizedApiKey}]"
 
-    override fun process(serviceEvent: ServiceEvent): Boolean {
+    override fun process(serviceEvent: CoreServiceEvent): Boolean {
         serviceEvent.extras.forEach {
             DebugLogger.info(
                 tag,

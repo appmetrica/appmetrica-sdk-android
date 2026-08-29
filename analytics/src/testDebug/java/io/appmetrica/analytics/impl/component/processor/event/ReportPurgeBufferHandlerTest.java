@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
@@ -23,13 +23,13 @@ public class ReportPurgeBufferHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldFlushEvents() {
-        mReportPurgeBufferHandler.process(new ServiceEvent());
+        mReportPurgeBufferHandler.process(new CoreServiceEvent());
 
         verify(mComponentUnit, times(1)).flushEvents();
     }
 
     @Test
     public void testProcessShouldNotBreakEventProcessing() {
-        assertThat(mReportPurgeBufferHandler.process(new ServiceEvent())).isFalse();
+        assertThat(mReportPurgeBufferHandler.process(new CoreServiceEvent())).isFalse();
     }
 }

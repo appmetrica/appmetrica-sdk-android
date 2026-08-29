@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 
@@ -21,7 +21,7 @@ internal object PublicLogConstructor {
     }
 
     @JvmStatic
-    fun constructCounterReportLog(serviceEvent: ServiceEvent, message: String): String? =
+    fun constructCounterReportLog(serviceEvent: CoreServiceEvent, message: String): String? =
         constructLogValueForInternalEvent(
             message,
             InternalEvents.valueOf(serviceEvent.type),

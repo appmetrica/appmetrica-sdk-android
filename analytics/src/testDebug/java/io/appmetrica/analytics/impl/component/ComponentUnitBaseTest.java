@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
@@ -85,7 +85,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Mock
     private PublicLogger mPublicLogger;
     @Mock
-    private ServiceEvent mServiceEvent;
+    private CoreServiceEvent serviceEvent;
     @Mock
     private ComponentUnitFieldsFactory.LoggerProvider mLoggerProvider;
     @Mock
@@ -268,9 +268,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testEventLoggedIfLoggerEnabled() {
         String message = "Some messahe";
-        when(PublicLogConstructor.constructCounterReportLog(mServiceEvent, "Event received on service"))
+        when(PublicLogConstructor.constructCounterReportLog(serviceEvent, "Event received on service"))
             .thenReturn(message);
-        mComponentUnit.handleReport(mServiceEvent);
+        mComponentUnit.handleReport(serviceEvent);
         verify(mPublicLogger).info(message);
     }
 
@@ -297,8 +297,8 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testHandleReport() {
-        mComponentUnit.handleReport(mServiceEvent);
-        verify(mReportProcessor).process(mServiceEvent);
+        mComponentUnit.handleReport(serviceEvent);
+        verify(mReportProcessor).process(serviceEvent);
     }
 
     @Test
@@ -406,8 +406,8 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testAddAppEnvironmentValue() {
-        when(mServiceEvent.getValue()).thenReturn("{\"aaa\":\"bbb\"}");
-        mComponentUnit.addAppEnvironmentValue(mServiceEvent);
+        when(serviceEvent.getValue()).thenReturn("{\"aaa\":\"bbb\"}");
+        mComponentUnit.addAppEnvironmentValue(serviceEvent);
         verify(mAppEnvironment).add("aaa", "bbb");
         verify(mAppEnvironmentProvider).commitIfNeeded(mRevision, mComponentPreferences);
     }

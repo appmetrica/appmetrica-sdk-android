@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import android.util.Pair;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
@@ -326,7 +326,7 @@ public class ReportAppOpenHandlerTests extends CommonTest {
 
     @Test
     public void testProcessHandleOpenEvent() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         serviceEvent.setValue(mInput);
         mReportAppOpenHandler.process(serviceEvent);
         verify(vitalComponentDataProvider, times(shouldIncrementOpenId ? 1 : 0)).incrementOpenId();
@@ -345,6 +345,6 @@ public class ReportAppOpenHandlerTests extends CommonTest {
 
     @Test
     public void testProcessDoesNotBreakProcessing() {
-        assertThat(mReportAppOpenHandler.process(new ServiceEvent())).isFalse();
+        assertThat(mReportAppOpenHandler.process(new CoreServiceEvent())).isFalse();
     }
 }

@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.crash.jvm.service
 import android.annotation.SuppressLint
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable
@@ -69,7 +69,7 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
     val clientDescriptionMockedConstructionRule = constructionRule<ClientDescription>()
     private val clientDescription: ClientDescription by clientDescriptionMockedConstructionRule
 
-    private val counterReportCaptor = argumentCaptor<ServiceEvent>()
+    private val counterReportCaptor = argumentCaptor<CoreServiceEvent>()
 
     private val fileLocksHolder: FileLocksHolder = mock()
 
@@ -151,9 +151,9 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
             counterReportCaptor.capture(),
             org.mockito.kotlin.eq(commonArguments)
         )
-        val capturedReport = counterReportCaptor.firstValue
-        assertThat(capturedReport.type).isEqualTo(eventType.typeId)
-        assertThat(capturedReport.creationTimestamp).isEqualTo(creationTimestamp)
+        val serviceEvent = counterReportCaptor.firstValue
+        assertThat(serviceEvent.type).isEqualTo(eventType.typeId)
+        assertThat(serviceEvent.creationTimestamp).isEqualTo(creationTimestamp)
 
         assertThat(clientDescriptionMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(clientDescriptionMockedConstructionRule.argumentInterceptor.flatArguments())

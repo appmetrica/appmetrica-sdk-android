@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
@@ -59,7 +59,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     @Mock
     private TimeProvider timeProvider;
     @Captor
-    private ArgumentCaptor<ServiceEvent> mReportCaptor;
+    private ArgumentCaptor<CoreServiceEvent> mReportCaptor;
     private Context mContext;
     private final String mPackage = "test.package";
     private final String mInstaller = "yandex.store";
@@ -91,9 +91,9 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldSaveInitReportIfInitNotYetSend() {
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
-        ArgumentCaptor<ServiceEvent> arg = ArgumentCaptor.forClass(ServiceEvent.class);
+        ArgumentCaptor<CoreServiceEvent> arg = ArgumentCaptor.forClass(CoreServiceEvent.class);
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(arg.capture());
         assertThat(arg.getValue().getType()).isEqualTo(InternalEvents.EVENT_TYPE_INIT.getTypeId());
@@ -106,7 +106,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessDoNothingIfInitAlreadySent() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
 
-        ArgumentCaptor<ServiceEvent> arg2 = ArgumentCaptor.forClass(ServiceEvent.class);
+        ArgumentCaptor<CoreServiceEvent> arg2 = ArgumentCaptor.forClass(CoreServiceEvent.class);
         verify(mEventSaver, never()).identifyAndSaveReport(arg2.capture());
 
         verify(vitalComponentDataProvider, never()).setInitEventDone(anyBoolean());
@@ -115,7 +115,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
     @Test
     public void testProcessSendInitEventWithPreloadInfo() throws JSONException {
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
         JSONAssert.assertEquals(
@@ -129,7 +129,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessSendInitEventWithoutPreloadInfo() throws JSONException {
         mPreloadInfoState = new PreloadInfoState(null, new JSONObject(), false, false, DistributionSource.UNDEFINED);
         when(mPreloadInfoStorage.retrieveData()).thenReturn(mPreloadInfoState);
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
         assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optJSONObject(KEY_PRELOAD_INFO)).isNull();
@@ -139,7 +139,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessSendInitEventWithPackageInstaller() throws JSONException {
         when(mSafePackageManager.getInstallerPackageName(mContext, mPackage)).thenReturn(mInstaller);
 
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
         assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLER)).isEqualTo(mInstaller);
@@ -149,7 +149,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessSendInitEventWithoutPackageInstaller() throws JSONException {
         when(mSafePackageManager.getInstallerPackageName(mContext, mPackage)).thenReturn(null);
 
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
         assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLER)).isEmpty();
@@ -157,16 +157,16 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldNotBreakEventProcessing() {
-        assertThat(mReportSaveInitHandler.process(new ServiceEvent())).isFalse();
+        assertThat(mReportSaveInitHandler.process(new CoreServiceEvent())).isFalse();
     }
 
     @Test
     public void testProcessShouldSaveUpdateReportIfInitNotSendYet() {
         doReturn(true).when(mReportRequestConfig).isFirstActivationAsUpdate();
 
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
-        ArgumentCaptor<ServiceEvent> arg = ArgumentCaptor.forClass(ServiceEvent.class);
+        ArgumentCaptor<CoreServiceEvent> arg = ArgumentCaptor.forClass(CoreServiceEvent.class);
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(arg.capture());
         assertThat(arg.getValue().getType()).isEqualTo(InternalEvents.EVENT_TYPE_APP_UPDATE.getTypeId());
@@ -176,7 +176,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessShouldSaveInitDoneForUpdateReport() {
         doReturn(true).when(mReportRequestConfig).isFirstActivationAsUpdate();
 
-        mReportSaveInitHandler.process(new ServiceEvent());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(vitalComponentDataProvider, times(1)).setInitEventDone(true);
         verify(vitalComponentDataProvider, times(1))

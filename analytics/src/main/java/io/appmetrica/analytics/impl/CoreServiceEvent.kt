@@ -23,7 +23,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
 
-internal class ServiceEvent : CounterReportApi {
+internal class CoreServiceEvent : CounterReportApi {
 
     override var name: String? = StringUtils.EMPTY
     override var value: String? = null
@@ -70,12 +70,12 @@ internal class ServiceEvent : CounterReportApi {
 
     companion object {
 
-        private const val TAG = "[ServiceEvent]"
+        private const val TAG = "[CoreServiceEvent]"
         private const val PAYLOAD_CRASH_ID = "payload_crash_id"
 
         @JvmStatic
-        fun from(counterReport: CounterReport): ServiceEvent {
-            return ServiceEvent().apply {
+        fun from(counterReport: CounterReport): CoreServiceEvent {
+            return CoreServiceEvent().apply {
                 name = counterReport.name
                 value = counterReport.value
                 eventEnvironment = counterReport.eventEnvironment
@@ -93,8 +93,8 @@ internal class ServiceEvent : CounterReportApi {
         }
 
         @JvmStatic
-        fun formReportCopyingMetadata(serviceEvent: ServiceEvent): ServiceEvent {
-            return ServiceEvent().apply {
+        fun formReportCopyingMetadata(serviceEvent: CoreServiceEvent): CoreServiceEvent {
+            return CoreServiceEvent().apply {
                 creationTimestamp = serviceEvent.creationTimestamp
                 creationElapsedRealtime = serviceEvent.creationElapsedRealtime
                 eventEnvironment = serviceEvent.eventEnvironment
@@ -107,24 +107,24 @@ internal class ServiceEvent : CounterReportApi {
 
         @JvmStatic
         private fun formReportCopyingMetaDataWithType(
-            serviceEvent: ServiceEvent,
+            serviceEvent: CoreServiceEvent,
             event: InternalEvents
-        ): ServiceEvent {
+        ): CoreServiceEvent {
             return formReportCopyingMetadata(serviceEvent).apply {
                 type = event.typeId
             }
         }
 
         @JvmStatic
-        fun formAliveReportData(serviceEvent: ServiceEvent): ServiceEvent {
+        fun formAliveReportData(serviceEvent: CoreServiceEvent): CoreServiceEvent {
             return formReportCopyingMetaDataWithType(serviceEvent, EVENT_TYPE_ALIVE)
         }
 
         @JvmStatic
         fun formSessionStartReportData(
-            serviceEvent: ServiceEvent,
+            serviceEvent: CoreServiceEvent,
             buildId: String?
-        ): ServiceEvent {
+        ): CoreServiceEvent {
             val startReport = formReportCopyingMetaDataWithType(serviceEvent, EVENT_TYPE_START)
             val eventStart = EventStart(buildId)
             startReport.valueBytes = MessageNano.toByteArray(EventStartConverter().fromModel(eventStart))
@@ -134,18 +134,18 @@ internal class ServiceEvent : CounterReportApi {
         }
 
         @JvmStatic
-        fun formInitReportData(serviceEvent: ServiceEvent): ServiceEvent {
+        fun formInitReportData(serviceEvent: CoreServiceEvent): CoreServiceEvent {
             return formReportCopyingMetaDataWithType(serviceEvent, EVENT_TYPE_INIT)
         }
 
         @JvmStatic
         fun formPermissionsReportData(
-            serviceEvent: ServiceEvent,
+            serviceEvent: CoreServiceEvent,
             newPermissions: Collection<PermissionState>,
             bgRestrictionsState: BackgroundRestrictionsState?,
             appStandbyBucket: String?,
             availableProviders: List<String>
-        ): ServiceEvent {
+        ): CoreServiceEvent {
             val resultData = formReportCopyingMetadata(serviceEvent)
             var value = StringUtils.EMPTY
             try {
@@ -172,7 +172,7 @@ internal class ServiceEvent : CounterReportApi {
         }
 
         @JvmStatic
-        fun formFeaturesReportData(serviceEvent: ServiceEvent, value: String?): ServiceEvent {
+        fun formFeaturesReportData(serviceEvent: CoreServiceEvent, value: String?): CoreServiceEvent {
             return formReportCopyingMetadata(serviceEvent).apply {
                 type = EVENT_TYPE_APP_FEATURES.typeId
                 this.value = value
@@ -180,18 +180,18 @@ internal class ServiceEvent : CounterReportApi {
         }
 
         @JvmStatic
-        fun formFirstEventReportData(serviceEvent: ServiceEvent): ServiceEvent {
+        fun formFirstEventReportData(serviceEvent: CoreServiceEvent): CoreServiceEvent {
             return formReportCopyingMetaDataWithType(serviceEvent, EVENT_TYPE_FIRST_ACTIVATION)
         }
 
         @JvmStatic
-        fun formUpdateReportData(serviceEvent: ServiceEvent): ServiceEvent {
+        fun formUpdateReportData(serviceEvent: CoreServiceEvent): CoreServiceEvent {
             return formReportCopyingMetaDataWithType(serviceEvent, EVENT_TYPE_APP_UPDATE)
         }
 
         @JvmStatic
-        fun formUserProfileEvent(): ServiceEvent {
-            return ServiceEvent().apply {
+        fun formUserProfileEvent(): CoreServiceEvent {
+            return CoreServiceEvent().apply {
                 type = EVENT_TYPE_SEND_USER_PROFILE.typeId
             }
         }
@@ -204,8 +204,8 @@ internal class ServiceEvent : CounterReportApi {
             logger: PublicLogger,
             creationTimestamp: Long,
             eventEnvironment: String?
-        ): ServiceEvent {
-            val serviceEvent = ServiceEvent()
+        ): CoreServiceEvent {
+            val serviceEvent = CoreServiceEvent()
             serviceEvent.type = eventType.typeId
             serviceEvent.creationTimestamp = creationTimestamp
             serviceEvent.value = StringByBytesTrimmer(
@@ -228,8 +228,8 @@ internal class ServiceEvent : CounterReportApi {
             bytesTruncated: Int,
             errorEnvironment: String?,
             creationTimestamp: Long
-        ): ServiceEvent {
-            return ServiceEvent().apply {
+        ): CoreServiceEvent {
+            return CoreServiceEvent().apply {
                 name = eventName
                 valueBytes = value
                 this.type = type.typeId

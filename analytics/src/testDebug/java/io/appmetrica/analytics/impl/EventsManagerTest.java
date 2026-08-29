@@ -237,7 +237,7 @@ public class EventsManagerTest extends CommonTest {
     public void testNativeCrashEntryCurrentSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
         long creationTimestamp = 1700000000000L;
-        ServiceEvent serviceEvent = ServiceEvent.nativeCrashEntry(
+        CoreServiceEvent serviceEvent = CoreServiceEvent.nativeCrashEntry(
             InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             value,
             "uuid",
@@ -258,7 +258,7 @@ public class EventsManagerTest extends CommonTest {
     public void testNativeCrashEntryPrevSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
         long creationTimestamp = 1700000000000L;
-        ServiceEvent serviceEvent = ServiceEvent.nativeCrashEntry(
+        CoreServiceEvent serviceEvent = CoreServiceEvent.nativeCrashEntry(
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             value,
             "uuid",

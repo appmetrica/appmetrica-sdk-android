@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component
 
 import android.content.Context
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest
@@ -43,7 +43,7 @@ internal class RegularDispatcherComponentHandleReportTest(
     }
 
     private val lifecycleManager: ComponentLifecycleManager<ClientUnit?> = mock()
-    private val serviceEvent: ServiceEvent = ServiceEvent().apply { type = eventType }
+    private val serviceEvent: CoreServiceEvent = CoreServiceEvent().apply { type = eventType }
 
     private val regularDispatcherComponent: RegularDispatcherComponent<ComponentUnit> by setUp {
         RegularDispatcherComponent(

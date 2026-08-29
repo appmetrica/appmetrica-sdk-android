@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -41,7 +41,7 @@ public class UpdatePreActivationConfigHandlerLocationTest {
     @Mock
     private CommutationDispatcherComponent mRegularDispatcherComponent;
     @Mock
-    private ServiceEvent mServiceEvent;
+    private CoreServiceEvent serviceEvent;
     @Mock
     private CounterConfiguration mCounterConfiguration;
     @Mock
@@ -82,7 +82,7 @@ public class UpdatePreActivationConfigHandlerLocationTest {
 
     @Test
     public void test() {
-        mHandler.process(mServiceEvent, mClientUnit);
+        mHandler.process(serviceEvent, mClientUnit);
         if (shouldSetWhat != null) {
             verify(GlobalServiceLocator.getInstance().getLocationClientApi())
                 .updateTrackingStatusFromClient(shouldSetWhat);

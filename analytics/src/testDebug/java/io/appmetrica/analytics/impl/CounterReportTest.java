@@ -93,8 +93,8 @@ public class CounterReportTest extends CommonTest {
     @Test
     public void testPermissionsAndRestrictionsAndProviders() throws Exception {
         String appStandbyBucketString = "expected string";
-        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
-            mock(ServiceEvent.class),
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formPermissionsReportData(
+            mock(CoreServiceEvent.class),
             Arrays.asList(new PermissionState("1", false), new PermissionState("2", true)),
             new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, true),
             appStandbyBucketString,
@@ -130,8 +130,8 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testNoPermissionsNullRestrictionsNoProviders() throws Exception {
-        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
-            mock(ServiceEvent.class),
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formPermissionsReportData(
+            mock(CoreServiceEvent.class),
             new ArrayList<PermissionState>(),
             null,
             null,
@@ -149,8 +149,8 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testNoPermissionsNoProvidersAndAppStandByBucketIsNull() throws Exception {
-        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
-            mock(ServiceEvent.class),
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formPermissionsReportData(
+            mock(CoreServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(null, false),
             null,
@@ -169,8 +169,8 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testNoPermissionsNoProvidersAndBackgroundRestrictedIsNull() throws Exception {
-        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
-            mock(ServiceEvent.class),
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formPermissionsReportData(
+            mock(CoreServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, null),
             "rare",
@@ -190,8 +190,8 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testNoPermissionsNoPermissionsNullRestrictionsValues() throws Exception {
-        ServiceEvent serviceEvent = ServiceEvent.formPermissionsReportData(
-            mock(ServiceEvent.class),
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formPermissionsReportData(
+            mock(CoreServiceEvent.class),
             new ArrayList<PermissionState>(),
             new BackgroundRestrictionsState(null, null),
             null,
@@ -217,14 +217,14 @@ public class CounterReportTest extends CommonTest {
                         .put("version", 1)
                         .put("required", false))
             );
-        ServiceEvent serviceEvent = ServiceEvent.formFeaturesReportData(mock(ServiceEvent.class), features.toString());
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formFeaturesReportData(mock(CoreServiceEvent.class), features.toString());
         JSONAssert.assertEquals(features, new JSONObject(serviceEvent.getValue()), true);
     }
 
     @Test
     public void testEmptyFeatures() throws JSONException {
         JSONObject features = new JSONObject().put("features", new JSONArray());
-        ServiceEvent serviceEvent = ServiceEvent.formFeaturesReportData(mock(ServiceEvent.class), features.toString());
+        CoreServiceEvent serviceEvent = CoreServiceEvent.formFeaturesReportData(mock(CoreServiceEvent.class), features.toString());
         JSONAssert.assertEquals(features, new JSONObject(serviceEvent.getValue()), true);
     }
 
@@ -266,7 +266,7 @@ public class CounterReportTest extends CommonTest {
         assertThat(
             new String(
                 EventStart.Value.parseFrom(
-                    ServiceEvent.formSessionStartReportData(new ServiceEvent(), buildId)
+                    CoreServiceEvent.formSessionStartReportData(new CoreServiceEvent(), buildId)
                         .getValueBytes()
                 ).buildId
             )
@@ -275,7 +275,7 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testFormNewSessionReportNoBuilId() throws InvalidProtocolBufferNanoException {
-        assertThat(EventStart.Value.parseFrom(ServiceEvent.formSessionStartReportData(new ServiceEvent(), null).getValueBytes()).buildId)
+        assertThat(EventStart.Value.parseFrom(CoreServiceEvent.formSessionStartReportData(new CoreServiceEvent(), null).getValueBytes()).buildId)
             .isEmpty();
     }
 

@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.component.clients
 
 import android.content.Context
 import android.location.Location
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils
@@ -54,7 +54,7 @@ internal class MainReporterClientUnitTest : CommonTest() {
 
     private fun verifyTrackingStatusUpdating(value: Boolean) {
         whenever(counterConfiguration.isLocationTrackingEnabled()).thenReturn(value)
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().locationClientApi).updateTrackingStatusFromClient(value)
     }
 
@@ -62,19 +62,19 @@ internal class MainReporterClientUnitTest : CommonTest() {
     fun updateLocation() {
         val location: Location = mock()
         whenever(counterConfiguration.manualLocation).thenReturn(location)
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().locationClientApi).updateLocationFromClient(location)
     }
 
     @Test
     fun `updateLocation if null`() {
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().locationClientApi).updateLocationFromClient(null)
     }
 
     @Test
     fun dispatchEvent() {
-        val serviceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_REGULAR.typeId }
+        val serviceEvent = CoreServiceEvent().apply { type = InternalEvents.EVENT_TYPE_REGULAR.typeId }
         val mockedArguments = CommonArgumentsTestUtils.createMockedArguments()
         mainReporterClientUnit.handleReport(serviceEvent, mockedArguments)
         verify(componentUnit, times(1)).handleReport(serviceEvent, mockedArguments)
@@ -83,21 +83,21 @@ internal class MainReporterClientUnitTest : CommonTest() {
     @Test
     fun `updateAdvIdTracking if true`() {
         whenever(counterConfiguration.isAdvIdentifiersTrackingEnabled).thenReturn(true)
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().advertisingIdGetter).updateStateFromClientConfig(true)
     }
 
     @Test
     fun `updateAdvIdTracking if false`() {
         whenever(counterConfiguration.isAdvIdentifiersTrackingEnabled).thenReturn(false)
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().advertisingIdGetter).updateStateFromClientConfig(false)
     }
 
     @Test
     fun `updateAdvIdTracking if null`() {
         whenever(counterConfiguration.isAdvIdentifiersTrackingEnabled).thenReturn(null)
-        mainReporterClientUnit.handleReport(ServiceEvent(), clientConfiguration)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
         verifyNoInteractions(GlobalServiceLocator.getInstance().advertisingIdGetter)
     }
 }

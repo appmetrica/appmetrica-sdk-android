@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
@@ -47,32 +47,32 @@ public class ReportFirstHandlerTest extends CommonTest {
     @Test
     public void testProcessShouldDoNothingIfFirstEventAlreadySend() {
         when(vitalComponentDataProvider.isFirstEventDone()).thenReturn(true);
-        mReportFirstHandler.process(new ServiceEvent());
-        verify(mEventSaver, never()).identifyAndSaveReport(any(ServiceEvent.class));
+        mReportFirstHandler.process(new CoreServiceEvent());
+        verify(mEventSaver, never()).identifyAndSaveReport(any(CoreServiceEvent.class));
         verify(vitalComponentDataProvider, never()).setFirstEventDone(anyBoolean());
     }
 
     @Test
     public void testProcessShouldNotSentEventIfInitStateExists() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
-        mReportFirstHandler.process(new ServiceEvent());
-        verify(mEventSaver, never()).identifyAndSaveReport(any(ServiceEvent.class));
+        mReportFirstHandler.process(new CoreServiceEvent());
+        verify(mEventSaver, never()).identifyAndSaveReport(any(CoreServiceEvent.class));
     }
 
     @Test
     public void testProcessShouldSaveFirstEventDoneIfInitStateExists() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
-        mReportFirstHandler.process(new ServiceEvent());
+        mReportFirstHandler.process(new CoreServiceEvent());
         verify(vitalComponentDataProvider, times(1)).setFirstEventDone(true);
     }
 
     @Test
     public void testProcessShouldSendFirstEventIfFirstEventAndInitNotSentYet() {
-        mReportFirstHandler.process(new ServiceEvent());
+        mReportFirstHandler.process(new CoreServiceEvent());
 
-        ArgumentMatcher<ServiceEvent> firstEventMatcher = new ArgumentMatcher<ServiceEvent>() {
+        ArgumentMatcher<CoreServiceEvent> firstEventMatcher = new ArgumentMatcher<CoreServiceEvent>() {
             @Override
-            public boolean matches(ServiceEvent serviceEvent) {
+            public boolean matches(CoreServiceEvent serviceEvent) {
                 return serviceEvent.getType() == InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId();
             }
         };
@@ -82,10 +82,10 @@ public class ReportFirstHandlerTest extends CommonTest {
 
     @Test
     public void testEventValueIsEmpty() {
-        mReportFirstHandler.process(new ServiceEvent());
-        verify(mEventSaver).identifyAndSaveFirstEventReport(argThat(new ArgumentMatcher<ServiceEvent>() {
+        mReportFirstHandler.process(new CoreServiceEvent());
+        verify(mEventSaver).identifyAndSaveFirstEventReport(argThat(new ArgumentMatcher<CoreServiceEvent>() {
             @Override
-            public boolean matches(ServiceEvent serviceEvent) {
+            public boolean matches(CoreServiceEvent serviceEvent) {
                 return serviceEvent.getValue() == null || serviceEvent.getValue().isEmpty();
             }
         }));

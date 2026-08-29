@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
@@ -31,7 +31,7 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
     private val mComponentUnit: ComponentUnit = mock {
         on { vitalComponentDataProvider } doReturn vitalComponentDataProvider
     }
-    private val serviceEvent: ServiceEvent = mock()
+    private val serviceEvent: CoreServiceEvent = mock()
 
     private val referrerManager: ReferrerManager by setUp { GlobalServiceLocator.getInstance().getReferrerManager() }
 
@@ -106,7 +106,7 @@ internal class SendReferrerEventHandlerTest : CommonTest() {
         }
         sendReferrer(result)
 
-        val reportCaptor = argumentCaptor<ServiceEvent>()
+        val reportCaptor = argumentCaptor<CoreServiceEvent>()
         verify(mComponentUnit).handleReport(reportCaptor.capture())
 
         val serviceEvent = reportCaptor.firstValue

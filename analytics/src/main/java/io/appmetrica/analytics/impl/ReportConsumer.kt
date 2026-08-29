@@ -19,7 +19,7 @@ internal class ReportConsumer(
     private val tasksExecutor: ICommonExecutor =
         GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor
 
-    fun consumeReport(serviceEvent: ServiceEvent, extras: Bundle?) {
+    fun consumeReport(serviceEvent: CoreServiceEvent, extras: Bundle?) {
         DebugLogger.info(
             tag,
             "serviceEvent: type = ${serviceEvent.type}; " +
@@ -36,7 +36,7 @@ internal class ReportConsumer(
 
     override fun consumeCrash(
         clientDescription: ClientDescription,
-        serviceEvent: ServiceEvent,
+        serviceEvent: CoreServiceEvent,
         commonArguments: CommonArguments
     ) {
         DebugLogger.info(

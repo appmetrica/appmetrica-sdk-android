@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
@@ -21,11 +21,11 @@ public abstract class AbstractClientUnit implements ClientUnit {
     }
 
     @Override
-    public void handle(@NonNull ServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
+    public void handle(@NonNull CoreServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
         handleReport(serviceEvent, sdkConfig);
     }
 
-    protected abstract void handleReport(@NonNull ServiceEvent serviceEvent,
+    protected abstract void handleReport(@NonNull CoreServiceEvent serviceEvent,
                                          @NonNull CommonArguments sdkConfig);
 
     public void onDisconnect() {

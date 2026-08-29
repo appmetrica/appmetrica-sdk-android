@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.clients;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 public class SelfDiagnosticClientUnitTest extends CommonTest {
 
     @Mock
-    private ServiceEvent mServiceEvent;
+    private CoreServiceEvent serviceEvent;
     @Mock
     private RegularDispatcherComponent mRegularDispatcherComponent;
     private CommonArguments mCommonArguments;
@@ -28,12 +28,12 @@ public class SelfDiagnosticClientUnitTest extends CommonTest {
 
     @Test
     public void testComponentUnitNotNull() {
-        new SelfDiagnosticClientUnit(mRegularDispatcherComponent).handle(mServiceEvent, mCommonArguments);
-        verify(mRegularDispatcherComponent).handleReport(mServiceEvent, mCommonArguments);
+        new SelfDiagnosticClientUnit(mRegularDispatcherComponent).handle(serviceEvent, mCommonArguments);
+        verify(mRegularDispatcherComponent).handleReport(serviceEvent, mCommonArguments);
     }
 
     @Test
     public void testComponentUnitNullDoesNotThrow() {
-        new SelfDiagnosticClientUnit(null).handle(mServiceEvent, mCommonArguments);
+        new SelfDiagnosticClientUnit(null).handle(serviceEvent, mCommonArguments);
     }
 }

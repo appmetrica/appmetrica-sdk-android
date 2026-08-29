@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.AppStandbyBucketConverter;
 import io.appmetrica.analytics.impl.AvailableProvidersRetriever;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsStateProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
@@ -63,7 +63,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
         mAvailableProvidersRetriever = availableProvidersRetriever;
     }
 
-    public boolean process(@NonNull ServiceEvent serviceEvent) {
+    public boolean process(@NonNull CoreServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         String componentIdName = component.getComponentId().toString();
 
@@ -141,7 +141,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
     }
 
     private void reportPermissions(@NonNull AppPermissionsState appPermissionsState,
-                                   @NonNull ServiceEvent serviceEvent,
+                                   @NonNull CoreServiceEvent serviceEvent,
                                    @NonNull EventSaver eventSaver) {
         String appStandbyBucket = null;
         if (appPermissionsState.mBackgroundRestrictionsState != null) {
@@ -149,7 +149,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
                 appPermissionsState.mBackgroundRestrictionsState.mAppStandByBucket
             );
         }
-        ServiceEvent permissionsServiceEvent = ServiceEvent.formPermissionsReportData(
+        CoreServiceEvent permissionsServiceEvent = CoreServiceEvent.formPermissionsReportData(
             serviceEvent,
             appPermissionsState.mPermissionStateList,
             appPermissionsState.mBackgroundRestrictionsState,

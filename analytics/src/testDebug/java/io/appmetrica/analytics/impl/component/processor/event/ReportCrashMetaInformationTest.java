@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
 import io.appmetrica.analytics.IReporter;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -28,7 +28,7 @@ public class ReportCrashMetaInformationTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
     @Mock
-    private ServiceEvent serviceEvent;
+    private CoreServiceEvent serviceEvent;
 
     private ReportCrashMetaInformation handler;
 

@@ -32,7 +32,7 @@ import org.mockito.kotlin.whenever
 internal class ReportRunnableTest : CommonTest() {
 
     private val context: Context = mock()
-    private val serviceEvent: ServiceEvent = mock()
+    private val serviceEvent: CoreServiceEvent = mock()
     private val extras: Bundle = mock()
     private val clientDescription: ClientDescription = mock()
     private val clientUnit: ClientUnit = mock()

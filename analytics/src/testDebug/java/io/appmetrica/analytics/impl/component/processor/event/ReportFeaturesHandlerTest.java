@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -71,7 +71,7 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     @Test
     public void testNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
             "feature_name",
             false
@@ -81,14 +81,14 @@ public class ReportFeaturesHandlerTest extends CommonTest {
             new FeatureDescription("feature_name_2", 2, true)
         ))).when(handler).getFeaturesFromSystem();
         handler.process(serviceEvent);
-        verify(mEventSaver, times(1)).saveFeaturesReport(any(ServiceEvent.class));
+        verify(mEventSaver, times(1)).saveFeaturesReport(any(CoreServiceEvent.class));
         verify(mPreferencesComponentDbStorage, times(1)).putApplicationFeatures(anyString());
     }
 
     @Test
     public void testNoNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
             "feature_name",
             false
@@ -103,11 +103,11 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     @Test
     public void testNoFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
-        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         doReturn(null).when(handler).parseFeaturesFromStorage();
         doReturn(new ArrayList<FeatureDescription>()).when(handler).getFeaturesFromSystem();
         handler.process(serviceEvent);
-        verify(mEventSaver, times(1)).saveFeaturesReport(any(ServiceEvent.class));
+        verify(mEventSaver, times(1)).saveFeaturesReport(any(CoreServiceEvent.class));
         verify(mPreferencesComponentDbStorage, times(1)).putApplicationFeatures(eq("[]"));
     }
 

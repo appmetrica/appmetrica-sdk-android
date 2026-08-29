@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.component
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.EventsManager
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
@@ -55,7 +55,7 @@ internal class RegularDispatcherComponent<COMPONENT>(
         startupCenter.registerStartupListener(componentId, this)
     }
 
-    fun handleReport(serviceEvent: ServiceEvent, configuration: CommonArguments) {
+    fun handleReport(serviceEvent: CoreServiceEvent, configuration: CommonArguments) {
         DebugLogger.info(tag, "handle report for componentId: %s; data: %s", componentId, serviceEvent)
 
         if (!EventsManager.isEventWithoutAppConfigUpdate(serviceEvent.type)) {

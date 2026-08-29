@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.component.processor.commutation
 
 import android.os.Bundle
 import android.os.ResultReceiver
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.IdentifiersData
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit
@@ -51,7 +51,7 @@ internal class ForceStartupHandlerTest : CommonTest() {
         on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifiersData
     }
 
-    private val serviceEvent: ServiceEvent = mock {
+    private val serviceEvent: CoreServiceEvent = mock {
         on { payload } doReturn bundle
     }
 

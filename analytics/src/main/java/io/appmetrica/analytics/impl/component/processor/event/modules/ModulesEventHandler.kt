@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -21,7 +21,7 @@ internal class ModulesEventHandler(component: ComponentUnit) : ReportComponentHa
             it.value to ModuleEventHandlerContextProvider(component, it.key)
         }
 
-    override fun process(serviceEvent: ServiceEvent): Boolean {
+    override fun process(serviceEvent: CoreServiceEvent): Boolean {
         if (component.vitalComponentDataProvider.isFirstEventDone) {
             DebugLogger.info(
                 tag,

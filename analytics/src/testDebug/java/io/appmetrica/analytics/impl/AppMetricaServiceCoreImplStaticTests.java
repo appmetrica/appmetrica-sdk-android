@@ -69,7 +69,7 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Rule
     public final MockedStaticRule<CounterReport> sCounterReport = new MockedStaticRule<>(CounterReport.class);
     @Rule
-    public final MockedStaticRule<ServiceEvent> sServiceEvent = new MockedStaticRule<>(ServiceEvent.class);
+    public final MockedStaticRule<CoreServiceEvent> sServiceEvent = new MockedStaticRule<>(CoreServiceEvent.class);
     @Rule
     public final MockedStaticRule<ProcessConfiguration> sProcessConfiguration = new MockedStaticRule<>(ProcessConfiguration.class);
     @Rule
@@ -128,10 +128,10 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Test
     public void testReportData() throws Exception {
         CounterReport clientReport = mock(CounterReport.class);
-        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         Bundle bundle = mock(Bundle.class);
         when(CounterReport.fromBundle(bundle)).thenReturn(clientReport);
-        when(ServiceEvent.from(clientReport)).thenReturn(serviceEvent);
+        when(CoreServiceEvent.from(clientReport)).thenReturn(serviceEvent);
         mMetricaCore.reportData(bundle);
         verify(mReportConsumer).consumeReport(serviceEvent, bundle);
     }

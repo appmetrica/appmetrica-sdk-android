@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.AppEnvironment;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
@@ -88,25 +88,25 @@ public class EventSaver {
 
     }
 
-    public void identifyAndSaveFirstEventReport(ServiceEvent serviceEvent) {
+    public void identifyAndSaveFirstEventReport(CoreServiceEvent serviceEvent) {
         mSessionManager.getSomeSession(serviceEvent); //workaround for first event
     }
 
-    public void savePermissionsReport(ServiceEvent serviceEvent) {
+    public void savePermissionsReport(CoreServiceEvent serviceEvent) {
         identifyAndSaveReport(serviceEvent);
         savePermissionsCheckTime();
     }
 
-    public void saveFeaturesReport(ServiceEvent serviceEvent) {
+    public void saveFeaturesReport(CoreServiceEvent serviceEvent) {
         identifyAndSaveReport(serviceEvent);
         saveFeaturesCheckVersion();
     }
 
-    public void identifyAndSaveReport(final ServiceEvent serviceEvent) {
+    public void identifyAndSaveReport(final CoreServiceEvent serviceEvent) {
         saveReport(serviceEvent, mSessionManager.getCurrentSessionState(serviceEvent));
     }
 
-    public boolean saveReportFromPrevSession(@NonNull ServiceEvent serviceEvent) {
+    public boolean saveReportFromPrevSession(@NonNull CoreServiceEvent serviceEvent) {
         SessionState sessionState = mSessionManager.peekCurrentSessionState(serviceEvent);
         DebugLogger.INSTANCE.info(
             TAG,
@@ -125,7 +125,7 @@ public class EventSaver {
     }
 
     @VisibleForTesting
-    public void saveReport(@NonNull final ServiceEvent serviceEvent, @NonNull final SessionState sessionState) {
+    public void saveReport(@NonNull final CoreServiceEvent serviceEvent, @NonNull final SessionState sessionState) {
         DebugLogger.INSTANCE.info(
             TAG,
             "saveReport: %s of type: %d",

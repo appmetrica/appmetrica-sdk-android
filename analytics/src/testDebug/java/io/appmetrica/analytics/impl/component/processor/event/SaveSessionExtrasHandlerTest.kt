@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
-import io.appmetrica.analytics.impl.ServiceEvent
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder
@@ -22,7 +22,7 @@ internal class SaveSessionExtrasHandlerTest : CommonTest() {
         on { sessionExtrasHolder } doReturn sessionExtrasHolder
         on { componentId } doReturn componentId
     }
-    private val report = mock<ServiceEvent>()
+    private val report = mock<CoreServiceEvent>()
 
     private lateinit var saveSessionExtrasHandler: SaveSessionExtrasHandler
 

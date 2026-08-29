@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.component.processor.commutation
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.DefaultValues
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.IdentifiersData
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit
@@ -15,7 +15,7 @@ internal class ForceStartupHandler(
 
     private val tag = "[ForceStartupHandler]"
 
-    override fun process(serviceEvent: ServiceEvent, clientUnit: CommutationClientUnit): Boolean {
+    override fun process(serviceEvent: CoreServiceEvent, clientUnit: CommutationClientUnit): Boolean {
         DebugLogger.info(tag, "process: $serviceEvent")
         val payload = serviceEvent.payload
 

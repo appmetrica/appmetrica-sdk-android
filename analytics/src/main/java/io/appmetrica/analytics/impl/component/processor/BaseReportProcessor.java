@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -14,7 +14,7 @@ public class BaseReportProcessor<T, C extends IComponent> {
 
     protected interface ProcessItem<T> {
 
-        boolean process(T handler, ServiceEvent serviceEvent);
+        boolean process(T handler, CoreServiceEvent serviceEvent);
 
     }
 
@@ -27,7 +27,7 @@ public class BaseReportProcessor<T, C extends IComponent> {
         mComponent = component;
     }
 
-    protected boolean process(@NonNull ServiceEvent serviceEvent,
+    protected boolean process(@NonNull CoreServiceEvent serviceEvent,
                               @NonNull ProcessItem<T> processItem) {
         List<? extends  T> handlers = getStrategy(serviceEvent).getEventHandlers();
         for (T handler : handlers) {
@@ -52,7 +52,7 @@ public class BaseReportProcessor<T, C extends IComponent> {
         return false;
     }
 
-    EventProcessingStrategy<T> getStrategy(final ServiceEvent serviceEvent) {
+    EventProcessingStrategy<T> getStrategy(final CoreServiceEvent serviceEvent) {
         return mProcessingStrategyFactory.getProcessingStrategy(serviceEvent.getType());
     }
 

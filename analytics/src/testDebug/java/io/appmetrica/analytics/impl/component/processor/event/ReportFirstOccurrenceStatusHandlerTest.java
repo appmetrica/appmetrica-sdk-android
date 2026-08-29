@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
@@ -41,7 +41,7 @@ public class ReportFirstOccurrenceStatusHandlerTest extends CommonTest {
 
     @Test
     public void testProcessUpdateEventFirstOccurrenceStatus() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         serviceEvent.setName(EVENT_NAME);
         FirstOccurrenceStatus status = FirstOccurrenceStatus.FIRST_OCCURRENCE;
         when(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME)).thenReturn(status);
@@ -51,7 +51,7 @@ public class ReportFirstOccurrenceStatusHandlerTest extends CommonTest {
 
     @Test
     public void testProcessDoesNotUpdateFirstOccurrenceStatusForEventWithEmptyEvent() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         when(mEventFirstOccurrenceService.checkFirstOccurrence(anyString()))
             .thenReturn(FirstOccurrenceStatus.FIRST_OCCURRENCE);
         mReportFirstOccurrenceStatusHandler.process(serviceEvent);
@@ -60,6 +60,6 @@ public class ReportFirstOccurrenceStatusHandlerTest extends CommonTest {
 
     @Test
     public void testProcessDoesNotBreakEventProcessing() {
-        assertThat(mReportFirstOccurrenceStatusHandler.process(new ServiceEvent())).isFalse();
+        assertThat(mReportFirstOccurrenceStatusHandler.process(new CoreServiceEvent())).isFalse();
     }
 }

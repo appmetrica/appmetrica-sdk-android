@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class SaveInitialUserProfileIDHandlerTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
 
-    private final ServiceEvent serviceEvent = new ServiceEvent();
+    private final CoreServiceEvent serviceEvent = new CoreServiceEvent();
 
     private SaveInitialUserProfileIDHandler handler;
 

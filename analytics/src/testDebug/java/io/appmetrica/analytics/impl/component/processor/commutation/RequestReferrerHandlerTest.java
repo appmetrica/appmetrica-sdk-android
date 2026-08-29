@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import android.os.Bundle;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
@@ -22,7 +22,7 @@ public class RequestReferrerHandlerTest extends CommonTest {
     @Mock
     private CommutationClientUnit clientUnit;
     @Mock
-    private ServiceEvent serviceEvent;
+    private CoreServiceEvent serviceEvent;
     private RequestReferrerHandler requestReferrerHandler;
 
     @Before

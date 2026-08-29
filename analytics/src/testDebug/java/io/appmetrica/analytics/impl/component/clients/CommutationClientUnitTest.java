@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.client.ClientConfigurationTestUtils;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -69,7 +69,7 @@ public class CommutationClientUnitTest extends CommonTest {
 
     @Test
     public void testHandle() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         mClientUnit.handle(serviceEvent, mClientConfiguration);
         verify(mCommutationDispatcherComponent, times(1)).handleReport(serviceEvent, mClientUnit);
         verify(mCommutationDispatcherComponent, times(1)).updateConfig(mClientConfiguration);
@@ -87,7 +87,7 @@ public class CommutationClientUnitTest extends CommonTest {
     public void testResultReceiverNotUpdated() {
         ResultReceiver newReceiver = mock(ResultReceiver.class);
         CommonArguments clientConfiguration = new CommonArguments(ClientConfigurationTestUtils.createStubbedConfiguration(contextRule.getContext(), newReceiver));
-        mClientUnit.handle(new ServiceEvent(), clientConfiguration);
+        mClientUnit.handle(new CoreServiceEvent(), clientConfiguration);
         mClientUnit.onClientIdentifiersChanged(mClientIdentifiersHolder);
         verify(mClientIdentifiersHolder).toBundle(any(Bundle.class));
         verify(newReceiver, never()).send(anyInt(), any(Bundle.class));

@@ -29,39 +29,39 @@ public class CounterReportMetaDataTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
     public static Collection<Object[]> getData() {
         return Arrays.asList(
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formAliveReportData(serviceEvent);
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formAliveReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_ALIVE, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formFeaturesReportData(serviceEvent, "some value");
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formFeaturesReportData(serviceEvent, "some value");
                 }
             }, InternalEvents.EVENT_TYPE_APP_FEATURES, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formFirstEventReportData(serviceEvent);
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formFirstEventReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formInitReportData(serviceEvent);
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formInitReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_INIT, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formPermissionsReportData(
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formPermissionsReportData(
                         serviceEvent,
                         new ArrayList<PermissionState>(),
                         null,
@@ -70,30 +70,30 @@ public class CounterReportMetaDataTest extends CommonTest {
                     );
                 }
             }, InternalEvents.EVENT_TYPE_PERMISSIONS, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formSessionStartReportData(serviceEvent, null);
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formSessionStartReportData(serviceEvent, null);
                 }
             }, InternalEvents.EVENT_TYPE_START, ""},
-            new Object[]{new Function<ServiceEvent, ServiceEvent>() {
+            new Object[]{new Function<CoreServiceEvent, CoreServiceEvent>() {
 
                 @Override
-                public ServiceEvent apply(ServiceEvent serviceEvent) {
-                    return ServiceEvent.formUpdateReportData(serviceEvent);
+                public CoreServiceEvent apply(CoreServiceEvent serviceEvent) {
+                    return CoreServiceEvent.formUpdateReportData(serviceEvent);
                 }
             }, InternalEvents.EVENT_TYPE_APP_UPDATE, ""}
         );
     }
 
     @NonNull
-    private final Function<ServiceEvent, ServiceEvent> reportProvider;
+    private final Function<CoreServiceEvent, CoreServiceEvent> reportProvider;
     @NonNull
     private final String expectedName;
     private final int expectedType;
 
-    public CounterReportMetaDataTest(@NonNull Function<ServiceEvent, ServiceEvent> reportProvider,
+    public CounterReportMetaDataTest(@NonNull Function<CoreServiceEvent, CoreServiceEvent> reportProvider,
                                      @NonNull InternalEvents expectedType,
                                      @NonNull String expectedName) {
         this.reportProvider = reportProvider;
@@ -112,21 +112,21 @@ public class CounterReportMetaDataTest extends CommonTest {
         originalPayload.putInt("some key", 100);
         Map<String, byte[]> extras = Collections.singletonMap("key", new byte[]{1, 3, 5, 7});
         int valueProtocolVersion = 2;
-        ServiceEvent originalServiceEvent = new ServiceEvent();
-        originalServiceEvent.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
-        originalServiceEvent.setCustomType(InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId());
-        originalServiceEvent.setName("original event");
-        originalServiceEvent.setValue(originalValue);
-        originalServiceEvent.setEventEnvironment(originalEventEnvironment);
-        originalServiceEvent.setProfileID(originalProfileId);
-        originalServiceEvent.setBytesTruncated(4);
-        originalServiceEvent.setCreationElapsedRealtime(originalElapsedRealtime);
-        originalServiceEvent.setCreationTimestamp(originalCreationTimestamp);
-        originalServiceEvent.setSource(EventSource.JS);
-        originalServiceEvent.setPayload(originalPayload);
-        originalServiceEvent.setExtras(extras);
-        originalServiceEvent.setValueProtocolVersion(valueProtocolVersion);
-        ServiceEvent resultServiceEvent = reportProvider.apply(originalServiceEvent);
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
+        serviceEvent.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
+        serviceEvent.setCustomType(InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId());
+        serviceEvent.setName("original event");
+        serviceEvent.setValue(originalValue);
+        serviceEvent.setEventEnvironment(originalEventEnvironment);
+        serviceEvent.setProfileID(originalProfileId);
+        serviceEvent.setBytesTruncated(4);
+        serviceEvent.setCreationElapsedRealtime(originalElapsedRealtime);
+        serviceEvent.setCreationTimestamp(originalCreationTimestamp);
+        serviceEvent.setSource(EventSource.JS);
+        serviceEvent.setPayload(originalPayload);
+        serviceEvent.setExtras(extras);
+        serviceEvent.setValueProtocolVersion(valueProtocolVersion);
+        CoreServiceEvent resultServiceEvent = reportProvider.apply(serviceEvent);
         Assertions.INSTANCE.ObjectPropertyAssertions(resultServiceEvent)
             .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "isUndefinedType")
             .withPrivateFields(true)

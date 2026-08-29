@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.session;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
@@ -35,7 +35,7 @@ public class ReportSessionStopDueCrashHandlerTest extends CommonTest {
 
     @Test
     public void testSessionStopped() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         reportSessionStopDueCrashHandler.process(serviceEvent);
 
         verify(sessionManager, times(1)).stopCurrentSessionDueToCrash(serviceEvent);
@@ -43,13 +43,13 @@ public class ReportSessionStopDueCrashHandlerTest extends CommonTest {
 
     @Test
     public void testProcessShouldTrigger() {
-        reportSessionStopDueCrashHandler.process(new ServiceEvent());
+        reportSessionStopDueCrashHandler.process(new CoreServiceEvent());
         verify(conditionalEventTrigger).trigger();
     }
 
     @Test
     public void testProcessShouldBreakProcessing() {
-        assertThat(reportSessionStopDueCrashHandler.process(new ServiceEvent())).isTrue();
+        assertThat(reportSessionStopDueCrashHandler.process(new CoreServiceEvent())).isTrue();
     }
 
 }

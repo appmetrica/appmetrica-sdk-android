@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component
 
 import android.content.Context
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
@@ -80,9 +80,9 @@ internal class RegularDispatcherComponentTest : CommonTest() {
 
     @Test
     fun handleReport() {
-        val activationServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_ACTIVATION.typeId }
-        val regularServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_REGULAR.typeId }
-        val startServiceEvent = ServiceEvent().apply { type = InternalEvents.EVENT_TYPE_START.typeId }
+        val activationServiceEvent = CoreServiceEvent().apply { type = InternalEvents.EVENT_TYPE_ACTIVATION.typeId }
+        val regularServiceEvent = CoreServiceEvent().apply { type = InternalEvents.EVENT_TYPE_REGULAR.typeId }
+        val startServiceEvent = CoreServiceEvent().apply { type = InternalEvents.EVENT_TYPE_START.typeId }
         regularDispatcherComponent.handleReport(
             activationServiceEvent,
             CommonArgumentsTestUtils.createMockedArguments()
@@ -171,7 +171,7 @@ internal class RegularDispatcherComponentTest : CommonTest() {
     }
 
     private fun warmUpAllComponents() {
-        val serviceEvent = ServiceEvent()
+        val serviceEvent = CoreServiceEvent()
         serviceEvent.type = InternalEvents.EVENT_TYPE_REGULAR.typeId
         regularDispatcherComponent.handleReport(
             serviceEvent,

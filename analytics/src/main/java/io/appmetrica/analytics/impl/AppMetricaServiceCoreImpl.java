@@ -285,7 +285,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         // Set class loader for unmarshalling
         data.setClassLoader(CounterConfiguration.class.getClassLoader());
         CounterReport counterReport = CounterReport.fromBundle(data);
-        ServiceEvent serviceEvent = ServiceEvent.from(counterReport);
+        CoreServiceEvent serviceEvent = CoreServiceEvent.from(counterReport);
         DebugLogger.INSTANCE.info(
             TAG,
             "reportData: type = %s; customType = %s; name = %s",

@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.db.event
 
 import android.content.Context
 import io.appmetrica.analytics.impl.AppEnvironment
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.session.SessionState
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
@@ -51,7 +51,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         "key" to "value".toByteArray()
     )
     private val valueProtocolVersion = 2
-    private val serviceEvent: ServiceEvent = mock {
+    private val serviceEvent: CoreServiceEvent = mock {
         on { type } doReturn type
         on { customType } doReturn customType
         on { name } doReturn name

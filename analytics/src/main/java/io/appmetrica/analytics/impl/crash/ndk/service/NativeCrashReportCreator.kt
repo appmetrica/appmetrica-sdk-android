@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.crash.ndk.service
 
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.InternalEvents
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash
 
 internal class NativeCrashReportCreator(
@@ -11,8 +11,8 @@ internal class NativeCrashReportCreator(
     private val timestampProvider: NativeCrashTimestampProvider,
 ) {
 
-    fun create(dump: String): ServiceEvent {
-        return ServiceEvent.nativeCrashEntry(
+    fun create(dump: String): CoreServiceEvent {
+        return CoreServiceEvent.nativeCrashEntry(
             eventType,
             dump,
             crash.uuid,

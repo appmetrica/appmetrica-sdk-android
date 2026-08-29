@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IdentifiersData;
 import io.appmetrica.analytics.impl.TaskProcessor;
@@ -193,7 +193,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @Test
     public void testHandleReport() {
         CommutationClientUnit clientUnit = mock(CommutationClientUnit.class);
-        ServiceEvent serviceEvent = mock(ServiceEvent.class);
+        CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         mComponentUnit.handleReport(serviceEvent, clientUnit);
         verify(mCommutationReportProcessor).process(serviceEvent, clientUnit);
     }

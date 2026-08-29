@@ -2,11 +2,11 @@ package io.appmetrica.analytics.impl.db.event
 
 import android.content.Context
 import io.appmetrica.analytics.impl.AppEnvironment
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.session.SessionState
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
@@ -19,7 +19,7 @@ internal class DbEventModelFactory @JvmOverloads constructor(
     private val sessionState: SessionState,
     private val reportType: Int,
     private val vitalComponentDataProvider: VitalComponentDataProvider,
-    private val serviceEvent: ServiceEvent,
+    private val serviceEvent: CoreServiceEvent,
     private val reportRequestConfig: ReportRequestConfig,
     private val environmentRevision: AppEnvironment.EnvironmentRevision,
     private val eventExtrasConverter: EventExtrasConverter = EventExtrasConverter(),

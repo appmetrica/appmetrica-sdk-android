@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategy;
@@ -36,7 +36,7 @@ public class CommutationReportProcessorTest extends CommonTest {
 
     @Test
     public void testHandlerCalledWithClientUnit() {
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         CommutationClientUnit unit = mock(CommutationClientUnit.class);
         mProcessor.process(serviceEvent, unit);
         verify(mHandler, times(1)).process(serviceEvent, unit);

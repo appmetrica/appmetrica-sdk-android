@@ -39,7 +39,7 @@ internal class ReportConsumerTest : CommonTest() {
     private val clientRepository: ClientRepository = mock {
         on { getOrCreateClient(clientDescription, commonArguments) } doReturn clientUnit
     }
-    private val serviceEvent: ServiceEvent = mock()
+    private val serviceEvent: CoreServiceEvent = mock()
     private val extras: Bundle = mock()
     private val reportExecutor: IHandlerExecutor = mock()
 

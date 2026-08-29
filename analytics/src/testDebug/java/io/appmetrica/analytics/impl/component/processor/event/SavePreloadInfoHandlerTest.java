@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -30,7 +30,7 @@ public class SavePreloadInfoHandlerTest extends CommonTest {
     @Mock
     private PreloadInfoStorage mPreloadInfoStorage;
     @Mock
-    private ServiceEvent mServiceEvent;
+    private CoreServiceEvent serviceEvent;
     @Mock
     private ReportRequestConfig mConfig;
     private final boolean mAutoTracking = new Random().nextBoolean();
@@ -51,30 +51,30 @@ public class SavePreloadInfoHandlerTest extends CommonTest {
 
     @Test
     public void valueIsBadJson() {
-        when(mServiceEvent.getValue()).thenReturn("bad json");
-        mHandler.process(mServiceEvent);
+        when(serviceEvent.getValue()).thenReturn("bad json");
+        mHandler.process(serviceEvent);
         verify(mPreloadInfoStorage).updateIfNeeded(argThat(mDefaultPreloadInfoStateMatcher));
     }
 
     @Test
     public void valueIsEmptyJson() {
-        when(mServiceEvent.getValue()).thenReturn(new JSONObject().toString());
-        mHandler.process(mServiceEvent);
+        when(serviceEvent.getValue()).thenReturn(new JSONObject().toString());
+        mHandler.process(serviceEvent);
         verify(mPreloadInfoStorage).updateIfNeeded(argThat(mDefaultPreloadInfoStateMatcher));
     }
 
     @Test
     public void valueIsNotEmptyButHasNoPreloadInfo() throws JSONException {
-        when(mServiceEvent.getValue()).thenReturn(new JSONObject().put("key", "value").toString());
-        mHandler.process(mServiceEvent);
+        when(serviceEvent.getValue()).thenReturn(new JSONObject().put("key", "value").toString());
+        mHandler.process(serviceEvent);
         verify(mPreloadInfoStorage).updateIfNeeded(argThat(mDefaultPreloadInfoStateMatcher));
     }
 
     @Test
     public void valueHasPreloadInfo() throws JSONException {
         PreloadInfoState preloadInfoData = new PreloadInfoState("11", new JSONObject(), true, mAutoTracking, DistributionSource.APP);
-        when(mServiceEvent.getValue()).thenReturn(new JSONObject().put("preloadInfo", preloadInfoData.toInternalJson()).toString());
-        mHandler.process(mServiceEvent);
+        when(serviceEvent.getValue()).thenReturn(new JSONObject().put("preloadInfo", preloadInfoData.toInternalJson()).toString());
+        mHandler.process(serviceEvent);
         ArgumentCaptor<PreloadInfoState> preloadInfoStateCaptor = ArgumentCaptor.forClass(PreloadInfoState.class);
         verify(mPreloadInfoStorage).updateIfNeeded(preloadInfoStateCaptor.capture());
         PreloadInfoState actual = preloadInfoStateCaptor.getValue();

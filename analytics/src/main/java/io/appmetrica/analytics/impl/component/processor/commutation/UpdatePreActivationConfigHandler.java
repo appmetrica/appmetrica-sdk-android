@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -26,7 +26,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
     }
 
     @Override
-    public boolean process(@NonNull ServiceEvent serviceEvent, @NonNull CommutationClientUnit clientUnit) {
+    public boolean process(@NonNull CoreServiceEvent serviceEvent, @NonNull CommutationClientUnit clientUnit) {
         DebugLogger.INSTANCE.info(TAG, "process: %s", serviceEvent);
         CommonArguments.ReporterArguments counterConfiguration = clientUnit.getComponent().getConfiguration();
         updateDataSendingStatus(counterConfiguration.dataSendingEnabled);

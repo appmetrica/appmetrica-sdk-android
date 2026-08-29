@@ -4,7 +4,7 @@ import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
 import io.appmetrica.analytics.impl.ReportingTaskProcessor;
@@ -195,7 +195,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
             mock(SessionExtrasHolder.class),
             taskProcessor
         );
-        eventSaver.saveReport(mock(ServiceEvent.class), mock(SessionState.class));
+        eventSaver.saveReport(mock(CoreServiceEvent.class), mock(SessionState.class));
         verify(taskProcessor).restartFlushTask();
     }
 

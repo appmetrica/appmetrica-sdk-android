@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.session;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -20,7 +20,7 @@ public class SessionManagerStateMachine {
     static final int SESSION_PROTECTION_WINDOW = 10;
 
     public interface EventSaver {
-        void saveEvent(@NonNull final ServiceEvent serviceEvent, @NonNull final SessionState sessionState);
+        void saveEvent(@NonNull final CoreServiceEvent serviceEvent, @NonNull final SessionState sessionState);
     }
 
     public enum State {
@@ -72,7 +72,7 @@ public class SessionManagerStateMachine {
         this.sessionFromPastFactory = sessionFromPastFactory;
     }
 
-    public synchronized void heartbeat(@NonNull ServiceEvent serviceEvent) {
+    public synchronized void heartbeat(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " heartbeat");
         loadValidSession(serviceEvent);
         switch (mState) {
@@ -93,7 +93,7 @@ public class SessionManagerStateMachine {
         }
     }
 
-    public synchronized void stopCurrentSessionDueToCrash(@NonNull ServiceEvent serviceEvent) {
+    public synchronized void stopCurrentSessionDueToCrash(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " stopCurrentSessionDueToCrash");
         Session lastSession = loadLastSession(serviceEvent);
         if (lastSession != null) {
@@ -116,7 +116,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    public synchronized Session getSomeSession(@NonNull ServiceEvent serviceEvent) {
+    public synchronized Session getSomeSession(@NonNull CoreServiceEvent serviceEvent) {
         loadValidSession(serviceEvent);
         DebugLogger.INSTANCE.info(
             TAG,
@@ -154,7 +154,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    public SessionState getCurrentSessionState(@NonNull ServiceEvent serviceEvent) {
+    public SessionState getCurrentSessionState(@NonNull CoreServiceEvent serviceEvent) {
         Session currentSession = getSomeSession(serviceEvent);
         return getStateFromSession(currentSession, serviceEvent.getCreationElapsedRealtime());
     }
@@ -194,7 +194,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    private Session createForegroundSession(@NonNull ServiceEvent serviceEvent) {
+    private Session createForegroundSession(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " create foreground session");
         final PublicLogger logger = mComponent.getPublicLogger();
         logger.info("Start foreground session");
@@ -208,7 +208,7 @@ public class SessionManagerStateMachine {
 
         mComponent.getEventTrigger().trigger();
         mSaver.saveEvent(
-            ServiceEvent.formSessionStartReportData(
+            CoreServiceEvent.formSessionStartReportData(
                 serviceEvent,
                 GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever().getBuildId()
             ),
@@ -217,7 +217,7 @@ public class SessionManagerStateMachine {
         return session;
     }
 
-    private void loadValidSession(@NonNull ServiceEvent serviceEvent) {
+    private void loadValidSession(@NonNull CoreServiceEvent serviceEvent) {
         if (mState == null) {
             Session foregroundSession = mForegroundSessionFactory.load();
             if (foregroundSession != null) {
@@ -243,7 +243,7 @@ public class SessionManagerStateMachine {
     }
 
     @Nullable
-    private Session loadLastSession(@NonNull ServiceEvent serviceEvent) {
+    private Session loadLastSession(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(
             TAG,
             "loadLastSession: mState = %s; mCurrentSession = %s",
@@ -268,7 +268,7 @@ public class SessionManagerStateMachine {
         }
     }
 
-    private boolean checkValidityOrClose(@Nullable Session session, @NonNull ServiceEvent serviceEvent) {
+    private boolean checkValidityOrClose(@Nullable Session session, @NonNull CoreServiceEvent serviceEvent) {
         if (session == null) {
             return false;
         } else {
@@ -281,9 +281,9 @@ public class SessionManagerStateMachine {
         }
     }
 
-    private void close(@NonNull Session session, @Nullable ServiceEvent serviceEvent) {
+    private void close(@NonNull Session session, @Nullable CoreServiceEvent serviceEvent) {
         if (session.isAliveNeeded()) {
-            mSaver.saveEvent(ServiceEvent.formAliveReportData(serviceEvent), getAliveReportSessionState(session));
+            mSaver.saveEvent(CoreServiceEvent.formAliveReportData(serviceEvent), getAliveReportSessionState(session));
             session.updateAliveReportNeeded(false);
         }
         DebugLogger.INSTANCE.info(
@@ -305,7 +305,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    private Session createBackgroundSession(@NonNull ServiceEvent serviceEvent) {
+    private Session createBackgroundSession(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " create background session");
         final PublicLogger logger = mComponent.getPublicLogger();
         logger.info("Start background session");
@@ -319,7 +319,7 @@ public class SessionManagerStateMachine {
         //non-elegant solution for first event
         if (mComponent.getVitalComponentDataProvider().isFirstEventDone()) {
             mSaver.saveEvent(
-                ServiceEvent.formSessionStartReportData(
+                CoreServiceEvent.formSessionStartReportData(
                     serviceEvent,
                     GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever().getBuildId()
                 ),
@@ -328,7 +328,7 @@ public class SessionManagerStateMachine {
         } else if (serviceEvent.getType() == InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId()) {
             mSaver.saveEvent(serviceEvent, getStateFromSession(session, eventCreationElapsedRealtime));
             mSaver.saveEvent(
-                ServiceEvent.formSessionStartReportData(
+                CoreServiceEvent.formSessionStartReportData(
                     serviceEvent,
                     GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever().getBuildId()
                 ),
@@ -357,7 +357,7 @@ public class SessionManagerStateMachine {
     }
 
     @Nullable
-    public SessionState peekCurrentSessionState(@NonNull ServiceEvent serviceEvent) {
+    public SessionState peekCurrentSessionState(@NonNull CoreServiceEvent serviceEvent) {
         Session lastSession = loadLastSession(serviceEvent);
         DebugLogger.INSTANCE.info(
             TAG,

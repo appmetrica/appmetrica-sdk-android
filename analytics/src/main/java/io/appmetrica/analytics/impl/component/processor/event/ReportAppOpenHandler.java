@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -22,7 +22,7 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final ServiceEvent serviceEvent) {
+    public boolean process(@NonNull final CoreServiceEvent serviceEvent) {
         String eventValue = serviceEvent.getValue();
         if (TextUtils.isEmpty(eventValue) == false) {
             try {

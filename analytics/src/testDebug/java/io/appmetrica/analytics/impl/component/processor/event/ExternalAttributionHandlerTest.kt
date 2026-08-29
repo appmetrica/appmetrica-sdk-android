@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.impl.ServiceEvent
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionHelper
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 internal class ExternalAttributionHandlerTest : CommonTest() {
 
     private val valueBytes = "string".toByteArray()
-    private val serviceEvent: ServiceEvent = mock {
+    private val serviceEvent: CoreServiceEvent = mock {
         on { valueBytes } doReturn valueBytes
     }
 

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.crash.ndk.service
 
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.ReportConsumer
-import io.appmetrica.analytics.impl.ServiceEvent
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
@@ -36,7 +36,7 @@ internal class NativeCrashConsumerTest : CommonTest() {
 
     private val nativeCrashDump = "Native crash dump"
 
-    private val serviceEvent: ServiceEvent = mock()
+    private val serviceEvent: CoreServiceEvent = mock()
     private val reportCreator: NativeCrashReportCreator = mock {
         on { create(nativeCrashDump) } doReturn serviceEvent
     }

@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.ReportingTaskProcessor;
@@ -173,7 +173,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
             this,
             vitalComponentDataProvider,
             new SessionManagerStateMachine.EventSaver() {
-                public void saveEvent(@NonNull ServiceEvent serviceEvent, @NonNull SessionState sessionState) {
+                public void saveEvent(@NonNull CoreServiceEvent serviceEvent, @NonNull SessionState sessionState) {
                     mEventSaver.saveReport(serviceEvent, sessionState);
                 }
             }
@@ -228,7 +228,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     }
 
     @Override
-    public void handleReport(@NonNull ServiceEvent serviceEvent) {
+    public void handleReport(@NonNull CoreServiceEvent serviceEvent) {
         DebugLogger.INSTANCE.info(
             TAG,
             "A new report for component \"%s\", data: %s",
@@ -304,7 +304,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         mEventSaver.saveFeaturesCheckVersion();
     }
 
-    public void addAppEnvironmentValue(ServiceEvent serviceEvent) {
+    public void addAppEnvironmentValue(CoreServiceEvent serviceEvent) {
         Map<String, String> environment = JsonHelper.jsonToMap(serviceEvent.getValue());
         if (environment != null) {
             for (Map.Entry<String, String> entry : environment.entrySet()) {
@@ -453,7 +453,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         return autoCollectedDataSubscribersHolder;
     }
 
-    private void logEvent(final ServiceEvent serviceEvent, String msg) {
+    private void logEvent(final CoreServiceEvent serviceEvent, String msg) {
         String log = PublicLogConstructor.constructCounterReportLog(serviceEvent, msg);
         if (log != null) {
             mPublicLogger.info(log);

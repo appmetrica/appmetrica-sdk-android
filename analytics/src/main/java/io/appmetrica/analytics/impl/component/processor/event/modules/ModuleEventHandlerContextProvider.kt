@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
-import io.appmetrica.analytics.impl.ServiceEvent
+import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.analytics.impl.modules.LegacyModulePreferenceAdapter
@@ -17,7 +17,7 @@ internal class ModuleEventHandlerContextProvider(component: ComponentUnit, modul
     private val apiKey: String? = component.componentId.apiKey
 
     fun getContext(
-        serviceEvent: ServiceEvent
+        serviceEvent: CoreServiceEvent
     ): ModuleEventServiceHandlerContext = ModuleEventServiceHandlerContextImpl(
         modulePreferenceAdapter,
         legacyModulePreferenceAdapter,

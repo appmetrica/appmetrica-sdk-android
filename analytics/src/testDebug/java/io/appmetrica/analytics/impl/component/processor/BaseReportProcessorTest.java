@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
@@ -44,8 +44,8 @@ public class BaseReportProcessorTest extends CommonTest {
     @Test
     public void testProcess() {
         BaseReportProcessor.ProcessItem item = mock(BaseReportProcessor.ProcessItem.class);
-        doReturn(false).when(item).process(any(), any(ServiceEvent.class));
-        ServiceEvent serviceEvent = new ServiceEvent();
+        doReturn(false).when(item).process(any(), any(CoreServiceEvent.class));
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         mProcessor.process(serviceEvent, item);
         verify(item, times(1)).process(mHandler1, serviceEvent);
         verify(item, times(1)).process(mHandler2, serviceEvent);
@@ -54,7 +54,7 @@ public class BaseReportProcessorTest extends CommonTest {
     @Test
     public void testBreakChain() {
         BaseReportProcessor.ProcessItem item = mock(BaseReportProcessor.ProcessItem.class);
-        ServiceEvent serviceEvent = new ServiceEvent();
+        CoreServiceEvent serviceEvent = new CoreServiceEvent();
         doReturn(true).when(item).process(mHandler1, serviceEvent);
         doReturn(false).when(item).process(mHandler2, serviceEvent);
         mProcessor.process(serviceEvent, item);

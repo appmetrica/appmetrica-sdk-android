@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.AppEnvironment;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.session.SessionType;
@@ -45,7 +45,7 @@ public class EventSaverTest extends CommonTest {
     @Mock
     private TimeProvider mTimeProvider;
     @Mock
-    private ServiceEvent mServiceEvent;
+    private CoreServiceEvent serviceEvent;
     @Mock
     private SessionState mSessionState;
     @Mock
@@ -63,7 +63,7 @@ public class EventSaverTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mServiceEvent.getType()).thenReturn(mReportType);
+        when(serviceEvent.getType()).thenReturn(mReportType);
         when(mPreferences.getPermissionsEventSendTime()).thenReturn(mPermissionsCheckTime);
         when(mPreferences.putPermissionsCheckTime(anyLong())).thenReturn(mPreferences);
         when(mPreferences.putLastAppVersionWithFeatures(anyInt())).thenReturn(mPreferences);
@@ -73,7 +73,7 @@ public class EventSaverTest extends CommonTest {
         mRevision = new AppEnvironment.EnvironmentRevision("value", 5);
         when(mAppEnvironment.getLastRevision()).thenReturn(mRevision);
 
-        when(mServiceEvent.getExtras()).thenReturn(extras);
+        when(serviceEvent.getExtras()).thenReturn(extras);
 
         mEventSaver = createReportSaverWithLastAppVersionsWithFeatures(curAppVersion);
     }
@@ -115,11 +115,11 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void testSaveReport() {
-        mEventSaver.saveReport(mServiceEvent, mSessionState);
-        verify(mServiceEvent).setProfileID(mProfileId);
-        verify(mServiceEvent).setOpenId(openId);
+        mEventSaver.saveReport(serviceEvent, mSessionState);
+        verify(serviceEvent).setProfileID(mProfileId);
+        verify(serviceEvent).setOpenId(openId);
         verify(mDbHelper).saveReport(
-            eq(mServiceEvent),
+            eq(serviceEvent),
             eq(mReportType),
             eq(mSessionState),
             eq(mRevision),
@@ -131,9 +131,9 @@ public class EventSaverTest extends CommonTest {
     @Test
     public void saveReportWithoutExtrasAndSessionExtras() {
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        mEventSaver.saveReport(mServiceEvent, mSessionState);
+        mEventSaver.saveReport(serviceEvent, mSessionState);
         verify(mDbHelper).saveReport(
-            eq(mServiceEvent),
+            eq(serviceEvent),
             eq(mReportType),
             eq(mSessionState),
             eq(mRevision),
@@ -150,9 +150,9 @@ public class EventSaverTest extends CommonTest {
         byte[] extraValue = new byte[]{1, 5, 7, 1, 6};
         extras.put(extraKey, extraValue);
         when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
-        mEventSaver.saveReport(mServiceEvent, mSessionState);
+        mEventSaver.saveReport(serviceEvent, mSessionState);
         verify(mDbHelper).saveReport(
-            eq(mServiceEvent),
+            eq(serviceEvent),
             eq(mReportType),
             eq(mSessionState),
             eq(mRevision),
@@ -169,9 +169,9 @@ public class EventSaverTest extends CommonTest {
         byte[] sessionExtraValue = "Session extra value".getBytes(StandardCharsets.UTF_8);
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
-        mEventSaver.saveReport(mServiceEvent, mSessionState);
+        mEventSaver.saveReport(serviceEvent, mSessionState);
         verify(mDbHelper).saveReport(
-            eq(mServiceEvent),
+            eq(serviceEvent),
             eq(mReportType),
             eq(mSessionState),
             eq(mRevision),
@@ -197,9 +197,9 @@ public class EventSaverTest extends CommonTest {
         when(sessionExtrasHolder.getSnapshot())
             .thenReturn(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
 
-        mEventSaver.saveReport(mServiceEvent, mSessionState);
+        mEventSaver.saveReport(serviceEvent, mSessionState);
         verify(mDbHelper).saveReport(
-            eq(mServiceEvent),
+            eq(serviceEvent),
             eq(mReportType),
             eq(mSessionState),
             eq(mRevision),
@@ -212,57 +212,57 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void testIdentifyAndSaveReport() {
-        prepareReportSaver(mServiceEvent);
-        mEventSaver.identifyAndSaveReport(mServiceEvent);
-        verifyReportSaved(mServiceEvent);
+        prepareReportSaver(serviceEvent);
+        mEventSaver.identifyAndSaveReport(serviceEvent);
+        verifyReportSaved(serviceEvent);
     }
 
     @Test
     public void testSavePermissionsReport() {
-        prepareReportSaver(mServiceEvent);
+        prepareReportSaver(serviceEvent);
         final long currentTime = 1100;
         when(mTimeProvider.currentTimeSeconds()).thenReturn(currentTime);
-        mEventSaver.savePermissionsReport(mServiceEvent);
-        verifyReportSaved(mServiceEvent);
+        mEventSaver.savePermissionsReport(serviceEvent);
+        verifyReportSaved(serviceEvent);
         verify(mPreferences).putPermissionsCheckTime(currentTime);
     }
 
     @Test
     public void testSaveFeaturesReport() {
-        prepareReportSaver(mServiceEvent);
-        mEventSaver.saveFeaturesReport(mServiceEvent);
-        verifyReportSaved(mServiceEvent);
+        prepareReportSaver(serviceEvent);
+        mEventSaver.saveFeaturesReport(serviceEvent);
+        verifyReportSaved(serviceEvent);
         verify(mPreferences).putLastAppVersionWithFeatures(curAppVersion);
     }
 
     @Test
     public void testIdentifyAndSaveFirstEventReport() {
-        prepareReportSaver(mServiceEvent);
-        mEventSaver.identifyAndSaveFirstEventReport(mServiceEvent);
-        verify(mSessionManager).getSomeSession(mServiceEvent);
+        prepareReportSaver(serviceEvent);
+        mEventSaver.identifyAndSaveFirstEventReport(serviceEvent);
+        verify(mSessionManager).getSomeSession(serviceEvent);
     }
 
     @Test
     public void testSaveReportWithCurrentSession() {
         final long timestamp = 123456000;
-        when(mServiceEvent.getCreationTimestamp()).thenReturn(timestamp);
-        prepareReportSaver(mServiceEvent);
+        when(serviceEvent.getCreationTimestamp()).thenReturn(timestamp);
+        prepareReportSaver(serviceEvent);
         SessionState sessionState = mock(SessionState.class);
         when(sessionState.getSessionType()).thenReturn(SessionType.FOREGROUND);
-        when(mSessionManager.peekCurrentSessionState(mServiceEvent)).thenReturn(sessionState);
-        mEventSaver.saveReportFromPrevSession(mServiceEvent);
-        verifyReportSaved(mServiceEvent, sessionState);
+        when(mSessionManager.peekCurrentSessionState(serviceEvent)).thenReturn(sessionState);
+        mEventSaver.saveReportFromPrevSession(serviceEvent);
+        verifyReportSaved(serviceEvent, sessionState);
     }
 
-    private void prepareReportSaver(ServiceEvent serviceEvent) {
+    private void prepareReportSaver(CoreServiceEvent serviceEvent) {
         when(mSessionManager.getCurrentSessionState(serviceEvent)).thenReturn(mSessionState);
     }
 
-    private void verifyReportSaved(ServiceEvent serviceEvent) {
+    private void verifyReportSaved(CoreServiceEvent serviceEvent) {
         verifyReportSaved(serviceEvent, mSessionState);
     }
 
-    private void verifyReportSaved(ServiceEvent serviceEvent, SessionState sessionState) {
+    private void verifyReportSaved(CoreServiceEvent serviceEvent, SessionState sessionState) {
         verify(serviceEvent).setProfileID(mProfileId);
         verify(serviceEvent).setOpenId(openId);
         verify(mDbHelper).saveReport(

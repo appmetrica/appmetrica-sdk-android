@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.impl.ServiceEvent;
+import io.appmetrica.analytics.impl.CoreServiceEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -59,15 +59,15 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
     }
 
     @Override
-    public boolean process(@NonNull final ServiceEvent serviceEvent) {
+    public boolean process(@NonNull final CoreServiceEvent serviceEvent) {
         ComponentUnit component = getComponent();
         if (vitalComponentDataProvider.isInitEventDone() == false) {
-            ServiceEvent serviceEventToSave;
+            CoreServiceEvent serviceEventToSave;
 
             if (component.getFreshReportRequestConfig().isFirstActivationAsUpdate()) {
-                serviceEventToSave = ServiceEvent.formUpdateReportData(serviceEvent);
+                serviceEventToSave = CoreServiceEvent.formUpdateReportData(serviceEvent);
             } else {
-                serviceEventToSave = ServiceEvent.formInitReportData(serviceEvent);
+                serviceEventToSave = CoreServiceEvent.formInitReportData(serviceEvent);
             }
             final JSONObject eventValue = new JSONObject();
             final String packageInstaller = WrapUtils.getOrDefault(
