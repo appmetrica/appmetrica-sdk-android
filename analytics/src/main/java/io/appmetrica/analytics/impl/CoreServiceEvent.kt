@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.os.Bundle
 import android.util.Base64
-import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
+import io.appmetrica.analytics.coreapi.internal.event.ServiceEvent
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.coreutils.internal.limitation.StringByBytesTrimmer
@@ -23,7 +23,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
 
-internal class CoreServiceEvent : CounterReportApi {
+internal class CoreServiceEvent : ServiceEvent {
 
     override var name: String? = StringUtils.EMPTY
     override var value: String? = null

@@ -197,6 +197,25 @@ public interface io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
     public abstract void setValueProtocolVersion([Nullable] Integer)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.event.ServiceEvent {
+    public abstract int getBytesTruncated()
+    public abstract int getCustomType()
+    public abstract [NonNull] java.util.Map<String, byte[]> getExtras()
+    public abstract [Nullable] String getName()
+    public abstract int getType()
+    public abstract [Nullable] String getValue()
+    public abstract [Nullable] byte[] getValueBytes()
+    public abstract [Nullable] Integer getValueProtocolVersion()
+    public abstract void setBytesTruncated(int)
+    public abstract void setCustomType(int)
+    public abstract void setExtras([NonNull] java.util.Map<String, byte[]>)
+    public abstract void setName([Nullable] String)
+    public abstract void setType(int)
+    public abstract void setValue([Nullable] String)
+    public abstract void setValueBytes([Nullable] byte[])
+    public abstract void setValueProtocolVersion([Nullable] Integer)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor extends io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread, java.util.concurrent.Executor {
     public abstract void execute([NonNull] Runnable)
     public abstract void executeDelayed([NonNull] Runnable, long)
@@ -504,42 +523,11 @@ public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.Serv
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter {
-    public abstract void handleReport([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport)
+    public abstract void handleReport([NonNull] io.appmetrica.analytics.coreapi.internal.event.ServiceEvent)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer {
     public abstract void onCreate([NonNull] android.content.Context)
-}
-
-public final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport {
-    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Companion Companion
-
-    public <init>([Nullable] String, [Nullable] String, [Nullable] byte[], int)
-    public final [Nullable] String component1()
-    public final [Nullable] String component2()
-    public final [Nullable] byte[] component3()
-    public final int component4()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport copy([Nullable] String, [Nullable] String, [Nullable] byte[], int)
-    public boolean equals([Nullable] Object)
-    public final [Nullable] String getName()
-    public final int getType()
-    public final [Nullable] String getValue()
-    public final [Nullable] byte[] getValueBytes()
-    public int hashCode()
-    public [NonNull] String toString()
-}
-
-public static final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder {
-    public <init>()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport build()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withName([Nullable] String)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withType(int)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withValue([Nullable] String)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withValueBytes([Nullable] byte[])
-}
-
-public static final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Companion {
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder newBuilder()
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext {

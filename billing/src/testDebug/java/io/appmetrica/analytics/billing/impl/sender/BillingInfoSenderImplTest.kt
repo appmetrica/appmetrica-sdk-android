@@ -4,14 +4,17 @@ import io.appmetrica.analytics.billing.impl.Constants
 import io.appmetrica.analytics.billinginterface.internal.Period
 import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
+import io.appmetrica.analytics.coreapi.internal.event.ServiceEvent
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter
-import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
 import io.appmetrica.gradle.testutils.CommonTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
@@ -82,18 +85,13 @@ internal class BillingInfoSenderImplTest : CommonTest() {
     fun sendInfo() {
         billingInfoSender.sendInfo(productInfos)
 
-        verify(reporter).handleReport(
-            ServiceModuleCounterReport.Companion.newBuilder()
-                .withType(Constants.Events.TYPE)
-                .withValueBytes(firstValueBytes)
-                .build()
-        )
-        verify(reporter).handleReport(
-            ServiceModuleCounterReport.Companion.newBuilder()
-                .withType(Constants.Events.TYPE)
-                .withValueBytes(secondValueBytes)
-                .build()
-        )
+        val captor = argumentCaptor<ServiceEvent>()
+        verify(reporter, times(2)).handleReport(captor.capture())
         verifyNoMoreInteractions(reporter)
+
+        assertThat(captor.allValues[0].type).isEqualTo(Constants.Events.TYPE)
+        assertThat(captor.allValues[0].valueBytes).isEqualTo(firstValueBytes)
+        assertThat(captor.allValues[1].type).isEqualTo(Constants.Events.TYPE)
+        assertThat(captor.allValues[1].valueBytes).isEqualTo(secondValueBytes)
     }
 }

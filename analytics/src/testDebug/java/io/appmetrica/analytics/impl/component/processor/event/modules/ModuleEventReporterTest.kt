@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
 import android.annotation.SuppressLint
-import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
+import io.appmetrica.analytics.coreapi.internal.event.ServiceEvent
 import io.appmetrica.analytics.impl.CoreServiceEvent
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.gradle.testutils.CommonTest
@@ -34,7 +34,7 @@ internal class ModuleEventReporterTest : CommonTest() {
     private val valueProtocolVersionValue = 3
     private val bytesTruncatedValue = 123
 
-    private val moduleReport = mock<CounterReportApi> {
+    private val moduleReport = mock<ServiceEvent> {
         on { type } doReturn typeValue
         on { customType } doReturn customTypeValue
         on { name } doReturn nameValue
