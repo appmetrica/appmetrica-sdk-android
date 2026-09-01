@@ -127,6 +127,10 @@ internal class StartupUnit(
         DebugLogger.info(tag, "isStartupOutdated: $required")
         if (!required) {
             required = !StartupRequiredUtils.areMainIdentifiersValid(startupState)
+            if (!required && isStartupRequiredBecauseOfReferrer(requestConfig, startupState)) {
+                DebugLogger.info(tag, "Startup is required because of referrer")
+                required = true
+            }
             val validClids = startupUnitComponents.clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
                 requestConfig.clidsFromClient,
                 startupState,
@@ -141,6 +145,15 @@ internal class StartupUnit(
             DebugLogger.info(tag, "Startup required because it's outdated.")
         }
         return required
+    }
+
+    private fun isStartupRequiredBecauseOfReferrer(
+        requestConfig: StartupRequestConfig,
+        startupState: StartupState
+    ): Boolean {
+        val currentReferrer = requestConfig.referrer?.referrer
+        return !currentReferrer.isNullOrEmpty() &&
+            currentReferrer != startupState.lastReferrerForStartupRequest
     }
 
     override fun onRequestComplete(
@@ -188,6 +201,7 @@ internal class StartupUnit(
             .withDiagnosticUrls(result.diagnosticUrls)
             .withCustomSdkHosts(result.customSdkHosts)
             .withEncodedClidsFromResponse(validClidsFromResponse)
+            .withLastReferrerForStartupRequest(requestConfig.referrer?.referrer)
             .withLastClientClidsForStartupRequest(clientClidsForRequest)
             .withStartupDidNotOverrideClids(
                 startupUnitComponents.clidsStateChecker.doRequestClidsMatchResponseClids(

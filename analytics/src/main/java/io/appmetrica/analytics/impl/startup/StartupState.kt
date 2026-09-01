@@ -27,6 +27,8 @@ internal class StartupState private constructor(
     val encodedClidsFromResponse: String? = startupStateModel.encodedClidsFromResponse
     val lastClientClidsForStartupRequest: String? = startupStateModel.lastClientClidsForStartupRequest
     val lastChosenForRequestClids: String? = startupStateModel.lastChosenForRequestClids
+    val lastReferrerForStartupRequest: String? =
+        startupStateModel.lastReferrerForStartupRequest
     val collectingFlags: CollectingFlags = startupStateModel.collectingFlags
     val obtainTime: Long = startupStateModel.obtainTime
     val hadFirstStartup: Boolean = startupStateModel.hadFirstStartup
@@ -86,6 +88,10 @@ internal class StartupState private constructor(
 
         fun withLastChosenForRequestClids(value: String?) = this.also {
             modelBuilder.withLastChosenForRequestClids(value)
+        }
+
+        fun withLastReferrerForStartupRequest(value: String?) = this.also {
+            modelBuilder.withLastReferrerForStartupRequest(value)
         }
 
         fun withObtainTime(value: Long) = this.also { modelBuilder.withObtainTime(value) }

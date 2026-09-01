@@ -1212,6 +1212,9 @@ public interface StartupStateProtobuf {
     // optional .StartupState.ExternalAttributionConfig externalAttributionConfig = 32;
     public StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfig;
 
+    // optional string lastReferrerForStartupRequest = 34;
+    public java.lang.String lastReferrerForStartupRequest;
+
     public StartupState() {
       clear();
     }
@@ -1247,6 +1250,7 @@ public interface StartupStateProtobuf {
       startupUpdateConfig = null;
       modulesRemoteConfigs = StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry.emptyArray();
       externalAttributionConfig = null;
+      lastReferrerForStartupRequest = "";
       cachedSize = -1;
       return this;
     }
@@ -1366,6 +1370,9 @@ public interface StartupStateProtobuf {
             output.writeString(33, element);
           }
         }
+      }
+      if (!this.lastReferrerForStartupRequest.equals("")) {
+        output.writeString(34, this.lastReferrerForStartupRequest);
       }
       super.writeTo(output);
     }
@@ -1540,6 +1547,10 @@ public interface StartupStateProtobuf {
         }
         size += dataSize;
         size += 2 * dataCount;
+      }
+      if (!this.lastReferrerForStartupRequest.equals("")) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(34, this.lastReferrerForStartupRequest);
       }
       return size;
     }
@@ -1795,6 +1806,10 @@ public interface StartupStateProtobuf {
             // Last one without readTag.
             newArray[i] = input.readString();
             this.hostUrlsFromLibraryAdapter = newArray;
+            break;
+          }
+          case 274: {
+            this.lastReferrerForStartupRequest = input.readString();
             break;
           }
         }

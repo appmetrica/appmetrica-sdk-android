@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
@@ -62,8 +63,11 @@ internal open class StartupUnitBaseTest : CommonTest() {
 
     private val chosenClids: ClidsInfo.Candidate = mock()
 
+    val referrerManager: ReferrerManager = mock()
+
     val startupRequestConfig: StartupRequestConfig = mock {
         on { chosenClids } doReturn chosenClids
+        on { referrerManager } doReturn this@StartupUnitBaseTest.referrerManager
     }
 
     val startupResultListener: StartupResultListener = mock()

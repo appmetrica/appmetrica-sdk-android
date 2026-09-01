@@ -36,6 +36,7 @@ internal class StartupStateStorageTest : CommonTest() {
     private val encodedClidsFromResponse = "clid0:0"
     private val lastClientClidsForStartupRequest = "clid1:1"
     private val lastChosenForRequestClids = "clid2:2"
+    private val lastReferrerForStartupRequest = "utm_source=test"
     private val customSdkHosts = mapOf("am" to listOf("host1"), "ads" to listOf("host2"))
     private val obtainTime = 676578768787L
     private val obtainServerTime = 231341354L
@@ -83,6 +84,7 @@ internal class StartupStateStorageTest : CommonTest() {
             .checkFieldIsNull("encodedClidsFromResponse")
             .checkFieldIsNull("lastClientClidsForStartupRequest")
             .checkFieldIsNull("lastChosenForRequestClids")
+            .checkFieldIsNull("lastReferrerForStartupRequest")
             .checkField("obtainTime", 0L)
             .checkField("obtainServerTime", 0L)
             .checkField("firstStartupServerTime", 0L)
@@ -132,6 +134,7 @@ internal class StartupStateStorageTest : CommonTest() {
         assertions.checkFieldIsNull("encodedClidsFromResponse")
         assertions.checkFieldIsNull("lastClientClidsForStartupRequest")
         assertions.checkFieldIsNull("lastChosenForRequestClids")
+        assertions.checkFieldIsNull("lastReferrerForStartupRequest")
         assertions.checkField("obtainTime", 0L)
         assertions.checkField("hadFirstStartup", false)
         assertions.checkField("startupDidNotOverrideClids", false)
@@ -177,6 +180,7 @@ internal class StartupStateStorageTest : CommonTest() {
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainTime(obtainTime)
             .withHadFirstStartup(hadFirstStartup)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
@@ -213,6 +217,7 @@ internal class StartupStateStorageTest : CommonTest() {
             .checkField("encodedClidsFromResponse", encodedClidsFromResponse)
             .checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest)
             .checkField("lastChosenForRequestClids", lastChosenForRequestClids)
+            .checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest)
             .checkField("obtainTime", obtainTime)
             .checkField("obtainServerTime", obtainServerTime)
             .checkField("firstStartupServerTime", firstStartupServerTime)
@@ -252,6 +257,7 @@ internal class StartupStateStorageTest : CommonTest() {
             .withHostUrlsFromClient(hostUrlsFromClient)
             .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainServerTime(obtainServerTime)
             .withObtainTime(obtainTime)
             .withOutdated(outdated)
@@ -288,6 +294,7 @@ internal class StartupStateStorageTest : CommonTest() {
         assertions.checkField("encodedClidsFromResponse", encodedClidsFromResponse)
         assertions.checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest)
         assertions.checkField("lastChosenForRequestClids", lastChosenForRequestClids)
+        assertions.checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest)
         assertions.checkField("obtainTime", obtainTime)
         assertions.checkField("hadFirstStartup", hadFirstStartup)
         assertions.checkField("startupDidNotOverrideClids", startupDidNotOverrideClids)

@@ -36,10 +36,6 @@ public class StartupRequestConfig extends CoreRequestConfig {
     @Nullable
     private List<String> mStartupHostsFromLibraryAdapter;
     @Nullable
-    private String mDistributionReferrer;
-    @Nullable
-    private String mInstallReferrerSource;
-    @Nullable
     private Map<String, String> mClidsFromClient;
     @NonNull
     private ClidsInfo.Candidate chosenClids = new ClidsInfo.Candidate(null, DistributionSource.APP);
@@ -54,6 +50,8 @@ public class StartupRequestConfig extends CoreRequestConfig {
     private long mFirstStartupTime = DEFAULT_FIRST_STARTUP_TIME;
     @NonNull
     private final ReferrerManager referrerManager;
+    @NonNull
+    private StartupRequestReferrerProvider startupRequestReferrerProvider;
     @NonNull
     private final HostsProvider resourceStartupHostsProvider;
     @NonNull
@@ -72,6 +70,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
                                 @NonNull HostsProvider resourceStartupHostsProvider,
                                 @NonNull HostsProvider defaultStartupHostsProvider) {
         this.referrerManager = referrerManager;
+        startupRequestReferrerProvider = new StartupRequestReferrerProvider(null, referrerManager);
         this.resourceStartupHostsProvider = resourceStartupHostsProvider;
         this.defaultStartupHostsProvider = defaultStartupHostsProvider;
     }
@@ -190,21 +189,12 @@ public class StartupRequestConfig extends CoreRequestConfig {
     }
 
     @Nullable
-    public String getDistributionReferrer() {
-        return mDistributionReferrer;
+    public StartupRequestReferrer getReferrer() {
+        return startupRequestReferrerProvider.getReferrer();
     }
 
-    private void setDistributionReferrer(@Nullable String distributionReferrer) {
-        mDistributionReferrer = distributionReferrer;
-    }
-
-    @Nullable
-    public String getInstallReferrerSource() {
-        return mInstallReferrerSource;
-    }
-
-    private void setInstallReferrerSource(@Nullable String installReferrerSource) {
-        mInstallReferrerSource = installReferrerSource;
+    void setStartupRequestReferrerProvider(@NonNull StartupRequestReferrerProvider startupRequestReferrerProvider) {
+        this.startupRequestReferrerProvider = startupRequestReferrerProvider;
     }
 
     @Nullable
@@ -261,8 +251,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
             "mStartupHostsFromStartup=" + mStartupHostsFromStartup +
             ", mStartupHostsFromClient=" + mStartupHostsFromClient +
             ", mStartupHostsFromLibraryAdapter=" + mStartupHostsFromLibraryAdapter +
-            ", mDistributionReferrer='" + mDistributionReferrer + '\'' +
-            ", mInstallReferrerSource='" + mInstallReferrerSource + '\'' +
+            ", startupRequestReferrerProvider=" + startupRequestReferrerProvider +
             ", mClidsFromClient=" + mClidsFromClient +
             ", mNewCustomHosts=" + mNewCustomHosts +
             ", mHasNewCustomHosts=" + mHasNewCustomHosts +
@@ -404,11 +393,17 @@ public class StartupRequestConfig extends CoreRequestConfig {
         public StartupRequestConfig load(@NonNull CoreDataSource<Arguments> dataSource) {
             StartupRequestConfig config = super.load(dataSource);
             loadHosts(config, dataSource.startupState);
-            if (dataSource.componentArguments.distributionReferrer != null) {
-                config.setDistributionReferrer(dataSource.componentArguments.distributionReferrer);
-                config.setDistributionReferrer(dataSource.componentArguments.distributionReferrer);
-                config.setInstallReferrerSource(dataSource.componentArguments.installReferrerSource);
-            }
+            config.setStartupRequestReferrerProvider(
+                new StartupRequestReferrerProvider(
+                    dataSource.componentArguments.distributionReferrer == null
+                        ? null
+                        : new StartupRequestReferrer(
+                            dataSource.componentArguments.distributionReferrer,
+                            dataSource.componentArguments.installReferrerSource
+                        ),
+                    config.getReferrerManager()
+                )
+            );
             Map<String, String> clientClids = dataSource.componentArguments.clientClids;
             config.setClidsFromClient(clientClids);
             ClidsInfo.Candidate clidsCandidate = new ClidsInfo.Candidate(clientClids, DistributionSource.APP);

@@ -46,6 +46,7 @@ public class StartupStateModelTest extends CommonTest {
         final String encodedClidsFromResponse = "clid0:0,clid1:1";
         final String lastClientClidsForStartupRequest = "clid1:1,clid2:2";
         final String lastChosenForRequestClids = "clid2:2,clid3:3";
+        final String lastReferrerForStartupRequest = "utm_source=test";
         final long obtainTime = 4444;
         final boolean hadFirstStartup = true;
         final boolean startupDidNotOverrideClids = true;
@@ -75,6 +76,7 @@ public class StartupStateModelTest extends CommonTest {
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainTime(obtainTime)
             .withHadFirstStartup(hadFirstStartup)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
@@ -109,6 +111,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("encodedClidsFromResponse", encodedClidsFromResponse);
         assertions.checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest);
         assertions.checkField("lastChosenForRequestClids", lastChosenForRequestClids);
+        assertions.checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest);
         assertions.checkField("obtainTime", obtainTime);
         assertions.checkField("hadFirstStartup", hadFirstStartup);
         assertions.checkField("startupDidNotOverrideClids", startupDidNotOverrideClids);
@@ -151,6 +154,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("encodedClidsFromResponse", (String) null);
         assertions.checkField("lastClientClidsForStartupRequest", (String) null);
         assertions.checkField("lastChosenForRequestClids", (String) null);
+        assertions.checkField("lastReferrerForStartupRequest", (String) null);
         assertions.checkField("obtainTime", 0L);
         assertions.checkField("hadFirstStartup", false);
         assertions.checkField("startupDidNotOverrideClids", false);
@@ -191,6 +195,7 @@ public class StartupStateModelTest extends CommonTest {
         final String encodedClidsFromResponse = "clid0:0,clid1:1";
         final String lastClientClidsForStartupRequest = "clid1:1,clid2:2";
         final String lastChosenForRequestClids = "clid2:2,clid3:3";
+        final String lastReferrerForStartupRequest = "utm_source=test";
         final long obtainTime = 4444;
         final boolean hadFirstStartup = true;
         final boolean startupDidNotOverrideClids = true;
@@ -221,6 +226,7 @@ public class StartupStateModelTest extends CommonTest {
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainTime(obtainTime)
             .withHadFirstStartup(hadFirstStartup)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
@@ -257,6 +263,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("encodedClidsFromResponse", encodedClidsFromResponse);
         assertions.checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest);
         assertions.checkField("lastChosenForRequestClids", lastChosenForRequestClids);
+        assertions.checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest);
         assertions.checkField("obtainTime", obtainTime);
         assertions.checkField("hadFirstStartup", hadFirstStartup);
         assertions.checkField("startupDidNotOverrideClids", startupDidNotOverrideClids);

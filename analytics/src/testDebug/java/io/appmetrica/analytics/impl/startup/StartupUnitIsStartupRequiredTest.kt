@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.impl.request.StartupRequestReferrer
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -53,6 +54,48 @@ internal class StartupUnitIsStartupRequiredTest : StartupUnitBaseTest() {
             )
         ).thenReturn(false)
         assertThat(startupUnit.isStartupRequired()).isTrue()
+    }
+
+    @Test
+    fun startupIsRequiredBecauseReferrerDoesNotMatch() {
+        val startupState = mock<StartupState>()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        whenever(StartupRequiredUtils.isOutdated(startupState)).thenReturn(false)
+        whenever(StartupRequiredUtils.areMainIdentifiersValid(startupState)).thenReturn(true)
+        whenever(startupState.lastReferrerForStartupRequest).thenReturn("old")
+        whenever(startupRequestConfig.referrer).thenReturn(
+            StartupRequestReferrer("new", "gpl")
+        )
+        whenever(
+            clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
+                clientClids,
+                startupState,
+                clidsStorage
+            )
+        ).thenReturn(true)
+
+        assertThat(startupUnit.isStartupRequired()).isTrue()
+    }
+
+    @Test
+    fun startupIsNotRequiredWhenReferrerMatchesSnapshot() {
+        val startupState = mock<StartupState>()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        whenever(StartupRequiredUtils.isOutdated(startupState)).thenReturn(false)
+        whenever(StartupRequiredUtils.areMainIdentifiersValid(startupState)).thenReturn(true)
+        whenever(startupState.lastReferrerForStartupRequest).thenReturn("referrer")
+        whenever(startupRequestConfig.referrer).thenReturn(
+            StartupRequestReferrer("referrer", "gpl")
+        )
+        whenever(
+            clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
+                clientClids,
+                startupState,
+                clidsStorage
+            )
+        ).thenReturn(true)
+
+        assertThat(startupUnit.isStartupRequired()).isFalse()
     }
 
     @Test

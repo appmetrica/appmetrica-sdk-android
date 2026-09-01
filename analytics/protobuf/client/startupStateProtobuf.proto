@@ -113,5 +113,6 @@ message StartupState {
     }
     optional ExternalAttributionConfig externalAttributionConfig = 32;
     // endregion
-}
 
+    optional string lastReferrerForStartupRequest = 34;
+}

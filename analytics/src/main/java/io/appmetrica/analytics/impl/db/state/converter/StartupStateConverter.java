@@ -66,6 +66,9 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         if (value.lastChosenForRequestClids != null) {
             state.lastChosenForRequestClids = value.lastChosenForRequestClids;
         }
+        if (value.lastReferrerForStartupRequest != null) {
+            state.lastReferrerForStartupRequest = value.lastReferrerForStartupRequest;
+        }
         state.startupDidNotOverrideClids = value.startupDidNotOverrideClids;
         state.obtainTime = value.obtainTime;
         state.hadFirstStartup = value.hadFirstStartup;
@@ -105,6 +108,7 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
                 .withDiagnosticUrls(Arrays.asList(nano.diagnosticUrls))
                 .withLastClientClidsForStartupRequest(nano.lastClientClidsForStartupRequest)
                 .withLastChosenForRequestClids(nano.lastChosenForRequestClids)
+                .withLastReferrerForStartupRequest(nano.lastReferrerForStartupRequest)
                 .withStartupDidNotOverrideClids(nano.startupDidNotOverrideClids)
                 .withObtainTime(nano.obtainTime)
                 .withHadFirstStartup(nano.hadFirstStartup)

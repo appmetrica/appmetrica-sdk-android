@@ -81,8 +81,8 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         StartupRequestConfig config = mLoader.load(dataSource);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(config.getDistributionReferrer()).isEqualTo(referrer);
-        softly.assertThat(config.getInstallReferrerSource()).isEqualTo(referrerSource);
+        softly.assertThat(config.getReferrer().getReferrer()).isEqualTo(referrer);
+        softly.assertThat(config.getReferrer().getSource()).isEqualTo(referrerSource);
         softly.assertThat(config.getClidsFromClient()).isEqualTo(clidsFromClient);
         softly.assertThat(config.getChosenClids()).isEqualTo(chosenClids);
         softly.assertThat(config.hasNewCustomHosts()).isTrue();
@@ -111,8 +111,7 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
             );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(config.getDistributionReferrer()).isNull();
-        softly.assertThat(config.getInstallReferrerSource()).isNull();
+        softly.assertThat(config.getReferrer()).isNull();
         softly.assertAll();
     }
 
@@ -140,8 +139,8 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
             );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(config.getDistributionReferrer()).isEqualTo(argumentsReferrer);
-        softly.assertThat(config.getInstallReferrerSource()).isEqualTo(argumentsReferrerSource);
+        softly.assertThat(config.getReferrer().getReferrer()).isEqualTo(argumentsReferrer);
+        softly.assertThat(config.getReferrer().getSource()).isEqualTo(argumentsReferrerSource);
         softly.assertAll();
     }
 

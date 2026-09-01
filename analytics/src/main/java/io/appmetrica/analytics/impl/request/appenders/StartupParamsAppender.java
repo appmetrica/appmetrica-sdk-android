@@ -12,10 +12,9 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerResult;
 import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
+import io.appmetrica.analytics.impl.request.StartupRequestReferrer;
 import io.appmetrica.analytics.impl.request.UrlParts;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -219,23 +218,9 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
     }
 
     private void appendReferrer(@NonNull Uri.Builder uriBuilder, @NonNull StartupRequestConfig requestConfig) {
-        String referrer = requestConfig.getDistributionReferrer();
-        String installReferrerSource = requestConfig.getInstallReferrerSource();
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "append referrer. Referrer from config: %s, source: %s",
-            referrer,
-            installReferrerSource
-        );
-        if (TextUtils.isEmpty(referrer)) {
-            final ReferrerResult referrerResult = requestConfig.getReferrerManager().getCachedReferrer();
-            final ReferrerInfo referrerInfo = referrerResult == null ? null : referrerResult.getReferrerInfo();
-            DebugLogger.INSTANCE.info(TAG, "referrer from ReferrerManager: %s", referrerInfo);
-            if (referrerInfo != null) {
-                referrer = referrerInfo.installReferrer;
-                installReferrerSource = referrerInfo.source.value;
-            }
-        }
+        StartupRequestReferrer startupRequestReferrer = requestConfig.getReferrer();
+        String referrer = startupRequestReferrer == null ? null : startupRequestReferrer.getReferrer();
+        String installReferrerSource = startupRequestReferrer == null ? null : startupRequestReferrer.getSource();
         if (TextUtils.isEmpty(referrer) == false) {
             uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.DISTRIBUTION_REFERRER), referrer);
             if (installReferrerSource == null) {

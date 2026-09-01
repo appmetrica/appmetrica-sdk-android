@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.network.UserAgentProvider
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
+import io.appmetrica.analytics.impl.request.StartupRequestReferrer
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.utils.StartupUtils
@@ -167,6 +168,8 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val reportAdUrl = "some.report.tst.url"
         val certificateUrl = "certificate.url"
         val encodedClids = "clid0:0,clid1:1"
+        val distributionReferrer = "utm_source=test"
+        val installReferrerSource = "gpl"
         val collectingFlags = mock<CollectingFlags>()
         val clientClids: MutableMap<String, String> = HashMap()
         clientClids["clid0"] = "10"
@@ -206,6 +209,9 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(result.encodedClids).thenReturn(encodedClids)
         whenever(result.collectionFlags).thenReturn(collectingFlags)
         whenever(startupRequestConfig.clidsFromClient).thenReturn(clientClids)
+        whenever(startupRequestConfig.referrer).thenReturn(
+            StartupRequestReferrer(distributionReferrer, installReferrerSource)
+        )
         whenever(startupRequestConfig.chosenClids)
             .thenReturn(ClidsInfo.Candidate(chosenClids, DistributionSource.APP))
         whenever(result.countryInit).thenReturn(countryInit)
@@ -238,6 +244,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
             StartupUtils.encodeClids(clientClids)
         )
         assertions.checkField("lastChosenForRequestClids", StartupUtils.encodeClids(chosenClids))
+        assertions.checkField("lastReferrerForStartupRequest", distributionReferrer)
         assertions.checkField("collectingFlags", collectingFlags)
         assertions.checkField("hadFirstStartup", true)
         assertions.checkField("startupDidNotOverrideClids", false)

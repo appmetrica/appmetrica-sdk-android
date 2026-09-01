@@ -26,6 +26,7 @@ internal class StartupStateTest : CommonTest() {
     private val encodedClidsFromResponse = "clid0:0"
     private val lastClientClidsForStartupRequest = "clid1:1"
     private val lastChosenForRequestClids = "clid2:2"
+    private val lastReferrerForStartupRequest = "utm_source=test"
     private val obtainTime = 676578768787L
     private val obtainServerTime = 231341354L
     private val firstStartupServerTime = 666666777L
@@ -63,6 +64,7 @@ internal class StartupStateTest : CommonTest() {
             .checkFieldIsNull("encodedClidsFromResponse")
             .checkFieldIsNull("lastClientClidsForStartupRequest")
             .checkFieldIsNull("lastChosenForRequestClids")
+            .checkFieldIsNull("lastReferrerForStartupRequest")
             .checkField("obtainTime", 0L)
             .checkField("obtainServerTime", 0L)
             .checkField("firstStartupServerTime", 0L)
@@ -107,6 +109,7 @@ internal class StartupStateTest : CommonTest() {
             .withHostUrlsFromClient(hostUrlsFromClient)
             .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainServerTime(obtainServerTime)
             .withObtainTime(obtainTime)
             .withOutdated(outdated)
@@ -138,6 +141,7 @@ internal class StartupStateTest : CommonTest() {
             .checkField("encodedClidsFromResponse", encodedClidsFromResponse)
             .checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest)
             .checkField("lastChosenForRequestClids", lastChosenForRequestClids)
+            .checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest)
             .checkField("obtainTime", obtainTime)
             .checkField("obtainServerTime", obtainServerTime)
             .checkField("firstStartupServerTime", firstStartupServerTime)
@@ -177,6 +181,7 @@ internal class StartupStateTest : CommonTest() {
             .withHostUrlsFromClient(hostUrlsFromClient)
             .withHostUrlsFromLibraryAdapter(hostUrlsFromLibraryAdapter)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withObtainServerTime(obtainServerTime)
             .withObtainTime(obtainTime)
             .withOutdated(outdated)
@@ -210,6 +215,7 @@ internal class StartupStateTest : CommonTest() {
             .checkField("encodedClidsFromResponse", encodedClidsFromResponse)
             .checkField("lastClientClidsForStartupRequest", lastClientClidsForStartupRequest)
             .checkField("lastChosenForRequestClids", lastChosenForRequestClids)
+            .checkField("lastReferrerForStartupRequest", lastReferrerForStartupRequest)
             .checkField("obtainTime", obtainTime)
             .checkField("obtainServerTime", obtainServerTime)
             .checkField("firstStartupServerTime", firstStartupServerTime)

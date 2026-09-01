@@ -85,6 +85,7 @@ public class StartupStateConverterTest extends CommonTest {
     private static final String ENCODED_CLIDS_FROM_RESPONSE = "testEncodedClidsFromResponse";
     private static final String LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST = "testLastClientClidsForStartupRequest";
     private static final String LAST_CHOSEN_CLIDS_FOR_REQUEST = "testLastChosenClidsForRequest";
+    private static final String LAST_REFERRER_FOR_STARTUP_REQUEST = "utm_source=test";
     private static final boolean STARTUP_DID_NOT_OVERRIDE_CLIDS = false;
     private static final long FIRST_STARTUP_SERVER_TIME = 1312131;
     private static final String COUNTRY_INIT = "by";
@@ -160,6 +161,7 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.encodedClidsFromResponse = ENCODED_CLIDS_FROM_RESPONSE;
         stateProto.lastClientClidsForStartupRequest = LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST;
         stateProto.lastChosenForRequestClids = LAST_CHOSEN_CLIDS_FOR_REQUEST;
+        stateProto.lastReferrerForStartupRequest = LAST_REFERRER_FOR_STARTUP_REQUEST;
         stateProto.startupDidNotOverrideClids = STARTUP_DID_NOT_OVERRIDE_CLIDS;
         stateProto.permissionsCollectingConfig = permissionsCollectingConfig;
         stateProto.statSending = statSending;
@@ -205,6 +207,10 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("encodedClidsFromResponse", ENCODED_CLIDS_FROM_RESPONSE);
         assertions.checkField("lastClientClidsForStartupRequest", LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST);
         assertions.checkField("lastChosenForRequestClids", LAST_CHOSEN_CLIDS_FOR_REQUEST);
+        assertions.checkField(
+            "lastReferrerForStartupRequest",
+            LAST_REFERRER_FOR_STARTUP_REQUEST
+        );
         assertions.checkField("startupDidNotOverrideClids", STARTUP_DID_NOT_OVERRIDE_CLIDS);
         assertions.checkField("obtainServerTime", OBTAIN_SERVER_TIME);
         assertions.checkField("countryInit", COUNTRY_INIT);
@@ -249,6 +255,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withEncodedClidsFromResponse(StartupStateConverterTest.ENCODED_CLIDS_FROM_RESPONSE)
             .withLastClientClidsForStartupRequest(StartupStateConverterTest.LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST)
             .withLastChosenForRequestClids(LAST_CHOSEN_CLIDS_FOR_REQUEST)
+            .withLastReferrerForStartupRequest(LAST_REFERRER_FOR_STARTUP_REQUEST)
             .withStartupDidNotOverrideClids(StartupStateConverterTest.STARTUP_DID_NOT_OVERRIDE_CLIDS)
             .withCountryInit(StartupStateConverterTest.COUNTRY_INIT)
             .withPermissionsCollectingConfig(permissionsCollectingConfig)
@@ -295,6 +302,10 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("encodedClidsFromResponse", ENCODED_CLIDS_FROM_RESPONSE);
         assertions.checkField("lastClientClidsForStartupRequest", LAST_CLIENT_CLIDS_FOR_STARTUP_REQUEST);
         assertions.checkField("lastChosenForRequestClids", LAST_CHOSEN_CLIDS_FOR_REQUEST);
+        assertions.checkField(
+            "lastReferrerForStartupRequest",
+            LAST_REFERRER_FOR_STARTUP_REQUEST
+        );
         assertions.checkField("startupDidNotOverrideClids", STARTUP_DID_NOT_OVERRIDE_CLIDS);
         assertions.checkField("obtainServerTime", OBTAIN_SERVER_TIME);
         assertions.checkField("countryInit", COUNTRY_INIT);

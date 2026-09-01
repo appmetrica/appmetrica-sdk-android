@@ -44,6 +44,8 @@ public class StartupStateModel {
     public final String lastClientClidsForStartupRequest;
     @Nullable
     public final String lastChosenForRequestClids;
+    @Nullable
+    public final String lastReferrerForStartupRequest;
 
     //region Startup collectingFlags
     @NonNull
@@ -104,6 +106,7 @@ public class StartupStateModel {
         this.obtainTime = builder.mObtainTime;
         this.hadFirstStartup = builder.mHadFirstStartup;
         this.lastChosenForRequestClids = builder.mLastChosenForRequestClids;
+        this.lastReferrerForStartupRequest = builder.mLastReferrerForStartupRequest;
         this.startupDidNotOverrideClids = builder.mStartupDidNotOverrideClids;
         this.countryInit = builder.mCountryInit;
         this.statSending = builder.mStatSending;
@@ -149,6 +152,7 @@ public class StartupStateModel {
             .withCustomSdkHosts(customSdkHosts)
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
+            .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
             .withObtainTime(obtainTime)
             .withHadFirstStartup(hadFirstStartup)
@@ -234,6 +238,7 @@ public class StartupStateModel {
         String mClientClidsForLastStartupRequest;
         @Nullable
         String mLastChosenForRequestClids;
+        String mLastReferrerForStartupRequest;
         @NonNull
         final CollectingFlags mCollectingFlags;
         @Nullable
@@ -327,6 +332,11 @@ public class StartupStateModel {
 
         public StartupStateBuilder withLastChosenForRequestClids(@Nullable String clids) {
             mLastChosenForRequestClids = clids;
+            return this;
+        }
+
+        public StartupStateBuilder withLastReferrerForStartupRequest(@Nullable String referrer) {
+            mLastReferrerForStartupRequest = referrer;
             return this;
         }
 
