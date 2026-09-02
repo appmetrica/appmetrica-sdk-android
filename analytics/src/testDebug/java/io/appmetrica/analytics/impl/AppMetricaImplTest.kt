@@ -474,6 +474,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate twice - save config`() {
         impl.activate(config)
         clearInvocations(clientPreferences)
+        impl.activate(config)
         verify(clientPreferences, never()).saveAppMetricaConfig(any())
     }
 
