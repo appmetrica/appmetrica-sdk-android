@@ -35,6 +35,9 @@ internal class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest()
     private val preferences: PreferencesClientDbStorage = mock {
         on { appMetricaConfig } doReturn configBuilderFromPreferences
     }
+    private val savedConfigRepository: SavedAppMetricaConfigRepository = mock {
+        on { getValidSavedConfig() } doReturn configBuilderFromPreferences
+    }
     private val adapterConfig: AppMetricaLibraryAdapterConfig = mock()
 
     @get:Rule
@@ -43,7 +46,7 @@ internal class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest()
     private val defaultAnonymousConfigProvider by defaultAnonymousConfigProviderMockedConstructionRule
 
     private val configProvider: AppMetricaConfigForAnonymousActivationProvider by setUp {
-        AppMetricaConfigForAnonymousActivationProvider(preferences)
+        AppMetricaConfigForAnonymousActivationProvider(preferences, savedConfigRepository)
     }
 
     @Test
@@ -77,10 +80,10 @@ internal class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest()
     }
 
     @Test
-    fun `config if doesn't exist in preferences`() {
+    fun `config if doesn't exist or expired in preferences`() {
         whenever(defaultAnonymousConfigProvider.getConfig(adapterConfig))
             .thenReturn(configFromLibraryAdapter)
-        whenever(preferences.appMetricaConfig).thenReturn(null)
+        whenever(savedConfigRepository.getValidSavedConfig()).thenReturn(null)
 
         assertThat(configProvider.getConfig(adapterConfig)).isEqualTo(configFromLibraryAdapter)
     }

@@ -6,7 +6,9 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class AppMetricaConfigForAnonymousActivationProvider(
-    private val preferences: PreferencesClientDbStorage
+    preferences: PreferencesClientDbStorage,
+    private val savedConfigRepository: SavedAppMetricaConfigRepository =
+        SavedAppMetricaConfigRepository(preferences)
 ) {
 
     private val tag = "[AppMetricaConfigForAnonymousActivationProvider]"
@@ -15,7 +17,7 @@ internal class AppMetricaConfigForAnonymousActivationProvider(
 
     fun getConfig(libraryAdapterConfig: AppMetricaLibraryAdapterConfig): AppMetricaConfig {
         val configFromLibraryAdapter = defaultAnonymousConfigProvider.getConfig(libraryAdapterConfig)
-        val configBuilderFromPreferences = preferences.appMetricaConfig
+        val configBuilderFromPreferences = savedConfigRepository.getValidSavedConfig()
         if (configBuilderFromPreferences == null) {
             DebugLogger.info(
                 tag,

@@ -553,6 +553,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString()).build();
         clientDbStorage.saveAppMetricaConfig(config);
         verify(mDbStorage).put(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG.fullKey(), config.toJson());
+        verify(mDbStorage).put(eq(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey()), anyLong());
     }
 
     @Test
@@ -566,5 +567,23 @@ public class PreferencesClientDbStorageTest extends CommonTest {
     @Test
     public void getAppMetricaConfigIfMissing() {
         assertThat(clientDbStorage.getAppMetricaConfig()).isNull();
+    }
+
+    @Test
+    public void appMetricaConfigSavedAtAndClear() {
+        assertThat(clientDbStorage.getAppMetricaConfigSavedAt()).isNull();
+
+        when(mDbStorage.containsKey(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey()))
+            .thenReturn(true);
+        when(mDbStorage.getLong(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey(), 0L))
+            .thenReturn(12345L);
+        assertThat(clientDbStorage.getAppMetricaConfigSavedAt()).isEqualTo(12345L);
+
+        clientDbStorage.setAppMetricaConfigSavedAt(999L);
+        verify(mDbStorage).put(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey(), 999L);
+
+        clientDbStorage.clearAppMetricaConfig();
+        verify(mDbStorage).remove(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG.fullKey());
+        verify(mDbStorage).remove(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey());
     }
 }

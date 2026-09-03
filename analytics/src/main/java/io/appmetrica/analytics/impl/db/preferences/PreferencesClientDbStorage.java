@@ -42,6 +42,8 @@ public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
             new PreferencesItem("SCREEN_SIZE_CHECKED_BY_DEPRECATED");
     static final PreferencesItem FEATURES = new PreferencesItem("FEATURES");
     static final PreferencesItem APPMETRICA_CLIENT_CONFIG = new PreferencesItem("APPMETRICA_CLIENT_CONFIG");
+    static final PreferencesItem APPMETRICA_CLIENT_CONFIG_SAVED_AT =
+            new PreferencesItem("APPMETRICA_CLIENT_CONFIG_SAVED_AT");
 
     public PreferencesClientDbStorage(final IKeyValueTableDbHelper dbHelper) {
         super(dbHelper);
@@ -240,8 +242,26 @@ public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
         return value == null ? null : new ClientConfigSerializer().fromJson(value);
     }
 
+    @Nullable
+    public Long getAppMetricaConfigSavedAt() {
+        if (containsKey(APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey())) {
+            return readLong(APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey(), 0L);
+        }
+        return null;
+    }
+
+    public void setAppMetricaConfigSavedAt(final long savedAtMillis) {
+        writeLong(APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey(), savedAtMillis);
+    }
+
+    public void clearAppMetricaConfig() {
+        removeKey(APPMETRICA_CLIENT_CONFIG.fullKey());
+        removeKey(APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey());
+    }
+
     public void saveAppMetricaConfig(@NonNull AppMetricaConfig appMetricaConfig) {
         writeString(APPMETRICA_CLIENT_CONFIG.fullKey(), appMetricaConfig.toJson());
+        writeLong(APPMETRICA_CLIENT_CONFIG_SAVED_AT.fullKey(), System.currentTimeMillis());
     }
 
     public boolean isScreenSizeCheckedByDeprecated() {
