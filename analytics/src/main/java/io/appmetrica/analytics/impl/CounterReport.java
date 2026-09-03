@@ -1,93 +1,17 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CounterReport implements CounterReportApi, Parcelable {
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        final Bundle reportData = new Bundle();
-
-        reportData.putString(CounterReportBundleKeys.EVENT, name);
-        reportData.putString(CounterReportBundleKeys.VALUE, value);
-        reportData.putInt(CounterReportBundleKeys.TYPE, type);
-        reportData.putInt(CounterReportBundleKeys.CUSTOM_TYPE, customType);
-        reportData.putInt(CounterReportBundleKeys.TRUNCATED, bytesTruncated);
-        reportData.putString(CounterReportBundleKeys.PROFILE_ID, profileID);
-
-        if (payload != null) {
-            reportData.putParcelable(CounterReportBundleKeys.PAYLOAD, payload);
-        }
-
-        if (null != eventEnvironment) {
-            reportData.putString(CounterReportBundleKeys.ENVIRONMENT, eventEnvironment);
-        }
-        reportData.putLong(CounterReportBundleKeys.CREATION_ELAPSED_REALTIME, creationElapsedRealtime);
-        reportData.putLong(CounterReportBundleKeys.CREATION_TIMESTAMP, creationTimestamp);
-        if (source != null) {
-            reportData.putInt(CounterReportBundleKeys.SOURCE, source.code);
-        }
-        reportData.putBundle(CounterReportBundleKeys.EXTRAS, CollectionUtils.mapToBundle(extras));
-        if (valueProtocolVersion != null) {
-            reportData.putInt(CounterReportBundleKeys.VALUE_PROTOCOL_VERSION, valueProtocolVersion);
-        }
-
-        dest.writeBundle(reportData);
-    }
-
-    public static final Parcelable.Creator<CounterReport> CREATOR =
-        new Parcelable.Creator<CounterReport>() {
-
-            public CounterReport createFromParcel(Parcel srcObj) {
-                Bundle data = srcObj.readBundle(DataResultReceiver.class.getClassLoader());
-                EventSource eventSource = null;
-                if (data.containsKey(CounterReportBundleKeys.SOURCE)) {
-                    eventSource = EventSource.fromCode(data.getInt(CounterReportBundleKeys.SOURCE));
-                }
-                CounterReport result = new CounterReport();
-                result.setType(data.getInt(CounterReportBundleKeys.TYPE,
-                    InternalEvents.EVENT_TYPE_UNDEFINED.getTypeId()));
-                result.setCustomType(data.getInt(CounterReportBundleKeys.CUSTOM_TYPE));
-                result.setValue(StringUtils.ifIsNullToDef(data.getString(CounterReportBundleKeys.VALUE),
-                    StringUtils.EMPTY));
-                result.setEventEnvironment(data.getString(CounterReportBundleKeys.ENVIRONMENT));
-                result.setName(data.getString(CounterReportBundleKeys.EVENT));
-                result.setBytesTruncated(data.getInt(CounterReportBundleKeys.TRUNCATED));
-                result.setProfileID(data.getString(CounterReportBundleKeys.PROFILE_ID));
-                result.setCreationEllapsedRealtime(data.getLong(
-                    CounterReportBundleKeys.CREATION_ELAPSED_REALTIME));
-                result.setCreationTimestamp(data.getLong(CounterReportBundleKeys.CREATION_TIMESTAMP));
-                result.setSource(eventSource);
-                result.setPayload(data.getBundle(CounterReportBundleKeys.PAYLOAD));
-                result.setExtras(CollectionUtils.bundleToMap(data.getBundle(CounterReportBundleKeys.EXTRAS)));
-                result.setValueProtocolVersion(
-                    Utils.getIntOrNull(data, CounterReportBundleKeys.VALUE_PROTOCOL_VERSION)
-                );
-                return result;
-            }
-
-            public CounterReport[] newArray(int size) {
-                return new CounterReport[size];
-            }
-
-        };
+public class CounterReport implements CounterReportApi {
 
     @Nullable
     protected String name;
@@ -270,13 +194,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
     }
 
     @NonNull
-    public Bundle toBundle(final Bundle bundle) {
-        final Bundle data = null != bundle ? bundle : new Bundle();
-        data.putParcelable(CounterReportBundleKeys.OBJECT, this);
-        return data;
-    }
-
-    @NonNull
     @Override
     public String toString() {
         return String.format(
@@ -289,21 +206,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
     }
 
     //region Static helpers
-
-    @NonNull
-    public static CounterReport fromBundle(@Nullable Bundle bundle) {
-        if (null != bundle) {
-            try {
-                CounterReport report = bundle.getParcelable(CounterReportBundleKeys.OBJECT);
-                if (report != null) {
-                    return report;
-                }
-            } catch (Throwable error) {
-                return new CounterReport();
-            }
-        }
-        return new CounterReport();
-    }
 
     @NonNull
     public static CounterReport formUpdatePreActivationConfig() {

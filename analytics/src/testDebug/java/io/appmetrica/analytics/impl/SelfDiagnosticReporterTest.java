@@ -64,6 +64,10 @@ public class SelfDiagnosticReporterTest extends CommonTest {
             ClientConfiguration env = ClientConfiguration.fromBundle(context, bundleCaptor.getValue());
             assertThat(env.getReporterConfiguration().getReporterType()).isEqualTo(newReporterType);
             assertThat(env.getReporterConfiguration().getApiKey()).isEqualTo(apiKey);
+            assertThat(CoreServiceEvent.fromIpcData(
+                EventIpcCodec.fromBundle(bundleCaptor.getValue())
+            ).getType())
+                .isEqualTo(InternalEvents.EVENT_TYPE_INIT.getTypeId());
         } else {
             verifyNoMoreInteractions(selfProcessReporter);
         }

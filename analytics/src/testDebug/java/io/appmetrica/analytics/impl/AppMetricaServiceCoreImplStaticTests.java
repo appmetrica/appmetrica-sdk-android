@@ -67,9 +67,10 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     @Rule
-    public final MockedStaticRule<CounterReport> sCounterReport = new MockedStaticRule<>(CounterReport.class);
-    @Rule
     public final MockedStaticRule<CoreServiceEvent> sServiceEvent = new MockedStaticRule<>(CoreServiceEvent.class);
+    @Rule
+    public final MockedStaticRule<EventIpcCodec> sEventIpcCodec =
+        new MockedStaticRule<>(EventIpcCodec.class);
     @Rule
     public final MockedStaticRule<ProcessConfiguration> sProcessConfiguration = new MockedStaticRule<>(ProcessConfiguration.class);
     @Rule
@@ -127,11 +128,11 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
 
     @Test
     public void testReportData() throws Exception {
-        CounterReport clientReport = mock(CounterReport.class);
         CoreServiceEvent serviceEvent = mock(CoreServiceEvent.class);
         Bundle bundle = mock(Bundle.class);
-        when(CounterReport.fromBundle(bundle)).thenReturn(clientReport);
-        when(CoreServiceEvent.from(clientReport)).thenReturn(serviceEvent);
+        EventIpcData ipcData = mock(EventIpcData.class);
+        when(EventIpcCodec.fromBundle(bundle)).thenReturn(ipcData);
+        when(CoreServiceEvent.fromIpcData(ipcData)).thenReturn(serviceEvent);
         mMetricaCore.reportData(bundle);
         verify(mReportConsumer).consumeReport(serviceEvent, bundle);
     }

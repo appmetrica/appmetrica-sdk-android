@@ -74,21 +74,21 @@ internal class CoreServiceEvent : ServiceEvent {
         private const val PAYLOAD_CRASH_ID = "payload_crash_id"
 
         @JvmStatic
-        fun from(counterReport: CounterReport): CoreServiceEvent {
+        fun fromIpcData(data: EventIpcData): CoreServiceEvent {
             return CoreServiceEvent().apply {
-                name = counterReport.name
-                value = counterReport.value
-                eventEnvironment = counterReport.eventEnvironment
-                type = counterReport.type
-                customType = counterReport.customType
-                bytesTruncated = counterReport.bytesTruncated
-                profileID = counterReport.profileID
-                creationElapsedRealtime = counterReport.creationElapsedRealtime
-                creationTimestamp = counterReport.creationTimestamp
-                source = counterReport.source
-                payload = counterReport.payload
-                extras = HashMap(counterReport.extras)
-                valueProtocolVersion = counterReport.valueProtocolVersion
+                name = data.name
+                value = StringUtils.ifIsNullToDef(data.value, StringUtils.EMPTY)
+                eventEnvironment = data.eventEnvironment
+                type = data.type
+                customType = data.customType
+                bytesTruncated = data.bytesTruncated
+                profileID = data.profileID
+                creationElapsedRealtime = data.creationElapsedRealtime
+                creationTimestamp = data.creationTimestamp
+                source = data.source
+                payload = data.payload
+                extras = data.extras
+                valueProtocolVersion = data.valueProtocolVersion
             }
         }
 

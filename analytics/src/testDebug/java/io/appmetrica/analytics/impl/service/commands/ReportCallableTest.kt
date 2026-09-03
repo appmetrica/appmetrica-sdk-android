@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.service.commands
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.EventIpcCodec
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
@@ -14,7 +14,10 @@ import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtException
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
@@ -27,10 +30,8 @@ import org.mockito.kotlin.whenever
 
 internal class ReportCallableTest : CommonTest() {
 
-    private val context: Context = mock()
     private val appMetricaConnector: AppMetricaConnector = mock()
     private val shouldDisconnectFromServiceChecker: ShouldDisconnectFromServiceChecker = mock()
-    private val intent: Intent = mock()
     private val service: IAppMetricaService = mock()
     private val reportData: CounterReport = mock()
     private val reportBundle: Bundle = mock()
@@ -42,6 +43,11 @@ internal class ReportCallableTest : CommonTest() {
     private val reporterEnvironment: ReporterEnvironment = mock {
         on { processConfiguration } doReturn processConfiguration
         on { reporterConfiguration } doReturn counterConfiguration
+    }
+
+    @get:Rule
+    val codecStaticRule = staticRule<EventIpcCodec> {
+        on { EventIpcCodec.toBundle(any(), any()) } doReturn reportBundle
     }
 
     private lateinit var reportCallable: ReportCallable
@@ -56,8 +62,6 @@ internal class ReportCallableTest : CommonTest() {
             shouldDisconnectFromServiceChecker,
             reportToSend
         )
-
-        whenever(reportData.toBundle(any())).thenReturn(reportBundle)
 
         AppMetricaUncaughtExceptionHandler.reset()
     }

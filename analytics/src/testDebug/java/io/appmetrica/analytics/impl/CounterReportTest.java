@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.util.Base64;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
@@ -42,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SuppressLint("RobolectricUsage") // Parcelable
+@SuppressLint("RobolectricUsage") // Bundle / SystemTimeProvider in constructors
 @RunWith(RobolectricTestRunner.class)
 public class CounterReportTest extends CommonTest {
 
@@ -245,9 +244,11 @@ public class CounterReportTest extends CommonTest {
         long expected = 45345435L;
         CounterReport counterReport = new CounterReport();
         counterReport.setCreationEllapsedRealtime(expected);
-        Bundle bundle = new Bundle();
-        counterReport.toBundle(bundle);
-        assertThat(CounterReport.fromBundle(bundle).getCreationElapsedRealtime())
+        Bundle bundle = EventIpcCodec.toBundle(
+            EventIpcData.fromCounterReport(counterReport),
+            new Bundle()
+        );
+        assertThat(CoreServiceEvent.fromIpcData(EventIpcCodec.fromBundle(bundle)).getCreationElapsedRealtime())
             .isEqualTo(expected);
     }
 
@@ -290,9 +291,11 @@ public class CounterReportTest extends CommonTest {
         long expected = 353454565L;
         CounterReport counterReport = new CounterReport();
         counterReport.setCreationTimestamp(expected);
-        Bundle bundle = new Bundle();
-        counterReport.toBundle(bundle);
-        assertThat(CounterReport.fromBundle(bundle).getCreationTimestamp())
+        Bundle bundle = EventIpcCodec.toBundle(
+            EventIpcData.fromCounterReport(counterReport),
+            new Bundle()
+        );
+        assertThat(CoreServiceEvent.fromIpcData(EventIpcCodec.fromBundle(bundle)).getCreationTimestamp())
             .isEqualTo(expected);
     }
 
@@ -353,85 +356,6 @@ public class CounterReportTest extends CommonTest {
         assertThat(result.getType()).isEqualTo(internalEvents.getTypeId());
         assertThat(result.getName()).isEmpty();
         assertThat(result.getValue()).isEqualTo(value);
-    }
-
-    @Test
-    public void testParcelableFilled() {
-        final int type = InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId();
-        final int customType = 8;
-        final String value = "value";
-        final String userInfo = "userInfo";
-        final String eventEnvironment = "eventEnvironment";
-        final String event = "event";
-        final int bytesTruncated = 20;
-        final String profileId = "profileId";
-        final long creationEllapsedRealtime = 21212121L;
-        final long creationTimestamp = 32323232L;
-        final EventSource source = EventSource.JS;
-        String extraKey = "extra key";
-        byte[] extraValue = new byte[]{1, 2, 3, 4, 5};
-        Map<String, byte[]> extras = Collections.singletonMap(extraKey, extraValue);
-        final Bundle payload = new Bundle();
-        payload.putString("key1", "value1");
-        payload.putInt("key2", 10);
-
-        CounterReport counterReport = new CounterReport();
-        counterReport.setType(type);
-        counterReport.setCustomType(customType);
-        counterReport.setValue(value);
-        counterReport.setEventEnvironment(eventEnvironment);
-        counterReport.setName(event);
-        counterReport.setBytesTruncated(bytesTruncated);
-        counterReport.setProfileID(profileId);
-        counterReport.setCreationEllapsedRealtime(creationEllapsedRealtime);
-        counterReport.setCreationTimestamp(creationTimestamp);
-        counterReport.setSource(source);
-        counterReport.setPayload(payload);
-        counterReport.setExtras(extras);
-
-        Parcel parcel = Parcel.obtain();
-        counterReport.writeToParcel(parcel, 0);
-        parcel.setDataPosition(0);
-        CounterReport fromParcel = CounterReport.CREATOR.createFromParcel(parcel);
-        SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(fromParcel.getType()).isEqualTo(type);
-        assertions.assertThat(fromParcel.getCustomType()).isEqualTo(customType);
-        assertions.assertThat(fromParcel.getValue()).isEqualTo(value);
-        assertions.assertThat(fromParcel.getEventEnvironment()).isEqualTo(eventEnvironment);
-        assertions.assertThat(fromParcel.getName()).isEqualTo(event);
-        assertions.assertThat(fromParcel.getBytesTruncated()).isEqualTo(bytesTruncated);
-        assertions.assertThat(fromParcel.getProfileID()).isEqualTo(profileId);
-        assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(creationEllapsedRealtime);
-        assertions.assertThat(fromParcel.getCreationTimestamp()).isEqualTo(creationTimestamp);
-        assertions.assertThat(fromParcel.getSource()).isEqualTo(source);
-        assertions.assertThat(fromParcel.getExtras()).containsAllEntriesOf(extras);
-        Bundle actualPayload = fromParcel.getPayload();
-        assertThat(actualPayload.keySet()).containsOnly("key1", "key2");
-        assertThat(actualPayload.getString("key1")).isEqualTo("value1");
-        assertThat(actualPayload.getInt("key2")).isEqualTo(10);
-
-        assertions.assertAll();
-
-    }
-
-    @Test
-    public void testParcelableNull() {
-        CounterReport fromParcel = CounterReport.CREATOR.createFromParcel(Parcel.obtain());
-        SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(fromParcel.getType()).isEqualTo(InternalEvents.EVENT_TYPE_UNDEFINED.getTypeId());
-        assertions.assertThat(fromParcel.getCustomType()).isEqualTo(0);
-        assertions.assertThat(fromParcel.getValue()).isEmpty();
-        assertions.assertThat(fromParcel.getEventEnvironment()).isNull();
-        assertions.assertThat(fromParcel.getName()).isNull();
-        assertions.assertThat(fromParcel.getBytesTruncated()).isEqualTo(0);
-        assertions.assertThat(fromParcel.getProfileID()).isNull();
-        assertions.assertThat(fromParcel.getCreationElapsedRealtime()).isEqualTo(0);
-        assertions.assertThat(fromParcel.getCreationTimestamp()).isEqualTo(0);
-        assertions.assertThat(fromParcel.getSource()).isNull();
-        assertions.assertThat(fromParcel.getPayload()).isNull();
-        assertions.assertThat(fromParcel.getExtras()).isEqualTo(Collections.emptyMap());
-
-        assertions.assertAll();
     }
 
     @Test

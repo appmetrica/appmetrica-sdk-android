@@ -55,7 +55,8 @@ public class SelfDiagnosticReporter {
                 counterConfiguration.setReporterType(mReporterType);
                 mSelfProcessReporter.reportData(
                     AppMetricaServiceDataReporter.TYPE_CORE,
-                    report.toBundle(
+                    EventIpcCodec.toBundle(
+                        EventIpcData.fromCounterReport(report),
                         new ReporterEnvironment(
                             new ProcessConfiguration(mContext, null),
                             counterConfiguration,

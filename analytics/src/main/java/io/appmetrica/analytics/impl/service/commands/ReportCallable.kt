@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl.service.commands
 
 import io.appmetrica.analytics.impl.AppMetricaConnector
+import io.appmetrica.analytics.impl.EventIpcCodec
+import io.appmetrica.analytics.impl.EventIpcData
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.internal.IAppMetricaService
@@ -28,7 +30,10 @@ internal open class ReportCallable(
         )
         service.reportData(
             reportToSend.serviceDataReporterType,
-            reportData.toBundle(reporterEnvironment.configBundle)
+            EventIpcCodec.toBundle(
+                EventIpcData.fromCounterReport(reportData),
+                reporterEnvironment.configBundle
+            )
         )
     }
 

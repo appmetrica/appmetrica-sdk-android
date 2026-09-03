@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
-@SuppressLint("RobolectricUsage") // Parcelable
+@SuppressLint("RobolectricUsage") // CoreServiceEvent factories use Bundle / permissions state
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class CounterReportMetaDataTest extends CommonTest {
 
