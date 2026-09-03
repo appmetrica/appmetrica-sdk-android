@@ -12,17 +12,19 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInf
 import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPauseForegroundSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportSaveInitHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionActivityStartHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.analytics.impl.permissions.PermissionsChecker;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
@@ -31,7 +33,6 @@ public class ReportingHandlerProvider {
 
     private final ReportPurgeBufferHandler mReportPurgeBufferHandler;
     private final ReportSaveToDatabaseHandler mReportSaveToDatabaseHandler;
-    private final ReportSessionHandler mReportSessionHandler;
     private final ReportSessionStopDueCrashHandler mReportSessionStopDueCrashHandler;
     private final ReportAppEnvironmentUpdatedHandler mReportAppEnvironmentUpdated;
     private final ReportAppEnvironmentClearedHandler mReportAppEnvironmentCleared;
@@ -50,11 +51,13 @@ public class ReportingHandlerProvider {
     private final ModulesEventHandler modulesEventHandler;
     private final SaveSessionExtrasHandler saveSessionExtrasHandler;
     private final ExternalAttributionHandler externalAttributionHandler;
+    private final ReportSaveInitHandler reportSaveInitHandler;
+    private final ReportSessionActivityStartHandler reportSessionActivityStartHandler;
+    private final ReportPauseForegroundSessionHandler reportPauseForegroundSessionHandler;
 
     public ReportingHandlerProvider(ComponentUnit component) {
         mReportPurgeBufferHandler = new ReportPurgeBufferHandler(component);
         mReportSaveToDatabaseHandler = new ReportSaveToDatabaseHandler(component);
-        mReportSessionHandler = new ReportSessionHandler(component);
         mReportSessionStopDueCrashHandler = new ReportSessionStopDueCrashHandler(component);
         mReportAppEnvironmentUpdated = new ReportAppEnvironmentUpdatedHandler(component);
         mReportAppEnvironmentCleared = new ReportAppEnvironmentClearedHandler(component);
@@ -79,6 +82,9 @@ public class ReportingHandlerProvider {
         modulesEventHandler = new ModulesEventHandler(component);
         saveSessionExtrasHandler = new SaveSessionExtrasHandler(component);
         externalAttributionHandler = new ExternalAttributionHandler(component, new SystemTimeProvider());
+        reportSaveInitHandler = new ReportSaveInitHandler(component);
+        reportSessionActivityStartHandler = new ReportSessionActivityStartHandler(component);
+        reportPauseForegroundSessionHandler = new ReportPauseForegroundSessionHandler(component);
     }
 
     public ReportPurgeBufferHandler getReportPurgeBufferHandler() {
@@ -87,10 +93,6 @@ public class ReportingHandlerProvider {
 
     public ReportSaveToDatabaseHandler getReportSaveToDatabaseHandler() {
         return mReportSaveToDatabaseHandler;
-    }
-
-    public ReportSessionHandler getReportSessionHandler() {
-        return mReportSessionHandler;
     }
 
     public ReportSessionStopDueCrashHandler getReportSessionStopDueCrashHandler() {
@@ -169,5 +171,20 @@ public class ReportingHandlerProvider {
     @NonNull
     public ExternalAttributionHandler getExternalAttributionHandler() {
         return externalAttributionHandler;
+    }
+
+    @NonNull
+    public ReportSaveInitHandler getReportSaveInitHandler() {
+        return reportSaveInitHandler;
+    }
+
+    @NonNull
+    public ReportSessionActivityStartHandler getReportSessionActivityStartHandler() {
+        return reportSessionActivityStartHandler;
+    }
+
+    @NonNull
+    public ReportPauseForegroundSessionHandler getReportPauseForegroundSessionHandler() {
+        return reportPauseForegroundSessionHandler;
     }
 }

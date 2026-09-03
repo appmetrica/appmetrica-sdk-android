@@ -33,19 +33,6 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
         InternalEvents.EVENT_TYPE_ANR.getTypeId()
     );
-    private static final EnumSet<InternalEvents> DO_NOT_AFFECT_SESSION_STATE = EnumSet.of
-        (
-            InternalEvents.EVENT_TYPE_UNDEFINED,
-            InternalEvents.EVENT_TYPE_PURGE_BUFFER,
-            InternalEvents.EVENT_TYPE_SEND_REFERRER,
-            InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
-            InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
-            InternalEvents.EVENT_TYPE_ACTIVATION,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
-            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
-        );
-
     private static final EnumSet<InternalEvents> SHOULD_NOT_UPDATE_APP_CONFIG = EnumSet.of
         (
             InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME,
@@ -120,10 +107,6 @@ public final class EventsManager {
 
     public static boolean shouldUseErrorEnvironment(int eventType) {
         return SHOULD_USE_ERROR_ENVIRONMENT.contains(eventType);
-    }
-
-    public static boolean affectSessionState(InternalEvents eventType) {
-        return !DO_NOT_AFFECT_SESSION_STATE.contains(eventType);
     }
 
     public static boolean isEventWithoutAppConfigUpdate(final int typeID) {

@@ -28,6 +28,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
@@ -106,9 +107,9 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     public void testProcessDoNothingIfInitAlreadySent() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
 
-        ArgumentCaptor<CoreServiceEvent> arg2 = ArgumentCaptor.forClass(CoreServiceEvent.class);
-        verify(mEventSaver, never()).identifyAndSaveReport(arg2.capture());
+        mReportSaveInitHandler.process(new CoreServiceEvent());
 
+        verify(mEventSaver, never()).identifyAndSaveReport(any(CoreServiceEvent.class));
         verify(vitalComponentDataProvider, never()).setInitEventDone(anyBoolean());
         verify(vitalComponentDataProvider, never()).setExternalAttributionWindowStart(anyLong());
     }

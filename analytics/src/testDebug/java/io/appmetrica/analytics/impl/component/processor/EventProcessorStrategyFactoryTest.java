@@ -12,11 +12,12 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInf
 import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPauseForegroundSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportSaveInitHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
@@ -24,6 +25,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventH
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionActivityStartHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -72,7 +74,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
         new MockedConstructionRule<>(ReportingHandlerProvider.class, (mock, context) -> {
             when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
             when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
-            when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
             when(mock.getReportSessionStopDueCrashHandler()).thenReturn(mock(ReportSessionStopDueCrashHandler.class));
             when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
             when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
@@ -92,12 +93,16 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
             when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
             when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
+            when(mock.getReportSaveInitHandler()).thenReturn(mock(ReportSaveInitHandler.class));
+            when(mock.getReportSessionActivityStartHandler())
+                .thenReturn(mock(ReportSessionActivityStartHandler.class));
+            when(mock.getReportPauseForegroundSessionHandler())
+                .thenReturn(mock(ReportPauseForegroundSessionHandler.class));
         });
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
 
         doReturn(mGlobalServiceLocatorRule.getContext()).when(mComponent).getContext();
         when(mComponentId.getApiKey()).thenReturn(apiKey);
@@ -120,8 +125,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
         List handlers = getHandlers(InternalEvents.EVENT_TYPE_INIT);
 
         assertThat(handlers).containsExactly(
-            mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler()
+            mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler()
         );
     }
 
@@ -131,7 +135,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
         assertThat(handlers).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportFirstOccurrenceStatusHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
@@ -143,7 +146,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
         assertThat(handlers).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler()
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportPauseForegroundSessionHandler()
         );
     }
 
@@ -153,7 +156,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
         assertThat(handlers).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportCrashMetaInformation(),
@@ -167,7 +169,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
         assertThat(handlers).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
     }
@@ -178,7 +179,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
         assertThat(handlers).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
     }
@@ -197,7 +197,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testProcessingStrategyShouldReturnExpectedHandlers_EventType_Alive() {
         List handlers = getHandlers(InternalEvents.EVENT_TYPE_ALIVE);
 
-        assertThat(handlers).containsExactly(mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler());
+        assertThat(handlers).isEmpty();
     }
 
     @Test
@@ -254,7 +254,8 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testGetProcessingStrategyReturnExpectedHandler_EventType_ActivityStart() {
         assertThat(getHandlers(EVENT_TYPE_START)).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler()
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionActivityStartHandler(),
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveInitHandler()
         );
     }
 
@@ -262,7 +263,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testGetProcessingStrategyReturnExpectedHandler_EventType_CustomEvent() {
         assertThat(getHandlers(EVENT_TYPE_CUSTOM_EVENT)).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
     }
@@ -277,7 +277,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testGetProcessingStrategyReturnExpectedHandler_EventType_ReportAppOpen() {
         assertThat(getHandlers(EVENT_TYPE_APP_OPEN)).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportAppOpenHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
@@ -287,7 +286,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testGetProcessingStrategyReturnExpectedHandlers_EventType_Cleanup() {
         assertThat(getHandlers(EVENT_TYPE_CLEANUP)).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler()
         );
     }
@@ -301,7 +299,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
         assertThat(getHandlers(EVENT_TYPE_REGULAR, new EventProcessingStrategyFactory(mComponent)))
             .extracting("class").containsOnly(
                 ModulesEventHandler.class,
-                ReportSessionHandler.class,
                 ReportFirstOccurrenceStatusHandler.class,
                 ReportSaveToDatabaseHandler.class
             );
@@ -322,7 +319,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
         assertThat(getHandlers(EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF))
             .containsExactly(
                 mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopDueCrashHandler()

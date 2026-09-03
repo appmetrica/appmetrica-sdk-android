@@ -1,13 +1,11 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.CommonConditionalFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.CommonHandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNativeCrashHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
@@ -52,6 +50,7 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SEND_USER_P
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_WEBVIEW_SYNC;
 
 public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<ReportComponentHandler> {
@@ -60,12 +59,8 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
 
     private final Map<InternalEvents, HandlersFactory<ReportComponentHandler>> mFactories;
 
-    @Nullable
-    private final CommonHandlersFactory<ReportComponentHandler> mPreMainFactory;
-
     public EventProcessingStrategyFactory(ComponentUnit componentUnit) {
         mHandlersProvider = new ReportingHandlerProvider(componentUnit);
-        mPreMainFactory = new CommonConditionalFactory(mHandlersProvider);
         mFactories = createHandlersMap(componentUnit);
     }
 
@@ -78,6 +73,10 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
 
         map.put(EVENT_TYPE_ACTIVATION, new ActivationFactory(mHandlersProvider, componentUnit.getComponentId()));
         map.put(EVENT_TYPE_START, new StartFactory(mHandlersProvider));
+        map.put(
+            EVENT_TYPE_UPDATE_FOREGROUND_TIME,
+            new SingleHandlerFactory(mHandlersProvider, mHandlersProvider.getReportPauseForegroundSessionHandler())
+        );
 
         map.put(EVENT_TYPE_REGULAR, new RegularFactory(mHandlersProvider));
 
@@ -142,8 +141,8 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
     public EventProcessingStrategy<ReportComponentHandler> getProcessingStrategy(int eventTypeId) {
         List<ReportComponentHandler> reportHandlers = new LinkedList<ReportComponentHandler>();
         InternalEvents eventType = InternalEvents.valueOf(eventTypeId);
-        if (mPreMainFactory != null) {
-            mPreMainFactory.addHandlers(eventType, reportHandlers);
+        if (EventsManager.shouldApplyModuleHandlers(eventType)) {
+            reportHandlers.add(mHandlersProvider.getModulesEventHandler());
         }
         HandlersFactory<ReportComponentHandler> factory = mFactories.get(eventType);
         if (factory != null) {

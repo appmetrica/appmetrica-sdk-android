@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.component.processor.factory;
 
-import io.appmetrica.analytics.impl.EventsManager;
-import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
@@ -14,13 +12,14 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurre
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportSaveInitHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionActivityStartHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
@@ -43,8 +42,6 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     private ReportPurgeBufferHandler mReportPurgeBufferHandler;
     @Mock
     private ReportSaveToDatabaseHandler mReportSaveToDatabaseHandler;
-    @Mock
-    private ReportSessionHandler mReportSessionHandler;
     @Mock
     private ReportSessionStopDueCrashHandler mReportSessionStopDueCrashHandler;
     @Mock
@@ -76,6 +73,10 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     @Mock
     private ExternalAttributionHandler externalAttributionHandler;
     @Mock
+    private ReportSaveInitHandler mReportSaveInitHandler;
+    @Mock
+    private ReportSessionActivityStartHandler mReportSessionActivityStartHandler;
+    @Mock
     private ComponentId componentId;
 
     List<ReportComponentHandler> mHandlersList = new ArrayList<ReportComponentHandler>();
@@ -86,7 +87,6 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         when(mProvider.getReportPurgeBufferHandler()).thenReturn(mReportPurgeBufferHandler);
         when(mProvider.getReportSaveToDatabaseHandler()).thenReturn(mReportSaveToDatabaseHandler);
-        when(mProvider.getReportSessionHandler()).thenReturn(mReportSessionHandler);
         when(mProvider.getReportSessionStopDueCrashHandler()).thenReturn(mReportSessionStopDueCrashHandler);
         when(mProvider.getReportFirstHandler()).thenReturn(mReportFirstHandler);
         when(mProvider.getReportPrevSessionEventHandler()).thenReturn(mReportPrevSessionEventHandler);
@@ -101,6 +101,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getSaveInitialUserProfileIDHandler()).thenReturn(saveInitialUserProfileIDHandler);
         when(mProvider.getModulesEventHandler()).thenReturn(moduleEventHandler);
         when(mProvider.getExternalAttributionHandler()).thenReturn(externalAttributionHandler);
+        when(mProvider.getReportSaveInitHandler()).thenReturn(mReportSaveInitHandler);
+        when(mProvider.getReportSessionActivityStartHandler()).thenReturn(mReportSessionActivityStartHandler);
         doReturn(reportCrashMetaInformation).when(mProvider).getReportCrashMetaInformation();
     }
 
@@ -131,31 +133,6 @@ public class ComponentHandlerFactoryTest extends CommonTest {
                 saveInitialUserProfileIDHandler,
                 mReportFirstHandler
         );
-    }
-
-    @Test
-    public void testCommonConditionalFactoryAll() {
-        InternalEvents event = InternalEvents.EVENT_TYPE_CUSTOM_EVENT;
-        CommonConditionalFactory factory = new CommonConditionalFactory(mProvider);
-
-        factory.addHandlers(event, mHandlersList);
-
-        assertThat(EventsManager.affectSessionState(event)).isTrue();
-
-        assertThat(mHandlersList)
-            .containsExactly(moduleEventHandler, mReportSessionHandler);
-    }
-
-    @Test
-    public void testCommonConditionalFactoryWithoutSessionState() {
-        InternalEvents event = InternalEvents.EVENT_TYPE_PURGE_BUFFER;
-        CommonConditionalFactory factory = new CommonConditionalFactory(mProvider);
-
-        factory.addHandlers(event, mHandlersList);
-
-        assertThat(EventsManager.affectSessionState(event)).isFalse();
-
-        assertThat(mHandlersList).containsExactly();
     }
 
     @Test
@@ -213,7 +190,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         StartFactory factory = new StartFactory(mProvider);
 
         factory.addHandlers(mHandlersList);
-        assertThat(mHandlersList).containsExactly();
+        assertThat(mHandlersList).containsExactly(mReportSessionActivityStartHandler, mReportSaveInitHandler);
     }
 
     @Test

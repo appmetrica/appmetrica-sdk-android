@@ -12,5 +12,7 @@ public class StartFactory extends HandlersFactory<ReportComponentHandler> {
 
     @Override
     public void addHandlers(@NonNull List<ReportComponentHandler> reportHandlers) {
+        reportHandlers.add(getProvider().getReportSessionActivityStartHandler());
+        reportHandlers.add(getProvider().getReportSaveInitHandler());
     }
 }

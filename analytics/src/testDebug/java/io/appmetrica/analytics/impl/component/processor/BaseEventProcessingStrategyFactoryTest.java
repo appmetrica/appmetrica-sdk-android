@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor;
 
+import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -13,11 +14,12 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInf
 import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPauseForegroundSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportSaveInitHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
@@ -25,7 +27,6 @@ import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventH
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.CommonConditionalFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNativeCrashHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
@@ -39,6 +40,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFac
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionActivityStartHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
@@ -81,6 +83,7 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SEND_USER_P
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_WEBVIEW_SYNC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -106,7 +109,6 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         new MockedConstructionRule<>(ReportingHandlerProvider.class, (mock, context) -> {
             when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
             when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
-            when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
             when(mock.getReportSessionStopDueCrashHandler()).thenReturn(mock(ReportSessionStopDueCrashHandler.class));
             when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
             when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
@@ -126,11 +128,12 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
             when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
             when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
+            when(mock.getReportSaveInitHandler()).thenReturn(mock(ReportSaveInitHandler.class));
+            when(mock.getReportSessionActivityStartHandler())
+                .thenReturn(mock(ReportSessionActivityStartHandler.class));
+            when(mock.getReportPauseForegroundSessionHandler())
+                .thenReturn(mock(ReportPauseForegroundSessionHandler.class));
         });
-
-    @Rule
-    public MockedConstructionRule<CommonConditionalFactory> commonConditionalFactoryMockedConstructionRule =
-        new MockedConstructionRule<>(CommonConditionalFactory.class);
 
     EventProcessingStrategyFactory mFactory;
     final InternalEvents mEventType;
@@ -157,6 +160,8 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
 
         static {
             LISTED_EVENTS.add(EVENT_TYPE_ACTIVATION);
+            LISTED_EVENTS.add(EVENT_TYPE_START);
+            LISTED_EVENTS.add(EVENT_TYPE_UPDATE_FOREGROUND_TIME);
             LISTED_EVENTS.add(EVENT_TYPE_REGULAR);
             LISTED_EVENTS.add(EVENT_TYPE_EXCEPTION_USER_PROTOBUF);
             LISTED_EVENTS.add(EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF);
@@ -208,12 +213,10 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         public void testStrategyCreationForNotListedEvents() {
             EventProcessingStrategy<ReportComponentHandler> processingStrategy =
                 mFactory.getProcessingStrategy(mEventType.getTypeId());
-            ArrayList<ReportComponentHandler> commonExpectedElements = new ArrayList<ReportComponentHandler>();
             ArrayList<Class<? extends ReportComponentHandler>> commonClasses =
-                new ArrayList<Class<? extends ReportComponentHandler>>(commonExpectedElements.size());
-            new CommonConditionalFactory(mFactory.getHandlersProvider()).addHandlers(mEventType, commonExpectedElements);
-            for (ReportComponentHandler handler : commonExpectedElements) {
-                commonClasses.add(handler.getClass());
+                new ArrayList<Class<? extends ReportComponentHandler>>();
+            if (EventsManager.shouldApplyModuleHandlers(mEventType)) {
+                commonClasses.add(mFactory.getHandlersProvider().getModulesEventHandler().getClass());
             }
             List<? extends ReportComponentHandler> eventHandlers = processingStrategy.getEventHandlers();
             if (LISTED_EVENTS.contains(mEventType)) {
@@ -290,6 +293,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
                 {EVENT_TYPE_APP_ENVIRONMENT_UPDATED, ReportAppEnvironmentUpdatedHandler.class},
                 {EVENT_TYPE_APP_ENVIRONMENT_CLEARED, ReportAppEnvironmentClearedHandler.class},
                 {EVENT_TYPE_SET_USER_PROFILE_ID, UpdateUserProfileIDHandler.class},
+                {EVENT_TYPE_UPDATE_FOREGROUND_TIME, ReportPauseForegroundSessionHandler.class},
             });
         }
 
