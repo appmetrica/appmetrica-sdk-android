@@ -57,23 +57,38 @@ internal class ServiceMigrationScriptToV116 : MigrationScript {
             tablesValidatorStub
         )
 
-        val datatabaseStorage =
+        val databaseStorage =
             GlobalServiceLocator.getInstance().storageFactory.createComponentLegacyStorageForMigration(
                 context,
                 "autoinapp-old",
                 nameProvider,
                 tablesManager
             )
-        val dbHelper = BinaryDataHelper(SimpleDBConnector(datatabaseStorage), Constants.BinaryDataTable.TABLE_NAME)
-        val oldValue = dbHelper.get("auto_inapp_collecting_info_data")
-        if (oldValue != null) {
-            DebugLogger.info(tag, "Migrate old inapp data (length: ${oldValue.size})")
-            GlobalServiceLocator.getInstance().storageFactory.getServiceBinaryDataHelperForMigration(context).insert(
-                "auto_inapp_collecting_info_data",
-                oldValue
-            )
-        } else {
-            DebugLogger.info(tag, "Not found old auto inapp data")
+        var migrationException: Throwable? = null
+        try {
+            val dbHelper = BinaryDataHelper(SimpleDBConnector(databaseStorage), Constants.BinaryDataTable.TABLE_NAME)
+            val oldValue = dbHelper.get("auto_inapp_collecting_info_data")
+            if (oldValue != null) {
+                DebugLogger.info(tag, "Migrate old inapp data (length: ${oldValue.size})")
+                GlobalServiceLocator.getInstance().storageFactory
+                    .getServiceBinaryDataHelperForMigration(context)
+                    .insert(
+                        "auto_inapp_collecting_info_data",
+                        oldValue
+                    )
+            } else {
+                DebugLogger.info(tag, "Not found old auto inapp data")
+            }
+        } catch (exception: Throwable) {
+            migrationException = exception
+            throw exception
+        } finally {
+            try {
+                databaseStorage.close()
+            } catch (closeException: Throwable) {
+                migrationException?.addSuppressed(closeException)
+                DebugLogger.error(tag, closeException, "Failed to close old auto inapp storage")
+            }
         }
     }
 }

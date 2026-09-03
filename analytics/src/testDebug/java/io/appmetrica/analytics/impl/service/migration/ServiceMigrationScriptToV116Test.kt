@@ -15,12 +15,15 @@ import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.con
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -55,10 +58,14 @@ internal class ServiceMigrationScriptToV116Test : CommonTest() {
     private val oldDbValue = "old database value".toByteArray()
 
     private var binaryDataHelperValue: ByteArray? = oldDbValue
+    private var binaryDataHelperException: Throwable? = null
 
     @get:Rule
     val binaryDataHelperRule = constructionRule<BinaryDataHelper> {
-        on { get("auto_inapp_collecting_info_data") } doReturn binaryDataHelperValue
+        on { get("auto_inapp_collecting_info_data") } doAnswer {
+            binaryDataHelperException?.let { throw it }
+            binaryDataHelperValue
+        }
     }
 
     @get:Rule
@@ -95,6 +102,7 @@ internal class ServiceMigrationScriptToV116Test : CommonTest() {
             "auto_inapp_collecting_info_data",
             oldDbValue
         )
+        verify(databaseStorage).close()
     }
 
     @Test
@@ -108,5 +116,33 @@ internal class ServiceMigrationScriptToV116Test : CommonTest() {
         verify(startupStateBuilder).withObtainTime(0)
 
         verifyNoInteractions(serviceBinaryDataHelperForMigration)
+        verify(databaseStorage).close()
+    }
+
+    @Test
+    fun runIgnoresCloseErrorAfterSuccessfulMigration() {
+        doThrow(RuntimeException("Close failed")).whenever(databaseStorage).close()
+
+        serviceMigrationScriptToV116.run(context)
+
+        verify(serviceBinaryDataHelperForMigration).insert(
+            "auto_inapp_collecting_info_data",
+            oldDbValue
+        )
+        verify(databaseStorage).close()
+    }
+
+    @Test
+    fun runPreservesReadErrorWhenClosingLegacyStorageFails() {
+        val readException = RuntimeException("Read failed")
+        val closeException = RuntimeException("Close failed")
+        binaryDataHelperException = readException
+        doThrow(closeException).whenever(databaseStorage).close()
+
+        assertThatThrownBy { serviceMigrationScriptToV116.run(context) }
+            .isSameAs(readException)
+        assertThat(readException.suppressed).containsExactly(closeException)
+        verifyNoInteractions(serviceBinaryDataHelperForMigration)
+        verify(databaseStorage).close()
     }
 }
