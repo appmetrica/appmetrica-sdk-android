@@ -60,7 +60,9 @@ public class KeyValueTableDbHelperWrapperTest extends CommonTest {
     public void putString() {
         String value = "aaa";
         assertThat(wrapper.put(key, value)).isSameAs(wrapper);
+        assertThat(wrapper.put(key, (String) null)).isSameAs(wrapper);
         verify(actualHelper).put(key, value);
+        verify(actualHelper).put(key, (String) null);
     }
 
     @Test

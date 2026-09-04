@@ -244,10 +244,11 @@ internal open class KeyValueTableDbHelper(
         return this
     }
 
-    override fun put(key: String, value: String): IKeyValueTableDbHelper {
-        putValue(key, value)
-        return this
-    }
+    override fun put(key: String, value: String?): IKeyValueTableDbHelper =
+        value?.let {
+            putValue(key, it)
+            this
+        } ?: remove(key)
 
     override fun put(key: String, value: Long): IKeyValueTableDbHelper {
         putValue(key, value)

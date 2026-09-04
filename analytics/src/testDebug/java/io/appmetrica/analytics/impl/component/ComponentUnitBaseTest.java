@@ -21,6 +21,7 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.impl.db.storage.MockedKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
@@ -414,11 +415,22 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testClearAppEnvironment() {
-        AppEnvironment.EnvironmentRevision revision = new AppEnvironment.EnvironmentRevision("value", 10);
-        when(mAppEnvironment.getLastRevision()).thenReturn(revision);
+        MockedKeyValueTableDbHelper dbStorage = new MockedKeyValueTableDbHelper(null);
+        PreferencesComponentDbStorage preferences = new PreferencesComponentDbStorage(dbStorage);
+        preferences.putAppEnvironmentRevision(
+            new AppEnvironment.EnvironmentRevision("{\"key\":\"value\"}", 10)
+        );
+        when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(preferences);
+        when(createFieldsFactory().createReportSaver(any(), any(), any(), any(), any(), any(), any()))
+            .thenReturn(mEventSaver);
+        mAppEnvironmentProvider = new AppEnvironmentProvider();
+        mComponentUnit = createComponentUnit();
+
         mComponentUnit.clearAppEnvironment();
-        verify(mAppEnvironment).reset();
-        verify(mAppEnvironmentProvider).commit(revision, mComponentPreferences);
+
+        assertThat(dbStorage.containsKey("APP_ENVIRONMENT")).isTrue();
+        assertThat(dbStorage.getString("APP_ENVIRONMENT", null))
+            .isEqualTo(AppEnvironment.DEFAULT_ENVIRONMENT_JSON_STRING);
     }
 
     @Test

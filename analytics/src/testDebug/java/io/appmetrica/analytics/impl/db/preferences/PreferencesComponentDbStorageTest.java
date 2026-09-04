@@ -64,6 +64,9 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
         final String profileID = "profileID";
         mComponentDbStorage.putProfileID(profileID);
         assertThat(mComponentDbStorage.getProfileID()).isEqualTo(profileID);
+
+        mComponentDbStorage.putProfileID(null);
+        assertThat(mComponentDbStorage.getProfileID()).isNull();
     }
 
     @Test

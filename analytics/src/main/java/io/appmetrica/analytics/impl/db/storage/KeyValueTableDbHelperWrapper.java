@@ -29,72 +29,78 @@ class KeyValueTableDbHelperWrapper implements IKeyValueTableDbHelper {
 
     @Nullable
     @Override
-    public String getString(String key, String defValue) {
+    public String getString(@NonNull String key, @Nullable String defValue) {
         checkMigrated();
         return actualHelper.getString(key, defValue);
     }
 
     @Override
-    public int getInt(String key, int defValue) {
+    public int getInt(@NonNull String key, int defValue) {
         checkMigrated();
         return actualHelper.getInt(key, defValue);
     }
 
     @Override
-    public long getLong(String key, long defValue) {
+    public long getLong(@NonNull String key, long defValue) {
         checkMigrated();
         return actualHelper.getLong(key, defValue);
     }
 
     @Override
-    public boolean getBoolean(String key, boolean defValue) {
+    public boolean getBoolean(@NonNull String key, boolean defValue) {
         checkMigrated();
         return actualHelper.getBoolean(key, defValue);
     }
 
     @Override
-    public float getFloat(String key, float defValue) {
+    public float getFloat(@NonNull String key, float defValue) {
         checkMigrated();
         return actualHelper.getFloat(key, defValue);
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper remove(String key) {
+    public IKeyValueTableDbHelper remove(@NonNull String key) {
         checkMigrated();
         actualHelper.remove(key);
         return this;
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper put(String key, String value) {
+    public IKeyValueTableDbHelper put(@NonNull String key, @Nullable String value) {
         checkMigrated();
         actualHelper.put(key, value);
         return this;
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper put(String key, long value) {
+    public IKeyValueTableDbHelper put(@NonNull String key, long value) {
         checkMigrated();
         actualHelper.put(key, value);
         return this;
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper put(String key, int value) {
+    public IKeyValueTableDbHelper put(@NonNull String key, int value) {
         checkMigrated();
         actualHelper.put(key, value);
         return this;
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper put(String key, boolean value) {
+    public IKeyValueTableDbHelper put(@NonNull String key, boolean value) {
         checkMigrated();
         actualHelper.put(key, value);
         return this;
     }
 
+    @NonNull
     @Override
-    public IKeyValueTableDbHelper put(String key, float value) {
+    public IKeyValueTableDbHelper put(@NonNull String key, float value) {
         checkMigrated();
         actualHelper.put(key, value);
         return this;
@@ -128,11 +134,13 @@ class KeyValueTableDbHelperWrapper implements IKeyValueTableDbHelper {
     }
 
     @VisibleForTesting
+    @NonNull
     StorageType getStorageType() {
         return storageType;
     }
 
     @VisibleForTesting
+    @NonNull
     IKeyValueTableDbHelper getActualHelper() {
         return actualHelper;
     }

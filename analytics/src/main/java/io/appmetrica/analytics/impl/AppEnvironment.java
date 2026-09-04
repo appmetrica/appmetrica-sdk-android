@@ -93,7 +93,11 @@ public class AppEnvironment {
             mRevisionNumber++;
             mChanged = false;
         }
-        return new EnvironmentRevision(JsonHelper.mapToJsonString(mValues), mRevisionNumber);
+        String value = JsonHelper.mapToJsonString(mValues);
+        return new EnvironmentRevision(
+                value == null ? DEFAULT_ENVIRONMENT_JSON_STRING : value,
+                mRevisionNumber
+        );
     }
 
     @VisibleForTesting

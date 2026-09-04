@@ -34,6 +34,7 @@ import static io.appmetrica.analytics.impl.db.constants.Constants.PreferencesTab
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
@@ -320,6 +321,24 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         assertThat(dbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
         assertThat(dbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
         assertThat(dbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+    }
+
+    @Test
+    public void putNullStringRemovesValue() {
+        dbHelper = createHelper(mDbStorage);
+
+        dbHelper.put(KEY_STRING, TEST_STRING).put(KEY_STRING, (String) null);
+
+        assertThat(dbHelper.getString(KEY_STRING, null)).isNull();
+        assertThat(dbHelper.containsKey(KEY_STRING)).isFalse();
+        assertThat(dbHelper.keys()).doesNotContain(KEY_STRING);
+        ArgumentCaptor<String[]> whereArgsCaptor = ArgumentCaptor.forClass(String[].class);
+        verify(mDatabase).delete(
+            eq(TABLE_NAME),
+            eq(Constants.PreferencesTable.DELETE_WHERE_KEY),
+            whereArgsCaptor.capture()
+        );
+        assertThat(whereArgsCaptor.getValue()).containsExactly(KEY_STRING);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)

@@ -7,27 +7,33 @@ import java.util.Set;
 public interface IKeyValueTableDbHelper {
 
     @Nullable
-    String getString(final String key, final String defValue);
+    String getString(@NonNull final String key, @Nullable final String defValue);
 
-    int getInt(final String key, final int defValue);
+    int getInt(@NonNull final String key, final int defValue);
 
-    long getLong(final String key, final long defValue);
+    long getLong(@NonNull final String key, final long defValue);
 
-    boolean getBoolean(final String key, final boolean defValue);
+    boolean getBoolean(@NonNull final String key, final boolean defValue);
 
-    float getFloat(final String key, final float defValue);
+    float getFloat(@NonNull final String key, final float defValue);
 
-    IKeyValueTableDbHelper remove(final String key);
+    @NonNull
+    IKeyValueTableDbHelper remove(@NonNull final String key);
 
-    IKeyValueTableDbHelper put(final String key, final String value);
+    @NonNull
+    IKeyValueTableDbHelper put(@NonNull final String key, @Nullable final String value);
 
-    IKeyValueTableDbHelper put(final String key, final long value);
+    @NonNull
+    IKeyValueTableDbHelper put(@NonNull final String key, final long value);
 
-    IKeyValueTableDbHelper put(final String key, final int value);
+    @NonNull
+    IKeyValueTableDbHelper put(@NonNull final String key, final int value);
 
-    IKeyValueTableDbHelper put(final String key, final boolean value);
+    @NonNull
+    IKeyValueTableDbHelper put(@NonNull final String key, final boolean value);
 
-    IKeyValueTableDbHelper put(final String key, final float value);
+    @NonNull
+    IKeyValueTableDbHelper put(@NonNull final String key, final float value);
 
     boolean containsKey(@NonNull String key);
 

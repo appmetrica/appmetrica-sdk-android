@@ -112,7 +112,9 @@ public class AppEnvironmentTest extends CommonTest {
         environment.getLastRevision();
         assertThat(environment.getLastRevision().revisionNumber).isEqualTo(1);
         environment.reset();
-        assertThat(environment.getLastRevision().revisionNumber).isEqualTo(1);
+        AppEnvironment.EnvironmentRevision revision = environment.getLastRevision();
+        assertThat(revision.revisionNumber).isEqualTo(1);
+        assertThat(revision.value).isEqualTo(AppEnvironment.DEFAULT_ENVIRONMENT_JSON_STRING);
         environment.add("a", "2");
         environment.add("a", "1");
         environment.add("a", "1");
