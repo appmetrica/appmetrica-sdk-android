@@ -39,41 +39,5 @@
       <version>1.9.25</version>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-api</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-utils</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-logger</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-modules-api</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-network</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-proto</artifactId>
-      <version>8.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
 </project>

@@ -6,22 +6,3 @@ public final class io.appmetrica.analytics.idsync.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper {
-    public static final [NonNull] io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper$Companion Companion
-
-    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.idsync.impl.model.IdSyncConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.idsync.impl.model.IdSyncConfig] getConfig$id_sync_release()
-}
-
-public static final class io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper toWrapper$id_sync_release([NonNull] OBFUSCATED[io.appmetrica.analytics.idsync.impl.model.IdSyncConfig])
-}
-
-public final class io.appmetrica.analytics.idsync.internal.IdSyncModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper> implementation io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper> {
-    public <init>()
-    public [NonNull] String getIdentifier()
-    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper> getRemoteConfigExtensionConfiguration()
-    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper>)
-    public void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.idsync.internal.IdSyncConfigWrapper>)
-}
-

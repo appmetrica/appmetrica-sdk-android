@@ -1,30 +1,9 @@
 # AppMetrica SDK Identifiers Synchronization
 
-**Optional module**.
-Maven: `io.appmetrica.analytics:analytics-id-sync:${VERSION}`.
+`io.appmetrica.analytics:analytics-id-sync:${VERSION}` is a deprecated empty
+compatibility artifact. It is retained temporarily so that existing dependency
+declarations and exclusions continue to resolve. The artifact contains no ID
+Sync implementation or functional dependencies. Its publication metadata keeps
+the Kotlin standard library dependency added by the shared convention plugin.
 
-## Builds
-
-### Assemble
-
-`./gradlew :id-sync:assembleRelease`
-
-### Publish to MavenLocal
-
-`./gradlew :id-sync:publishReleasePublicationToMavenLocal`
-
-### Tests
-
-`./gradlew :id-sync:testReleaseUnitTest :id-sync:generateReleaseJacocoReport`
-
-### Code style
-
-`./gradlew :id-sync:lint :id-sync:ktlint :id-sync:checkstyleRelease`
-
-### Check AAR API
-
-`./gradlew :id-sync:aarCheck`
-
-### Regenerate AAR API dump
-
-`./gradlew :id-sync:aarDump`
+It will be removed in a future major release.

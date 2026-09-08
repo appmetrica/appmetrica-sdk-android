@@ -83,13 +83,6 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-id-sync",
-                    "version": {
-                        "requires": "8.6.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
                     "module": "analytics-identifiers",
                     "version": {
                         "requires": "8.6.0"

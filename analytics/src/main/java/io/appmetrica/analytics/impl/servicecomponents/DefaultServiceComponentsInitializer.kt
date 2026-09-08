@@ -15,7 +15,6 @@ internal class DefaultServiceComponentsInitializer : ServiceComponentsInitialize
         "io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.AppLovinAutoServiceModuleEntryPoint",
         "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
         "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
-        "io.appmetrica.analytics.idsync.internal.IdSyncModuleEntryPoint"
     )
 
     override fun onCreate(context: Context) {

@@ -60,7 +60,7 @@ configurations.configureEach {
 - **location** - allows AppMetrica SDK to collect location.
 - **ndkcrashes** - allows AppMetrica SDK to handle native crashes on Android.
 - **screenshot** - allows AppMetrica SDK to collect screenshot taken events.
-- **id-sync** — enhances integration capabilities and improves overall system performance in cross-platform environments.
+- **id-sync** — deprecated empty compatibility artifact retained temporarily for dependency resolution.
 - **billing** — aggregates the functionality of the in-app purchase collection.
 
 ### Modules with optional dependencies

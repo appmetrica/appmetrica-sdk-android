@@ -125,7 +125,6 @@ dependencies {
 
     runtimeOnly(project(":ad-revenue"))
     runtimeOnly(project(":billing"))
-    runtimeOnly(project(":id-sync"))
     runtimeOnly(project(":identifiers"))
     runtimeOnly(project(":location"))
     runtimeOnly(project(":remote-permissions"))
