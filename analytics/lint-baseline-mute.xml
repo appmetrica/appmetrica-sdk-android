@@ -327,7 +327,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
-            line="152"
+            line="155"
             column="5"/>
     </issue>
 
@@ -338,7 +338,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
-            line="231"
+            line="234"
             column="5"/>
     </issue>
 
@@ -349,7 +349,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/BaseEventProcessingStrategyFactoryTest.java"
-            line="277"
+            line="280"
             column="5"/>
     </issue>
 
@@ -713,6 +713,17 @@
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbEventModelConverterTest.kt"
             line="18"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/db/event/DbEventValueEncoderTest.kt"
+            line="12"
             column="1"/>
     </issue>
 
@@ -1361,7 +1372,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
-            line="40"
+            line="41"
             column="1"/>
     </issue>
 
@@ -1647,7 +1658,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="44"
+            line="42"
             column="1"/>
     </issue>
 
@@ -1658,7 +1669,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="398"
+            line="383"
             column="5"/>
     </issue>
 
@@ -1669,7 +1680,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="479"
+            line="464"
             column="5"/>
     </issue>
 
@@ -1680,7 +1691,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="551"
+            line="536"
             column="5"/>
     </issue>
 
@@ -1900,7 +1911,7 @@
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/AppMetricaServiceCoreImplStaticTests.java"
-            line="106"
+            line="107"
             column="20"/>
     </issue>
 
@@ -2362,7 +2373,7 @@
         errorLine2="                   ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/component/processor/event/ReportSaveInitHandlerTest.java"
-            line="72"
+            line="73"
             column="20"/>
     </issue>
 

@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Base64;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
@@ -312,7 +311,8 @@ public class CounterReportTest extends CommonTest {
         byte[] bytes = new byte[]{1, 2, 3, 4, 10, 11, 12, 13, 14, 15, 21};
         CounterReport report = new CounterReport();
         report.setValueBytes(bytes);
-        assertThat(report.getValue()).isEqualTo(new String(Base64.encode(bytes, 0)));
+        assertThat(report.getValueBytes()).isEqualTo(bytes);
+        assertThat(report.getValue()).isEqualTo(new String(bytes, java.nio.charset.StandardCharsets.UTF_8));
     }
 
     @Test
@@ -335,9 +335,8 @@ public class CounterReportTest extends CommonTest {
     public void testReadBytes() {
         byte[] bytes = new byte[]{1, 2, 3, 4, 10, 11, 12, 13, 14, 15, 21};
         CounterReport report = new CounterReport();
-        report.setValue(new String(Base64.encode(bytes, 0)));
+        report.setValueBytes(bytes);
         assertThat(report.getValueBytes()).isEqualTo(bytes);
-
     }
 
     @Test

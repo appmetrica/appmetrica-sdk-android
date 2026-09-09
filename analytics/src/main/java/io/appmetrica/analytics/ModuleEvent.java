@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.ServiceDataReporter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public final class ModuleEvent {
     @Nullable
     private final String name;
     @Nullable
-    private final String value;
+    private final byte[] value;
     private final int serviceDataReporterType;
     private final Category category;
     @Nullable
@@ -62,12 +63,22 @@ public final class ModuleEvent {
     }
 
     /**
-     * Returns the event value.
+     * Returns the event value as a UTF-8 string.
      *
      * @return event value
      */
     @Nullable
     public String getValue() {
+        return value == null ? null : new String(value, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Returns the event value bytes.
+     *
+     * @return event value bytes
+     */
+    @Nullable
+    public byte[] getValueBytes() {
         return value;
     }
 
@@ -146,7 +157,7 @@ public final class ModuleEvent {
         return "ModuleEvent{" +
             "type=" + type +
             ", name='" + name + '\'' +
-            ", value='" + value + '\'' +
+            ", value='" + getValue() + '\'' +
             ", serviceDataReporterType=" + serviceDataReporterType +
             ", category=" + category +
             ", environment=" + environment +
@@ -164,7 +175,7 @@ public final class ModuleEvent {
         @Nullable
         private String name;
         @Nullable
-        private String value;
+        private byte[] value;
         private int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
         @NonNull
         private Category category = Category.GENERAL;
@@ -198,6 +209,18 @@ public final class ModuleEvent {
          * @return same {@link Builder} object
          */
         public Builder withValue(@Nullable final String value) {
+            this.value = value == null ? null : value.getBytes(StandardCharsets.UTF_8);
+            return this;
+        }
+
+        /**
+         * Sets event value bytes. Can be replaced with {@link ModuleEvent#attributes}
+         * if {@link ModuleEvent#attributes} is not null or empty.
+         *
+         * @param value event value bytes
+         * @return same {@link Builder} object
+         */
+        public Builder withValueBytes(@Nullable final byte[] value) {
             this.value = value;
             return this;
         }

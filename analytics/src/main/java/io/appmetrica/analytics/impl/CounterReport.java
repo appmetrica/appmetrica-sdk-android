@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
-import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class CounterReport implements CounterReportApi {
     @Nullable
     protected String name;
     @Nullable
-    protected String value;
+    private byte[] valueStorage;
     @Nullable
     private String eventEnvironment;
     private int type;
@@ -48,7 +48,7 @@ public class CounterReport implements CounterReportApi {
     public CounterReport(@Nullable String value, @Nullable String event, final int type) {
         name = event;
         this.type = type;
-        this.value = value;
+        this.valueStorage = value == null ? null : StringUtils.getUTF8Bytes(value);
         creationElapsedRealtime = systemTimeProvider.elapsedRealtime();
         creationTimestamp = systemTimeProvider.currentTimeMillis();
     }
@@ -72,23 +72,23 @@ public class CounterReport implements CounterReportApi {
     @Override
     @Nullable
     public String getValue() {
-        return value;
+        return valueStorage == null ? null : new String(valueStorage, StandardCharsets.UTF_8);
     }
 
     @Override
     @Nullable
     public byte[] getValueBytes() {
-        return value == null ? null : Base64.decode(value, Base64.DEFAULT);
+        return valueStorage;
     }
 
     @Override
     public void setValue(@Nullable String value) {
-        this.value = value;
+        this.valueStorage = value == null ? null : StringUtils.getUTF8Bytes(value);
     }
 
     @Override
     public void setValueBytes(@Nullable byte[] bytes) {
-        value = bytes == null ? null : new String(Base64.encode(bytes, Base64.DEFAULT));
+        this.valueStorage = bytes;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class CounterReport implements CounterReportApi {
             "[event: %s, type: %s, value: %s]",
             name,
             InternalEvents.valueOf(type).getInfo(),
-            Utils.trimToSize(value, Limits.EVENT_VALUE_FOR_LOGS_LIMIT)
+            Utils.trimToSize(getValue(), Limits.EVENT_VALUE_FOR_LOGS_LIMIT)
         );
     }
 

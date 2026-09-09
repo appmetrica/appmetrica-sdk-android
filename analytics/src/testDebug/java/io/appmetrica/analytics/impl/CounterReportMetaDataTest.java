@@ -128,7 +128,7 @@ public class CounterReportMetaDataTest extends CommonTest {
         serviceEvent.setValueProtocolVersion(valueProtocolVersion);
         CoreServiceEvent resultServiceEvent = reportProvider.apply(serviceEvent);
         Assertions.INSTANCE.ObjectPropertyAssertions(resultServiceEvent)
-            .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "isUndefinedType")
+            .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "valueBytesStorage", "isUndefinedType")
             .withPrivateFields(true)
             .withFinalFieldOnly(false)
             .checkField("name", expectedName)

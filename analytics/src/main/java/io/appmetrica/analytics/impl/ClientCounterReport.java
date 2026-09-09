@@ -1,12 +1,11 @@
 package io.appmetrica.analytics.impl;
 
-import android.util.Base64;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
+import io.appmetrica.analytics.coreutils.internal.io.GZIPUtils;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
@@ -81,7 +80,7 @@ public class ClientCounterReport extends CounterReport {
                                @NonNull PublicLogger logger) {
         super();
         setTrimmers(logger);
-        this.value = trimValue(value);
+        super.setValue(trimValue(value));
         this.name = trimName(name);
         setType(type);
         setCustomType(customType);
@@ -187,7 +186,7 @@ public class ClientCounterReport extends CounterReport {
 
     @Override
     public void setValue(@Nullable String value) {
-        this.value = trimValue(value);
+        super.setValue(trimValue(value));
     }
 
     @Override
@@ -229,7 +228,7 @@ public class ClientCounterReport extends CounterReport {
         @NonNull final Userprofile.Profile userProfile
     ) {
         CounterReport counterReport = formUserProfileEvent();
-        counterReport.setValue(new String(Base64.encode(MessageNano.toByteArray(userProfile), 0)));
+        counterReport.setValueBytes(MessageNano.toByteArray(userProfile));
         return counterReport;
     }
 
@@ -254,7 +253,7 @@ public class ClientCounterReport extends CounterReport {
         counterReport.setType(InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT.getTypeId());
 
         final Pair<byte[], Integer> result = revenue.getDataToSend();
-        counterReport.setValue(new String(Base64.encode(result.first, 0)));
+        counterReport.setValueBytes(result.first);
         counterReport.setBytesTruncated(result.second);
 
         return counterReport;
@@ -269,7 +268,7 @@ public class ClientCounterReport extends CounterReport {
         counterReport.setType(InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.getTypeId());
 
         final kotlin.Pair<byte[], Integer> result = adRevenue.getDataToSend();
-        counterReport.setValue(new String(Base64.encode(result.getFirst(), 0)));
+        counterReport.setValueBytes(result.getFirst());
         counterReport.setBytesTruncated(result.getSecond());
 
         return counterReport;
@@ -283,7 +282,11 @@ public class ClientCounterReport extends CounterReport {
         counterReport.setType(InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.getTypeId());
 
         final byte[] valueBytes = MessageNano.toByteArray(result.result);
-        counterReport.setValue(Base64Utils.compressBase64(valueBytes));
+        try {
+            counterReport.setValueBytes(GZIPUtils.gzipBytes(valueBytes));
+        } catch (Throwable ignored) {
+            counterReport.setValueBytes(null);
+        }
         counterReport.setBytesTruncated(result.getBytesTruncated());
 
         return counterReport;

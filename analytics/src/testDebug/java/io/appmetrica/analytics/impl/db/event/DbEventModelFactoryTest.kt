@@ -55,7 +55,7 @@ internal class DbEventModelFactoryTest : CommonTest() {
         on { type } doReturn type
         on { customType } doReturn customType
         on { name } doReturn name
-        on { value } doReturn value
+        on { valueBytes } doReturn value.toByteArray()
         on { eventEnvironment } doReturn eventEnvironment
         on { bytesTruncated } doReturn bytesTruncated
         on { profileID } doReturn profileId

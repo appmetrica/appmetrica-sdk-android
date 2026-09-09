@@ -4,11 +4,11 @@ import android.os.Bundle
 
 /**
  * Flat CounterReport fields carried over IPC (see [EventIpcBundleKeys]).
- * Used by [EventIpcCodec] and mapped to [CoreServiceEvent] / DiagnosticEvent on the service.
+ * Used by [EventIpcCodec] and mapped to [CoreServiceEvent] on the service.
  */
 internal class EventIpcData(
     val name: String? = null,
-    val value: String? = null,
+    val value: ByteArray? = null,
     val type: Int = -1,
     val customType: Int = -1,
     val bytesTruncated: Int = 0,
@@ -28,7 +28,7 @@ internal class EventIpcData(
         fun fromCounterReport(report: CounterReport): EventIpcData {
             return EventIpcData(
                 name = report.name,
-                value = report.value,
+                value = report.valueBytes,
                 type = report.type,
                 customType = report.customType,
                 bytesTruncated = report.bytesTruncated,

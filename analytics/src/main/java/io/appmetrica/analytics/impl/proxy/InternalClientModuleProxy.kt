@@ -14,7 +14,7 @@ internal class InternalClientModuleProxy : InternalClientModuleFacade {
     override fun reportEvent(internalModuleEvent: InternalModuleEvent) {
         val moduleEvent = ModuleEvent.newBuilder(internalModuleEvent.type)
             .withName(internalModuleEvent.name)
-            .withValue(internalModuleEvent.value)
+            .withValueBytes(internalModuleEvent.valueBytes)
             .apply {
                 internalModuleEvent.serviceDataReporterType?.let {
                     withServiceDataReporterType(it)

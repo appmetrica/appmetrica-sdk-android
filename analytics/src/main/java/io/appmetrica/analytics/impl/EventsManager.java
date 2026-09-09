@@ -273,9 +273,8 @@ public final class EventsManager {
     }
 
     static CounterReport customEventReportEntry(@NonNull ModuleEvent moduleEvent, @NonNull PublicLogger logger) {
-        final String stringValue = moduleEvent.getValue();
         CounterReport report = new ClientCounterReport(
-            stringValue == null ? null : StringUtils.getUTF8Bytes(stringValue),
+            moduleEvent.getValueBytes(),
             moduleEvent.getName(),
             InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
             logger

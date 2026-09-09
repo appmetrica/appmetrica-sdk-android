@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl
 
 import android.os.Bundle
-import android.util.Base64
 import io.appmetrica.analytics.coreapi.internal.event.ServiceEvent
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 import io.appmetrica.analytics.coreutils.internal.StringUtils
@@ -21,12 +20,14 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import org.json.JSONArray
 import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 import java.util.Locale
 
 internal class CoreServiceEvent : ServiceEvent {
 
     override var name: String? = StringUtils.EMPTY
-    override var value: String? = null
+    @JvmField
+    var valueBytesStorage: ByteArray? = null
     var eventEnvironment: String? = null
     override var type: Int = 0
     override var customType: Int = 0
@@ -49,10 +50,16 @@ internal class CoreServiceEvent : ServiceEvent {
         creationTimestamp = systemTimeProvider.currentTimeMillis()
     }
 
+    override var value: String?
+        get() = valueBytesStorage?.let { String(it, StandardCharsets.UTF_8) }
+        set(stringValue) {
+            valueBytesStorage = stringValue?.let { StringUtils.getUTF8Bytes(it) }
+        }
+
     override var valueBytes: ByteArray?
-        get() = value?.let { Base64.decode(it, Base64.DEFAULT) }
+        get() = valueBytesStorage
         set(bytes) {
-            value = bytes?.let { String(Base64.encode(it, Base64.DEFAULT)) }
+            valueBytesStorage = bytes
         }
 
     val isUndefinedType: Boolean
@@ -77,7 +84,7 @@ internal class CoreServiceEvent : ServiceEvent {
         fun fromIpcData(data: EventIpcData): CoreServiceEvent {
             return CoreServiceEvent().apply {
                 name = data.name
-                value = StringUtils.ifIsNullToDef(data.value, StringUtils.EMPTY)
+                valueBytes = data.value ?: StringUtils.getUTF8Bytes(StringUtils.EMPTY)
                 eventEnvironment = data.eventEnvironment
                 type = data.type
                 customType = data.customType

@@ -41,7 +41,11 @@ internal class DbEventModelFactory @JvmOverloads constructor(
         return DbEventModel.Description(
             customType = serviceEvent.customType,
             name = serviceEvent.name,
-            value = serviceEvent.value,
+            value = DbEventValueEncoder.encode(
+                serviceEvent.valueBytes,
+                serviceEvent.type,
+                serviceEvent.valueProtocolVersion
+            ),
             numberOfType = vitalComponentDataProvider.getAndIncrementNumberOfType(reportType),
             locationInfo = dbLocationModelFactory.create(),
             errorEnvironment = serviceEvent.eventEnvironment,

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.modulesapi.internal.common
 
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
+import java.nio.charset.StandardCharsets
 
 /**
  * Custom event parameters.
@@ -21,10 +22,19 @@ class InternalModuleEvent private constructor(builder: Builder) {
      */
     val name: String? = builder.name
 
+    private val valueStorage: ByteArray? = builder.value
+
     /**
-     * @return event value
+     * @return event value as a UTF-8 string
      */
-    val value: String? = builder.value
+    val value: String?
+        get() = valueStorage?.let { String(it, StandardCharsets.UTF_8) }
+
+    /**
+     * @return event value bytes
+     */
+    val valueBytes: ByteArray?
+        get() = valueStorage
 
     /**
      * @return the way this event will be tracked
@@ -79,7 +89,7 @@ class InternalModuleEvent private constructor(builder: Builder) {
      */
     class Builder(internal val type: Int) {
         var name: String? = null
-        var value: String? = null
+        var value: ByteArray? = null
         var serviceDataReporterType: Int? = null
         var category: Category? = null
         var environment: Map<String, Any>? = null
@@ -105,6 +115,18 @@ class InternalModuleEvent private constructor(builder: Builder) {
          * @return same [Builder] object
          */
         fun withValue(value: String?): Builder {
+            this.value = value?.toByteArray(StandardCharsets.UTF_8)
+            return this
+        }
+
+        /**
+         * Sets event value bytes. Can be replaced with [ModuleEvent.attributes]
+         * if [ModuleEvent.attributes] is not null or empty.
+         *
+         * @param value event value bytes
+         * @return same [Builder] object
+         */
+        fun withValueBytes(value: ByteArray?): Builder {
             this.value = value
             return this
         }

@@ -319,9 +319,6 @@ public class ClientCounterReportTest extends CommonTest {
     public void testLongValueBytesTruncated() {
         byte[] original = generateByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 10);
         byte[] originalTruncated = generateByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE);
-        String originalEncoded = "Encoded string";
-        when(Base64.encode(originalTruncated, Base64.DEFAULT)).thenReturn(originalEncoded.getBytes());
-        when(Base64.decode(originalEncoded, Base64.DEFAULT)).thenReturn(originalTruncated);
 
         ClientCounterReport report = new ClientCounterReport(mPublicLogger);
         report.setValueBytes(original);
@@ -399,16 +396,13 @@ public class ClientCounterReportTest extends CommonTest {
     public void testAdRevenueEvent() {
         final AdRevenueWrapper adRevenueWrapper = mock(AdRevenueWrapper.class);
         final byte[] bytes = "some_data".getBytes(StandardCharsets.UTF_8);
-        final String encryptedData = "encrypted some data";
-        when(Base64.encode(bytes, Base64.DEFAULT)).thenReturn(encryptedData.getBytes());
-        when(Base64.decode(encryptedData, Base64.DEFAULT)).thenReturn(bytes);
         final int bytesTruncated = 42;
         when(adRevenueWrapper.getDataToSend()).thenReturn(new Pair<>(bytes, bytesTruncated));
 
         final CounterReport report = ClientCounterReport.formAdRevenueEvent(mock(PublicLogger.class), adRevenueWrapper);
 
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.getTypeId());
-        assertThat(report.getValue()).isEqualTo(encryptedData);
+        assertThat(report.getValueBytes()).isEqualTo(bytes);
         assertThat(report.getBytesTruncated()).isEqualTo(bytesTruncated);
     }
 

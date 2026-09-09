@@ -15,7 +15,7 @@ internal object EventIpcCodec {
     @JvmStatic
     fun toBundle(data: EventIpcData, bundle: Bundle): Bundle = bundle.apply {
         putString(EventIpcBundleKeys.EVENT, data.name)
-        putString(EventIpcBundleKeys.VALUE, data.value)
+        data.value?.let { putByteArray(EventIpcBundleKeys.VALUE, it) }
         putInt(EventIpcBundleKeys.TYPE, data.type)
         putInt(EventIpcBundleKeys.CUSTOM_TYPE, data.customType)
         putInt(EventIpcBundleKeys.TRUNCATED, data.bytesTruncated)
@@ -38,7 +38,7 @@ internal object EventIpcCodec {
         bundle.classLoader = CounterConfiguration::class.java.classLoader
         return EventIpcData(
             name = bundle.getString(EventIpcBundleKeys.EVENT),
-            value = bundle.getString(EventIpcBundleKeys.VALUE),
+            value = bundle.getByteArray(EventIpcBundleKeys.VALUE),
             // Bundle.getInt returns 0 when TYPE is absent, not EVENT_TYPE_UNDEFINED (-1).
             // 0 is EVENT_TYPE_INIT — that was the bug in the old CounterReport.fromBundle fallback.
             type = bundle.getInt(EventIpcBundleKeys.TYPE, -1),

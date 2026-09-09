@@ -4,6 +4,7 @@ import io.appmetrica.analytics.billing.impl.Constants
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Test
+import java.nio.charset.StandardCharsets
 
 internal class BillingServiceEventTest : CommonTest() {
 
@@ -20,7 +21,7 @@ internal class BillingServiceEventTest : CommonTest() {
             .checkField("valueBytes", valueBytes)
             .checkField("customType", 0)
             .checkField<String>("name", null)
-            .checkField<String>("value", null)
+            .checkField("value", "getValue", String(valueBytes, StandardCharsets.UTF_8))
             .checkField<Int>("valueProtocolVersion", null)
             .checkField("bytesTruncated", 0)
             .checkField("extras", emptyMap<String, ByteArray>())

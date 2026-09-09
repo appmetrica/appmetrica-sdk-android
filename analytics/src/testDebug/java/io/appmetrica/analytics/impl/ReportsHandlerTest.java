@@ -283,7 +283,7 @@ public class ReportsHandlerTest extends CommonTest {
     }
 
     @Test
-    public void testReportEventWithAttributesForCustomEventStoresBase64EncodedValue() {
+    public void testReportEventWithAttributesForCustomEventStoresUtf8ValueBytes() {
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("key", "value");
         final CounterReport report = new ClientCounterReport(
@@ -363,7 +363,7 @@ public class ReportsHandlerTest extends CommonTest {
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
         CounterReport report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT.getTypeId());
-        assertThat(report.getValue()).isEqualTo(new String(Base64.encode(result.first, 0)));
+        assertThat(report.getValueBytes()).isEqualTo(result.first);
         assertThat(report.getBytesTruncated()).isEqualTo(300);
     }
 
@@ -380,7 +380,7 @@ public class ReportsHandlerTest extends CommonTest {
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
         CounterReport report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.getTypeId());
-        assertThat(report.getValue()).isEqualTo(new String(Base64.encode(result.getFirst(), 0)));
+        assertThat(report.getValueBytes()).isEqualTo(result.getFirst());
         assertThat(report.getBytesTruncated()).isEqualTo(300);
     }
 
@@ -460,10 +460,11 @@ public class ReportsHandlerTest extends CommonTest {
 
     private void assertECommerceCounterReport(ReportToSend reportToSend,
                                               byte[] expectedBytes,
-                                              int bytesTruncated) {
+                                              int bytesTruncated) throws Exception {
         CounterReport report = reportToSend.getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.getTypeId());
-        assertThat(Base64Utils.decompressBase64GzipAsBytes(report.getValue())).isEqualTo(expectedBytes);
+        assertThat(io.appmetrica.analytics.coreutils.internal.io.GZIPUtils.unGzipBytes(report.getValueBytes()))
+            .isEqualTo(expectedBytes);
         assertThat(report.getBytesTruncated()).isEqualTo(bytesTruncated);
     }
 
