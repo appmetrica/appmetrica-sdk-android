@@ -19,8 +19,13 @@ internal class DbEventDescriptionConverter(
         value.name?.let {
             proto.name = StringUtils.correctIllFormedString(it)
         }
+        // Legacy string field — only for V112 migration / dual-read of pending.
+        // New events must write valueBytes only (never set value).
         value.value?.let {
             proto.value = StringUtils.correctIllFormedString(it)
+        }
+        value.valueBytes?.let {
+            proto.valueBytes = it
         }
         value.numberOfType?.let {
             proto.numberOfType = it
@@ -75,6 +80,7 @@ internal class DbEventDescriptionConverter(
             value.customType.takeIf { it != defaultModel.customType },
             value.name.takeIf { it != defaultModel.name },
             value.value.takeIf { it != defaultModel.value },
+            value.valueBytes.takeIf { !it.contentEquals(defaultModel.valueBytes) },
             value.numberOfType.takeIf { it != defaultModel.numberOfType },
             locationConverter.toModel(value.locationInfo),
             value.errorEnvironment.takeIf { it != defaultModel.errorEnvironment },

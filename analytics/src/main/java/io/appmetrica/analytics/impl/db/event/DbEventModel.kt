@@ -18,7 +18,8 @@ internal class DbEventModel(
     internal class Description(
         val customType: Int?,
         val name: String?,
-        val value: String?,
+        val value: String?, // Legacy string field 3 — only for pending dual-read / V112 migration.
+        val valueBytes: ByteArray?, // Canonical payload for new events (proto field 20).
         val numberOfType: Long?,
         val locationInfo: DbLocationModel?,
         val errorEnvironment: String?,
@@ -34,5 +35,7 @@ internal class DbEventModel(
         val openId: Int?,
         val extras: ByteArray?,
         val valueProtocolVersion: Int?
-    )
+    ) {
+        fun getValueForLog(): String? = value ?: valueBytes?.let { String(it) }
+    }
 }

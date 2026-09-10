@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.util.Base64;
 import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,18 +16,15 @@ import io.appmetrica.analytics.impl.preparer.EventPreparer;
 import io.appmetrica.analytics.impl.preparer.EventTypeComposer;
 import io.appmetrica.analytics.impl.preparer.NameComposer;
 import io.appmetrica.analytics.impl.preparer.ProtobufNativeCrashComposer;
+import io.appmetrica.analytics.impl.preparer.ReferrerValueComposer;
 import io.appmetrica.analytics.impl.preparer.StringValueComposer;
 import io.appmetrica.analytics.impl.preparer.UnGzipBytesValueComposer;
 import io.appmetrica.analytics.impl.preparer.ValueComposer;
 import io.appmetrica.analytics.impl.preparer.ValueWithPreloadInfoComposer;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.impl.protobuf.backend.Referrer;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,31 +188,7 @@ public final class ProtobufUtils {
         eventsMapping.put(InternalEvents.EVENT_TYPE_REGULAR, preparerWithStringValue);
         eventsMapping.put(
                 InternalEvents.EVENT_TYPE_SEND_REFERRER,
-                EventPreparer.builderWithDefaults().withValueComposer(new ValueComposer() {
-                    @NonNull
-                    @Override
-                    public byte[] getValue(@NonNull EventFromDbModel event, @NonNull ReportRequestConfig config) {
-                        if (!StringUtils.isNullOrEmpty(event.getValue())) {
-                            try {
-                                ReferrerInfo info = ReferrerInfo.parseFrom(Base64.decode(event.getValue(), 0));
-                                Referrer referrer = new Referrer();
-                                referrer.referrer = info.installReferrer == null ?
-                                        new byte[]{} : info.installReferrer.getBytes();
-                                referrer.clickTimestamp = info.referrerClickTimestampSeconds;
-                                referrer.installBeginTimestamp = info.installBeginTimestampSeconds;
-                                referrer.source = sourceToProto(info.source);
-                                return MessageNano.toByteArray(referrer);
-                            } catch (Throwable e) {
-                                DebugLogger.INSTANCE.error(
-                                    TAG,
-                                    e,
-                                    "Something went wrong while serializing referrer event."
-                                );
-                            }
-                        }
-                        return new byte[0];
-                    }
-                }).build()
+                EventPreparer.builderWithDefaults().withValueComposer(new ReferrerValueComposer()).build()
         );
         eventsMapping.put(
             InternalEvents.EVENT_TYPE_ALIVE,
@@ -382,19 +354,6 @@ public final class ProtobufUtils {
     @Nullable
     public static Integer internalEventToProto(@Nullable InternalEvents internalEvents) {
         return internalEvents == null ? null : INTERNAL_TO_PROTOBUF_TYPES_MAPPING.get(internalEvents);
-    }
-
-    private static int sourceToProto(@NonNull ReferrerInfo.Source source) {
-        switch (source) {
-            case GP:
-                return Referrer.GP;
-            case HMS:
-                return Referrer.HMS;
-            case RS:
-                return Referrer.RS;
-            default:
-                return Referrer.UNKNOWN;
-        }
     }
 
 }

@@ -145,7 +145,7 @@ internal class EventBatchWriter(
                     "Event saved to db",
                     dbEventModel.type,
                     dbEventModel.description.name,
-                    dbEventModel.description.value
+                    dbEventModel.description.getValueForLog()
                 )
             )
         }

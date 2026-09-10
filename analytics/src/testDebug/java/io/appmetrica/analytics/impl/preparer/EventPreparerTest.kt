@@ -22,7 +22,6 @@ import org.mockito.kotlin.whenever
 internal class EventPreparerTest : CommonTest() {
 
     private val name = "name"
-    private val value = "value"
     private val environment = "event environment"
     private val type = InternalEvents.EVENT_TYPE_ALIVE
     private val numberInSession = 6L
@@ -68,7 +67,6 @@ internal class EventPreparerTest : CommonTest() {
     @Before
     fun setUp() {
         whenever(eventFromDbModel.name).thenReturn(name)
-        whenever(eventFromDbModel.value).thenReturn(value)
         whenever(eventFromDbModel.index).thenReturn(numberInSession)
         whenever(eventFromDbModel.globalNumber).thenReturn(globalNumber)
         whenever(eventFromDbModel.numberOfType).thenReturn(numberOfType)

@@ -13,7 +13,19 @@ internal class EventFromDbModel(cv: ContentValues) {
     private val dbEventModel = DbEventModelConverter().toModel(cv)
 
     val name: String? = dbEventModel.description.name
-    var value: String? = dbEventModel.description.value
+
+    /**
+     * Present when the event was stored in deprecated string field 3.
+     * Cleared after [updateValue].
+     */
+    private var legacyStringValue: String? = dbEventModel.description.value
+
+    /**
+     * Canonical payload from [DbEventModel.Description.valueBytes],
+     * or UTF-8 bytes written via [updateValue].
+     */
+    private var valueBytes: ByteArray? = dbEventModel.description.valueBytes
+
     val index: Long? = dbEventModel.numberInSession
     val globalNumber: Long? = dbEventModel.globalNumber
     val numberOfType: Long? = dbEventModel.description.numberOfType
@@ -37,7 +49,21 @@ internal class EventFromDbModel(cv: ContentValues) {
     val appEnvironmentRevision: Long = dbEventModel.description.appEnvironmentRevision ?: 0L
     val valueProtocolVersion: Int? = dbEventModel.description.valueProtocolVersion
 
+    /**
+     * Legacy-first dual-read: prefers deprecated string field, else [valueBytes], else empty.
+     */
+    fun <T> foldValue(
+        onLegacy: (String) -> T,
+        onBytes: (ByteArray) -> T,
+        onEmpty: () -> T,
+    ): T {
+        legacyStringValue?.let { return onLegacy(it) }
+        valueBytes?.let { return onBytes(it) }
+        return onEmpty()
+    }
+
     fun updateValue(newValue: String?) {
-        value = newValue
+        legacyStringValue = null
+        valueBytes = newValue?.toByteArray(Charsets.UTF_8)
     }
 }

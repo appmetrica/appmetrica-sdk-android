@@ -30,6 +30,7 @@ message SessionDescription {
 message EventDescription {
   optional int32 custom_type = 1 [default = -1];
   optional string name = 2 [default = ""];
+  // Deprecated: legacy pending events only. New events write value_bytes.
   optional string value = 3 [default = ""];
   optional int64 number_of_type = 4 [default = -1];
   optional Location location_info = 5;
@@ -47,4 +48,5 @@ message EventDescription {
   optional int32 open_id = 17 [default = -1];
   optional bytes extras = 18 [default = ""];
   optional uint32 value_protocol_version = 19 [default = 1];
+  optional bytes value_bytes = 20 [default = ""];
 }

@@ -29,10 +29,21 @@ public class BytesValueComposerTest extends CommonTest {
     }
 
     @Test
-    public void testGetValue() {
+    public void testGetValueFromLegacyString() {
         final byte[] expected = new byte[]{1, 2, 3, 4};
         DbProto.EventDescription eventDescription = new DbProto.EventDescription();
         eventDescription.value = new String(Base64.encode(expected, Base64.DEFAULT));
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
+        EventFromDbModel event = new EventFromDbModel(cv);
+        assertThat(mBytesValueComposer.getValue(event, mConfig)).isEqualTo(expected);
+    }
+
+    @Test
+    public void testGetValueFromValueBytes() {
+        final byte[] expected = new byte[]{1, 2, 3, 4};
+        DbProto.EventDescription eventDescription = new DbProto.EventDescription();
+        eventDescription.valueBytes = expected;
         ContentValues cv = new ContentValues();
         cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
         EventFromDbModel event = new EventFromDbModel(cv);

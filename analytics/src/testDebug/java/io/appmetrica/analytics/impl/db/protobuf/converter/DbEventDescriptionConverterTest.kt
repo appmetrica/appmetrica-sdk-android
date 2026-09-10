@@ -18,6 +18,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     private val customType = 42
     private val name = "name string"
     private val value = "value string"
+    private val valueBytes = "value bytes".toByteArray()
     private val numberOfType = 4242L
     private val locationInfo: DbLocationModel = mock()
     private val errorEnvironment = "error environment string"
@@ -55,11 +56,12 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     )
 
     @Test
-    fun fromModel() {
+    fun fromModelWithValueBytesOnly() {
         val model = DbEventModel.Description(
             customType,
             name,
-            value,
+            null,
+            valueBytes,
             numberOfType,
             locationInfo,
             errorEnvironment,
@@ -80,7 +82,8 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
         ProtoObjectPropertyAssertions(proto)
             .checkField("customType", customType)
             .checkField("name", name)
-            .checkField("value", value)
+            .checkField("value", "")
+            .checkField("valueBytes", valueBytes)
             .checkField("numberOfType", numberOfType)
             .checkField("locationInfo", locationInfoProto)
             .checkField("errorEnvironment", errorEnvironment)
@@ -100,16 +103,45 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     }
 
     @Test
+    fun fromModelWithLegacyValueOnly() {
+        val model = DbEventModel.Description(
+            customType,
+            name,
+            value,
+            null,
+            numberOfType,
+            locationInfo,
+            errorEnvironment,
+            appEnvironment,
+            appEnvironmentRevision,
+            truncated,
+            connectionType,
+            cellularConnectionType,
+            profileId,
+            firstOccurrenceStatus,
+            source,
+            attributionIdChanged,
+            openId,
+            extras,
+            valueProtocolVersion
+        )
+        val proto = converter.fromModel(model)
+        assertThat(proto.value).isEqualTo(value)
+        assertThat(proto.valueBytes).isEmpty()
+    }
+
+    @Test
     fun fromModelIfNullFields() {
         val model = DbEventModel.Description(
             null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null
         )
         val proto = converter.fromModel(model)
         ProtoObjectPropertyAssertions(proto)
             .checkField("customType", -1)
             .checkField("name", "")
             .checkField("value", "")
+            .checkField("valueBytes", "".toByteArray())
             .checkField("numberOfType", -1L)
             .checkFieldIsNull("locationInfo")
             .checkField("errorEnvironment", "")
@@ -134,6 +166,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.customType = customType
             it.name = name
             it.value = value
+            it.valueBytes = valueBytes
             it.numberOfType = numberOfType
             it.locationInfo = locationInfoProto
             it.errorEnvironment = errorEnvironment
@@ -155,6 +188,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             .checkField("customType", customType)
             .checkField("name", name)
             .checkField("value", value)
+            .checkField("valueBytes", valueBytes)
             .checkField("numberOfType", numberOfType)
             .checkField("locationInfo", locationInfo)
             .checkField("errorEnvironment", errorEnvironment)
@@ -182,6 +216,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "customType",
                 "name",
                 "value",
+                "valueBytes",
                 "numberOfType",
                 "locationInfo",
                 "errorEnvironment",
@@ -206,6 +241,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
             it.customType = -1
             it.name = ""
             it.value = ""
+            it.valueBytes = "".toByteArray()
             it.numberOfType = -1
             it.locationInfo = null
             it.errorEnvironment = ""
@@ -228,6 +264,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 "customType",
                 "name",
                 "value",
+                "valueBytes",
                 "numberOfType",
                 "locationInfo",
                 "errorEnvironment",
@@ -247,7 +284,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
     }
 
     @Test
-    fun fromModelForIllFormedValue() {
+    fun fromModelForIllFormedLegacyValue() {
         val invalidFormattedStringWithUnpairedSurrogate = "\uD83D"
         val validValuePart = "Value with ill-formed part"
         val proto = converter.fromModel(
@@ -255,6 +292,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 customType,
                 name,
                 validValuePart + invalidFormattedStringWithUnpairedSurrogate,
+                null,
                 numberOfType,
                 locationInfo,
                 errorEnvironment,
@@ -284,6 +322,7 @@ internal class DbEventDescriptionConverterTest : CommonTest() {
                 customType,
                 validValuePart + invalidFormattedStringWithUnpairedSurrogate,
                 value,
+                null,
                 numberOfType,
                 locationInfo,
                 errorEnvironment,

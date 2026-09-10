@@ -61,7 +61,7 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
 
         assertThat(mComposer.getValue(new EventFromDbModel(cv), mConfig)).isEqualTo(mExpectedBytes);
         verify(mStringValueComposer).getValue(mEventCaptor.capture(), same(mConfig));
-        JSONAssert.assertEquals(new JSONObject().put("key", "value").toString(), mEventCaptor.getValue().getValue(), true);
+        JSONAssert.assertEquals(new JSONObject().put("key", "value").toString(), asUtf8String(mEventCaptor.getValue()), true);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
         when(mConfig.needToSendPreloadInfo()).thenReturn(false);
         assertThat(mComposer.getValue(new EventFromDbModel(cv), mConfig)).isEqualTo(mExpectedBytes);
         verify(mStringValueComposer).getValue(mEventCaptor.capture(), same(mConfig));
-        JSONAssert.assertEquals(value, mEventCaptor.getValue().getValue(), true);
+        JSONAssert.assertEquals(value, asUtf8String(mEventCaptor.getValue()), true);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
         when(mConfig.needToSendPreloadInfo()).thenReturn(false);
         assertThat(mComposer.getValue(new EventFromDbModel(cv), mConfig)).isEqualTo(mExpectedBytes);
         verify(mStringValueComposer).getValue(mEventCaptor.capture(), same(mConfig));
-        assertThat(mEventCaptor.getValue().getValue()).isEqualTo(value);
+        assertThat(asUtf8String(mEventCaptor.getValue())).isEqualTo(value);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
         when(mConfig.needToSendPreloadInfo()).thenReturn(false);
         assertThat(mComposer.getValue(new EventFromDbModel(cv), mConfig)).isEqualTo(mExpectedBytes);
         verify(mStringValueComposer).getValue(mEventCaptor.capture(), same(mConfig));
-        assertThat(mEventCaptor.getValue().getValue()).isNull();
+        assertThat(asUtf8String(mEventCaptor.getValue())).isNull();
     }
 
     @Test
@@ -110,6 +110,14 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
         when(mConfig.needToSendPreloadInfo()).thenReturn(false);
         assertThat(mComposer.getValue(new EventFromDbModel(cv), mConfig)).isEqualTo(mExpectedBytes);
         verify(mStringValueComposer).getValue(mEventCaptor.capture(), same(mConfig));
-        assertThat(mEventCaptor.getValue().getValue()).isNull();
+        assertThat(asUtf8String(mEventCaptor.getValue())).isNull();
+    }
+
+    private static String asUtf8String(EventFromDbModel event) {
+        return event.foldValue(
+            legacy -> legacy,
+            bytes -> new String(bytes, java.nio.charset.StandardCharsets.UTF_8),
+            () -> null
+        );
     }
 }

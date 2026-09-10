@@ -231,6 +231,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                     customType = cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyCustomType)),
                     name = cursor.getString(cursor.getColumnIndexOrThrow(oldKeyName)),
                     value = cursor.getString(cursor.getColumnIndexOrThrow(oldKeyValue)),
+                    valueBytes = null,
                     numberOfType = cursor.getLong(cursor.getColumnIndexOrThrow(oldKeyNumberOfType)),
                     locationInfo = null,
                     errorEnvironment = cursor.getString(cursor.getColumnIndexOrThrow(oldKeyErrorEnvironment)),

@@ -421,6 +421,7 @@ internal class EventMigratorToV112CommonCasesTest(
                         .checkField("customType", expectedRecord.customType)
                         .checkField("name", expectedRecord.name)
                         .checkField("value", expectedRecord.value)
+                        .checkField("valueBytes", null as ByteArray?)
                         .checkField("numberOfType", expectedRecord.numberOfType)
                         .checkField("errorEnvironment", expectedRecord.errorEnvironment)
                         .checkField("appEnvironment", expectedRecord.appEnvironment)

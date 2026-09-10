@@ -551,7 +551,7 @@ public class DatabaseHelper {
                     msg,
                     dbEventModel.getType(),
                     dbEventModel.getDescription().getName(),
-                    dbEventModel.getDescription().getValue()
+                    dbEventModel.getDescription().getValueForLog()
                 )
             );
         }

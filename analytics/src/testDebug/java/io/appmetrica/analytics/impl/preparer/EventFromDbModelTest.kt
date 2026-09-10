@@ -24,6 +24,7 @@ internal class EventFromDbModelTest : CommonTest() {
     private val customType = 41
     private val name = "some name"
     private val value = "some value"
+    private val valueBytes = "raw bytes".toByteArray()
     private val time = 83274576L
     private val numberInSession = 11L
     private val globalNumber = 57L
@@ -63,6 +64,7 @@ internal class EventFromDbModelTest : CommonTest() {
         whenever(modelDescription.customType).thenReturn(customType)
         whenever(modelDescription.name).thenReturn(name)
         whenever(modelDescription.value).thenReturn(value)
+        whenever(modelDescription.valueBytes).thenReturn(null)
         whenever(modelDescription.numberOfType).thenReturn(numberOfType)
         whenever(modelDescription.locationInfo).thenReturn(locationInfo)
         whenever(modelDescription.errorEnvironment).thenReturn(eventEnvironment)
@@ -86,9 +88,8 @@ internal class EventFromDbModelTest : CommonTest() {
 
         ObjectPropertyAssertions(event)
             .withFinalFieldOnly(false)
-            .withIgnoredFields("dbEventModel")
+            .withIgnoredFields("dbEventModel", "legacyStringValue", "valueBytes")
             .checkField("name", name)
-            .checkField("value", value)
             .checkField("index", numberInSession)
             .checkField("globalNumber", globalNumber)
             .checkField("numberOfType", numberOfType)
@@ -113,6 +114,51 @@ internal class EventFromDbModelTest : CommonTest() {
     }
 
     @Test
+    fun foldValuePrefersLegacyString() {
+        val event = EventFromDbModel(contentValues)
+
+        val result = event.foldValue(
+            onLegacy = { "legacy:$it" },
+            onBytes = { "bytes" },
+            onEmpty = { "empty" },
+        )
+
+        assertThat(result).isEqualTo("legacy:$value")
+    }
+
+    @Test
+    fun foldValueUsesValueBytesWhenNoLegacyString() {
+        whenever(modelDescription.value).thenReturn(null)
+        whenever(modelDescription.valueBytes).thenReturn(valueBytes)
+
+        val event = EventFromDbModel(contentValues)
+
+        val result = event.foldValue(
+            onLegacy = { "legacy" },
+            onBytes = { it },
+            onEmpty = { ByteArray(0) },
+        )
+
+        assertThat(result).isEqualTo(valueBytes)
+    }
+
+    @Test
+    fun foldValueEmpty() {
+        whenever(modelDescription.value).thenReturn(null)
+        whenever(modelDescription.valueBytes).thenReturn(null)
+
+        val event = EventFromDbModel(contentValues)
+
+        val result = event.foldValue(
+            onLegacy = { "legacy" },
+            onBytes = { "bytes" },
+            onEmpty = { "empty" },
+        )
+
+        assertThat(result).isEqualTo("empty")
+    }
+
+    @Test
     fun constructorIfNoFirstOccurrenceStatus() {
         whenever(modelDescription.firstOccurrenceStatus).thenReturn(null)
 
@@ -132,10 +178,15 @@ internal class EventFromDbModelTest : CommonTest() {
 
     @Test
     fun updateValue() {
-        val value = "new value"
         val event = EventFromDbModel(contentValues)
-        event.updateValue(value)
+        event.updateValue("new value")
 
-        assertThat(event.value).isEqualTo(value)
+        val result = event.foldValue(
+            onLegacy = { "legacy" },
+            onBytes = { String(it, Charsets.UTF_8) },
+            onEmpty = { "empty" },
+        )
+
+        assertThat(result).isEqualTo("new value")
     }
 }

@@ -89,6 +89,7 @@ public class EventToPreparerSpecialCasesTest extends CommonTest {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_SEND_REFERRER);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(eventPreparer.getNameComposer()).isExactlyInstanceOf(SameNameComposer.class);
+        softly.assertThat(eventPreparer.getValueComposer()).isExactlyInstanceOf(ReferrerValueComposer.class);
         softly.assertThat(eventPreparer.getEventTypeComposer()).isExactlyInstanceOf(SameEventTypeComposer.class);
         softly.assertThat(eventPreparer.getEncodingTypeProvider()).isExactlyInstanceOf(NoneEncodingTypeProvider.class);
 
@@ -114,6 +115,7 @@ public class EventToPreparerSpecialCasesTest extends CommonTest {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_SEND_REFERRER);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(eventPreparer.getNameComposer()).isExactlyInstanceOf(SameNameComposer.class);
+        softly.assertThat(eventPreparer.getValueComposer()).isExactlyInstanceOf(ReferrerValueComposer.class);
         softly.assertThat(eventPreparer.getEventTypeComposer()).isExactlyInstanceOf(SameEventTypeComposer.class);
         softly.assertThat(eventPreparer.getEncodingTypeProvider()).isExactlyInstanceOf(NoneEncodingTypeProvider.class);
 
@@ -131,6 +133,7 @@ public class EventToPreparerSpecialCasesTest extends CommonTest {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_SEND_REFERRER);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(eventPreparer.getNameComposer()).isExactlyInstanceOf(SameNameComposer.class);
+        softly.assertThat(eventPreparer.getValueComposer()).isExactlyInstanceOf(ReferrerValueComposer.class);
         softly.assertThat(eventPreparer.getEventTypeComposer()).isExactlyInstanceOf(SameEventTypeComposer.class);
         softly.assertThat(eventPreparer.getEncodingTypeProvider()).isExactlyInstanceOf(NoneEncodingTypeProvider.class);
         EventFromDbModel event = new EventFromDbModel(new ContentValues());
