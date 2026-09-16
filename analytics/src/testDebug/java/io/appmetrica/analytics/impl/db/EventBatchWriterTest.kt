@@ -35,8 +35,11 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.thread
 
 internal class EventBatchWriterTest : CommonTest() {
 
@@ -143,13 +146,13 @@ internal class EventBatchWriterTest : CommonTest() {
     }
 
     @Test
-    fun `writeEvents deletes excessive events adjusts rowCount and notifies listeners when over limit`() {
+    fun `overflow deletes events updates rowCount notifies listeners and requests cleanup`() {
         rowCount.set(100)
         whenever(reportRequestConfig.maxEventsInDbCount).thenReturn(100L)
         whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
             .thenReturn(DatabaseCleaner.DeletionInfo(null, 10))
 
-        writer.writeEvents(listOf(ContentValues()))
+        val cleanupNeeded = writer.writeEvents(listOf(ContentValues()))
 
         verify(databaseCleaner).cleanEvents(
             eq(database), eq(Constants.EventsTable.TABLE_NAME), any(), isNull(),
@@ -157,22 +160,111 @@ internal class EventBatchWriterTest : CommonTest() {
         )
         assertThat(rowCount.get()).isEqualTo(91)
         verify(listener).onEventsUpdated()
+        assertThat(cleanupNeeded).isTrue()
     }
 
     @Test
-    fun `writeEvents deletes empty sessions after overflow cleanup`() {
+    fun `writeEvents does not request cleanup when no events were deleted`() {
+        rowCount.set(100)
+        whenever(reportRequestConfig.maxEventsInDbCount).thenReturn(100L)
+        whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
+            .thenReturn(DatabaseCleaner.DeletionInfo(null, 0))
+
+        val cleanupNeeded = writer.writeEvents(listOf(ContentValues()))
+
+        assertThat(cleanupNeeded).isFalse()
+        assertThat(rowCount.get()).isEqualTo(101)
+        verify(listener, never()).onEventsUpdated()
+        verify(database, never()).delete(
+            eq(Constants.SessionTable.TABLE_NAME),
+            eq(Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS),
+            any()
+        )
+    }
+
+    @Test
+    fun `writeEvents does not request cleanup when overflow cleanup fails`() {
+        rowCount.set(100)
+        whenever(reportRequestConfig.maxEventsInDbCount).thenReturn(100L)
+        whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
+            .thenThrow(RuntimeException("cleanup failed"))
+
+        val cleanupNeeded = writer.writeEvents(listOf(ContentValues()))
+
+        assertThat(cleanupNeeded).isFalse()
+        assertThat(rowCount.get()).isEqualTo(101)
+        verify(listener, never()).onEventsUpdated()
+    }
+
+    @Test
+    fun `empty sessions cleanup uses fresh threshold while holding session monitor and database lock`() {
+        whenever(database.delete(any(), any(), any())).thenAnswer {
+            assertThat(Thread.holdsLock(sessionManager)).isTrue()
+            assertThat(lock.isWriteLockedByCurrentThread).isTrue()
+            0
+        }
         rowCount.set(100)
         whenever(reportRequestConfig.maxEventsInDbCount).thenReturn(100L)
         whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
             .thenReturn(DatabaseCleaner.DeletionInfo(null, 10))
 
-        writer.writeEvents(listOf(ContentValues()))
+        assertThat(writer.writeEvents(listOf(ContentValues()))).isTrue()
+        verify(sessionManager, never()).thresholdSessionIdForActualSessions
+        val freshThreshold = threshold - 1
+        whenever(sessionManager.thresholdSessionIdForActualSessions).thenReturn(freshThreshold)
+
+        writer.deleteEmptyOverflowedSessions()
 
         verify(database).delete(
             eq(Constants.SessionTable.TABLE_NAME),
             eq(Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS),
-            eq(arrayOf(threshold.toString()))
+            eq(arrayOf(freshThreshold.toString()))
         )
+    }
+
+    @Test
+    fun `overflow event transaction finishes while session manager is busy`() {
+        val realSessionManager = SessionManagerStateMachine(component, mock(), mock(), mock(), mock())
+        whenever(component.sessionManager).thenReturn(realSessionManager)
+        rowCount.set(dbLimit)
+        val overflowReached = CountDownLatch(1)
+        val writeFinished = CountDownLatch(1)
+        whenever(databaseCleaner.cleanEvents(any(), any(), any(), anyOrNull(), any(), any(), any()))
+            .thenAnswer {
+                overflowReached.countDown()
+                DatabaseCleaner.DeletionInfo(null, 10)
+            }
+        val report: ContentValues = mock()
+        val writerThread = thread(start = false, name = "overflow-contention-test") {
+            try {
+                writer.writeEvents(listOf(report))
+            } finally {
+                writeFinished.countDown()
+            }
+        }
+
+        val finishedWithoutSessionMonitor: Boolean
+        try {
+            finishedWithoutSessionMonitor = synchronized(realSessionManager) {
+                writerThread.start()
+                assertThat(overflowReached.await(5, TimeUnit.SECONDS)).isTrue()
+                writeFinished.await(5, TimeUnit.SECONDS).also { finished ->
+                    if (!finished) {
+                        println(writerThread.stackTrace.joinToString("\n"))
+                    }
+                }
+            }
+        } finally {
+            writerThread.join(TimeUnit.SECONDS.toMillis(5))
+        }
+
+        assertThat(writerThread.isAlive).isFalse()
+        assertThat(finishedWithoutSessionMonitor)
+            .describedAs("Event transaction must not wait for the session manager monitor")
+            .isTrue()
+        verify(database).setTransactionSuccessful()
+        verify(database).endTransaction()
+        assertThat(lock.isWriteLocked).isFalse()
     }
 
     @Test

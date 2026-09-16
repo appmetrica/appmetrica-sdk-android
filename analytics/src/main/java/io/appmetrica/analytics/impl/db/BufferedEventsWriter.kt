@@ -35,7 +35,14 @@ internal class BufferedEventsWriter(
         processor = BatchProcessor { events ->
             try {
                 DebugLogger.info(tag, "Writing ${events.size} events")
-                writer.writeEvents(events)
+                val cleanupNeeded = writer.writeEvents(events)
+                if (cleanupNeeded) {
+                    try {
+                        executor.execute { writer.deleteEmptyOverflowedSessions() }
+                    } catch (e: Throwable) {
+                        DebugLogger.error(tag, e, "Unable to schedule empty sessions cleanup")
+                    }
+                }
                 writer.notifyListeners(events)
             } catch (e: Exception) {
                 DebugLogger.error(tag, e, "Error writing ${events.size} events")

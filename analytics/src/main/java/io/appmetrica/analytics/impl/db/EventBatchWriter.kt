@@ -36,12 +36,14 @@ internal class EventBatchWriter(
      * This method is thread-safe and handles database overflow by deleting excessive events.
      *
      * @param reports List of events to write
+     * @return true when a successful overflow cleanup requests separate empty sessions cleanup
      */
-    fun writeEvents(reports: List<ContentValues>) {
-        if (reports.isEmpty()) return
+    fun writeEvents(reports: List<ContentValues>): Boolean {
+        if (reports.isEmpty()) return false
 
         val dbLimit = component.freshReportRequestConfig.maxEventsInDbCount
         var wDatabase: SQLiteDatabase? = null
+        var cleanupNeeded = false
         writeLock.withLock {
             try {
                 wDatabase = storage.writableDatabase
@@ -58,19 +60,22 @@ internal class EventBatchWriter(
                     val rows = rowCount.get()
                     DebugLogger.info(tag, "report saved. Row count $rows; dbLimit: $dbLimit;")
 
-                    var deletedRowsCount = 0
+                    var deletedRowsCount: Int? = null
                     if (rows > dbLimit) {
                         deletedRowsCount = deleteExcessiveReports(db)
-                        val actualEventsCount = rowCount.addAndGet(-deletedRowsCount.toLong())
-                        DebugLogger.info(
-                            tag,
-                            "Reports table cleared. $deletedRowsCount rows deleted. Row count: $actualEventsCount"
-                        )
+                        deletedRowsCount?.let { count ->
+                            val actualEventsCount = rowCount.addAndGet(-count.toLong())
+                            DebugLogger.info(
+                                tag,
+                                "Reports table cleared. $count rows deleted. Row count: $actualEventsCount"
+                            )
+                        }
                     }
 
                     db.setTransactionSuccessful()
+                    cleanupNeeded = deletedRowsCount != null && deletedRowsCount != 0
 
-                    if (deletedRowsCount != 0) {
+                    if (deletedRowsCount != null && deletedRowsCount != 0) {
                         for (listener in eventListeners) {
                             listener.onEventsUpdated()
                         }
@@ -82,6 +87,7 @@ internal class EventBatchWriter(
                 Utils.endTransaction(wDatabase)
             }
         }
+        return cleanupNeeded
     }
 
     /**
@@ -97,7 +103,7 @@ internal class EventBatchWriter(
         component.eventTrigger.trigger()
     }
 
-    private fun deleteExcessiveReports(db: SQLiteDatabase): Int {
+    private fun deleteExcessiveReports(db: SQLiteDatabase): Int? {
         return try {
             val percentToDelete = 10
             val whereClause = String.format(
@@ -115,23 +121,27 @@ internal class EventBatchWriter(
                 component.componentId.apiKey,
                 true
             ).mDeletedRowsCount
-            deleteEmptyOverflowedSessions(db)
             deletedEventsCount
         } catch (e: Throwable) {
             DebugLogger.error(tag, e, "Something was wrong while removing excessive reports from db")
             AppMetricaSelfReportFacade.getReporter().reportError("deleteExcessiveReports exception", e)
-            0
+            null
         }
     }
 
-    private fun deleteEmptyOverflowedSessions(db: SQLiteDatabase) {
+    fun deleteEmptyOverflowedSessions() {
         try {
-            val threshold = component.sessionManager.thresholdSessionIdForActualSessions
-            db.delete(
-                Constants.SessionTable.TABLE_NAME,
-                Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS,
-                arrayOf(threshold.toString())
-            )
+            val sessionManager = component.sessionManager
+            synchronized(sessionManager) {
+                writeLock.withLock {
+                    val threshold = sessionManager.thresholdSessionIdForActualSessions
+                    storage.writableDatabase?.delete(
+                        Constants.SessionTable.TABLE_NAME,
+                        Constants.SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS,
+                        arrayOf(threshold.toString())
+                    )
+                }
+            }
         } catch (e: Throwable) {
             DebugLogger.error(tag, e, "Something was wrong while removing empty overflowed sessions from db")
         }

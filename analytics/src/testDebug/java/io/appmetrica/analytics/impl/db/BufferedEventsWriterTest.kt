@@ -12,6 +12,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
@@ -26,6 +27,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
     private val delayMillis = 1000L
     private val runnableCaptor = argumentCaptor<Runnable>()
+    private val cleanupRunnableCaptor = argumentCaptor<Runnable>()
     private val eventsCaptor = argumentCaptor<List<ContentValues>>()
 
     @get:Rule
@@ -136,6 +138,52 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         verify(writer).writeEvents(eventsCaptor.capture())
         assertThat(eventsCaptor.firstValue).hasSize(3)
+    }
+
+    @Test
+    fun `overflow cleanup is queued before listeners and does not run inline`() {
+        whenever(writer.writeEvents(any())).thenReturn(true)
+        val event = ContentValues()
+
+        bufferedWriter.addEvent(event, isUrgent = true)
+
+        inOrder(writer, executor) {
+            verify(writer).writeEvents(any())
+            verify(executor).execute(cleanupRunnableCaptor.capture())
+            verify(writer).notifyListeners(any())
+        }
+        verify(writer, never()).deleteEmptyOverflowedSessions()
+
+        cleanupRunnableCaptor.firstValue.run()
+
+        verify(writer).deleteEmptyOverflowedSessions()
+    }
+
+    @Test
+    fun `deferred overflow cleanup is queued and does not run inline`() {
+        whenever(writer.writeEvents(any())).thenReturn(true)
+        bufferedWriter.addEvent(ContentValues(), isUrgent = false)
+
+        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        runnableCaptor.firstValue.run()
+
+        verify(executor).execute(cleanupRunnableCaptor.capture())
+        verify(writer, never()).deleteEmptyOverflowedSessions()
+
+        cleanupRunnableCaptor.firstValue.run()
+
+        verify(writer).deleteEmptyOverflowedSessions()
+    }
+
+    @Test
+    fun `cleanup scheduling failure does not skip listener notification`() {
+        whenever(writer.writeEvents(any())).thenReturn(true)
+        doThrow(RuntimeException("executor is stopped")).whenever(executor).execute(any())
+
+        bufferedWriter.addEvent(ContentValues(), isUrgent = true)
+
+        verify(writer).notifyListeners(any())
+        verify(writer, never()).deleteEmptyOverflowedSessions()
     }
 
     @Test

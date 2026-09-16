@@ -176,7 +176,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    public SessionState createBackgroundSessionFromPast(
+    public synchronized SessionState createBackgroundSessionFromPast(
         final long reportElapsedRealtime,
         final long reportTimestampSeconds,
         @NonNull SessionRequestParams sessionRequestParams
@@ -357,7 +357,7 @@ public class SessionManagerStateMachine {
     }
 
     @Nullable
-    public SessionState peekCurrentSessionState(@NonNull CoreServiceEvent serviceEvent) {
+    public synchronized SessionState peekCurrentSessionState(@NonNull CoreServiceEvent serviceEvent) {
         Session lastSession = loadLastSession(serviceEvent);
         DebugLogger.INSTANCE.info(
             TAG,
