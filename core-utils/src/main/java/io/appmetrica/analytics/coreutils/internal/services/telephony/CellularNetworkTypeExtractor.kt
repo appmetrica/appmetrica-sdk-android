@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.services.telephony
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
@@ -27,7 +28,13 @@ class CellularNetworkTypeExtractor(val context: Context) {
     @TargetApi(Build.VERSION_CODES.N)
     @DoNotInline
     private class ExtractorN : FunctionWithThrowable<TelephonyManager, Int?> {
-        @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
+        @SuppressLint("InlinedApi")
+        @RequiresPermission(
+            anyOf = [
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_BASIC_PHONE_STATE
+            ]
+        )
         override fun apply(input: TelephonyManager): Int = input.dataNetworkType
     }
 
@@ -38,7 +45,13 @@ class CellularNetworkTypeExtractor(val context: Context) {
             ExtractorPreN()
         }
 
-    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
+    @SuppressLint("InlinedApi")
+    @RequiresPermission(
+        anyOf = [
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_BASIC_PHONE_STATE
+        ]
+    )
     fun getNetworkType(): String = CellularNetworkTypeConverter.convert(
         SystemServiceUtils.accessSystemServiceByNameSafely(
             context,

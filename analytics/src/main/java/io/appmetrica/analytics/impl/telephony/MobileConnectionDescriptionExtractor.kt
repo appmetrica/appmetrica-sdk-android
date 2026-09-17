@@ -7,6 +7,7 @@ import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 import io.appmetrica.analytics.coreutils.internal.permission.AlwaysAllowPermissionStrategy
+import io.appmetrica.analytics.coreutils.internal.permission.AnyOfPermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -19,13 +20,17 @@ internal class MobileConnectionDescriptionExtractor(
 
     private val tag = "[MobileConnectionDescriptionExtractor]"
 
-    private val networkTypePermissionStrategy = if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)) {
-        SinglePermissionStrategy(
+    private val networkTypePermissionStrategy = when {
+        AndroidUtils.isApiAchieved(Build.VERSION_CODES.TIRAMISU) -> AnyOfPermissionStrategy(
+            GlobalServiceLocator.getInstance().generalPermissionExtractor,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_BASIC_PHONE_STATE
+        )
+        AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q) -> SinglePermissionStrategy(
             GlobalServiceLocator.getInstance().generalPermissionExtractor,
             Manifest.permission.READ_PHONE_STATE
         )
-    } else {
-        AlwaysAllowPermissionStrategy()
+        else -> AlwaysAllowPermissionStrategy()
     }
 
     private val cellularNetworkTypeExtractor = CellularNetworkTypeExtractor(context)

@@ -179,6 +179,34 @@ internal class MobileConnectionDescriptionExtractorTest : CommonTest() {
         verify(cachedData).data = result
     }
 
+    @Test
+    fun `extract on Tiramisu with read basic phone state permission only`() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.TIRAMISU)).thenReturn(true)
+        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE))
+            .thenReturn(false)
+        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_BASIC_PHONE_STATE))
+            .thenReturn(true)
+        val result = MobileConnectionDescriptionExtractor(context).extract()
+        ObjectPropertyAssertions(result)
+            .checkField("networkType", networkTypeString)
+            .checkAll()
+        verify(cachedData).data = result
+    }
+
+    @Test
+    fun `extract on Tiramisu without phone state permissions`() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.TIRAMISU)).thenReturn(true)
+        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE))
+            .thenReturn(false)
+        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_BASIC_PHONE_STATE))
+            .thenReturn(false)
+        val result = MobileConnectionDescriptionExtractor(context).extract()
+        ObjectPropertyAssertions(result)
+            .checkField("networkType", "unknown")
+            .checkAll()
+        verify(cachedData).data = result
+    }
+
     private fun cachedData(): CachedDataProvider.CachedData<MobileConnectionDescription> {
         assertThat(cachedDataMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(cachedDataMockedConstructionRule.argumentInterceptor.flatArguments())
