@@ -5,10 +5,13 @@
     <!-- To obtain Google Advertising Identifier on Android 12 and higher -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
-    <!-- To obtain Yandex Advertising Identifier on Android 11 and higher -->
+    <!-- To obtain Yandex and Huawei Advertising Identifiers on Android 11 and higher -->
     <queries>
         <intent>
             <action android:name="com.yandex.android.advid.IDENTIFIER_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="com.uodis.opendevice.OPENIDS_SERVICE" />
         </intent>
     </queries>
 
