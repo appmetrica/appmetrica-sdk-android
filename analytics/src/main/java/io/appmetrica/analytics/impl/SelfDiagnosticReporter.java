@@ -48,7 +48,7 @@ public class SelfDiagnosticReporter {
         mSelfProcessReporter = selfProcessReporter;
     }
 
-    public void reportEvent(@NonNull CounterReport report) {
+    public void reportEvent(@NonNull CoreClientEvent report) {
         if (mReporterType != null) {
             try {
                 CounterConfiguration counterConfiguration = new CounterConfiguration(mApiKey);
@@ -56,7 +56,10 @@ public class SelfDiagnosticReporter {
                 mSelfProcessReporter.reportData(
                     AppMetricaServiceDataReporter.TYPE_CORE,
                     EventIpcCodec.toBundle(
-                        EventIpcData.fromCounterReport(report),
+                        EventIpcData.fromCoreClientEvent(
+                            LoggerStorage.getOrCreatePublicLogger(mApiKey),
+                            report
+                        ),
                         new ReporterEnvironment(
                             new ProcessConfiguration(mContext, null),
                             counterConfiguration,

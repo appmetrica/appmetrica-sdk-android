@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.ClientServiceLocator
-import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
@@ -72,7 +71,7 @@ internal class CrashCallableTest : CommonTest() {
         whenever(reporterEnvironment.processConfiguration).thenReturn(processConfiguration)
         whenever(reporterEnvironment.reporterConfiguration).thenReturn(counterConfiguration)
 
-        whenever(reportToSend.report).thenReturn(CounterReport())
+        whenever(reportToSend.report).thenReturn(mock())
         whenever(reportToSend.environment).thenReturn(reporterEnvironment)
 
         AppMetricaUncaughtExceptionHandler.reset()

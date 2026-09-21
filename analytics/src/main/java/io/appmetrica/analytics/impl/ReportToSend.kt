@@ -1,15 +1,14 @@
 package io.appmetrica.analytics.impl
 
-import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
 
 internal class ReportToSend(
-    val report: CounterReport,
+    val report: TrimmedCoreClientEvent,
     val isCrashReport: Boolean,
     val serviceDataReporterType: Int,
-    val trimmedFields: HashMap<TrimmedField, Int>?,
     val environment: ReporterEnvironment
 ) {
 
@@ -18,33 +17,27 @@ internal class ReportToSend(
             "report=$report, " +
             "serviceDataReporterType=$serviceDataReporterType, " +
             "environment=$environment, " +
-            "isCrashReport=$isCrashReport, " +
-            "trimmedFields=$trimmedFields" +
+            "isCrashReport=$isCrashReport" +
             ")"
     }
 
     companion object {
 
         @JvmStatic
-        fun newBuilder(report: CounterReport, environment: ReporterEnvironment) =
+        fun newBuilder(report: CoreClientEvent, environment: ReporterEnvironment) =
             Builder(report, environment)
     }
 
     internal class Builder(
-        private val report: CounterReport,
+        private val report: CoreClientEvent,
         private val environment: ReporterEnvironment
     ) {
 
         private var isCrashReport = false
         private var serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE
-        private var trimmedFields: HashMap<TrimmedField, Int>? = null
 
         fun asCrash(isCrash: Boolean) = apply {
             this.isCrashReport = isCrash
-        }
-
-        fun withTrimmedFields(trimmedFields: HashMap<TrimmedField, Int>) = apply {
-            this.trimmedFields = trimmedFields
         }
 
         fun withServiceDataReporterType(type: Int) = apply {
@@ -52,10 +45,12 @@ internal class ReportToSend(
         }
 
         fun build() = ReportToSend(
-            report,
+            TrimmedCoreClientEvent(
+                LoggerStorage.getOrCreatePublicLogger(environment.reporterConfiguration.apiKey),
+                report
+            ),
             isCrashReport,
             serviceDataReporterType,
-            trimmedFields,
             ReporterEnvironment(
                 ProcessConfiguration(environment.processConfiguration),
                 CounterConfiguration(environment.reporterConfiguration),

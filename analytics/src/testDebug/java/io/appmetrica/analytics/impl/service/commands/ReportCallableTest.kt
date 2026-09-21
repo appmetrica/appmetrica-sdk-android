@@ -4,8 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.CoreClientEvent
 import io.appmetrica.analytics.impl.EventIpcCodec
+import io.appmetrica.analytics.impl.EventTrimPolicy
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
@@ -33,7 +34,7 @@ internal class ReportCallableTest : CommonTest() {
     private val appMetricaConnector: AppMetricaConnector = mock()
     private val shouldDisconnectFromServiceChecker: ShouldDisconnectFromServiceChecker = mock()
     private val service: IAppMetricaService = mock()
-    private val reportData: CounterReport = mock()
+    private val reportData: CoreClientEvent = mock()
     private val reportBundle: Bundle = mock()
     private val serviceDataReporterType = 42
 
@@ -54,6 +55,9 @@ internal class ReportCallableTest : CommonTest() {
 
     @Before
     fun setUp() {
+        whenever(reportData.trimPolicy).thenReturn(EventTrimPolicy.STANDARD)
+        whenever(reportData.bytesTruncated).thenReturn(0)
+        whenever(reportData.extras).thenReturn(mutableMapOf())
         val reportToSend = ReportToSend.newBuilder(reportData, reporterEnvironment)
             .withServiceDataReporterType(serviceDataReporterType)
             .build()

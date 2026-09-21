@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreapi.internal.event
 
-interface CounterReportApi {
+interface ClientEvent {
 
     var type: Int
 
@@ -17,4 +17,8 @@ interface CounterReportApi {
     var bytesTruncated: Int
 
     var extras: MutableMap<String, ByteArray>
+
+    var profileID: String?
+
+    var eventEnvironment: String?
 }

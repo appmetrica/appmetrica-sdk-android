@@ -5,8 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.CoreClientEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.ProtobufUtils;
@@ -144,9 +143,9 @@ public class DatabaseCleanerTest extends CommonTest {
             apiKey,
             true
         );
-        ArgumentCaptor<CounterReport> reportCaptor = ArgumentCaptor.forClass(CounterReport.class);
+        ArgumentCaptor<CoreClientEvent> reportCaptor = ArgumentCaptor.forClass(CoreClientEvent.class);
         verify(selfDiagnosticReporter).reportEvent(reportCaptor.capture());
-        CounterReport report = reportCaptor.getValue();
+        CoreClientEvent report = reportCaptor.getValue();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CLEANUP.getTypeId());
 
         JSONObject details = new JSONObject();
@@ -191,8 +190,8 @@ public class DatabaseCleanerTest extends CommonTest {
 
     @Test
     public void testCouldNotFormReport() {
-        try (MockedStatic<EventsManager> sEventsManager = Mockito.mockStatic(EventsManager.class)) {
-            when(EventsManager.cleanupEventReportEntry(anyString(), any(PublicLogger.class))).thenThrow(new RuntimeException());
+        try (MockedStatic<CoreClientEvent> sCoreClientEvent = Mockito.mockStatic(CoreClientEvent.class)) {
+            when(CoreClientEvent.cleanupEventReportEntry(anyString())).thenThrow(new RuntimeException());
             addEvents(5);
             databaseCleaner.cleanEvents(
                 db,
@@ -240,7 +239,7 @@ public class DatabaseCleanerTest extends CommonTest {
                 apiKey,
                 true
             );
-            ArgumentCaptor<CounterReport> reportCaptor = ArgumentCaptor.forClass(CounterReport.class);
+            ArgumentCaptor<CoreClientEvent> reportCaptor = ArgumentCaptor.forClass(CoreClientEvent.class);
             verify(selfDiagnosticReporter).reportEvent(reportCaptor.capture());
             sProtobufUtils.verify(new MockedStatic.Verification() {
                 @Override
@@ -248,7 +247,7 @@ public class DatabaseCleanerTest extends CommonTest {
                     ProtobufUtils.internalEventToProto(InternalEvents.EVENT_TYPE_REGULAR);
                 }
             });
-            CounterReport report = reportCaptor.getValue();
+            CoreClientEvent report = reportCaptor.getValue();
             JSONAssert.assertEquals(
                 new JSONArray().put(protoEvent),
                 new JSONObject(report.getValue()).getJSONObject("details").getJSONObject("cleared").getJSONArray("event_type"),

@@ -196,7 +196,7 @@ public class MainReporterTest extends BaseReporterTest {
     ) {
         when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED))
             .thenReturn(true);
-        when(EventsManager.notifyServiceOnActivityStartReportEntry(expectedEvent, mPublicLogger))
+        when(CoreClientEvent.notifyServiceOnActivityStartReportEntry(expectedEvent))
             .thenReturn(mockedEvent);
         mMainReporter.resumeSession(resumedActivity);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
@@ -216,7 +216,7 @@ public class MainReporterTest extends BaseReporterTest {
         when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED))
             .thenReturn(false);
         mMainReporter.resumeSession(resumedActivity);
-        verify(mReportsHandler, never()).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        verify(mReportsHandler, never()).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -257,7 +257,7 @@ public class MainReporterTest extends BaseReporterTest {
         when(activityStateManager.didStateChange(pausedActivity, ActivityStateManager.ActivityState.PAUSED))
             .thenReturn(true);
         when(mReporterEnvironment.isForegroundSessionPaused()).thenReturn(false);
-        when(EventsManager.activityEndReportEntry(expectedEvent, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.activityEndReportEntry(expectedEvent)).thenReturn(mockedEvent);
         mMainReporter.pauseSession(pausedActivity);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
     }
@@ -277,7 +277,7 @@ public class MainReporterTest extends BaseReporterTest {
             .thenReturn(false);
         when(mReporterEnvironment.isForegroundSessionPaused()).thenReturn(false);
         mMainReporter.pauseSession(pausedActivity);
-        verify(mReportsHandler, never()).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        verify(mReportsHandler, never()).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -318,7 +318,7 @@ public class MainReporterTest extends BaseReporterTest {
         byte[] bytes = new byte[]{1, 4, 7};
         ExternalAttribution attribution = mock(ExternalAttribution.class);
         when(attribution.toBytes()).thenReturn(bytes);
-        when(EventsManager.clientExternalAttributionEntry(bytes, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.clientExternalAttributionEntry(bytes)).thenReturn(mockedEvent);
 
         mMainReporter.reportExternalAttribution(attribution);
 
@@ -389,7 +389,7 @@ public class MainReporterTest extends BaseReporterTest {
     @Test
     public void testReportAppOpen() {
         String link = "some://uri";
-        when(EventsManager.openAppReportEntry(link, true, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.openAppReportEntry(link, true)).thenReturn(mockedEvent);
         mMainReporter.reportAppOpen(link, true);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
         verify(mPublicLogger).info("App opened via deeplink: " + link);

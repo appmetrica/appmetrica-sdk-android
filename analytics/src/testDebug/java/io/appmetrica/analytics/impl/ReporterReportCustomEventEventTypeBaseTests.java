@@ -51,8 +51,8 @@ public abstract class ReporterReportCustomEventEventTypeBaseTests extends BaseRe
     final int mWantedNumbersOfInvocation;
 
     @Rule
-    public final MockedStaticRule<EventsManager> sEventsManager = new MockedStaticRule<>(EventsManager.class);
-    private final CounterReport mockedEvent = mock(CounterReport.class);
+    public final MockedStaticRule<CoreClientEvent> sCoreClientEvent = new MockedStaticRule<>(CoreClientEvent.class);
+    private final CoreClientEvent mockedEvent = mock(CoreClientEvent.class);
     protected BaseReporter mReporter;
 
     @Before
@@ -82,7 +82,7 @@ public abstract class ReporterReportCustomEventEventTypeBaseTests extends BaseRe
             .withAttributes(new HashMap<String, Object>())
             .build();
 
-        when(EventsManager.customEventReportEntry(any(), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.customEventReportEntry(any())).thenReturn(mockedEvent);
         mReporter.reportEvent(moduleEvent);
         verify(mReportsHandler, times(mWantedNumbersOfInvocation))
             .reportEvent(

@@ -27,7 +27,6 @@ abstract class AppMetricaEventData {
 
     /**
      * Number of bytes truncated by the module before passing data to SDK.
-     * Added to the SDK's own truncation count in `CounterReport.bytesTruncated`.
      */
     abstract val bytesTruncated: Int
 }

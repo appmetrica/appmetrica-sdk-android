@@ -173,7 +173,7 @@ public class ReportsHandlerTest extends CommonTest {
         final List<String> identifiers = Arrays.asList("uuid", "deviceid", "deviceid hash");
 
         mReportsHandlerSpy.reportStartupEvent(identifiers, mock(DataResultReceiver.class), null, true);
-        verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        verify(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -186,7 +186,7 @@ public class ReportsHandlerTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                CounterReport counterReport = (CounterReport) invocationOnMock.getArguments()[0];
+                CoreClientEvent counterReport = (CoreClientEvent) invocationOnMock.getArguments()[0];
                 checkReportData(counterReport, EVENT_TYPE_STARTUP);
                 IdentifiersData identifiersData = counterReport.getPayload().getParcelable(IdentifiersData.BUNDLE_KEY);
                 assertThat(identifiersData.getIdentifiersList()).containsExactlyInAnyOrderElementsOf(identifiers);
@@ -194,10 +194,10 @@ public class ReportsHandlerTest extends CommonTest {
                 assertThat(identifiersData.getClidsFromClientForVerification()).isEqualTo(clientClids);
                 return null;
             }
-        }).when(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        }).when(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
 
         mReportsHandlerSpy.reportStartupEvent(identifiers, resultReceiver, clientClids, true);
-        verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        verify(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -248,7 +248,7 @@ public class ReportsHandlerTest extends CommonTest {
 
     @Test
     public void testReportErrorProtobufWithEnvironment() {
-        final CounterReport reportData = createReportDataWithTypeMock(EVENT_TYPE_EXCEPTION_USER_PROTOBUF);
+        final CoreClientEvent reportData = createReportDataWithTypeMock(EVENT_TYPE_EXCEPTION_USER_PROTOBUF);
 
         // Call method
         mReportsHandlerSpy.reportEvent(reportData, mArgReporterEnvironment);
@@ -266,7 +266,7 @@ public class ReportsHandlerTest extends CommonTest {
 
     @Test
     public void testReportCustomErrorProtobufWithEnvironment() {
-        final CounterReport reportData = createReportDataWithTypeMock(EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF);
+        final CoreClientEvent reportData = createReportDataWithTypeMock(EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF);
 
         // Call method
         mReportsHandlerSpy.reportEvent(reportData, mArgReporterEnvironment);
@@ -286,11 +286,10 @@ public class ReportsHandlerTest extends CommonTest {
     public void testReportEventWithAttributesForCustomEventStoresUtf8ValueBytes() {
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("key", "value");
-        final CounterReport report = new ClientCounterReport(
-            "name",
-            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
-            mock(PublicLogger.class)
-        );
+        final CoreClientEvent report = new CoreClientEvent();
+        report.setValue("");
+        report.setName("name");
+        report.setType(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
 
         mReportsHandlerSpy.reportEvent(
             report,
@@ -301,7 +300,7 @@ public class ReportsHandlerTest extends CommonTest {
 
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender).queueReport(reportToSend.capture());
-        CounterReport queuedReport = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent queuedReport = reportToSend.getValue().getReport();
         assertThat(queuedReport.getValueBytes())
             .isEqualTo(StringUtils.getUTF8Bytes(JsonHelper.mapToJsonString(attributes)));
     }
@@ -310,11 +309,10 @@ public class ReportsHandlerTest extends CommonTest {
     public void testReportEventWithAttributesForRegularEventStoresPlainJsonValue() {
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("key", "value");
-        final CounterReport report = new ClientCounterReport(
-            "name",
-            InternalEvents.EVENT_TYPE_REGULAR.getTypeId(),
-            mock(PublicLogger.class)
-        );
+        final CoreClientEvent report = new CoreClientEvent();
+        report.setValue("");
+        report.setName("name");
+        report.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
 
         mReportsHandlerSpy.reportEvent(
             report,
@@ -325,7 +323,7 @@ public class ReportsHandlerTest extends CommonTest {
 
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender).queueReport(reportToSend.capture());
-        CounterReport queuedReport = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent queuedReport = reportToSend.getValue().getReport();
         assertThat(queuedReport.getValue()).isEqualTo(JsonHelper.mapToJsonString(attributes));
     }
 
@@ -335,7 +333,7 @@ public class ReportsHandlerTest extends CommonTest {
         mReportsHandlerSpy.sendUserProfile(profile, mMainReporterEnvironment);
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
-        CounterReport report = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
     }
 
@@ -345,7 +343,7 @@ public class ReportsHandlerTest extends CommonTest {
         mReportsHandlerSpy.setUserProfileID(profileID, mMainReporterEnvironment);
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
-        CounterReport report = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID.getTypeId());
         assertThat(report.getValue()).isEqualTo(profileID);
     }
@@ -361,7 +359,7 @@ public class ReportsHandlerTest extends CommonTest {
         mReportsHandlerSpy.sendRevenue(wrapper, mMainReporterEnvironment);
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
-        CounterReport report = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT.getTypeId());
         assertThat(report.getValueBytes()).isEqualTo(result.first);
         assertThat(report.getBytesTruncated()).isEqualTo(300);
@@ -378,7 +376,7 @@ public class ReportsHandlerTest extends CommonTest {
         mReportsHandlerSpy.sendAdRevenue(wrapper, mMainReporterEnvironment);
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
-        CounterReport report = reportToSend.getValue().getReport();
+        TrimmedCoreClientEvent report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.getTypeId());
         assertThat(report.getValueBytes()).isEqualTo(result.getFirst());
         assertThat(report.getBytesTruncated()).isEqualTo(300);
@@ -461,7 +459,7 @@ public class ReportsHandlerTest extends CommonTest {
     private void assertECommerceCounterReport(ReportToSend reportToSend,
                                               byte[] expectedBytes,
                                               int bytesTruncated) throws Exception {
-        CounterReport report = reportToSend.getReport();
+        TrimmedCoreClientEvent report = reportToSend.getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.getTypeId());
         assertThat(io.appmetrica.analytics.coreutils.internal.io.GZIPUtils.unGzipBytes(report.getValueBytes()))
             .isEqualTo(expectedBytes);
@@ -492,7 +490,7 @@ public class ReportsHandlerTest extends CommonTest {
     public void testReportFirstEventSendsExpectedEventType() throws RemoteException {
         mReportsHandlerSpy.reportActivationEvent(mMainReporterEnvironment);
 
-        ArgumentCaptor<CounterReport> arg1 = ArgumentCaptor.forClass(CounterReport.class);
+        ArgumentCaptor<CoreClientEvent> arg1 = ArgumentCaptor.forClass(CoreClientEvent.class);
         ArgumentCaptor<ReporterEnvironment> arg2 = ArgumentCaptor.forClass(ReporterEnvironment.class);
 
         verify(mReportsHandlerSpy, times(1)).reportEvent(arg1.capture(), arg2.capture());
@@ -536,15 +534,18 @@ public class ReportsHandlerTest extends CommonTest {
         }).when(mReportsSender).queueReport(any(ReportToSend.class));
     }
 
-    private CounterReport createReportDataWithTypeMock(final InternalEvents eventType) {
-        final CounterReport reportData = mock(CounterReport.class);
+    private CoreClientEvent createReportDataWithTypeMock(final InternalEvents eventType) {
+        final CoreClientEvent reportData = mock(CoreClientEvent.class);
         when(reportData.getType()).thenReturn(eventType.getTypeId());
+        when(reportData.getTrimPolicy()).thenReturn(EventTrimPolicy.STANDARD);
+        when(reportData.getBytesTruncated()).thenReturn(0);
+        when(reportData.getExtras()).thenReturn(new HashMap<>());
         return reportData;
     }
 
     private void checkReportData(final Object reportData, final InternalEvents event) {
-        assertThat(reportData).isInstanceOf(CounterReport.class);
-        assertThat(((CounterReport) reportData).getType()).isEqualTo(event.getTypeId());
+        assertThat(reportData).isInstanceOf(CoreClientEvent.class);
+        assertThat(((CoreClientEvent) reportData).getType()).isEqualTo(event.getTypeId());
     }
 
     @Test
@@ -652,15 +653,15 @@ public class ReportsHandlerTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                CounterReport counterReport = (CounterReport) invocationOnMock.getArguments()[0];
+                CoreClientEvent counterReport = (CoreClientEvent) invocationOnMock.getArguments()[0];
                 checkReportData(counterReport, EVENT_TYPE_REQUEST_REFERRER);
                 ReferrerResultReceiver receiver = counterReport.getPayload().getParcelable(ReferrerResultReceiver.BUNDLE_KEY);
                 assertThat(receiver).isNotNull();
                 return null;
             }
-        }).when(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        }).when(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
 
         mReportsHandlerSpy.reportRequestReferrerEvent(receiver);
-        verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
+        verify(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
     }
 }

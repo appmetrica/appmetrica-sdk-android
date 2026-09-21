@@ -1,9 +1,10 @@
 package io.appmetrica.analytics.impl
 
 import android.os.Bundle
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
 /**
- * Flat CounterReport fields carried over IPC (see [EventIpcBundleKeys]).
+ * Flat CoreClientEvent fields carried over IPC (see [EventIpcBundleKeys]).
  * Used by [EventIpcCodec] and mapped to [CoreServiceEvent] on the service.
  */
 internal class EventIpcData(
@@ -25,21 +26,26 @@ internal class EventIpcData(
     companion object {
 
         @JvmStatic
-        fun fromCounterReport(report: CounterReport): EventIpcData {
+        fun fromCoreClientEvent(logger: PublicLogger, report: CoreClientEvent): EventIpcData {
+            return from(TrimmedCoreClientEvent(logger, report))
+        }
+
+        @JvmStatic
+        fun from(trimmed: TrimmedCoreClientEvent): EventIpcData {
             return EventIpcData(
-                name = report.name,
-                value = report.valueBytes,
-                type = report.type,
-                customType = report.customType,
-                bytesTruncated = report.bytesTruncated,
-                profileID = report.profileID,
-                eventEnvironment = report.eventEnvironment,
-                creationElapsedRealtime = report.creationElapsedRealtime,
-                creationTimestamp = report.creationTimestamp,
-                source = report.source,
-                payload = report.payload,
-                extras = HashMap(report.extras),
-                valueProtocolVersion = report.valueProtocolVersion,
+                name = trimmed.name,
+                value = trimmed.valueBytes,
+                type = trimmed.type,
+                customType = trimmed.customType,
+                bytesTruncated = trimmed.bytesTruncated,
+                profileID = trimmed.profileID,
+                eventEnvironment = trimmed.eventEnvironment,
+                creationElapsedRealtime = trimmed.creationElapsedRealtime,
+                creationTimestamp = trimmed.creationTimestamp,
+                source = trimmed.source,
+                payload = trimmed.payload,
+                extras = HashMap(trimmed.extras),
+                valueProtocolVersion = trimmed.valueProtocolVersion,
             )
         }
     }

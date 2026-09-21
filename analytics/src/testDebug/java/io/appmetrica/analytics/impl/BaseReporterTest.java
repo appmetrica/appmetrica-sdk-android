@@ -100,7 +100,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Rule
     public final MockedStaticRule<EventsManager> sEventsManager = new MockedStaticRule<>(EventsManager.class);
     @Rule
-    public final MockedStaticRule<CounterReport> sCounterReport = new MockedStaticRule<>(CounterReport.class);
+    public final MockedStaticRule<CoreClientEvent> sCounterReport = new MockedStaticRule<>(CoreClientEvent.class);
     @Rule
     public final MockedStaticRule<MessageNano> sMessageNano = new MockedStaticRule<>(MessageNano.class);
     @Rule
@@ -127,7 +127,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     protected CustomErrorConverter customErrorConverter = mock(CustomErrorConverter.class);
     protected PluginErrorDetailsConverter pluginErrorDetailsConverter = mock(PluginErrorDetailsConverter.class);
     protected byte[] serializedBytes = new byte[]{1, 3, 5, 7};
-    protected CounterReport mockedEvent = mock(CounterReport.class);
+    protected CoreClientEvent mockedEvent = mock(CoreClientEvent.class);
 
     @Before
     @Override
@@ -147,7 +147,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(mExtraMetaInfoRetriever.getBuildId()).thenReturn(null);
         when(mExtraMetaInfoRetriever.isOffline()).thenReturn(null);
         when(anrConverter.fromModel(any(Anr.class))).thenReturn(anr);
-        when(EventsManager.anrEntry(eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.anrEntry(eq(serializedBytes))).thenReturn(mockedEvent);
         final AllThreads allThreads = new AllThreads(new ThreadState(
             "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
         ), new ArrayList<ThreadState>(), "process");
@@ -177,7 +177,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(mExtraMetaInfoRetriever.getBuildId()).thenReturn(buildId);
         when(mExtraMetaInfoRetriever.isOffline()).thenReturn(isOffline);
         when(anrConverter.fromModel(any(Anr.class))).thenReturn(anr);
-        when(EventsManager.anrEntry(eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.anrEntry(eq(serializedBytes))).thenReturn(mockedEvent);
         final AllThreads allThreads = new AllThreads(new ThreadState(
             "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
         ), new ArrayList<ThreadState>(), "process");
@@ -212,7 +212,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void testSendEventBufferShouldDispatchToReportsHandler() {
-        when(EventsManager.reportEntry(eq(InternalEvents.EVENT_TYPE_PURGE_BUFFER), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.reportEntry(eq(InternalEvents.EVENT_TYPE_PURGE_BUFFER))).thenReturn(mockedEvent);
         mReporter.sendEventsBuffer();
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
@@ -238,7 +238,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
             eq(buildId),
             eq(isOffline)
         )).thenReturn(unhandledException);
-        when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
 
         mReporter.reportError(message, (Throwable) null);
 
@@ -268,7 +268,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         StackTraceElement[] stacktrace = new StackTraceElement[]{mock(StackTraceElement.class)};
         when(throwable.getStackTrace()).thenReturn(stacktrace);
         when(regularErrorConverter.fromModel(any(RegularError.class))).thenReturn(mockedProtoError);
-        when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
             same(null),
@@ -310,7 +310,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final String message = "message";
         final IllegalStateException exception = new IllegalStateException();
         when(regularErrorConverter.fromModel(any(RegularError.class))).thenReturn(mockedProtoError);
-        when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
             same(exception),
@@ -353,7 +353,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final String message = "message";
         final IllegalStateException exception = new IllegalStateException();
         when(customErrorConverter.fromModel(any(CustomError.class))).thenReturn(mockedProtoError);
-        when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.customErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
             same(exception),
@@ -402,7 +402,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final String id = "identifier";
         final String message = "message";
         when(customErrorConverter.fromModel(any(CustomError.class))).thenReturn(mockedProtoError);
-        when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.customErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
             same(null),
@@ -450,7 +450,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final String id = "identifier";
         final String message = "message";
         when(customErrorConverter.fromModel(any(CustomError.class))).thenReturn(mockedProtoError);
-        when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.customErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
             same(null),
@@ -677,7 +677,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
             .withAttributes(attributes)
             .build();
 
-        when(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.customEventReportEntry(moduleEvent)).thenReturn(mockedEvent);
         getReporter().reportEvent(moduleEvent);
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
@@ -702,7 +702,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
             .withAttributes(attributes)
             .build();
 
-        when(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.customEventReportEntry(moduleEvent)).thenReturn(mockedEvent);
         getReporter().reportEvent(moduleEvent);
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
@@ -718,7 +718,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         AppMetricaEvent event = mock(AppMetricaEvent.class);
         when(eventData.getData()).thenReturn("event data".getBytes());
         when(event.getEventData()).thenReturn(eventData);
-        when(EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.appMetricaEventReportEntry(eventData)).thenReturn(mockedEvent);
 
         getReporter().reportEvent(event);
 
@@ -733,7 +733,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void setSessionExtra() {
         String key = "Key";
         byte[] value = new byte[]{2, 6, 11};
-        when(EventsManager.setSessionExtraReportEntry(key, value, mPublicLogger)).thenReturn(mockedEvent);
+        when(CoreClientEvent.setSessionExtraReportEntry(key, value)).thenReturn(mockedEvent);
 
         getReporter().setSessionExtra(key, value);
 
@@ -746,7 +746,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void testReportEventWithNameShouldBeSentToReportsHandler() {
         String eventName = "EventName";
-        when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName);
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
@@ -755,7 +755,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void testReportEventWithNullJsonAttributesShouldBeSentToReportsHandler() {
         String eventName = "EventName";
         String value = null;
-        when(EventsManager.regularEventReportEntry(eq(eventName), same(value), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName), same(value))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, value);
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
@@ -764,7 +764,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void testReportEventWithValidJsonShouldBeSentToReportsHandler() {
         String eventName = "EventName";
         String json = "{\"name\" : \"value\"}";
-        when(EventsManager.regularEventReportEntry(eq(eventName), eq(json), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName), eq(json))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, json);
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
@@ -774,7 +774,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventName = "EventName";
         Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("Key", "Value");
-        when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, attributes);
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), eq(attributes));
     }
@@ -782,7 +782,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void testReportEventWithMapShouldBeSentToReportsHandlerIfMapIsNull() {
         String eventName = "EventName";
-        when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, (Map) null);
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), same((Map) null));
     }
@@ -790,7 +790,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void testReportEventWithMapShouldReportEventWithNullEnvironmentIfEnvironmentIsEmpty() {
         String eventName = "EventName";
-        when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.regularEventReportEntry(eq(eventName))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, new HashMap<String, Object>());
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), any(Map.class));
     }
@@ -923,28 +923,26 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void testOnResumeDoesNotSendEventsBuffer() {
         final String activity = "some activity";
-        when(EventsManager.reportEntry(eq(InternalEvents.EVENT_TYPE_PURGE_BUFFER), any(PublicLogger.class))).thenReturn(mockedEvent);
+        when(CoreClientEvent.reportEntry(eq(InternalEvents.EVENT_TYPE_PURGE_BUFFER))).thenReturn(mockedEvent);
         mReporter.onResumeForegroundSession(activity);
         verify(mReportsHandler, never()).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
 
     @Test
     public void reportJsEvent() {
-        ClientCounterReport report = mock(ClientCounterReport.class);
-        try (MockedStatic<ClientCounterReport> sClientCounterReport = Mockito.mockStatic(ClientCounterReport.class)) {
-            final String eventName = "Event name";
-            final String eventValue = "Event value";
-            when(ClientCounterReport.formJsEvent(eventName, eventValue, mPublicLogger)).thenReturn(report);
-            mReporter.reportJsEvent(eventName, eventValue);
-            verify(mPublicLogger).info("Event received: Event name. With value: Event value");
-            verify(mReportsHandler).reportEvent(report, mReporterEnvironment);
-        }
+        CoreClientEvent report = mock(CoreClientEvent.class);
+        final String eventName = "Event name";
+        final String eventValue = "Event value";
+        when(CoreClientEvent.formJsEvent(eventName, eventValue)).thenReturn(report);
+        mReporter.reportJsEvent(eventName, eventValue);
+        verify(mPublicLogger).info("Event received: Event name. With value: Event value");
+        verify(mReportsHandler).reportEvent(report, mReporterEnvironment);
     }
 
     @Test
     public void reportJsInitEvent() {
         final String eventValue = "Event value";
-        when(CounterReport.formJsInitEvent(eventValue)).thenReturn(mockedEvent);
+        when(CoreClientEvent.formJsInitEvent(eventValue)).thenReturn(mockedEvent);
         mReporter.reportJsInitEvent(eventValue);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
     }
@@ -952,7 +950,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void reportUnhandledPluginException() {
         final String errorName = "error name";
-        ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
+        CoreClientEvent clientCounterReport = mock(CoreClientEvent.class);
         PluginErrorDetails errorDetails = mock(PluginErrorDetails.class);
         UnhandledException unhandledException = mock(UnhandledException.class);
         final CrashAndroid.Crash crash = mock(CrashAndroid.Crash.class);
@@ -965,7 +963,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(pluginErrorDetailsConverter.toUnhandledException(errorDetails)).thenReturn(unhandledException);
         when(unhandledExceptionConverter.fromModel(unhandledException)).thenReturn(crash);
         when(UnhandledException.getErrorName(unhandledException)).thenReturn(errorName);
-        when(EventsManager.unhandledExceptionReportEntry(eq(errorName), eq(serializedBytes), any(PublicLogger.class))).thenReturn(clientCounterReport);
+        when(CoreClientEvent.unhandledExceptionReportEntry(eq(errorName), eq(serializedBytes))).thenReturn(clientCounterReport);
 
         getReporter().reportUnhandledException(errorDetails);
 
@@ -981,7 +979,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void reportPluginError() {
         final String message = "message";
-        ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
+        CoreClientEvent clientCounterReport = mock(CoreClientEvent.class);
         PluginErrorDetails errorDetails = mock(PluginErrorDetails.class);
         RegularError regularError = new RegularError(message, mock(UnhandledException.class));
         final CrashAndroid.Error error = mock(CrashAndroid.Error.class);
@@ -992,7 +990,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(mExtraMetaInfoRetriever.isOffline()).thenReturn(isOffline);
         when(pluginErrorDetailsConverter.toRegularError(message, errorDetails)).thenReturn(regularError);
         when(regularErrorConverter.fromModel(regularError)).thenReturn(error);
-        when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(clientCounterReport);
+        when(CoreClientEvent.customErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(clientCounterReport);
 
         getReporter().reportError(errorDetails, message);
 
@@ -1010,7 +1008,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void reportPluginErrorWithIdentifier() throws IllegalAccessException {
         String identifier = "id";
         final String message = "message";
-        ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
+        CoreClientEvent clientCounterReport = mock(CoreClientEvent.class);
         PluginErrorDetails errorDetails = mock(PluginErrorDetails.class);
         UnhandledException unhandledException = mock(UnhandledException.class);
         RegularError regularError = new RegularError(message, unhandledException);
@@ -1024,7 +1022,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
         when(pluginErrorDetailsConverter.toRegularError(message, errorDetails)).thenReturn(regularError);
         when(customErrorConverter.fromModel(any(CustomError.class))).thenReturn(error);
-        when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(clientCounterReport);
+        when(CoreClientEvent.customErrorReportEntry(eq(message), eq(serializedBytes))).thenReturn(clientCounterReport);
 
         getReporter().reportError(identifier, message, errorDetails);
 

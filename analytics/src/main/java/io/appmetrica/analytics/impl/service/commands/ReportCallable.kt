@@ -31,7 +31,7 @@ internal open class ReportCallable(
         service.reportData(
             reportToSend.serviceDataReporterType,
             EventIpcCodec.toBundle(
-                EventIpcData.fromCounterReport(reportData),
+                EventIpcData.from(reportData),
                 reporterEnvironment.configBundle
             )
         )

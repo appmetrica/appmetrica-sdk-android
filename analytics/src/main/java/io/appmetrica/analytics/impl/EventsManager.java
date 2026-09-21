@@ -1,29 +1,17 @@
 package io.appmetrica.analytics.impl;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import io.appmetrica.analytics.ModuleEvent;
-import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
-import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
+import io.appmetrica.analytics.impl.InternalEvents;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import org.json.JSONObject;
 
 /**
  * Class for various kinds of event management.
  */
 public final class EventsManager {
-
-    private static final String TAG = "[EventsManager]";
 
     private static final Set<Integer> SHOULD_USE_ERROR_ENVIRONMENT = CollectionUtils.unmodifiableSetOf(
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF.getTypeId(),
@@ -131,208 +119,5 @@ public final class EventsManager {
 
     public static boolean shouldGenerateGlobalNumber(int eventType) {
         return !EVENTS_WITHOUT_GLOBAL_NUMBER.contains(InternalEvents.valueOf(eventType));
-    }
-
-    public static CounterReport reportEntry(InternalEvents eventType, @NonNull PublicLogger logger) {
-        return new ClientCounterReport("", eventType.getTypeId(), logger);
-    }
-
-    public static CounterReport regularEventReportEntry(String eventName, @NonNull PublicLogger logger) {
-        return new ClientCounterReport(eventName, InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), logger);
-    }
-
-    static CounterReport regularEventReportEntry(String eventName, String extraData, @NonNull PublicLogger logger) {
-        return new ClientCounterReport(extraData, eventName, InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), logger);
-    }
-
-    static CounterReport anrEntry(byte[] value, @NonNull PublicLogger publicLogger) {
-        return new ClientCounterReport(
-            value,
-            "",
-            InternalEvents.EVENT_TYPE_ANR.getTypeId(),
-            publicLogger
-        );
-    }
-
-    static CounterReport regularErrorReportEntry(
-        @Nullable String eventName,
-        byte[] extraData,
-        @NonNull PublicLogger logger
-    ) {
-        return new ClientCounterReport(extraData, eventName,
-            InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF.getTypeId(), logger);
-    }
-
-    static CounterReport customErrorReportEntry(
-        @Nullable String eventName,
-        @NonNull byte[] extraData,
-        @NonNull PublicLogger logger
-    ) {
-        return new ClientCounterReport(extraData, eventName,
-            InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF.getTypeId(), logger);
-    }
-
-    static CounterReport notifyServiceOnActivityStartReportEntry(String eventName, @NonNull PublicLogger logger) {
-        return new ClientCounterReport(eventName, InternalEvents.EVENT_TYPE_START.getTypeId(), logger);
-    }
-
-    static CounterReport activityEndReportEntry(String eventName, @NonNull PublicLogger logger) {
-        return new ClientCounterReport(eventName, InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME.getTypeId(), logger);
-    }
-
-    public static ClientCounterReport unhandledExceptionReportEntry(String eventName,
-                                                                    byte[] value,
-                                                                    @NonNull PublicLogger logger) {
-        return unhandledExceptionReportEntry(
-            value,
-            eventName,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
-            logger
-        );
-    }
-
-    public static CounterReport unhandledExceptionFromFileReportEntry(
-        InternalEvents type,
-        String eventName,
-        byte[] value,
-        int bytesTruncated,
-        @NonNull HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields,
-        @Nullable String errorEnvironment,
-        @NonNull PublicLogger logger,
-        long creationTimestamp
-    ) {
-        ClientCounterReport result = unhandledExceptionReportEntry(
-            value,
-            eventName,
-            type,
-            logger,
-            creationTimestamp
-        );
-        result.withTrimmedFields(trimmedFields);
-        result.setBytesTruncated(bytesTruncated);
-        result.setEventEnvironment(errorEnvironment);
-
-        return result;
-    }
-
-    private static ClientCounterReport unhandledExceptionReportEntry(byte[] value,
-                                                                     String eventName,
-                                                                     InternalEvents type,
-                                                                     @NonNull PublicLogger logger) {
-        return new ClientCounterReport(value, eventName, type.getTypeId(), logger);
-    }
-
-    private static ClientCounterReport unhandledExceptionReportEntry(byte[] value,
-                                                                     String eventName,
-                                                                     InternalEvents type,
-                                                                     @NonNull PublicLogger logger,
-                                                                     long creationTimestamp) {
-        return new ClientCounterReport(value, eventName, type.getTypeId(), logger, creationTimestamp);
-    }
-
-    public static CounterReport requestReferrerEntry(@NonNull PublicLogger logger) {
-        return new ClientCounterReport(StringUtils.EMPTY, StringUtils.EMPTY,
-            InternalEvents.EVENT_TYPE_REQUEST_REFERRER.getTypeId(), logger);
-    }
-
-    static CounterReport openAppReportEntry(final String value, boolean auto, @NonNull PublicLogger logger) {
-        return eventOpenEntry(EVENT_OPEN_TYPE_OPEN, value, auto, logger);
-    }
-
-    static CounterReport eventOpenEntry(final String type,
-                                        final String value,
-                                        final boolean auto,
-                                        @NonNull PublicLogger logger) {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(EVENT_OPEN_TYPE_KEY, type);
-        map.put(EVENT_OPEN_LINK_KEY, value);
-        map.put(EVENT_OPEN_AUTO_KEY, auto);
-        return new ClientCounterReport(JsonHelper.mapToJsonString(map), StringUtils.EMPTY,
-            InternalEvents.EVENT_TYPE_APP_OPEN.getTypeId(), logger);
-    }
-
-    public static CounterReport activationEventReportEntry(@Nullable PreloadInfoWrapper preloadInfo,
-                                                           @Nullable String userProfileID,
-                                                           @NonNull PublicLogger logger) {
-        JSONObject activationEventValue = new JSONObject();
-        if (preloadInfo != null) {
-            preloadInfo.addToEventValue(activationEventValue);
-        }
-        CounterReport counterReport = new ClientCounterReport(
-            activationEventValue.toString(),
-            "",
-            InternalEvents.EVENT_TYPE_ACTIVATION.getTypeId(),
-            logger
-        );
-        counterReport.setProfileID(userProfileID);
-        return counterReport;
-    }
-
-    public static CounterReport cleanupEventReportEntry(@NonNull String value, @NonNull PublicLogger logger) {
-        return new ClientCounterReport(value, "", InternalEvents.EVENT_TYPE_CLEANUP.getTypeId(), logger);
-    }
-
-    static CounterReport customEventReportEntry(@NonNull ModuleEvent moduleEvent, @NonNull PublicLogger logger) {
-        CounterReport report = new ClientCounterReport(
-            moduleEvent.getValueBytes(),
-            moduleEvent.getName(),
-            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
-            logger
-        );
-        report.setCustomType(moduleEvent.getType());
-        report.setValueProtocolVersion(2);
-        report.setSource(new EventCategoryToSourceConverter().convert(moduleEvent.getCategory()));
-        report.setEventEnvironment(JsonHelper.mapToJsonString(moduleEvent.getEnvironment()));
-        if (moduleEvent.getExtras() != null) {
-            report.setExtras(moduleEvent.getExtras());
-        }
-        return report;
-    }
-
-    static CounterReport setSessionExtraReportEntry(@NonNull String key,
-                                                    @Nullable byte[] value,
-                                                    @NonNull PublicLogger publicLogger) {
-
-        CounterReport counterReport =
-            new ClientCounterReport(null, InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA.getTypeId(), publicLogger);
-        counterReport.setExtras(Collections.singletonMap(key, value == null ? new byte[0] : value));
-
-        return counterReport;
-    }
-
-    static CounterReport appMetricaEventReportEntry(
-        @NonNull AppMetricaEventData event,
-        @NonNull PublicLogger logger
-    ) {
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "Sending AppMetricaEvent: total size = %d, bytes truncated = %d",
-            event.getData().length,
-            event.getBytesTruncated()
-        );
-
-        CounterReport report = new ClientCounterReport(
-            event.getData(),
-            event.getName(),
-            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
-            logger
-        );
-        report.setCustomType(event.getType());
-        report.setBytesTruncated(report.getBytesTruncated() + event.getBytesTruncated());
-        report.setValueProtocolVersion(2);
-
-        return report;
-    }
-
-    public static CounterReport clientExternalAttributionEntry(
-        byte[] value,
-        @NonNull PublicLogger publicLogger
-    ) {
-        return new ClientCounterReport(
-            value,
-            "",
-            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId(),
-            publicLogger
-        );
     }
 }

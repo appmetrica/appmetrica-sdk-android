@@ -65,11 +65,7 @@ public class CrashToFileWriter {
                 fileLocker.lock();
                 File crash = mFileProvider.getFileInNonNullDirectory(crashFolder, fileName);
                 printWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(crash)));
-                printWriter.write(new JvmCrash(
-                        toSend.getReport(),
-                        toSend.getEnvironment(),
-                        toSend.getTrimmedFields()
-                ).toJSONString());
+                printWriter.write(new JvmCrash(toSend.getReport(), toSend.getEnvironment()).toJSONString());
                 DebugLogger.INSTANCE.info(TAG, "Crash saved: %s to file: %s", crash.getName(), fileName);
             } catch (IOException ioe) {
                 DebugLogger.INSTANCE.error(TAG, ioe, "Can't write crash to file.");

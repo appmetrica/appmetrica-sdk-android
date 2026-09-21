@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
+import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions
 import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions
@@ -13,12 +15,15 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.function.Predicate
 
 @SuppressLint("RobolectricUsage") // Bundle usage
 @RunWith(RobolectricTestRunner::class)
 internal class EventIpcCodecTest : CommonTest() {
+
+    private val logger: PublicLogger = mock()
 
     @get:Rule
     val systemTimeProviderRule = constructionRule<SystemTimeProvider> {
@@ -46,20 +51,23 @@ internal class EventIpcCodecTest : CommonTest() {
 
     @Test
     fun toBundleWritesFlatKeys() {
-        val report = CounterReport("value", "name", InternalEvents.EVENT_TYPE_REGULAR.typeId).apply {
+        val report = CoreClientEvent().apply {
+            value = "value"
+            name = "name"
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
             customType = 7
             bytesTruncated = 3
-            setProfileID("pid")
-            setEventEnvironment("env")
-            setCreationEllapsedRealtime(11L)
-            setCreationTimestamp(22L)
-            setSource(EventSource.JS)
-            setPayload(Bundle().apply { putString("p", "v") })
+            profileID = "pid"
+            eventEnvironment = "env"
+            creationElapsedRealtime = 11L
+            creationTimestamp = 22L
+            source = EventSource.JS
+            payload = Bundle().apply { putString("p", "v") }
             extras = hashMapOf("e" to byteArrayOf(9))
             valueProtocolVersion = 2
         }
 
-        val bundle = codec.toBundle(EventIpcData.fromCounterReport(report), Bundle())
+        val bundle = codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle())
 
         assertThat(bundle.containsKey(EventIpcBundleKeys.TYPE)).isTrue
         assertThat(bundle.getString(EventIpcBundleKeys.EVENT)).isEqualTo("name")
@@ -81,19 +89,22 @@ internal class EventIpcCodecTest : CommonTest() {
     fun fromBundleReadsWrittenFields() {
         val payload = Bundle().apply { putString("p", "v") }
         val extras = hashMapOf("e" to byteArrayOf(9))
-        val report = CounterReport("v", "n", 15).apply {
+        val report = CoreClientEvent().apply {
+            value = "v"
+            name = "n"
+            type = 15
             customType = 2
             bytesTruncated = 3
-            setProfileID("pid")
-            setEventEnvironment("env")
-            setCreationEllapsedRealtime(11L)
-            setCreationTimestamp(22L)
-            setSource(EventSource.JS)
-            setPayload(payload)
+            profileID = "pid"
+            eventEnvironment = "env"
+            creationElapsedRealtime = 11L
+            creationTimestamp = 22L
+            source = EventSource.JS
+            this.payload = payload
             this.extras = extras
             valueProtocolVersion = 1
         }
-        val event = readEvent(codec.toBundle(EventIpcData.fromCounterReport(report), Bundle()))
+        val event = readEvent(codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle()))
 
         Assertions.ObjectPropertyAssertions(event)
             .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "isUndefinedType")
@@ -149,13 +160,13 @@ internal class EventIpcCodecTest : CommonTest() {
 
     @Test
     fun valueNullNormalizedToEmpty() {
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             type = 1
             value = null
-            setCreationEllapsedRealtime(0L)
-            setCreationTimestamp(0L)
+            creationElapsedRealtime = 0L
+            creationTimestamp = 0L
         }
-        val event = readEvent(codec.toBundle(EventIpcData.fromCounterReport(report), Bundle()))
+        val event = readEvent(codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle()))
 
         Assertions.ObjectPropertyAssertions(event)
             .withIgnoredFields("systemTimeProvider", "value", "valueBytes", "isUndefinedType")
@@ -187,6 +198,62 @@ internal class EventIpcCodecTest : CommonTest() {
         assertThat(data.type).isEqualTo(InternalEvents.EVENT_TYPE_UNDEFINED.typeId)
         assertThat(data.name).isNull()
         assertThat(data.value).isNull()
+    }
+
+    @Test
+    fun fromCoreClientEventTrimsLongNameAndValue() {
+        val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
+        val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
+        val report = CoreClientEvent().apply {
+            name = longName
+            valueBytes = longValue
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
+            trimPolicy = EventTrimPolicy.STANDARD
+        }
+
+        val data = EventIpcData.fromCoreClientEvent(logger, report)
+
+        assertThat(data.name!!.length).isEqualTo(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH)
+        assertThat(data.value!!.size).isEqualTo(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE)
+        assertThat(data.bytesTruncated).isGreaterThan(0)
+        assertThat(report.name).isEqualTo(longName)
+        assertThat(report.valueBytes).isEqualTo(longValue)
+    }
+
+    @Test
+    fun fromCoreClientEventNoneDoesNotTrim() {
+        val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
+        val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
+        val report = CoreClientEvent().apply {
+            name = longName
+            valueBytes = longValue
+            type = InternalEvents.EVENT_TYPE_WEBVIEW_SYNC.typeId
+            bytesTruncated = 5
+            trimPolicy = EventTrimPolicy.NONE
+        }
+
+        val data = EventIpcData.fromCoreClientEvent(logger, report)
+
+        assertThat(data.name).isEqualTo(longName)
+        assertThat(data.value).isEqualTo(longValue)
+        assertThat(data.bytesTruncated).isEqualTo(5)
+    }
+
+    @Test
+    fun fromCoreClientEventAccumulatesBytesTruncatedWithValueDelta() {
+        val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 9) { 4 }
+        val report = CoreClientEvent().apply {
+            valueBytes = longValue
+            type = InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.typeId
+            bytesTruncated = 55
+            trimPolicy = EventTrimPolicy.STANDARD
+        }
+
+        val data = EventIpcData.fromCoreClientEvent(logger, report)
+
+        assertThat(data.value!!.size).isEqualTo(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE)
+        val expectedValueDelta = longValue.size - data.value!!.size
+        assertThat(data.bytesTruncated).isEqualTo(55 + expectedValueDelta)
     }
 
     private companion object {

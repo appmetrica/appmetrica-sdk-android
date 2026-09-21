@@ -54,16 +54,15 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testCustomEventReportEntryShouldContainsCustomReportType() {
         ModuleEvent moduleEvent = ModuleEvent.newBuilder(new Random().nextInt()).build();
-        assertThat(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger).getType())
+        assertThat(CoreClientEvent.customEventReportEntry(moduleEvent).getType())
             .isEqualTo(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
     }
 
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedSubtype() {
         int type = new Random().nextInt();
-        CounterReport report = EventsManager.customEventReportEntry(
-            ModuleEvent.newBuilder(type).build(),
-            mPublicLogger
+        CoreClientEvent report = CoreClientEvent.customEventReportEntry(
+            ModuleEvent.newBuilder(type).build()
         );
         assertThat(report.getCustomType()).isEqualTo(type);
     }
@@ -71,9 +70,8 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedName() {
         String name = new RandomStringGenerator(20).nextString();
-        CounterReport report = EventsManager.customEventReportEntry(
-            ModuleEvent.newBuilder(new Random().nextInt()).withName(name).build(),
-            mPublicLogger
+        CoreClientEvent report = CoreClientEvent.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withName(name).build()
         );
         assertThat(report.getName()).isEqualTo(name);
     }
@@ -81,9 +79,8 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedValue() {
         String value = new RandomStringGenerator(1000).nextString();
-        CounterReport report = EventsManager.customEventReportEntry(
-            ModuleEvent.newBuilder(new Random().nextInt()).withValue(value).build(),
-            mPublicLogger
+        CoreClientEvent report = CoreClientEvent.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withValue(value).build()
         );
         assertThat(report.getValueBytes()).isEqualTo(StringUtils.getUTF8Bytes(value));
     }
@@ -94,9 +91,8 @@ public class EventsManagerTest extends CommonTest {
         String envValue = new RandomStringGenerator(100).nextString();
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put(envKey, envValue);
-        CounterReport report = EventsManager.customEventReportEntry(
-            ModuleEvent.newBuilder(new Random().nextInt()).withEnvironment(environment).build(),
-            mPublicLogger
+        CoreClientEvent report = CoreClientEvent.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withEnvironment(environment).build()
         );
         JSONObject jsonObject = new JSONObject(report.getEventEnvironment());
         assertThat(jsonObject.keys().next()).isEqualTo(envKey);
@@ -106,9 +102,8 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void customEventReportEntryExtras() throws Exception {
         Map<String, byte[]> extras = Collections.singletonMap("key", new byte[]{2, 6, 8});
-        CounterReport report = EventsManager.customEventReportEntry(
-            ModuleEvent.newBuilder(new Random().nextInt()).withExtras(extras).build(),
-            mPublicLogger
+        CoreClientEvent report = CoreClientEvent.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withExtras(extras).build()
         );
         assertThat(report.getExtras()).isEqualTo(extras);
     }
@@ -117,7 +112,7 @@ public class EventsManagerTest extends CommonTest {
     public void appMetricaEventReportEntryShouldContainCustomReportType() {
         AppMetricaEventData eventData = mock(AppMetricaEventData.class);
         when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
-        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.appMetricaEventReportEntry(eventData);
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
     }
 
@@ -127,7 +122,7 @@ public class EventsManagerTest extends CommonTest {
         AppMetricaEventData eventData = mock(AppMetricaEventData.class);
         when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
         when(eventData.getType()).thenReturn(type);
-        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.appMetricaEventReportEntry(eventData);
         assertThat(report.getCustomType()).isEqualTo(type);
     }
 
@@ -137,7 +132,7 @@ public class EventsManagerTest extends CommonTest {
         AppMetricaEventData eventData = mock(AppMetricaEventData.class);
         when(eventData.getData()).thenReturn(new byte[]{1, 2, 3});
         when(eventData.getName()).thenReturn(name);
-        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.appMetricaEventReportEntry(eventData);
         assertThat(report.getName()).isEqualTo(name);
     }
 
@@ -146,7 +141,7 @@ public class EventsManagerTest extends CommonTest {
         byte[] data = new byte[]{10, 20, 30};
         AppMetricaEventData eventData = mock(AppMetricaEventData.class);
         when(eventData.getData()).thenReturn(data);
-        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.appMetricaEventReportEntry(eventData);
         assertThat(report.getValueBytes()).isEqualTo(data);
     }
 
@@ -156,7 +151,7 @@ public class EventsManagerTest extends CommonTest {
         AppMetricaEventData eventData = mock(AppMetricaEventData.class);
         when(eventData.getData()).thenReturn(new byte[]{1});
         when(eventData.getBytesTruncated()).thenReturn(eventBytesTruncated);
-        CounterReport report = EventsManager.appMetricaEventReportEntry(eventData, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.appMetricaEventReportEntry(eventData);
         assertThat(report.getBytesTruncated()).isEqualTo(eventBytesTruncated);
     }
 
@@ -164,7 +159,7 @@ public class EventsManagerTest extends CommonTest {
     public void testOpenAppReportEntryShouldContainsExpectedValue() throws JSONException {
         String link = "some://link/deep";
         boolean auto = new Random().nextBoolean();
-        CounterReport report = EventsManager.openAppReportEntry(link, auto, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.openAppReportEntry(link, auto);
         JSONAssert.assertEquals(
             new JSONObject()
                 .put("link", link)
@@ -180,7 +175,7 @@ public class EventsManagerTest extends CommonTest {
     public void customErrorEntry() {
         String message = "mes";
         byte[] value = "somevalue".getBytes();
-        CounterReport report = EventsManager.customErrorReportEntry(message, value, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.customErrorReportEntry(message, value);
         SoftAssertions soft = new SoftAssertions();
 
         soft.assertThat(report.getName()).as("message").isEqualTo(message);
@@ -192,41 +187,11 @@ public class EventsManagerTest extends CommonTest {
         soft.assertAll();
     }
 
-    @Test
-    public void testUnhandledExceptionReportEntry() {
-        final String name = "name";
-        final String value = "value";
-        final int bytesTruncated = 200;
-        final String errorEnvironment = "error env";
-        final long creationTimestamp = 1700000000000L;
-        final HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
-        trimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 200);
-        ClientCounterReport clientCounterReport = (ClientCounterReport) EventsManager
-            .unhandledExceptionFromFileReportEntry(
-                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-                name,
-                value.getBytes(),
-                bytesTruncated,
-                trimmedFields,
-                errorEnvironment,
-                mPublicLogger,
-                creationTimestamp
-            );
-        SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(clientCounterReport.getName()).as("name").isEqualTo(name);
-        assertions.assertThat(clientCounterReport.getValueBytes()).as("value bytes").isEqualTo(value.getBytes());
-        assertions.assertThat(clientCounterReport.getType()).as("type").isEqualTo(InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId());
-        assertions.assertThat(clientCounterReport.getBytesTruncated()).as("bytes truncated").isEqualTo(bytesTruncated);
-        assertions.assertThat(clientCounterReport.getTrimmedFields()).as("trimmed fields").isEqualTo(trimmedFields);
-        assertions.assertThat(clientCounterReport.getEventEnvironment()).as("event environment").isEqualTo(errorEnvironment);
-        assertions.assertThat(clientCounterReport.getCreationTimestamp()).as("creation timestamp").isEqualTo(creationTimestamp);
-        assertions.assertAll();
-    }
 
     @Test
     public void testCleanupEventReportEntry() {
         final String value = "value";
-        final CounterReport report = EventsManager.cleanupEventReportEntry(value, mPublicLogger);
+        final CoreClientEvent report = CoreClientEvent.cleanupEventReportEntry(value);
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(report.getValue()).isEqualTo(value);
         assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CLEANUP.getTypeId());
@@ -278,7 +243,7 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testAnrEntry() {
         byte[] value = "value".getBytes();
-        CounterReport clientCounterReport = EventsManager.anrEntry(value, mPublicLogger);
+        CoreClientEvent clientCounterReport = CoreClientEvent.anrEntry(value);
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(clientCounterReport.getName()).isEmpty();
         assertions.assertThat(clientCounterReport.getValueBytes()).isEqualTo(value);
@@ -301,10 +266,9 @@ public class EventsManagerTest extends CommonTest {
             .build(),
             mPublicLogger,
             autoTracking);
-        CounterReport report = EventsManager.activationEventReportEntry(
+        CoreClientEvent report = CoreClientEvent.activationEventReportEntry(
             preloadInfoWrapper,
-            userProfileId,
-            mPublicLogger
+            userProfileId
         );
         assertThat(report.getName()).isEmpty();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_ACTIVATION.getTypeId());
@@ -321,10 +285,9 @@ public class EventsManagerTest extends CommonTest {
 
     @Test
     public void testActivationEventReportEntryNullPreloadInfo() throws JSONException {
-        CounterReport report = EventsManager.activationEventReportEntry(
+        CoreClientEvent report = CoreClientEvent.activationEventReportEntry(
             null,
-            "user_profile_id",
-            mPublicLogger
+            "user_profile_id"
         );
         assertThat(report.getName()).isEmpty();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_ACTIVATION.getTypeId());
@@ -333,7 +296,7 @@ public class EventsManagerTest extends CommonTest {
 
     @Test
     public void requestReferrerEntry() {
-        CounterReport report = EventsManager.requestReferrerEntry(mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.requestReferrerEntry();
         assertThat(report.getName()).isEmpty();
         assertThat(report.getValue()).isEmpty();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_REQUEST_REFERRER.getTypeId());
@@ -341,7 +304,7 @@ public class EventsManagerTest extends CommonTest {
 
     @Test
     public void testActivationEventReportEntryNullProfileID() {
-        CounterReport report = EventsManager.activationEventReportEntry(null, null, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.activationEventReportEntry(null, null);
         assertThat(report.getProfileID()).isNull();
     }
 
@@ -349,7 +312,7 @@ public class EventsManagerTest extends CommonTest {
     public void setSessionExtraReportEntry() {
         String key = "Key";
         byte[] value = new byte[]{1, 4, 7};
-        CounterReport report = EventsManager.setSessionExtraReportEntry(key, value, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.setSessionExtraReportEntry(key, value);
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA.getTypeId());
         assertThat(report.getName()).isNullOrEmpty();
         assertThat(report.getValue()).isNullOrEmpty();
@@ -359,7 +322,7 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void clientExternalAttributionEntry() {
         byte[] value = new byte[]{1, 4, 7};
-        CounterReport report = EventsManager.clientExternalAttributionEntry(value, mPublicLogger);
+        CoreClientEvent report = CoreClientEvent.clientExternalAttributionEntry(value);
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId());
         assertThat(report.getName()).isEmpty();
         assertThat(report.getValueBytes()).isEqualTo(value);

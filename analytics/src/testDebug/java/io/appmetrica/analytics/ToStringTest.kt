@@ -17,7 +17,6 @@ import io.appmetrica.analytics.ecommerce.ECommerceProduct
 import io.appmetrica.analytics.ecommerce.ECommerceReferrer
 import io.appmetrica.analytics.ecommerce.ECommerceScreen
 import io.appmetrica.analytics.impl.AppMetricaConfigExtension
-import io.appmetrica.analytics.impl.ClientCounterReport
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder
 import io.appmetrica.analytics.impl.DeferredDeeplinkState
 import io.appmetrica.analytics.impl.DistributionSource
@@ -91,7 +90,7 @@ internal class ToStringTest(
         fun data(): Collection<Array<Any?>> = listOf(
             CounterConfiguration().toTestCase(Modifier.PRIVATE or Modifier.FINAL),
             CoreRequestConfig().toTestCase(Modifier.PRIVATE),
-            ReportToSend(mock(), true, 12, mock(), mock()).toTestCase(Modifier.PRIVATE),
+            ReportToSend(mock(), true, 12, mock()).toTestCase(Modifier.PRIVATE),
             ClientConfiguration(mock(), mock()).toTestCase(Modifier.PRIVATE or Modifier.FINAL),
             ProcessConfiguration(mock<ContentValues>(), null).toTestCase(additionalDescription = "with null receiver"),
 
@@ -306,7 +305,10 @@ internal class ToStringTest(
             ),
             TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase(),
 
-            JvmCrash(mock(), clientConfigurationMock(), hashMapOf<ClientCounterReport.TrimmedField, Int>()).toTestCase(
+            JvmCrash(
+                mock(),
+                clientConfigurationMock(),
+            ).toTestCase(
                 modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
                 excludedFields = setOf("environment", "fileModifiedTimestamp")
             ),

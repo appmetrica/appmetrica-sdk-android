@@ -24,8 +24,6 @@ import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
@@ -142,7 +140,7 @@ public class ReportsHandler {
                 isAdvIdentifiersTrackingEnabledForced
             );
         }
-        reportEvent(CounterReport.formUpdatePreActivationConfig(), mCommutationReportEnvironment);
+        reportEvent(CoreClientEvent.formUpdatePreActivationConfig(), mCommutationReportEnvironment);
     }
 
     public void onStartupRequestStarted() {
@@ -153,7 +151,7 @@ public class ReportsHandler {
         mConnector.allowDisconnect();
     }
 
-    private CounterReport prepareRegularReport(final CounterReport event,
+    private CoreClientEvent prepareRegularReport(final CoreClientEvent event,
                                                final ReporterEnvironment reporterEnvironment) {
         if (EventsManager.shouldUseErrorEnvironment(event.getType())) {
             DebugLogger.INSTANCE.info(
@@ -167,12 +165,12 @@ public class ReportsHandler {
         return event;
     }
 
-    void reportEvent(final CounterReport event, final ReporterEnvironment reporterEnvironment) {
+    void reportEvent(final CoreClientEvent event, final ReporterEnvironment reporterEnvironment) {
         reportEvent(prepareRegularReport(event, reporterEnvironment), reporterEnvironment, null);
     }
 
     void reportEvent(
-        final CounterReport event,
+        final CoreClientEvent event,
         final ReporterEnvironment reporterEnvironment,
         final Map<String, Object> attributes
     ) {
@@ -180,7 +178,7 @@ public class ReportsHandler {
     }
 
     public void reportEvent(
-        CounterReport report,
+        CoreClientEvent report,
         final ReporterEnvironment environment,
         final int serviceDataReporterType,
         final Map<String, Object> attributes
@@ -236,9 +234,8 @@ public class ReportsHandler {
             IdentifiersData.BUNDLE_KEY,
             new IdentifiersData(identifiers, freshClientClids, receiver, forceRefreshConfiguration)
         );
-        CounterReport counterReport = EventsManager.reportEntry(
-            InternalEvents.EVENT_TYPE_STARTUP,
-            PublicLogger.getAnonymousInstance()
+        CoreClientEvent counterReport = CoreClientEvent.reportEntry(
+            InternalEvents.EVENT_TYPE_STARTUP
         );
         counterReport.setPayload(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
@@ -247,17 +244,16 @@ public class ReportsHandler {
     public void reportRequestReferrerEvent(@NonNull ReferrerResultReceiver receiver) {
         Bundle payload = new Bundle();
         payload.putParcelable(ReferrerResultReceiver.BUNDLE_KEY, receiver);
-        CounterReport counterReport = EventsManager.requestReferrerEntry(PublicLogger.getAnonymousInstance());
+        CoreClientEvent counterReport = CoreClientEvent.requestReferrerEntry();
         counterReport.setPayload(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
     }
 
     public void reportActivationEvent(final ReporterEnvironment environment) {
         reportEvent(
-            EventsManager.activationEventReportEntry(
+            CoreClientEvent.activationEventReportEntry(
                 environment.getPreloadInfoWrapper(),
-                environment.getInitialUserProfileID(),
-                getPublicLoggerForEnvironment(environment)
+                environment.getInitialUserProfileID()
             ),
             environment
         );
@@ -332,7 +328,7 @@ public class ReportsHandler {
     public void sendAppEnvironmentValue(String key, String value, ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formAppEnvironmentChangedReport(key, value),
+                CoreClientEvent.formAppEnvironmentChangedReport(key, value),
                 reporterEnvironment
             ).build()
         );
@@ -341,7 +337,7 @@ public class ReportsHandler {
     public void sendClearAppEnvironment(final ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formAppEnvironmentClearedReport(),
+                CoreClientEvent.formAppEnvironmentClearedReport(),
                 reporterEnvironment
             ).build()
         );
@@ -351,7 +347,7 @@ public class ReportsHandler {
                          @NonNull ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formUserProfileEvent(userProfile),
+                CoreClientEvent.formUserProfileEvent(userProfile),
                 reporterEnvironment
             ).build()
         );
@@ -361,10 +357,7 @@ public class ReportsHandler {
                           @NonNull ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formSetUserProfileIDEvent(
-                    userProfileID,
-                    getPublicLoggerForEnvironment(reporterEnvironment)
-                ),
+                CoreClientEvent.formSetUserProfileIDEvent(userProfileID),
                 reporterEnvironment
             ).build()
         );
@@ -374,7 +367,7 @@ public class ReportsHandler {
                      @NonNull ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formRevenueEvent(getPublicLoggerForEnvironment(reporterEnvironment), revenue),
+                CoreClientEvent.formRevenueEvent(revenue),
                 reporterEnvironment
             ).build()
         );
@@ -385,7 +378,7 @@ public class ReportsHandler {
         @NonNull ReporterEnvironment reporterEnvironment) {
         queueReport(
             ReportToSend.newBuilder(
-                ClientCounterReport.formAdRevenueEvent(getPublicLoggerForEnvironment(reporterEnvironment), adRevenue),
+                CoreClientEvent.formAdRevenueEvent(adRevenue),
                 reporterEnvironment
             ).build()
         );
@@ -396,7 +389,7 @@ public class ReportsHandler {
         for (final Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result : event.toProto()) {
             queueReport(
                 ReportToSend.newBuilder(
-                    ClientCounterReport.formECommerceEvent(getPublicLoggerForEnvironment(environment), result),
+                    CoreClientEvent.formECommerceEvent(result),
                     environment
                 ).build()
             );
@@ -419,10 +412,5 @@ public class ReportsHandler {
     @NonNull
     ReporterEnvironment getCommutationReporterEnvironment() {
         return mCommutationReportEnvironment;
-    }
-
-    @NonNull
-    private PublicLogger getPublicLoggerForEnvironment(@NonNull ReporterEnvironment environment) {
-        return LoggerStorage.getOrCreatePublicLogger(environment.getReporterConfiguration().getApiKey());
     }
 }

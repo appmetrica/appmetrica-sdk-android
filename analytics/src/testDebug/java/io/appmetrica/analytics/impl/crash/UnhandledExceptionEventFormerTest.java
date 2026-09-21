@@ -1,20 +1,19 @@
 package io.appmetrica.analytics.impl.crash;
 
 import android.content.Context;
-import io.appmetrica.analytics.impl.ClientCounterReport;
-import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.CoreClientEvent;
+import io.appmetrica.analytics.impl.EventTrimPolicy;
 import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
+import io.appmetrica.analytics.impl.TrimmedCoreClientEvent;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.crash.jvm.converter.JvmCrashConverter;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
-import java.util.HashMap;
 import java.util.Random;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
@@ -56,7 +55,7 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
 
     @Test
     public void formEvent() {
-        try (MockedStatic<EventsManager> sEventsManager = Mockito.mockStatic(EventsManager.class)) {
+        try (MockedStatic<CoreClientEvent> sCoreClientEvent = Mockito.mockStatic(CoreClientEvent.class)) {
             final byte[] eventValueBytes = new byte[1024];
             String environment = "environment";
             new Random().nextBytes(eventValueBytes);
@@ -77,18 +76,16 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             when(mReporterEnvironment.getProcessConfiguration()).thenReturn(processConfiguration);
             when(mReporterEnvironment.getReporterConfiguration()).thenReturn(new CounterConfiguration());
 
-            ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
+            CoreClientEvent clientCounterReport = mock(CoreClientEvent.class);
+            when(clientCounterReport.getTrimPolicy()).thenReturn(EventTrimPolicy.STANDARD);
+            when(clientCounterReport.getBytesTruncated()).thenReturn(0);
+            when(clientCounterReport.getExtras()).thenReturn(new java.util.HashMap<>());
             when(
-                EventsManager.unhandledExceptionReportEntry(
+                CoreClientEvent.unhandledExceptionReportEntry(
                     eq(errorName),
-                    same(eventValueBytes),
-                    any(PublicLogger.class)
+                    same(eventValueBytes)
                 )
             ).thenReturn(clientCounterReport);
-            HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
-            trimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 20);
-            trimmedFields.put(ClientCounterReport.TrimmedField.NAME, 10);
-            when(clientCounterReport.getTrimmedFields()).thenReturn(trimmedFields);
             ReportToSend report = mEventFormer.formEvent(unhandledException, mReporterEnvironment);
             verify(clientCounterReport).setEventEnvironment(environment);
             SoftAssertions softly = new SoftAssertions();
@@ -97,8 +94,7 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             softly.assertThat(report.getEnvironment().getProcessConfiguration())
                 .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getProcessConfiguration());
             softly.assertThat(report.isCrashReport()).isTrue();
-            softly.assertThat(report.getTrimmedFields()).isEqualTo(trimmedFields);
-            softly.assertThat(report.getReport()).isSameAs(clientCounterReport);
+            softly.assertThat(report.getReport()).isInstanceOf(TrimmedCoreClientEvent.class);
             softly.assertAll();
         }
     }

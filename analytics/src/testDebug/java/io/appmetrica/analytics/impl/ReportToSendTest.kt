@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl
 
-import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
@@ -21,62 +20,49 @@ internal class ReportToSendTest : CommonTest() {
         on { reporterConfiguration } doReturn reporterConfiguration
     }
 
+    private fun coreClientEvent(): CoreClientEvent = mock {
+        on { trimPolicy } doReturn EventTrimPolicy.STANDARD
+        on { bytesTruncated } doReturn 0
+        on { extras } doReturn mutableMapOf()
+    }
+
     @Test
     fun builder() {
-        val counterReport = mock<CounterReport>()
+        val counterReport = coreClientEvent()
         val reportToSend = ReportToSend.newBuilder(counterReport, reporterEnvironment).build()
 
         SoftAssertions().apply {
-            assertThat(reportToSend.report).isSameAs(counterReport)
+            assertThat(reportToSend.report).isInstanceOf(TrimmedCoreClientEvent::class.java)
             assertThat(reportToSend.isCrashReport).isFalse
             assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
-            assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
 
     @Test
     fun builderAsCrash() {
-        val counterReport = mock<CounterReport>()
+        val counterReport = coreClientEvent()
         val reportToSend = ReportToSend.newBuilder(counterReport, reporterEnvironment)
             .asCrash(true)
             .build()
 
         SoftAssertions().apply {
-            assertThat(reportToSend.report).isSameAs(counterReport)
+            assertThat(reportToSend.report).isInstanceOf(TrimmedCoreClientEvent::class.java)
             assertThat(reportToSend.isCrashReport).isTrue
             assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
-            assertThat(reportToSend.trimmedFields).isNull()
-        }.assertAll()
-    }
-
-    @Test
-    fun builderWithTrimmerFields() {
-        val counterReport = mock<CounterReport>()
-        val trimmedField = mock<HashMap<TrimmedField, Int>>()
-        val reportToSend = ReportToSend.newBuilder(counterReport, reporterEnvironment)
-            .withTrimmedFields(trimmedField)
-            .build()
-
-        SoftAssertions().apply {
-            assertThat(reportToSend.report).isSameAs(counterReport)
-            assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
-            assertThat(reportToSend.trimmedFields).isSameAs(trimmedField)
         }.assertAll()
     }
 
     @Test
     fun builderWithServiceDataReporterType() {
-        val counterReport = mock<CounterReport>()
+        val counterReport = coreClientEvent()
         val reportToSend = ReportToSend.newBuilder(counterReport, reporterEnvironment)
             .withServiceDataReporterType(42)
             .build()
 
         SoftAssertions().apply {
-            assertThat(reportToSend.report).isSameAs(counterReport)
+            assertThat(reportToSend.report).isInstanceOf(TrimmedCoreClientEvent::class.java)
             assertThat(reportToSend.isCrashReport).isFalse
             assertThat(reportToSend.serviceDataReporterType).isEqualTo(42)
-            assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
 
@@ -85,7 +71,7 @@ internal class ReportToSendTest : CommonTest() {
         val userProfileID = "user_profile_id"
         whenever(reporterEnvironment.initialUserProfileID).thenReturn(userProfileID)
         val reportToSend = ReportToSend.newBuilder(
-            mock(),
+            coreClientEvent(),
             reporterEnvironment
         ).build()
         assertThat(reportToSend.environment.initialUserProfileID).isEqualTo(userProfileID)

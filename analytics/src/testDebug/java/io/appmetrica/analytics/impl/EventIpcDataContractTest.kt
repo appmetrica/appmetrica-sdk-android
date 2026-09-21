@@ -20,12 +20,15 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.function.Predicate
 
 @SuppressLint("RobolectricUsage") // Parcel / Bundle marshalling
 @RunWith(RobolectricTestRunner::class)
 internal class EventIpcDataContractTest : CommonTest() {
+
+    private val logger: PublicLogger = mock()
 
     @get:Rule
     val contextRule = ContextRule()
@@ -39,8 +42,8 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     private val codec = EventIpcCodec
 
-    private fun write(report: CounterReport, bundle: Bundle = Bundle()): Bundle {
-        return codec.toBundle(EventIpcData.fromCounterReport(report), bundle)
+    private fun write(report: CoreClientEvent, bundle: Bundle = Bundle()): Bundle {
+        return codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), bundle)
     }
 
     private fun read(bundle: Bundle): CoreServiceEvent {
@@ -99,18 +102,18 @@ internal class EventIpcDataContractTest : CommonTest() {
             putBundle("nested", Bundle().apply { putString("inner", "ok") })
         }
 
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             this.type = type
             this.customType = customType
             this.value = value
-            setEventEnvironment(eventEnvironment)
+            this.eventEnvironment = eventEnvironment
             name = event
             this.bytesTruncated = bytesTruncated
-            setProfileID(profileId)
-            setCreationEllapsedRealtime(creationElapsedRealtime)
-            setCreationTimestamp(creationTimestamp)
-            setSource(source)
-            setPayload(payload)
+            profileID = profileId
+            this.creationElapsedRealtime = creationElapsedRealtime
+            this.creationTimestamp = creationTimestamp
+            this.source = source
+            this.payload = payload
             this.extras = HashMap(extras)
             valueProtocolVersion = 2
         }
@@ -158,9 +161,9 @@ internal class EventIpcDataContractTest : CommonTest() {
             putParcelable(IdentifiersData.BUNDLE_KEY, identifiersData)
         }
 
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            setPayload(payload)
+            this.payload = payload
         }
 
         val decoded = read(marshal(write(report)))
@@ -198,16 +201,16 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun nullOptionalFieldsNormalized() {
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             type = InternalEvents.EVENT_TYPE_REGULAR.typeId
             value = null
             name = null
-            setEventEnvironment(null)
-            setProfileID(null)
-            setSource(null)
-            setPayload(null)
-            setCreationEllapsedRealtime(0L)
-            setCreationTimestamp(0L)
+            eventEnvironment = null
+            profileID = null
+            source = null
+            payload = null
+            creationElapsedRealtime = 0L
+            creationTimestamp = 0L
             extras = HashMap()
             valueProtocolVersion = null
         }
@@ -239,7 +242,11 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun coexistsWithClientConfigurationInSameBundle() {
-        val report = CounterReport("v", "n", InternalEvents.EVENT_TYPE_REGULAR.typeId)
+        val report = CoreClientEvent().apply {
+            value = "v"
+            name = "n"
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
+        }
         val environment = ReporterEnvironment(
             ProcessConfiguration(context, null),
             CounterConfiguration("api-key"),
@@ -361,11 +368,11 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun sourceAbsentMeansNull() {
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            setSource(null)
-            setCreationEllapsedRealtime(0L)
-            setCreationTimestamp(0L)
+            source = null
+            creationElapsedRealtime = 0L
+            creationTimestamp = 0L
         }
 
         val decoded = read(marshal(write(report)))
@@ -395,11 +402,11 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun sourcePresentRoundTrips() {
-        val report = CounterReport().apply {
+        val report = CoreClientEvent().apply {
             type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            setSource(EventSource.NATIVE)
-            setCreationEllapsedRealtime(0L)
-            setCreationTimestamp(0L)
+            source = EventSource.NATIVE
+            creationElapsedRealtime = 0L
+            creationTimestamp = 0L
         }
 
         val decoded = read(marshal(write(report)))

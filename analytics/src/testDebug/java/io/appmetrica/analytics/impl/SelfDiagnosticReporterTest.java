@@ -55,7 +55,7 @@ public class SelfDiagnosticReporterTest extends CommonTest {
     @Test
     public void test() {
         ArgumentCaptor<Bundle> bundleCaptor = ArgumentCaptor.forClass(Bundle.class);
-        selfDiagnosticReporter.reportEvent(new CounterReport());
+        selfDiagnosticReporter.reportEvent(new CoreClientEvent());
         if (newReporterType != null) {
             verify(selfProcessReporter).reportData(
                 eq(AppMetricaServiceDataReporter.TYPE_CORE),

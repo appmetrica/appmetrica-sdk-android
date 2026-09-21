@@ -62,7 +62,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     public void reportAppOpen(@NonNull String deeplink, boolean auto) {
         mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
         mReportsHandler.reportEvent(
-                EventsManager.openAppReportEntry(deeplink, auto, mPublicLogger),
+                CoreClientEvent.openAppReportEntry(deeplink, auto),
                 mReporterEnvironment
         );
     }
@@ -192,7 +192,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     public void reportExternalAttribution(@NonNull ExternalAttribution value) {
         mPublicLogger.info("External attribution received: %s", value);
         mReportsHandler.reportEvent(
-            EventsManager.clientExternalAttributionEntry(value.toBytes(), mPublicLogger),
+            CoreClientEvent.clientExternalAttributionEntry(value.toBytes()),
             mReporterEnvironment
         );
     }

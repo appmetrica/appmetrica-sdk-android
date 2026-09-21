@@ -2,9 +2,10 @@ package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.ClientCounterReport;
-import io.appmetrica.analytics.impl.EventsManager;
-import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.CoreClientEvent;
+import io.appmetrica.analytics.impl.EventTrimPolicy;
+import io.appmetrica.analytics.impl.TrimmedCoreClientEvent;
+import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
@@ -14,10 +15,8 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.gradle.testutils.assertions.Assertions;
 import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import org.assertj.core.api.SoftAssertions;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +37,6 @@ public class JvmCrashTest extends CommonTest {
 
     private static final String KEY_EVENT = "event";
     private static final String KEY_BYTES_TRUNCATED = "bytes_truncated";
-    private static final String KEY_TRIMMED_FIELDS = "trimmed_fields";
     private static final String KEY_JVM_CRASH = "jvm_crash";
     private static final String KEY_EVENT_NAME = "name";
     private static final String KEY_PROCESS_CONFIGURATION = "process_configuration";
@@ -57,7 +55,6 @@ public class JvmCrashTest extends CommonTest {
     @Mock
     private ClientConfiguration clientConfiguration;
     private final String mCrashName = "crash_name";
-    private final String mCrashValue = "crash_value";
     private final String mErrorEnvironment = "error env";
     private final long mFileModifiedTimestamp = 1700000000000L;
     private final int mPid = 1022;
@@ -66,7 +63,10 @@ public class JvmCrashTest extends CommonTest {
     private final String mApiKey = TestsData.generateApiKey();
     private final CounterConfigurationReporterType mReporterType = CounterConfigurationReporterType.MAIN;
     private final int mBytesTruncated = 200;
-    private final HashMap<ClientCounterReport.TrimmedField, Integer> mTrimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
+    private final int mValueDelta = 100;
+    private byte[] mRawCrashValue;
+    private byte[] mTrimmedCrashValue;
+    private PublicLogger logger;
 
     @Before
     public void setUp() {
@@ -78,30 +78,34 @@ public class JvmCrashTest extends CommonTest {
         doReturn(mPackageName).when(processConfiguration).getPackageName();
         doReturn(mApiKey).when(reporterConfiguration).getApiKey();
         doReturn(mReporterType).when(reporterConfiguration).getReporterType();
-        mTrimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 100);
+        logger = mock(PublicLogger.class);
+        mRawCrashValue = new byte[EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + mValueDelta];
+        Arrays.fill(mRawCrashValue, (byte) 1);
+        mTrimmedCrashValue = Arrays.copyOf(mRawCrashValue, EventLimitationProcessor.REPORT_VALUE_MAX_SIZE);
+    }
+
+    private TrimmedCoreClientEvent crashReport() {
+        CoreClientEvent event = new CoreClientEvent();
+        event.setName(mCrashName);
+        event.setValueBytes(mRawCrashValue);
+        event.setBytesTruncated(mBytesTruncated);
+        event.setEventEnvironment(mErrorEnvironment);
+        event.setTrimPolicy(EventTrimPolicy.STANDARD);
+        return new TrimmedCoreClientEvent(logger, event);
     }
 
     @Test
     public void testToJSON() throws JSONException {
-        JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-            mCrashName,
-            mCrashValue.getBytes(),
-            mBytesTruncated,
-            mTrimmedFields,
-            mErrorEnvironment,
-            mock(PublicLogger.class),
-            0L
-        ), clientConfiguration, mTrimmedFields);
+        JvmCrash crash = new JvmCrash(crashReport(), clientConfiguration);
 
         JSONObject object = new JSONObject(crash.toJSONString());
 
         SoftAssertions softly = new SoftAssertions();
         JSONObject event = object.getJSONObject(KEY_EVENT);
-        softly.assertThat(event.get(KEY_JVM_CRASH)).isEqualTo(Base64.encodeToString(mCrashValue.getBytes(), 0));
+        softly.assertThat(event.get(KEY_JVM_CRASH)).isEqualTo(Base64.encodeToString(mTrimmedCrashValue, 0));
         softly.assertThat(event.get(KEY_EVENT_NAME)).isEqualTo(mCrashName);
-        softly.assertThat(event.get(KEY_BYTES_TRUNCATED)).isEqualTo(mBytesTruncated);
-        softly.assertThat(event.get(KEY_TRIMMED_FIELDS)).isEqualTo("{\"VALUE\":100}");
+        softly.assertThat(event.get(KEY_BYTES_TRUNCATED)).isEqualTo(mBytesTruncated + mValueDelta);
+        softly.assertThat(event.has("trimmed_fields")).isFalse();
         softly.assertThat(event.get(KEY_ENVIRONMENT)).isEqualTo(mErrorEnvironment);
 
         JSONObject process = object.getJSONObject(KEY_PROCESS_CONFIGURATION);
@@ -118,21 +122,12 @@ public class JvmCrashTest extends CommonTest {
 
     @Test
     public void testAllFieldsFilled() throws Exception {
-        JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
-            mCrashName,
-            mCrashValue.getBytes(),
-            mBytesTruncated,
-            mTrimmedFields,
-            mErrorEnvironment,
-            mock(PublicLogger.class),
-            0L
-        ), clientConfiguration, mTrimmedFields);
-        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
-            .withIgnoredFields("trimmedFields");
-        assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
+        JvmCrash crash = new JvmCrash(crashReport(), clientConfiguration);
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash)
+            .withDeclaredAccessibleFields(true);
+        assertions.checkField("crash", "getCrashValue", mTrimmedCrashValue);
         assertions.checkField("name", "getName", mCrashName);
-        assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
+        assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated + mValueDelta);
         assertions.checkField("errorEnvironment", "getEnvironment", mErrorEnvironment);
         assertions.checkField("pid", "getPid", mPid);
         assertions.checkField("psid", "getPsid", mPsid);
@@ -141,8 +136,6 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
         assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", 0L);
         assertions.checkAll();
-
-        assertThat(crash.getTrimmedFields()).containsOnly(new AbstractMap.SimpleEntry<ClientCounterReport.TrimmedField, Integer>(ClientCounterReport.TrimmedField.VALUE, 100));
     }
 
     @Test
@@ -157,18 +150,17 @@ public class JvmCrashTest extends CommonTest {
             ).put(
                 KEY_EVENT,
                 new JSONObject()
-                    .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
+                    .put(KEY_JVM_CRASH, Base64.encodeToString(mTrimmedCrashValue, 0))
                     .put(KEY_EVENT_NAME, mCrashName)
                     .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
                     .put(KEY_ENVIRONMENT, mErrorEnvironment)
-                    .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
             ).toString(),
             mFileModifiedTimestamp
         );
 
-        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
-            .withIgnoredFields("trimmedFields");
-        assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash)
+            .withDeclaredAccessibleFields(true);
+        assertions.checkField("crash", "getCrashValue", mTrimmedCrashValue);
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
         assertions.checkField("errorEnvironment", "getEnvironment", mErrorEnvironment);
@@ -179,8 +171,6 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
         assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", mFileModifiedTimestamp);
         assertions.checkAll();
-
-        assertThat(crash.getTrimmedFields()).containsOnly(new AbstractMap.SimpleEntry<ClientCounterReport.TrimmedField, Integer>(ClientCounterReport.TrimmedField.VALUE, 100));
     }
 
     @Test
@@ -195,15 +185,16 @@ public class JvmCrashTest extends CommonTest {
             ).put(
                 KEY_EVENT,
                 new JSONObject()
-                    .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
+                    .put(KEY_JVM_CRASH, Base64.encodeToString(mTrimmedCrashValue, 0))
                     .put(KEY_EVENT_NAME, mCrashName)
                     .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
             ).toString(),
             0L
         );
 
-        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true);
-        assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash)
+            .withDeclaredAccessibleFields(true);
+        assertions.checkField("crash", "getCrashValue", mTrimmedCrashValue);
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
         assertions.checkField("errorEnvironment", "getEnvironment", null);
@@ -211,24 +202,38 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("psid", "getPsid", mPsid);
         assertions.checkField("packageName", "getPackageName", mPackageName);
         assertions.checkField("apiKey", "getApiKey", mApiKey);
-        assertions.checkField("trimmedFields", "getTrimmedFields", new HashMap<String, String>());
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
         assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", 0L);
         assertions.checkAll();
     }
 
     @Test
+    public void testFromJsonIgnoresLegacyTrimmedFieldsKey() throws Exception {
+        JvmCrash crash = new JvmCrash(
+            new JSONObject().put(
+                KEY_PROCESS_CONFIGURATION,
+                new JSONObject().put(KEY_PID, mPid).put(KEY_PSID, mPsid).put(KEY_PACKAGE_NAME, mPackageName)
+            ).put(
+                KEY_REPORTER_CONFIGURATION,
+                new JSONObject().put(KEY_API_KEY, mApiKey).put(KEY_REPORTER_TYPE, "main")
+            ).put(
+                KEY_EVENT,
+                new JSONObject()
+                    .put(KEY_JVM_CRASH, Base64.encodeToString(mTrimmedCrashValue, 0))
+                    .put(KEY_EVENT_NAME, mCrashName)
+                    .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
+                    .put("trimmed_fields", new JSONObject().put("VALUE", mValueDelta))
+            ).toString(),
+            mFileModifiedTimestamp
+        );
+
+        assertThat(crash.getBytesTruncated()).isEqualTo(mBytesTruncated);
+        assertThat(crash.getCrashValue()).isEqualTo(mTrimmedCrashValue);
+    }
+
+    @Test
     public void testSerializeAndDeserialize() throws JSONException {
-        JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
-            mCrashName,
-            mCrashValue.getBytes(),
-            mBytesTruncated,
-            mTrimmedFields,
-            mErrorEnvironment,
-            mock(PublicLogger.class),
-            0L
-        ), clientConfiguration, mTrimmedFields);
+        JvmCrash crash = new JvmCrash(crashReport(), clientConfiguration);
         assertThat(new JvmCrash(crash.toJSONString(), 0L)).usingRecursiveComparison().isEqualTo(crash);
     }
 
@@ -286,7 +291,6 @@ public class JvmCrashTest extends CommonTest {
                 .put(KEY_JVM_CRASH, Base64.encodeToString("crashValue".getBytes(), 0))
                 .put(KEY_EVENT_NAME, "name")
                 .put(KEY_BYTES_TRUNCATED, 0)
-                .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
         );
     }
 }

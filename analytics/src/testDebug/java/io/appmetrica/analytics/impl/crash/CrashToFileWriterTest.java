@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.crash;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
+import io.appmetrica.analytics.impl.TrimmedCoreClientEvent;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
@@ -40,7 +40,7 @@ public class CrashToFileWriterTest extends CommonTest {
     @Mock
     private File mCrashFolder;
     @Mock
-    private CounterReport counterReport;
+    private TrimmedCoreClientEvent trimmedReport;
     @Mock
     private ReportToSend mReport;
     @Mock
@@ -60,8 +60,9 @@ public class CrashToFileWriterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashFolder);
         when(mReport.getEnvironment()).thenReturn(mReporterEnvironment);
-        when(mReport.getReport()).thenReturn(counterReport);
+        when(mReport.getReport()).thenReturn(trimmedReport);
         when(mReporterEnvironment.getProcessConfiguration()).thenReturn(mProcessConfiguration);
+        when(mReporterEnvironment.getReporterConfiguration()).thenReturn(mock(io.appmetrica.analytics.internal.CounterConfiguration.class));
         when(mProcessConfiguration.getProcessID()).thenReturn(7766);
         when(mProcessConfiguration.getProcessSessionID()).thenReturn("112233");
         mCrashToFileWriter = new CrashToFileWriter(mContext, mFileProvider, mCrashFolderPreparer, fileLocksHolder);

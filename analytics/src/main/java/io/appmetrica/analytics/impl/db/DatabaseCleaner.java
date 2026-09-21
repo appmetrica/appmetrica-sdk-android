@@ -6,9 +6,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.CoreClientEvent;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.ProtobufUtils;
@@ -19,7 +17,6 @@ import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -146,9 +143,8 @@ public class DatabaseCleaner {
     }
 
     @Nullable
-    private CounterReport formCleanupEvent(@NonNull List<ContentValues> reports,
+    private CoreClientEvent formCleanupEvent(@NonNull List<ContentValues> reports,
                                            @NonNull Reason reason,
-                                           @Nullable String apiKey,
                                            int actualDeletedNumber) {
         try {
             JSONObject cleared = new JSONObject();
@@ -181,8 +177,7 @@ public class DatabaseCleaner {
                     .put("cleared", cleared)
                     .put("actual_deleted_number", actualDeletedNumber);
             JSONObject value = new JSONObject().put("details", details);
-            PublicLogger logger = LoggerStorage.getOrCreatePublicLogger(apiKey);
-            return EventsManager.cleanupEventReportEntry(value.toString(), logger);
+            return CoreClientEvent.cleanupEventReportEntry(value.toString());
         } catch (Throwable ex) {
             DebugLogger.INSTANCE.error(TAG, ex, "Something went wrong while forming cleanup event");
         }
@@ -198,7 +193,7 @@ public class DatabaseCleaner {
         if (apiKey != null && mSelfDiagnosticReporterStorage != null) {
             SelfDiagnosticReporter reporter = mSelfDiagnosticReporterStorage
                     .getOrCreateReporter(apiKey, mReporterType);
-            final CounterReport report = formCleanupEvent(reports, reason, apiKey, deletedRowsCount);
+            final CoreClientEvent report = formCleanupEvent(reports, reason, deletedRowsCount);
             if (report != null) {
                 reporter.reportEvent(report);
             }

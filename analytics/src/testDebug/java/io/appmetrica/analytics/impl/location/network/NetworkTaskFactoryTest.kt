@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.location.network
 
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor
-import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.CoreClientEvent
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.LazyReportConfigProvider
 import io.appmetrica.analytics.impl.ReportTask
@@ -46,7 +46,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
 
     private val customUserAgent = "CustomUserAgent"
     val context = mock<Context>()
-    val counterReport = mock<CounterReport>()
+    val counterReport = mock<CoreClientEvent>()
     val vitalComponentDataProvider = mock<VitalComponentDataProvider>()
     val notIsBadRequestCondition = mock<NetworkTask.ShouldTryNextHostCondition>()
 
