@@ -149,6 +149,11 @@ public class ServiceExecutorProvider {
         return mServiceExecutorFactory.createHmsReferrerThread(runnable);
     }
 
+    @NonNull
+    public InterruptionSafeThread getRuStoreReferrerThread(@NonNull Runnable runnable) {
+        return mServiceExecutorFactory.createRuStoreReferrerThread(runnable);
+    }
+
     @VisibleForTesting
     public void destroy() {
         stopRunning(mMetricaCoreExecutor);

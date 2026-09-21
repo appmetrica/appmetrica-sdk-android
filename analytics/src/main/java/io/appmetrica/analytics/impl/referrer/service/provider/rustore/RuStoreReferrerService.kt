@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListener
 import io.appmetrica.analytics.impl.referrer.service.ReferrerResult
@@ -12,6 +13,7 @@ import io.appmetrica.analytics.impl.referrer.service.provider.rustore.aidl.GetIn
 import io.appmetrica.analytics.impl.referrer.service.provider.rustore.aidl.InstallReferrerProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Binder client for RuStore install referrer service.
@@ -67,39 +69,53 @@ internal class RuStoreReferrerService(private val context: Context) {
         private val listener: ReferrerListener,
     ) : ServiceConnection {
 
+        private val completed = AtomicBoolean()
+
         // Held as a field so the Binder callback is not garbage-collected before
         // RuStore calls onSuccess/onError from the remote process.
         private val referrerCallback = object : GetInstallReferrerCallback.Stub() {
             override fun onSuccess(payload: String?) {
                 DebugLogger.info(tag, "Got referrer from RuStore: $payload")
-                unbindSafely(this@RuStoreServiceConnection)
-                listener.onResult(parsePayload(payload))
+                complete(parsePayload(payload))
             }
 
             override fun onError(code: Int, errorMessage: String) {
                 DebugLogger.warning(tag, "RuStore referrer error $code: $errorMessage")
-                unbindSafely(this@RuStoreServiceConnection)
-                listener.onResult(ReferrerResult.Failure("RuStore referrer error $code: $errorMessage"))
+                complete(ReferrerResult.Failure("RuStore referrer error $code: $errorMessage"))
             }
         }
 
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
             DebugLogger.info(tag, "Service connected: $name")
+            if (completed.get()) {
+                return
+            }
             try {
                 val service = InstallReferrerProvider.Stub.asInterface(binder)
                 if (service == null) {
                     val message = "RuStore service binder is null"
                     DebugLogger.warning(tag, message)
-                    unbindSafely(this)
-                    listener.onResult(ReferrerResult.Failure(message))
+                    complete(ReferrerResult.Failure(message))
                     return
                 }
-                service.getInstallReferrer(context.packageName, referrerCallback)
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.getRuStoreReferrerThread(
+                    Runnable {
+                        if (completed.get()) {
+                            return@Runnable
+                        }
+                        try {
+                            service.getInstallReferrer(context.packageName, referrerCallback)
+                        } catch (e: Throwable) {
+                            val message = "Failed to referrer from RuStore service"
+                            DebugLogger.warning(tag, "$message: ${e.message}")
+                            complete(ReferrerResult.Failure(message, e))
+                        }
+                    },
+                ).start()
             } catch (e: Throwable) {
                 val message = "Failed to referrer from RuStore service"
                 DebugLogger.warning(tag, "$message: ${e.message}")
-                unbindSafely(this)
-                listener.onResult(ReferrerResult.Failure(message, e))
+                complete(ReferrerResult.Failure(message, e))
             }
         }
 
@@ -110,15 +126,20 @@ internal class RuStoreReferrerService(private val context: Context) {
         override fun onBindingDied(name: ComponentName?) {
             DebugLogger.warning(tag, "Binding died: $name")
             val message = "RuStore service binding died"
-            unbindSafely(this)
-            listener.onResult(ReferrerResult.Failure(message))
+            complete(ReferrerResult.Failure(message))
         }
 
         override fun onNullBinding(name: ComponentName?) {
             DebugLogger.warning(tag, "Null binding from RuStore service: $name")
             val message = "RuStore service returned null binding"
-            unbindSafely(this)
-            listener.onResult(ReferrerResult.Failure(message))
+            complete(ReferrerResult.Failure(message))
+        }
+
+        private fun complete(result: ReferrerResult) {
+            if (completed.compareAndSet(false, true)) {
+                unbindSafely(this)
+                listener.onResult(result)
+            }
         }
     }
 

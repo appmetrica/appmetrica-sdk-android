@@ -37,6 +37,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     @Mock
     private InterruptionSafeThread hmsReferrerThread;
     @Mock
+    private InterruptionSafeThread ruStoreReferrerThread;
+    @Mock
     private ExecutorWrapper firstCustomModuleExecutor;
     @Mock
     private ExecutorWrapper secondCustomModuleExecutor;
@@ -60,6 +62,7 @@ public class ServiceExecutorProviderTest extends CommonTest {
         when(serviceExecutorFactory.createSupportIOExecutor()).thenReturn(supportDataCollectingExecutor);
         when(serviceExecutorFactory.createDefaultExecutor()).thenReturn(defaultExecutor);
         when(serviceExecutorFactory.createHmsReferrerThread(runnable)).thenReturn(hmsReferrerThread);
+        when(serviceExecutorFactory.createRuStoreReferrerThread(runnable)).thenReturn(ruStoreReferrerThread);
         when(serviceExecutorFactory.createCustomModuleExecutor(firstCustomExecutorTag))
             .thenReturn(firstCustomModuleExecutor);
         when(serviceExecutorFactory.createCustomModuleExecutor(secondCustomModuleExecutorTag))
@@ -157,5 +160,13 @@ public class ServiceExecutorProviderTest extends CommonTest {
             assertThat(serviceExecutorProvider.getHmsReferrerThread(runnable)).isEqualTo(hmsReferrerThread);
         }
         verify(serviceExecutorFactory, times(CALLS_COUNT)).createHmsReferrerThread(runnable);
+    }
+
+    @Test
+    public void getRuStoreReferrerThread() {
+        for (int i = 0; i < CALLS_COUNT; i++) {
+            assertThat(serviceExecutorProvider.getRuStoreReferrerThread(runnable)).isEqualTo(ruStoreReferrerThread);
+        }
+        verify(serviceExecutorFactory, times(CALLS_COUNT)).createRuStoreReferrerThread(runnable);
     }
 }

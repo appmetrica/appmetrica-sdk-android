@@ -70,4 +70,9 @@ public class ServiceExecutorFactory {
     InterruptionSafeThread createHmsReferrerThread(@NonNull Runnable runnable) {
         return NamedThreadFactory.newThread(NamedThreadFactory.SERVICE_HMS_REFERRER_THREAD, runnable);
     }
+
+    @NonNull
+    InterruptionSafeThread createRuStoreReferrerThread(@NonNull Runnable runnable) {
+        return NamedThreadFactory.newThread(NamedThreadFactory.SERVICE_RUSTORE_REFERRER_THREAD, runnable);
+    }
 }

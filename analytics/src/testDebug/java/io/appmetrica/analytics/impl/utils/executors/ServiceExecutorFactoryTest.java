@@ -77,4 +77,9 @@ public class ServiceExecutorFactoryTest extends CommonTest {
     public void createHmsReferrerThread() {
         assertThat(serviceExecutorFactory.createHmsReferrerThread(runnable).getName()).startsWith("IAA-SHMSR");
     }
+
+    @Test
+    public void createRuStoreReferrerThread() {
+        assertThat(serviceExecutorFactory.createRuStoreReferrerThread(runnable).getName()).startsWith("IAA-SRSR");
+    }
 }

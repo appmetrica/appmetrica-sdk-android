@@ -8,25 +8,30 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.os.IBinder
+import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListener
 import io.appmetrica.analytics.impl.referrer.service.ReferrerResult
 import io.appmetrica.analytics.impl.referrer.service.provider.rustore.aidl.GetInstallReferrerCallback
 import io.appmetrica.analytics.impl.referrer.service.provider.rustore.aidl.InstallReferrerProvider
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -44,6 +49,8 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     }
     private val listener: ReferrerListener = mock()
     private val aidlService: InstallReferrerProvider = mock()
+    private val referrerRequestQueue = mutableListOf<Runnable>()
+    private val referrerRequestThreads = mutableListOf<InterruptionSafeThread>()
 
     // Binder that returns our service mock via queryLocalInterface — bypasses Stub.asInterface proxy creation
     private val binder: IBinder = mock {
@@ -56,7 +63,27 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     @get:Rule
     val componentNameRule = MockedConstructionRule(ComponentName::class.java)
 
-    private val service by setUp { RuStoreReferrerService(context) }
+    @get:Rule
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
+    private val service by setUp {
+        RuStoreReferrerService(context)
+    }
+
+    @Before
+    fun setUpThreadFactory() {
+        whenever(globalServiceLocatorRule.serviceExecutorProviderMock.getRuStoreReferrerThread(any()))
+            .thenAnswer { invocation ->
+                val runnable = invocation.getArgument<Runnable>(0)
+                val thread = mock<InterruptionSafeThread>()
+                doAnswer {
+                    referrerRequestQueue.add(runnable)
+                    null
+                }.whenever(thread).start()
+                referrerRequestThreads.add(thread)
+                thread
+            }
+    }
 
     // region findRuStoreComponent
 
@@ -162,13 +189,72 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     }
 
     @Test
-    fun `onServiceConnected calls getInstallReferrer with correct package name`() {
+    fun `onServiceConnected defers getInstallReferrer and calls it with correct package name`() {
         val connection = bindAndGetConnection()
 
         connection.onServiceConnected(mock(), binder)
 
+        verify(aidlService, never()).getInstallReferrer(any(), any())
+        assertThat(referrerRequestQueue).hasSize(1)
+        verify(referrerRequestThreads.single()).start()
+
+        runQueuedReferrerRequest()
+
         verify(aidlService).getInstallReferrer(eq(appPackageName), any())
         verify(listener, never()).onResult(any())
+    }
+
+    @Test
+    fun `onServiceConnected requests referrer after reconnect`() {
+        val connection = bindAndGetConnection()
+
+        connection.onServiceConnected(mock(), binder)
+        connection.onServiceDisconnected(mock())
+        connection.onServiceConnected(mock(), binder)
+
+        verify(aidlService, never()).getInstallReferrer(any(), any())
+        assertThat(referrerRequestQueue).hasSize(2)
+        assertThat(referrerRequestThreads).hasSize(2)
+        referrerRequestThreads.forEach { verify(it).start() }
+
+        runQueuedReferrerRequest()
+        runQueuedReferrerRequest()
+
+        verify(aidlService, times(2)).getInstallReferrer(eq(appPackageName), any())
+    }
+
+    @Test
+    fun `onServiceConnected fails and unbinds when creating referrer request thread throws exception`() {
+        val exception = RuntimeException("thread creation error")
+        whenever(globalServiceLocatorRule.serviceExecutorProviderMock.getRuStoreReferrerThread(any())) doThrow exception
+        val connection = bindAndGetConnection()
+
+        connection.onServiceConnected(mock(), binder)
+
+        val resultCaptor = argumentCaptor<ReferrerResult>()
+        verify(listener).onResult(resultCaptor.capture())
+        val failure = resultCaptor.firstValue as ReferrerResult.Failure
+        assertThat(failure.message).isEqualTo("Failed to referrer from RuStore service")
+        assertThat(failure.throwable).isEqualTo(exception)
+        verify(context).unbindService(connection)
+    }
+
+    @Test
+    fun `onServiceConnected fails and unbinds when starting referrer request thread throws exception`() {
+        val exception = RuntimeException("thread start error")
+        val thread = mock<InterruptionSafeThread>()
+        doThrow(exception).whenever(thread).start()
+        whenever(globalServiceLocatorRule.serviceExecutorProviderMock.getRuStoreReferrerThread(any())) doReturn thread
+        val connection = bindAndGetConnection()
+
+        connection.onServiceConnected(mock(), binder)
+
+        val resultCaptor = argumentCaptor<ReferrerResult>()
+        verify(listener).onResult(resultCaptor.capture())
+        val failure = resultCaptor.firstValue as ReferrerResult.Failure
+        assertThat(failure.message).isEqualTo("Failed to referrer from RuStore service")
+        assertThat(failure.throwable).isEqualTo(exception)
+        verify(context).unbindService(connection)
     }
 
     @Test
@@ -178,6 +264,7 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
         val connection = bindAndGetConnection()
 
         connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
 
         val resultCaptor = argumentCaptor<ReferrerResult>()
         verify(listener).onResult(resultCaptor.capture())
@@ -223,6 +310,7 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
         val installTimestampMs = 1_700_000_001_000L
         val connection = bindAndGetConnection()
         connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
         val callback = captureCallback()
 
         callback.onSuccess(buildPayload(referrerId, clickTimestampMs, installTimestampMs))
@@ -241,6 +329,7 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
         val referrerId = "utm_source=rustore"
         val connection = bindAndGetConnection()
         connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
         val callback = captureCallback()
 
         callback.onSuccess(buildPayload(referrerId, null, null))
@@ -258,6 +347,7 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     fun `onSuccess unbinds and returns Failure when payload is invalid JSON`() {
         val connection = bindAndGetConnection()
         connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
         val callback = captureCallback()
 
         callback.onSuccess("not-a-json")
@@ -274,6 +364,7 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     fun `onError unbinds and returns Failure with code and message`() {
         val connection = bindAndGetConnection()
         connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
         val callback = captureCallback()
 
         callback.onError(42, "something went wrong")
@@ -292,14 +383,38 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
     @Test
     fun `onBindingDied unbinds and returns Failure`() {
         val connection = bindAndGetConnection()
+        connection.onServiceConnected(mock(), binder)
 
         connection.onBindingDied(mock())
+        connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
 
         val resultCaptor = argumentCaptor<ReferrerResult>()
         verify(listener).onResult(resultCaptor.capture())
         assertThat((resultCaptor.firstValue as ReferrerResult.Failure).message)
             .isEqualTo("RuStore service binding died")
         verify(context).unbindService(connection)
+        verify(aidlService, never()).getInstallReferrer(any(), any())
+        verify(globalServiceLocatorRule.serviceExecutorProviderMock).getRuStoreReferrerThread(any())
+        assertThat(referrerRequestThreads).hasSize(1)
+        verify(referrerRequestThreads.single()).start()
+    }
+
+    @Test
+    fun `onBindingDied ignores late referrer callback`() {
+        val connection = bindAndGetConnection()
+        connection.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
+        val callback = captureCallback()
+
+        connection.onBindingDied(mock())
+        callback.onError(42, "late error")
+
+        val resultCaptor = argumentCaptor<ReferrerResult>()
+        verify(listener, times(1)).onResult(resultCaptor.capture())
+        assertThat((resultCaptor.firstValue as ReferrerResult.Failure).message)
+            .isEqualTo("RuStore service binding died")
+        verify(context, times(1)).unbindService(connection)
     }
 
     @Test
@@ -372,10 +487,16 @@ internal class RuStoreReferrerServiceTest : CommonTest() {
         val connCaptor = argumentCaptor<ServiceConnection>()
         verify(context, atLeastOnce()).bindService(any(), connCaptor.capture(), any<Int>())
         connCaptor.lastValue.onServiceConnected(mock(), binder)
+        runQueuedReferrerRequest()
 
         val cbCaptor = argumentCaptor<GetInstallReferrerCallback>()
         verify(aidlService, atLeastOnce()).getInstallReferrer(any(), cbCaptor.capture())
         return cbCaptor.lastValue
+    }
+
+    private fun runQueuedReferrerRequest() {
+        assertThat(referrerRequestQueue).isNotEmpty()
+        referrerRequestQueue.removeAt(0).run()
     }
 
     private fun buildPayload(referrerId: String, clickTs: Long?, installTs: Long?): String {

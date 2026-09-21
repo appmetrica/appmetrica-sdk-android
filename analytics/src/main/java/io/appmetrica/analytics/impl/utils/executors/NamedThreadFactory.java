@@ -23,6 +23,7 @@ public class NamedThreadFactory implements ThreadFactory {
     public static final String SERVICE_PERSISTENCE_THREAD = PREFIX + "SPT";
 
     public static final String SERVICE_HMS_REFERRER_THREAD = PREFIX + "SHMSR";
+    public static final String SERVICE_RUSTORE_REFERRER_THREAD = PREFIX + "SRSR";
     public static final String CUSTOM_MODULE_EXECUTOR_PATTERN = PREFIX + "M-%s";
     private static final AtomicInteger sThreadNum = new AtomicInteger(0);
 
