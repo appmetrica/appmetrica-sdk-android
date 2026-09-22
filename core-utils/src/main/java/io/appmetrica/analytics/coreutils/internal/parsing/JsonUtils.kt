@@ -174,4 +174,19 @@ object JsonUtils {
             }
         } ?: fallback
     }
+
+    @JvmStatic
+    fun IntArray?.toJsonArray(): JSONArray {
+        val jsonArray = JSONArray()
+        this?.forEach { jsonArray.put(it) }
+        return jsonArray
+    }
+
+    @JvmStatic
+    fun JSONArray?.toIntArray(): IntArray {
+        if (this == null || this.length() == 0) {
+            return IntArray(0)
+        }
+        return IntArray(this.length()) { index -> this.optInt(index) }
+    }
 }

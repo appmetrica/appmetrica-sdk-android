@@ -476,6 +476,8 @@ public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils 
     public static final [Nullable] Long optLongOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] String optStringOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] String optStringOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] String)
+    public static final [NonNull] int[] toIntArray([Nullable] org.json.JSONArray)
+    public static final [NonNull] org.json.JSONArray toJsonArray([Nullable] int[])
 }
 
 public class io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils {

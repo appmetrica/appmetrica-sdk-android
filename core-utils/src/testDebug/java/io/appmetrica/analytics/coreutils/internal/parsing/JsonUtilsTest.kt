@@ -13,6 +13,8 @@ import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrDef
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNullable
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.toIntArray
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.toJsonArray
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
@@ -460,5 +462,30 @@ class JsonUtilsTest : CommonTest() {
     fun optHexByteArrayForNonNullFallback() {
         assertThat(JSONObject().optHexByteArray("key", byteArrayOf(1, 2, 3)))
             .isEqualTo(byteArrayOf(1, 2, 3))
+    }
+
+    @Test
+    fun `toJsonArray for null`() {
+        assertThat(null.toJsonArray().length()).isEqualTo(0)
+    }
+
+    @Test
+    fun `toJsonArray for values`() {
+        val json = intArrayOf(1, 2, 3).toJsonArray()
+        assertThat(json.length()).isEqualTo(3)
+        assertThat(json.getInt(0)).isEqualTo(1)
+        assertThat(json.getInt(2)).isEqualTo(3)
+    }
+
+    @Test
+    fun `toIntArray for null or empty`() {
+        assertThat(null.toIntArray()).isEmpty()
+        assertThat(JSONArray().toIntArray()).isEmpty()
+    }
+
+    @Test
+    fun `toIntArray for values`() {
+        val json = JSONArray().put(4).put(5)
+        assertThat(json.toIntArray()).containsExactly(4, 5)
     }
 }
