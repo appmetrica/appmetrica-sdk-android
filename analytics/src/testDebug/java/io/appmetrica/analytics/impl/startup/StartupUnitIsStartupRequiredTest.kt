@@ -10,6 +10,8 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 internal class StartupUnitIsStartupRequiredTest : StartupUnitBaseTest() {
@@ -96,6 +98,51 @@ internal class StartupUnitIsStartupRequiredTest : StartupUnitBaseTest() {
         ).thenReturn(true)
 
         assertThat(startupUnit.isStartupRequired()).isFalse()
+    }
+
+    @Test
+    fun yandexAdsGateTransitions() {
+        fun stubBase(startupState: StartupState) {
+            whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+            whenever(StartupRequiredUtils.isOutdated(startupState)).thenReturn(false)
+            whenever(StartupRequiredUtils.areMainIdentifiersValid(startupState)).thenReturn(true)
+            whenever(
+                clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
+                    clientClids,
+                    startupState,
+                    clidsStorage
+                )
+            ).thenReturn(true)
+        }
+
+        val changed = mock<StartupState>()
+        stubBase(changed)
+        whenever(changed.lastYandexAdsOnlyForStartupRequest).thenReturn(false)
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        whenever(yandexAdsStartupStateProvider.requiresUpdate(true, false)).thenReturn(true)
+        assertThat(startupUnit.isStartupRequired()).isTrue()
+        verify(startupRequestConfig, never()).setYandexAdsOnly(any())
+
+        val same = mock<StartupState>()
+        stubBase(same)
+        whenever(same.lastYandexAdsOnlyForStartupRequest).thenReturn(true)
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        whenever(yandexAdsStartupStateProvider.requiresUpdate(true, true)).thenReturn(false)
+        assertThat(startupUnit.isStartupRequired()).isFalse()
+
+        val nullToZero = mock<StartupState>()
+        stubBase(nullToZero)
+        whenever(nullToZero.lastYandexAdsOnlyForStartupRequest).thenReturn(null)
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(false)
+        whenever(yandexAdsStartupStateProvider.requiresUpdate(false, null)).thenReturn(false)
+        assertThat(startupUnit.isStartupRequired()).isFalse()
+
+        val nullToOne = mock<StartupState>()
+        stubBase(nullToOne)
+        whenever(nullToOne.lastYandexAdsOnlyForStartupRequest).thenReturn(null)
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        whenever(yandexAdsStartupStateProvider.requiresUpdate(true, null)).thenReturn(true)
+        assertThat(startupUnit.isStartupRequired()).isTrue()
     }
 
     @Test

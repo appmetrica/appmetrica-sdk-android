@@ -56,6 +56,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
     private final HostsProvider resourceStartupHostsProvider;
     @NonNull
     private final HostsProvider defaultStartupHostsProvider;
+    private boolean yandexAdsOnly;
 
     private StartupRequestConfig() {
         this(
@@ -240,6 +241,14 @@ public class StartupRequestConfig extends CoreRequestConfig {
         mCountryInit = countryInit;
     }
 
+    public boolean isYandexAdsOnly() {
+        return yandexAdsOnly;
+    }
+
+    public void setYandexAdsOnly(boolean yandexAdsOnly) {
+        this.yandexAdsOnly = yandexAdsOnly;
+    }
+
     @NonNull
     public ReferrerManager getReferrerManager() {
         return referrerManager;
@@ -260,6 +269,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
             ", mSuccessfulStartup=" + mSuccessfulStartup +
             ", mCountryInit='" + mCountryInit + '\'' +
             ", mFirstStartupTime=" + mFirstStartupTime +
+            ", yandexAdsOnly=" + yandexAdsOnly +
             "} " + super.toString();
     }
 

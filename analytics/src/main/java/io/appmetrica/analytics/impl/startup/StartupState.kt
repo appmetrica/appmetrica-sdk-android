@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
 
 internal class StartupState private constructor(
@@ -29,6 +30,8 @@ internal class StartupState private constructor(
     val lastChosenForRequestClids: String? = startupStateModel.lastChosenForRequestClids
     val lastReferrerForStartupRequest: String? =
         startupStateModel.lastReferrerForStartupRequest
+    val lastYandexAdsOnlyForStartupRequest: Boolean? =
+        startupStateModel.lastYandexAdsOnlyForStartupRequest
     val collectingFlags: CollectingFlags = startupStateModel.collectingFlags
     val obtainTime: Long = startupStateModel.obtainTime
     val hadFirstStartup: Boolean = startupStateModel.hadFirstStartup
@@ -94,6 +97,10 @@ internal class StartupState private constructor(
             modelBuilder.withLastReferrerForStartupRequest(value)
         }
 
+        fun withLastYandexAdsOnlyForStartupRequest(value: Boolean?) = this.also {
+            modelBuilder.withLastYandexAdsOnlyForStartupRequest(value)
+        }
+
         fun withObtainTime(value: Long) = this.also { modelBuilder.withObtainTime(value) }
         fun withObtainServerTime(value: Long) = this.also { modelBuilder.withObtainServerTime(value) }
         fun withFirstStartupServerTime(value: Long) = this.also { modelBuilder.withFirstStartupServerTime(value) }
@@ -132,21 +139,34 @@ internal class StartupState private constructor(
         private val vitalCommonDataProvider: VitalCommonDataProvider
     ) {
 
+        private val tag = "[StartupState.Storage]"
+
         constructor(context: Context) : this(
             StorageFactory.Provider.get(StartupStateModel::class.java).create(context),
             GlobalServiceLocator.getInstance().vitalDataProviderStorage.commonDataProvider
         )
 
         fun read(): StartupState {
-            return StartupState(
+            val state = StartupState(
                 vitalCommonDataProvider.deviceId,
                 vitalCommonDataProvider.deviceIdHash,
                 modelStorage.read()
             )
+            DebugLogger.info(
+                tag,
+                "Read startup state: lastYandexAdsOnlyForStartupRequest=" +
+                    "${state.lastYandexAdsOnlyForStartupRequest}"
+            )
+            return state
         }
 
         // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
         fun save(startupState: StartupState) {
+            DebugLogger.info(
+                tag,
+                "Save startup state: lastYandexAdsOnlyForStartupRequest=" +
+                    "${startupState.lastYandexAdsOnlyForStartupRequest}"
+            )
             vitalCommonDataProvider.deviceId = startupState.deviceId
             vitalCommonDataProvider.deviceIdHash = startupState.deviceIdHash
             vitalCommonDataProvider.flushAsync()

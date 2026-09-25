@@ -71,6 +71,11 @@ internal class StartupUnitListenerNotificationTest : CommonTest() {
     private val startupStateHolder: StartupStateHolder = mock()
     private val requestConfigArguments: StartupRequestConfig.Arguments = mock()
 
+    private val yandexAdsStartupStateProvider: YandexAdsStartupStateProvider = mock {
+        on { isYandexAdsOnly } doReturn false
+        on { requiresUpdate(org.mockito.kotlin.any(), org.mockito.kotlin.anyOrNull()) } doReturn false
+    }
+
     private val startupUnitComponents: StartupUnitComponents = mock {
         on { startupConfigurationHolder } doReturn startupConfigurationHolder
         on { deviceIdGenerator } doReturn deviceIdGenerator
@@ -85,6 +90,7 @@ internal class StartupUnitListenerNotificationTest : CommonTest() {
         on { packageName } doReturn packageName
         on { startupStateHolder } doReturn startupStateHolder
         on { requestConfigArguments } doReturn requestConfigArguments
+        on { yandexAdsStartupStateProvider } doReturn yandexAdsStartupStateProvider
     }
 
     private lateinit var startupUnit: StartupUnit

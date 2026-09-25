@@ -26,10 +26,17 @@ public class MainReporterClientUnit extends AbstractClientUnit {
 
     @Override
     protected void handleReport(@NonNull CoreServiceEvent serviceEvent, @NonNull CommonArguments sdkConfig) {
+        updateMainApiKey(sdkConfig);
         updateLocationTracking(sdkConfig);
         Boolean advIdentifiersTracking = sdkConfig.componentArguments.advIdentifiersTrackingEnabled;
         updateAdvIdentifiersTracking(advIdentifiersTracking);
         getComponentUnit().handleReport(serviceEvent, sdkConfig);
+    }
+
+    private void updateMainApiKey(@NonNull CommonArguments sdkConfig) {
+        GlobalServiceLocator.getInstance()
+            .getYandexAdsOrdinaryActivationState()
+            .onMainClientApiKey(sdkConfig.componentArguments.apiKey);
     }
 
     private void updateLocationTracking(CommonArguments sdkConfig) {

@@ -2,7 +2,9 @@ package io.appmetrica.analytics.impl.db.state.converter;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.impl.OptionalBoolConverter;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
+import io.appmetrica.analytics.impl.startup.StartupOptionalBoolConverter;
 import io.appmetrica.analytics.impl.startup.StartupStateModel;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import java.util.Arrays;
@@ -21,6 +23,7 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
     private ModulesRemoteConfigsConverter modulesRemoteConfigsConverter = new ModulesRemoteConfigsConverter();
     private ExternalAttributionConfigConverter externalAttributionConfigConverter =
         new ExternalAttributionConfigConverter();
+    private OptionalBoolConverter optionalBoolConverter = new StartupOptionalBoolConverter();
 
     @SuppressWarnings("checkstyle:methodLength")
     @NonNull
@@ -69,6 +72,8 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         if (value.lastReferrerForStartupRequest != null) {
             state.lastReferrerForStartupRequest = value.lastReferrerForStartupRequest;
         }
+        state.lastYandexAdsOnlyForStartupRequest =
+            optionalBoolConverter.toProto(value.lastYandexAdsOnlyForStartupRequest);
         state.startupDidNotOverrideClids = value.startupDidNotOverrideClids;
         state.obtainTime = value.obtainTime;
         state.hadFirstStartup = value.hadFirstStartup;
@@ -109,6 +114,9 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
                 .withLastClientClidsForStartupRequest(nano.lastClientClidsForStartupRequest)
                 .withLastChosenForRequestClids(nano.lastChosenForRequestClids)
                 .withLastReferrerForStartupRequest(nano.lastReferrerForStartupRequest)
+                .withLastYandexAdsOnlyForStartupRequest(
+                    optionalBoolConverter.toModel(nano.lastYandexAdsOnlyForStartupRequest)
+                )
                 .withStartupDidNotOverrideClids(nano.startupDidNotOverrideClids)
                 .withObtainTime(nano.obtainTime)
                 .withHadFirstStartup(nano.hadFirstStartup)

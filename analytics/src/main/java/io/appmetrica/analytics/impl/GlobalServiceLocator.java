@@ -51,6 +51,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
 import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
+import io.appmetrica.analytics.impl.startup.YandexAdsOrdinaryActivationState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
@@ -88,6 +89,8 @@ public final class GlobalServiceLocator {
     private volatile ReferrerManager referrerManager;
     @Nullable
     private volatile DataSendingRestrictionControllerImpl dataSendingRestrictionController;
+    @Nullable
+    private volatile YandexAdsOrdinaryActivationState yandexAdsOrdinaryActivationState;
     @NonNull
     private final ServiceExecutorProvider mServiceExecutorProvider;
     @Nullable
@@ -215,6 +218,20 @@ public final class GlobalServiceLocator {
             }
         }
         return dataSendingRestrictionController;
+    }
+
+    @NonNull
+    public YandexAdsOrdinaryActivationState getYandexAdsOrdinaryActivationState() {
+        if (yandexAdsOrdinaryActivationState == null) {
+            synchronized (this) {
+                if (yandexAdsOrdinaryActivationState == null) {
+                    yandexAdsOrdinaryActivationState = new YandexAdsOrdinaryActivationState(
+                        getServicePreferences()
+                    );
+                }
+            }
+        }
+        return yandexAdsOrdinaryActivationState;
     }
 
     @NonNull

@@ -34,6 +34,8 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     static final PreferencesItem LAST_KOTLIN_VERSION_SEND_TIME = new PreferencesItem("LAST_KOTLIN_VERSION_SEND_TIME");
     static final PreferencesItem ADV_IDENTIFIERS_TRACKING_ENABLED =
         new PreferencesItem("ADV_IDENTIFIERS_TRACKING_ENABLED");
+    static final PreferencesItem ORDINARY_ACTIVATION =
+        new PreferencesItem("ORDINARY_ACTIVATION");
 
     public PreferencesServiceDbStorage(final IKeyValueTableDbHelper dbStorage) {
         super(dbStorage);
@@ -159,6 +161,15 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
 
     public boolean isAdvIdentifiersTrackingStatusEnabled(boolean defaultValue) {
         return readBoolean(ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), defaultValue);
+    }
+
+    public boolean hasOrdinaryActivation() {
+        return readBoolean(ORDINARY_ACTIVATION.fullKey(), false);
+    }
+
+    public void saveOrdinaryActivation(boolean value) {
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(ORDINARY_ACTIVATION.fullKey(), value).flushAsync();
     }
 
     @NonNull

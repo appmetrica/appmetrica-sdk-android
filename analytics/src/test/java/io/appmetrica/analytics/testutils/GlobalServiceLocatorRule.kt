@@ -102,6 +102,9 @@ class GlobalServiceLocatorRule : ExternalResource() {
         whenever(globalServiceLocator.getDataSendingRestrictionController()).thenReturn(
             mock<DataSendingRestrictionControllerImpl>()
         )
+        whenever(globalServiceLocator.yandexAdsOrdinaryActivationState).thenReturn(
+            mock()
+        )
         whenever(globalServiceLocator.getSslSocketFactoryProvider()).thenReturn(mock<SslSocketFactoryProviderImpl>())
         val vitalDataProviderStorage = mock<VitalDataProviderStorage>()
         whenever(vitalDataProviderStorage.commonDataProvider).thenReturn(mock<VitalCommonDataProvider>())

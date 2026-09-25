@@ -28,6 +28,8 @@ internal class StartupUnitComponents(
     val timeProvider: TimeProvider = SystemTimeProvider()
     val clidsStorage: ClidsInfoStorage = GlobalServiceLocator.getInstance().clidsStorage
     val clidsStateChecker = ClidsStateChecker()
+    val yandexAdsStartupStateProvider: YandexAdsStartupStateProvider =
+        YandexAdsStartupStateProvider.create(context, YandexAdsSDKDetector.shared)
 
     val startupConfigurationHolder = StartupConfigurationHolder(
         StartupRequestConfig.Loader(context, packageName),

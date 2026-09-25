@@ -11,8 +11,10 @@ import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.CounterConfiguration
+import io.appmetrica.analytics.networktasks.internal.FinalConfigProvider
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.testutils.TestUtils
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
@@ -24,8 +26,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.UUID
@@ -38,6 +42,11 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
     @get:Rule
     val userAgentProviderRule = constructionRule<UserAgentProvider> {
         on { userAgent } doReturn "userAgent"
+    }
+
+    @get:Rule
+    val finalConfigProviderRule = constructionRule<FinalConfigProvider<*>> {
+        on { config } doReturn startupRequestConfig
     }
 
     @Before
@@ -59,6 +68,56 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(first.isRemoved).thenReturn(true)
         val second = startupUnit.getOrCreateStartupTaskIfRequired()
         assertThat(first).isNotSameAs(second)
+    }
+
+    @Test
+    fun `in-flight startup keeps frozen yandex ads only snapshot`() {
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(false)
+        val first = startupUnit.getOrCreateStartupTaskIfRequired()!!
+        verify(startupRequestConfig).setYandexAdsOnly(false)
+        whenever(first.isRemoved).thenReturn(false)
+
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        val second = startupUnit.getOrCreateStartupTaskIfRequired()
+        assertThat(first).isSameAs(second)
+        verify(startupRequestConfig, never()).setYandexAdsOnly(true)
+    }
+
+    @Test
+    fun `removed startup task refreshes yandex ads only snapshot`() {
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(false)
+        val first = startupUnit.getOrCreateStartupTaskIfRequired()!!
+        verify(startupRequestConfig).setYandexAdsOnly(false)
+        whenever(first.isRemoved).thenReturn(true)
+
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        val second = startupUnit.getOrCreateStartupTaskIfRequired()
+        assertThat(first).isNotSameAs(second)
+        verify(startupRequestConfig).setYandexAdsOnly(true)
+    }
+
+    @Test
+    fun `getOrCreateStartupTaskIfRequired uses one requestConfig when holder resets mid create`() {
+        val configBeforeReset = mock<StartupRequestConfig>()
+        val configAfterReset = mock<StartupRequestConfig>()
+        whenever(yandexAdsStartupStateProvider.isYandexAdsOnly).thenReturn(true)
+        whenever(startupConfigurationHolder.startupState).thenReturn(
+            TestUtils.createDefaultStartupState().buildUpon().withOutdated(true).build()
+        )
+
+        var snapshotApplied = false
+        doAnswer {
+            snapshotApplied = true
+            null
+        }.whenever(configBeforeReset).setYandexAdsOnly(true)
+        whenever(startupConfigurationHolder.get()).thenAnswer {
+            if (snapshotApplied) configAfterReset else configBeforeReset
+        }
+
+        assertThat(startupUnit.getOrCreateStartupTaskIfRequired()).isNotNull
+        finalConfigProviderRule.singleWithArgs(configBeforeReset)
+        verify(configBeforeReset).setYandexAdsOnly(true)
+        verify(configAfterReset, never()).setYandexAdsOnly(any())
     }
 
     @Test
@@ -149,6 +208,8 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         startupUnit.onRequestError(error)
         verify(startupResultListener)
             .onStartupError(ContextRule.PACKAGE_NAME, error, startupState)
+        // Failed startup must not persist request snapshot (including lastYandexAdsOnly).
+        verify(startupConfigurationHolder, never()).updateStartupState(any())
     }
 
     @Test
@@ -212,6 +273,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(startupRequestConfig.referrer).thenReturn(
             StartupRequestReferrer(distributionReferrer, installReferrerSource)
         )
+        whenever(startupRequestConfig.isYandexAdsOnly).thenReturn(true)
         whenever(startupRequestConfig.chosenClids)
             .thenReturn(ClidsInfo.Candidate(chosenClids, DistributionSource.APP))
         whenever(result.countryInit).thenReturn(countryInit)
@@ -245,6 +307,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         )
         assertions.checkField("lastChosenForRequestClids", StartupUtils.encodeClids(chosenClids))
         assertions.checkField("lastReferrerForStartupRequest", distributionReferrer)
+        assertions.checkField("lastYandexAdsOnlyForStartupRequest", true)
         assertions.checkField("collectingFlags", collectingFlags)
         assertions.checkField("hadFirstStartup", true)
         assertions.checkField("startupDidNotOverrideClids", false)

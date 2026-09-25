@@ -211,6 +211,7 @@ public class StartupStateConverterTest extends CommonTest {
             "lastReferrerForStartupRequest",
             LAST_REFERRER_FOR_STARTUP_REQUEST
         );
+        assertions.checkFieldIsNull("lastYandexAdsOnlyForStartupRequest");
         assertions.checkField("startupDidNotOverrideClids", STARTUP_DID_NOT_OVERRIDE_CLIDS);
         assertions.checkField("obtainServerTime", OBTAIN_SERVER_TIME);
         assertions.checkField("countryInit", COUNTRY_INIT);
@@ -306,6 +307,10 @@ public class StartupStateConverterTest extends CommonTest {
             "lastReferrerForStartupRequest",
             LAST_REFERRER_FOR_STARTUP_REQUEST
         );
+        assertions.checkField(
+            "lastYandexAdsOnlyForStartupRequest",
+            StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED
+        );
         assertions.checkField("startupDidNotOverrideClids", STARTUP_DID_NOT_OVERRIDE_CLIDS);
         assertions.checkField("obtainServerTime", OBTAIN_SERVER_TIME);
         assertions.checkField("countryInit", COUNTRY_INIT);
@@ -326,6 +331,27 @@ public class StartupStateConverterTest extends CommonTest {
         verify(mStatSendingConverter).fromModel(statSending);
         verify(mPermissionsCollectingConfigConverter).fromModel(permissionsCollectingConfig);
         verify(customSdkHostsConverter).fromModel(customSdkHostsModel);
+    }
+
+    @Test
+    public void lastYandexAdsOnlyOptionalBoolRoundTrip() {
+        CollectingFlags flagsModel = new CollectingFlags.CollectingFlagsBuilder().build();
+
+        StartupStateModel trueModel = new StartupStateModel.StartupStateBuilder(flagsModel)
+            .withLastYandexAdsOnlyForStartupRequest(true)
+            .build();
+        StartupStateProtobuf.StartupState trueProto = mConverter.fromModel(trueModel);
+        assertThat(trueProto.lastYandexAdsOnlyForStartupRequest)
+            .isEqualTo(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_TRUE);
+        assertThat(mConverter.toModel(trueProto).lastYandexAdsOnlyForStartupRequest).isTrue();
+
+        StartupStateModel falseModel = new StartupStateModel.StartupStateBuilder(flagsModel)
+            .withLastYandexAdsOnlyForStartupRequest(false)
+            .build();
+        StartupStateProtobuf.StartupState falseProto = mConverter.fromModel(falseModel);
+        assertThat(falseProto.lastYandexAdsOnlyForStartupRequest)
+            .isEqualTo(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_FALSE);
+        assertThat(mConverter.toModel(falseProto).lastYandexAdsOnlyForStartupRequest).isFalse();
     }
 
     @Test

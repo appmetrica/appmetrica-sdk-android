@@ -5,6 +5,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.MainReporterComponentId
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponentFactory
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -32,6 +33,9 @@ internal class MainReporterClientFactoryTest : CommonTest() {
     private val repository: ComponentsRepository = mock {
         on { getOrCreateRegularComponent(any(), any(), any()) } doReturn component
     }
+
+    @get:Rule
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
     @get:Rule
     val componentIdRule = constructionRule<MainReporterComponentId>()

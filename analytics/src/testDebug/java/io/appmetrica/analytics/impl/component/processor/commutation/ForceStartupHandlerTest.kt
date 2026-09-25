@@ -86,6 +86,7 @@ internal class ForceStartupHandlerTest : CommonTest() {
         whenever(serviceEvent.payload).thenReturn(filledBundle)
         forceStartupHandler.process(serviceEvent, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(identifiersData)
+        verifyNoInteractions(GlobalServiceLocator.getInstance().yandexAdsOrdinaryActivationState)
     }
 
     @Test

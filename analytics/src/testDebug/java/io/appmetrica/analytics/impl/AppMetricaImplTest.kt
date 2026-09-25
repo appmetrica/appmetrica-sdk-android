@@ -345,11 +345,11 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(startupHelper)
         impl.activate(config)
+        verify(startupHelper).sendStartupIfNeeded()
         verify(startupHelper).setPublicLogger(publicLogger)
         verify(startupHelper).setCustomHosts(null)
         verify(startupHelper).clids = null
         verify(startupHelper).setDistributionReferrer(null)
-        verify(startupHelper).sendStartupIfNeeded()
         verifyNoMoreInteractions(startupHelper)
     }
 

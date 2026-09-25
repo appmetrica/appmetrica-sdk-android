@@ -61,6 +61,11 @@ internal class StartupUnitIdentifiersGeneratingTest : CommonTest() {
 
     private val requestConfigArguments: StartupRequestConfig.Arguments = mock()
 
+    private val yandexAdsStartupStateProvider: YandexAdsStartupStateProvider = mock {
+        on { isYandexAdsOnly } doReturn false
+        on { requiresUpdate(org.mockito.kotlin.any(), org.mockito.kotlin.anyOrNull()) } doReturn false
+    }
+
     private val startupUnitComponents: StartupUnitComponents = mock {
         on { context } doReturn context
         on { packageName } doReturn packageName
@@ -76,6 +81,7 @@ internal class StartupUnitIdentifiersGeneratingTest : CommonTest() {
         on { resultListener } doReturn startupResultListener
         on { startupStateHolder } doReturn startupStateHolder
         on { requestConfigArguments } doReturn requestConfigArguments
+        on { yandexAdsStartupStateProvider } doReturn yandexAdsStartupStateProvider
     }
 
     private val startupStateCaptor = argumentCaptor<StartupState>()

@@ -391,4 +391,19 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
             .thenReturn(true);
         assertThat(mServiceDbStorage.isAdvIdentifiersTrackingStatusEnabled(false)).isTrue();
     }
+
+    @Test
+    public void saveOrdinaryActivation() {
+        mServiceDbStorage.saveOrdinaryActivation(true);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.ORDINARY_ACTIVATION.fullKey(), true);
+        inOrder.verify(mDbStorage).flushAsync();
+    }
+
+    @Test
+    public void hasOrdinaryActivation() {
+        when(mDbStorage.getBoolean(PreferencesServiceDbStorage.ORDINARY_ACTIVATION.fullKey(), false))
+            .thenReturn(true);
+        assertThat(mServiceDbStorage.hasOrdinaryActivation()).isTrue();
+    }
 }

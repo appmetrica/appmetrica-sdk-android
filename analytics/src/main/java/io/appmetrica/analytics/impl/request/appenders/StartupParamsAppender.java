@@ -16,6 +16,7 @@ import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.StartupRequestReferrer;
 import io.appmetrica.analytics.impl.request.UrlParts;
+import io.appmetrica.analytics.impl.request.YandexAdsOnlyParameter;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
@@ -174,6 +175,17 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
         for (String block : modulesBlocks.keySet()) {
             uriBuilder.appendQueryParameter(block, String.valueOf(modulesBlocks.get(block)));
         }
+        String hoyas = YandexAdsOnlyParameter.toQueryValue(requestConfig.isYandexAdsOnly());
+        uriBuilder.appendQueryParameter(
+            mObfuscator.obfuscate(UrlParts.YANDEX_ADS_ONLY),
+            hoyas
+        );
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Append startup query param hoyas=%s (yandexAdsOnly=%b)",
+            hoyas,
+            requestConfig.isYandexAdsOnly()
+        );
     }
 
     protected void appendAdvIdIfAllowed(@NonNull Uri.Builder uriBuilder,

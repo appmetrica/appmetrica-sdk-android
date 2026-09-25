@@ -1215,6 +1215,9 @@ public interface StartupStateProtobuf {
     // optional string lastReferrerForStartupRequest = 34;
     public java.lang.String lastReferrerForStartupRequest;
 
+    // optional .StartupState.OptionalBool lastYandexAdsOnlyForStartupRequest = 35 [default = OPTIONAL_BOOL_UNDEFINED];
+    public int lastYandexAdsOnlyForStartupRequest;
+
     public StartupState() {
       clear();
     }
@@ -1251,6 +1254,7 @@ public interface StartupStateProtobuf {
       modulesRemoteConfigs = StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry.emptyArray();
       externalAttributionConfig = null;
       lastReferrerForStartupRequest = "";
+      lastYandexAdsOnlyForStartupRequest = StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED;
       cachedSize = -1;
       return this;
     }
@@ -1373,6 +1377,9 @@ public interface StartupStateProtobuf {
       }
       if (!this.lastReferrerForStartupRequest.equals("")) {
         output.writeString(34, this.lastReferrerForStartupRequest);
+      }
+      if (this.lastYandexAdsOnlyForStartupRequest != StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED) {
+        output.writeInt32(35, this.lastYandexAdsOnlyForStartupRequest);
       }
       super.writeTo(output);
     }
@@ -1551,6 +1558,10 @@ public interface StartupStateProtobuf {
       if (!this.lastReferrerForStartupRequest.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
             .computeStringSize(34, this.lastReferrerForStartupRequest);
+      }
+      if (this.lastYandexAdsOnlyForStartupRequest != StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+          .computeInt32Size(35, this.lastYandexAdsOnlyForStartupRequest);
       }
       return size;
     }
@@ -1810,6 +1821,17 @@ public interface StartupStateProtobuf {
           }
           case 274: {
             this.lastReferrerForStartupRequest = input.readString();
+            break;
+          }
+          case 280: {
+            int value = input.readInt32();
+            switch (value) {
+              case StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED:
+              case StartupStateProtobuf.StartupState.OPTIONAL_BOOL_FALSE:
+              case StartupStateProtobuf.StartupState.OPTIONAL_BOOL_TRUE:
+                this.lastYandexAdsOnlyForStartupRequest = value;
+                break;
+            }
             break;
           }
         }

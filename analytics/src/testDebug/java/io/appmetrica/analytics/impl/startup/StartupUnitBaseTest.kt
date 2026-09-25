@@ -103,6 +103,11 @@ internal open class StartupUnitBaseTest : CommonTest() {
 
     val startupStateHolder: StartupStateHolder = mock()
 
+    val yandexAdsStartupStateProvider: YandexAdsStartupStateProvider = mock {
+        on { isYandexAdsOnly } doReturn false
+        on { requiresUpdate(org.mockito.kotlin.any(), org.mockito.kotlin.anyOrNull()) } doReturn false
+    }
+
     val startupUnitComponents: StartupUnitComponents by lazy {
         val sdkConfig = sdkConfig
         mock {
@@ -120,6 +125,7 @@ internal open class StartupUnitBaseTest : CommonTest() {
             on { deviceIdGenerator } doReturn deviceIdGenerator
             on { componentId } doReturn componentId
             on { startupStateHolder } doReturn startupStateHolder
+            on { yandexAdsStartupStateProvider } doReturn yandexAdsStartupStateProvider
         }
     }
 

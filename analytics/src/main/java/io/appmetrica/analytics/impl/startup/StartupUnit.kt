@@ -97,6 +97,10 @@ internal class StartupUnit(
             var task = currentTask
             if (task == null || task.isRemoved) {
                 DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
+                // Freeze hoyas onto a single requestConfig instance: the getter reloads from
+                // StartupConfigurationHolder, which another thread may reset between reads.
+                val requestConfig = requestConfig
+                refreshYandexAdsOnlySnapshot(requestConfig)
                 task = createStartupTask(this, requestConfig)
                 currentTask = task
             }
@@ -127,8 +131,17 @@ internal class StartupUnit(
         DebugLogger.info(tag, "isStartupOutdated: $required")
         if (!required) {
             required = !StartupRequiredUtils.areMainIdentifiersValid(startupState)
+            val requestConfig = requestConfig
+            // Read current hoyas for the decision without mutating requestConfig —
+            // the in-flight task must keep the frozen value until completion.
+            val currentYandexAdsOnly =
+                startupUnitComponents.yandexAdsStartupStateProvider.isYandexAdsOnly
             if (!required && isStartupRequiredBecauseOfReferrer(requestConfig, startupState)) {
                 DebugLogger.info(tag, "Startup is required because of referrer")
+                required = true
+            }
+            if (!required && isStartupRequiredBecauseOfYandexAds(currentYandexAdsOnly, startupState)) {
+                DebugLogger.info(tag, "Startup is required because of Yandex Ads state")
                 required = true
             }
             val validClids = startupUnitComponents.clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
@@ -147,6 +160,16 @@ internal class StartupUnit(
         return required
     }
 
+    private fun refreshYandexAdsOnlySnapshot(requestConfig: StartupRequestConfig) {
+        val yandexAdsOnly = startupUnitComponents.yandexAdsStartupStateProvider.isYandexAdsOnly
+        DebugLogger.info(
+            tag,
+            "Freeze hoyas snapshot for startup request: yandexAdsOnly=$yandexAdsOnly " +
+                "(query value will be ${if (yandexAdsOnly) "1" else "0"})"
+        )
+        requestConfig.setYandexAdsOnly(yandexAdsOnly)
+    }
+
     private fun isStartupRequiredBecauseOfReferrer(
         requestConfig: StartupRequestConfig,
         startupState: StartupState
@@ -154,6 +177,21 @@ internal class StartupUnit(
         val currentReferrer = requestConfig.referrer?.referrer
         return !currentReferrer.isNullOrEmpty() &&
             currentReferrer != startupState.lastReferrerForStartupRequest
+    }
+
+    private fun isStartupRequiredBecauseOfYandexAds(
+        currentYandexAdsOnly: Boolean,
+        startupState: StartupState
+    ): Boolean {
+        val lastSent = startupState.lastYandexAdsOnlyForStartupRequest
+        DebugLogger.info(
+            tag,
+            "Check hoyas startup gate: current=$currentYandexAdsOnly, lastSent=$lastSent"
+        )
+        return startupUnitComponents.yandexAdsStartupStateProvider.requiresUpdate(
+            currentYandexAdsOnly,
+            lastSent
+        )
     }
 
     override fun onRequestComplete(
@@ -185,6 +223,12 @@ internal class StartupUnit(
         )
         DebugLogger.info(tag, "Selected clids: $validClidsFromResponse")
         val deviceID = startupState.deviceId?.takeIf { it.isNotBlank() } ?: result.deviceId
+        val lastYandexAdsOnly = requestConfig.isYandexAdsOnly
+        DebugLogger.info(
+            tag,
+            "Persist lastYandexAdsOnlyForStartupRequest=$lastYandexAdsOnly " +
+                "from frozen startup request snapshot (hoyas=${if (lastYandexAdsOnly) "1" else "0"})"
+        )
 
         return StartupState.Builder(StartupStateBuilder(result.collectionFlags))
             .withDeviceId(deviceID)
@@ -202,6 +246,7 @@ internal class StartupUnit(
             .withCustomSdkHosts(result.customSdkHosts)
             .withEncodedClidsFromResponse(validClidsFromResponse)
             .withLastReferrerForStartupRequest(requestConfig.referrer?.referrer)
+            .withLastYandexAdsOnlyForStartupRequest(lastYandexAdsOnly)
             .withLastClientClidsForStartupRequest(clientClidsForRequest)
             .withStartupDidNotOverrideClids(
                 startupUnitComponents.clidsStateChecker.doRequestClidsMatchResponseClids(

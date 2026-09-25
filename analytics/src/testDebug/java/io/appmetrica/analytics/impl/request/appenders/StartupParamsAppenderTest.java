@@ -341,6 +341,19 @@ public class StartupParamsAppenderTest extends CommonTest {
     }
 
     @Test
+    public void alwaysSendsYandexAdsOnly() {
+        when(startupRequestConfig.isYandexAdsOnly()).thenReturn(true);
+        when(obfuscator.obfuscate("hoyas")).thenReturn("obfuscated_hoyas");
+        startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
+        assertThat(mBuilder.toString()).contains("obfuscated_hoyas=1");
+
+        mBuilder.clearQuery();
+        when(startupRequestConfig.isYandexAdsOnly()).thenReturn(false);
+        startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
+        assertThat(mBuilder.toString()).contains("obfuscated_hoyas=0");
+    }
+
+    @Test
     public void paramsShouldContainAppSetId() {
         final String appSetId = "333-444";
         when(startupRequestConfig.getAppSetId()).thenReturn(appSetId);

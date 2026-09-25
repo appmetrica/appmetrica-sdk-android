@@ -46,6 +46,8 @@ public class StartupStateModel {
     public final String lastChosenForRequestClids;
     @Nullable
     public final String lastReferrerForStartupRequest;
+    @Nullable
+    public final Boolean lastYandexAdsOnlyForStartupRequest;
 
     //region Startup collectingFlags
     @NonNull
@@ -107,6 +109,7 @@ public class StartupStateModel {
         this.hadFirstStartup = builder.mHadFirstStartup;
         this.lastChosenForRequestClids = builder.mLastChosenForRequestClids;
         this.lastReferrerForStartupRequest = builder.mLastReferrerForStartupRequest;
+        this.lastYandexAdsOnlyForStartupRequest = builder.lastYandexAdsOnlyForStartupRequest;
         this.startupDidNotOverrideClids = builder.mStartupDidNotOverrideClids;
         this.countryInit = builder.mCountryInit;
         this.statSending = builder.mStatSending;
@@ -153,6 +156,7 @@ public class StartupStateModel {
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withLastChosenForRequestClids(lastChosenForRequestClids)
             .withLastReferrerForStartupRequest(lastReferrerForStartupRequest)
+            .withLastYandexAdsOnlyForStartupRequest(lastYandexAdsOnlyForStartupRequest)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
             .withObtainTime(obtainTime)
             .withHadFirstStartup(hadFirstStartup)
@@ -239,6 +243,8 @@ public class StartupStateModel {
         @Nullable
         String mLastChosenForRequestClids;
         String mLastReferrerForStartupRequest;
+        @Nullable
+        Boolean lastYandexAdsOnlyForStartupRequest;
         @NonNull
         final CollectingFlags mCollectingFlags;
         @Nullable
@@ -337,6 +343,11 @@ public class StartupStateModel {
 
         public StartupStateBuilder withLastReferrerForStartupRequest(@Nullable String referrer) {
             mLastReferrerForStartupRequest = referrer;
+            return this;
+        }
+
+        public StartupStateBuilder withLastYandexAdsOnlyForStartupRequest(@Nullable Boolean yandexAdsOnly) {
+            lastYandexAdsOnlyForStartupRequest = yandexAdsOnly;
             return this;
         }
 

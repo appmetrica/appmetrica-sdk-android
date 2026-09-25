@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import android.location.Location
 import io.appmetrica.analytics.impl.CoreServiceEvent
+import io.appmetrica.analytics.impl.DefaultValues
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.component.CommonArguments
@@ -40,6 +41,23 @@ internal class MainReporterClientUnitTest : CommonTest() {
 
     private val mainReporterClientUnit: MainReporterClientUnit by setUp {
         MainReporterClientUnit(context, componentUnit)
+    }
+
+    @Test
+    fun `handleReport forwards main client apiKey to ordinary activation state`() {
+        val ordinaryState = GlobalServiceLocator.getInstance().yandexAdsOrdinaryActivationState
+
+        whenever(counterConfiguration.apiKey).thenReturn("ordinary-api-key")
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
+        verify(ordinaryState).onMainClientApiKey("ordinary-api-key")
+
+        whenever(counterConfiguration.apiKey).thenReturn(DefaultValues.ANONYMOUS_API_KEY)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
+        verify(ordinaryState).onMainClientApiKey(DefaultValues.ANONYMOUS_API_KEY)
+
+        whenever(counterConfiguration.apiKey).thenReturn(null)
+        mainReporterClientUnit.handleReport(CoreServiceEvent(), clientConfiguration)
+        verify(ordinaryState).onMainClientApiKey(null)
     }
 
     @Test

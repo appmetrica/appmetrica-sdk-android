@@ -115,4 +115,5 @@ message StartupState {
     // endregion
 
     optional string lastReferrerForStartupRequest = 34;
+    optional OptionalBool lastYandexAdsOnlyForStartupRequest = 35 [default = OPTIONAL_BOOL_UNDEFINED];
 }

@@ -57,6 +57,9 @@ internal class StartupUnitComponentsTest : CommonTest() {
     @get:Rule
     val uuidValidatorMockedConstructionRule = constructionRule<UuidValidator>()
 
+    @get:Rule
+    val yandexAdsProviderRule = constructionRule<YandexAdsStartupStateProvider>()
+
     private lateinit var startupUnitComponents: StartupUnitComponents
 
     @Before
@@ -111,6 +114,13 @@ internal class StartupUnitComponentsTest : CommonTest() {
             .isEqualTo(clidsStateCheckerMockedConstructionRule.constructionMock.constructed().first())
         assertThat(clidsStateCheckerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(clidsStateCheckerMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
+    }
+
+    @Test
+    fun yandexAdsStartupStateProvider() {
+        assertThat(startupUnitComponents.yandexAdsStartupStateProvider)
+            .isEqualTo(yandexAdsProviderRule.constructionMock.constructed().first())
+        assertThat(yandexAdsProviderRule.constructionMock.constructed()).hasSize(1)
     }
 
     @Test
