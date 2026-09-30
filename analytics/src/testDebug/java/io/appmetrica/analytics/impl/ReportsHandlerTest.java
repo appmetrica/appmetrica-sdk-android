@@ -256,9 +256,6 @@ public class ReportsHandlerTest extends CommonTest {
         // Verify calls for executor
         verify(mReportsSender, times(1)).queueReport(any(ReportToSend.class));
 
-        // Verify calls for environment
-        verify(mArgReporterEnvironment, times(1)).getErrorEnvironment();
-
         // Verify calls for connector
         verify(mConnector, times(1)).removeScheduleDisconnect();
         verify(mConnector, never()).scheduleDisconnect();
@@ -274,29 +271,18 @@ public class ReportsHandlerTest extends CommonTest {
         // Verify calls for executor
         verify(mReportsSender, times(1)).queueReport(any(ReportToSend.class));
 
-        // Verify calls for environment
-        verify(mArgReporterEnvironment, times(1)).getErrorEnvironment();
-
         // Verify calls for connector
         verify(mConnector, times(1)).removeScheduleDisconnect();
         verify(mConnector, never()).scheduleDisconnect();
     }
 
     @Test
-    public void testReportEventWithAttributesForCustomEventStoresUtf8ValueBytes() {
+    public void testReportEventWithAttributesStoresUtf8ValueBytes() {
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("key", "value");
-        final CoreClientEvent report = new CoreClientEvent();
-        report.setValue("");
-        report.setName("name");
-        report.setType(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
+        final CoreClientEvent report = CoreClientEvent.regularEventReportEntry("name", attributes);
 
-        mReportsHandlerSpy.reportEvent(
-            report,
-            mArgReporterEnvironment,
-            AppMetricaServiceDataReporter.TYPE_CORE,
-            attributes
-        );
+        mReportsHandlerSpy.reportEvent(report, mArgReporterEnvironment);
 
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender).queueReport(reportToSend.capture());
@@ -306,20 +292,12 @@ public class ReportsHandlerTest extends CommonTest {
     }
 
     @Test
-    public void testReportEventWithAttributesForRegularEventStoresPlainJsonValue() {
+    public void testReportEventWithAttributesStoresPlainJsonValue() {
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("key", "value");
-        final CoreClientEvent report = new CoreClientEvent();
-        report.setValue("");
-        report.setName("name");
-        report.setType(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
+        final CoreClientEvent report = CoreClientEvent.regularEventReportEntry("name", attributes);
 
-        mReportsHandlerSpy.reportEvent(
-            report,
-            mArgReporterEnvironment,
-            AppMetricaServiceDataReporter.TYPE_CORE,
-            attributes
-        );
+        mReportsHandlerSpy.reportEvent(report, mArgReporterEnvironment);
 
         ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
         verify(mReportsSender).queueReport(reportToSend.capture());

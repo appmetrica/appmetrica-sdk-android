@@ -92,8 +92,6 @@ internal class EventIpcDataContractTest : CommonTest() {
         val event = "event"
         val bytesTruncated = 20
         val profileId = "profileId"
-        val creationElapsedRealtime = 21212121L
-        val creationTimestamp = 32323232L
         val source = EventSource.JS
         val extras = mapOf("extra key" to byteArrayOf(1, 2, 3, 4, 5))
         val payload = Bundle().apply {
@@ -102,21 +100,19 @@ internal class EventIpcDataContractTest : CommonTest() {
             putBundle("nested", Bundle().apply { putString("inner", "ok") })
         }
 
-        val report = CoreClientEvent().apply {
-            this.type = type
-            this.customType = customType
-            this.value = value
-            this.eventEnvironment = eventEnvironment
-            name = event
-            this.bytesTruncated = bytesTruncated
-            profileID = profileId
-            this.creationElapsedRealtime = creationElapsedRealtime
-            this.creationTimestamp = creationTimestamp
-            this.source = source
-            this.payload = payload
-            this.extras = HashMap(extras)
-            valueProtocolVersion = 2
-        }
+        val report = CoreClientEvent(
+            type = type,
+            customType = customType,
+            valueBytes = value.toByteArray(),
+            eventEnvironment = eventEnvironment,
+            name = event,
+            bytesTruncated = bytesTruncated,
+            profileID = profileId,
+            source = source,
+            payload = payload,
+            extras = extras,
+            valueProtocolVersion = 2,
+        )
 
         val decoded = read(marshal(write(report)))
 
@@ -134,8 +130,8 @@ internal class EventIpcDataContractTest : CommonTest() {
             .checkField("name", event)
             .checkField("bytesTruncated", bytesTruncated)
             .checkField("profileID", profileId)
-            .checkField("creationElapsedRealtime", creationElapsedRealtime)
-            .checkField("creationTimestamp", creationTimestamp)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .checkField("source", source)
             .checkField("valueProtocolVersion", 2)
             .let { assertions -> checkExtrasContent(assertions, extras) }
@@ -161,10 +157,10 @@ internal class EventIpcDataContractTest : CommonTest() {
             putParcelable(IdentifiersData.BUNDLE_KEY, identifiersData)
         }
 
-        val report = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            this.payload = payload
-        }
+        val report = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            payload = payload,
+        )
 
         val decoded = read(marshal(write(report)))
 
@@ -201,19 +197,17 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun nullOptionalFieldsNormalized() {
-        val report = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            value = null
-            name = null
-            eventEnvironment = null
-            profileID = null
-            source = null
-            payload = null
-            creationElapsedRealtime = 0L
-            creationTimestamp = 0L
-            extras = HashMap()
-            valueProtocolVersion = null
-        }
+        val report = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            valueBytes = null,
+            name = null,
+            eventEnvironment = null,
+            profileID = null,
+            source = null,
+            payload = null,
+            extras = emptyMap(),
+            valueProtocolVersion = null,
+        )
 
         val decoded = read(marshal(write(report)))
 
@@ -228,8 +222,8 @@ internal class EventIpcDataContractTest : CommonTest() {
             .checkField("customType", 0)
             .checkField("valueBytesStorage", ByteArray(0))
             .checkField("bytesTruncated", 0)
-            .checkField("creationElapsedRealtime", 0L)
-            .checkField("creationTimestamp", 0L)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .let { checkExtrasContent(it, emptyMap()) }
             .checkFieldIsNull("name")
             .checkFieldIsNull("eventEnvironment")
@@ -242,11 +236,11 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun coexistsWithClientConfigurationInSameBundle() {
-        val report = CoreClientEvent().apply {
-            value = "v"
-            name = "n"
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-        }
+        val report = CoreClientEvent(
+            valueBytes = "v".toByteArray(),
+            name = "n",
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+        )
         val environment = ReporterEnvironment(
             ProcessConfiguration(context, null),
             CounterConfiguration("api-key"),
@@ -368,12 +362,10 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun sourceAbsentMeansNull() {
-        val report = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            source = null
-            creationElapsedRealtime = 0L
-            creationTimestamp = 0L
-        }
+        val report = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            source = null,
+        )
 
         val decoded = read(marshal(write(report)))
 
@@ -389,8 +381,8 @@ internal class EventIpcDataContractTest : CommonTest() {
             .checkField("valueBytesStorage", StringUtils.getUTF8Bytes(StringUtils.EMPTY))
             .checkField("name", StringUtils.EMPTY)
             .checkField("bytesTruncated", 0)
-            .checkField("creationElapsedRealtime", 0L)
-            .checkField("creationTimestamp", 0L)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .let { checkExtrasContent(it, emptyMap()) }
             .checkFieldIsNull("eventEnvironment")
             .checkFieldIsNull("profileID")
@@ -402,12 +394,10 @@ internal class EventIpcDataContractTest : CommonTest() {
 
     @Test
     fun sourcePresentRoundTrips() {
-        val report = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            source = EventSource.NATIVE
-            creationElapsedRealtime = 0L
-            creationTimestamp = 0L
-        }
+        val report = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            source = EventSource.NATIVE,
+        )
 
         val decoded = read(marshal(write(report)))
 
@@ -423,8 +413,8 @@ internal class EventIpcDataContractTest : CommonTest() {
             .checkField("valueBytesStorage", StringUtils.getUTF8Bytes(StringUtils.EMPTY))
             .checkField("name", StringUtils.EMPTY)
             .checkField("bytesTruncated", 0)
-            .checkField("creationElapsedRealtime", 0L)
-            .checkField("creationTimestamp", 0L)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .checkField("source", EventSource.NATIVE)
             .let { checkExtrasContent(it, emptyMap()) }
             .checkFieldIsNull("eventEnvironment")

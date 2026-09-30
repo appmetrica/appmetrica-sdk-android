@@ -34,9 +34,9 @@ public class UnhandledExceptionEventFormer {
         );
         final CoreClientEvent reportData = CoreClientEvent.unhandledExceptionReportEntry(
                 UnhandledException.getErrorName(unhandledException),
-                mJvmCrashConverter.fromModel(unhandledException)
+                mJvmCrashConverter.fromModel(unhandledException),
+                reporterEnvironment
         );
-        reportData.setEventEnvironment(reporterEnvironment.getErrorEnvironment());
         return ReportToSend.newBuilder(reportData, reporterEnvironment)
             .asCrash(true)
             .build();

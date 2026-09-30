@@ -17,6 +17,7 @@ import io.appmetrica.gradle.testutils.assertions.Assertions;
 import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import org.assertj.core.api.SoftAssertions;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,12 +86,20 @@ public class JvmCrashTest extends CommonTest {
     }
 
     private TrimmedCoreClientEvent crashReport() {
-        CoreClientEvent event = new CoreClientEvent();
-        event.setName(mCrashName);
-        event.setValueBytes(mRawCrashValue);
-        event.setBytesTruncated(mBytesTruncated);
-        event.setEventEnvironment(mErrorEnvironment);
-        event.setTrimPolicy(EventTrimPolicy.STANDARD);
+        CoreClientEvent event = new CoreClientEvent(
+            0,
+            0,
+            mCrashName,
+            null,
+            mBytesTruncated,
+            Collections.emptyMap(),
+            null,
+            mErrorEnvironment,
+            mRawCrashValue,
+            EventTrimPolicy.STANDARD,
+            null,
+            null
+        );
         return new TrimmedCoreClientEvent(logger, event);
     }
 

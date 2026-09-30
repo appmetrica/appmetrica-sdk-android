@@ -151,28 +151,23 @@ internal class CoreClientEventTest : CommonTest() {
     }
 
     @Test
-    fun creationElapsedRealtimeDefaultsAndSetter() {
+    fun creationElapsedRealtimeDefaultsFromClock() {
         assertThat(CoreClientEvent().creationElapsedRealtime).isEqualTo(currentElapsedRealtime)
         assertThat(
-            CoreClientEvent().apply {
-                value = "Test value"
-                name = "Test event"
-                type = 234
-            }.creationElapsedRealtime
+            CoreClientEvent(
+                valueBytes = "Test value".toByteArray(),
+                name = "Test event",
+                type = 234,
+            ).creationElapsedRealtime
         ).isEqualTo(currentElapsedRealtime)
-
-        val expected = 2453543L
-        val report = CoreClientEvent().apply { creationElapsedRealtime = expected }
-        assertThat(report.creationElapsedRealtime).isEqualTo(expected)
     }
 
     @Test
     fun creationElapsedRealtimeRoundTripViaIpc() {
-        val expected = 45345435L
-        val report = CoreClientEvent().apply { creationElapsedRealtime = expected }
+        val report = CoreClientEvent()
         val bundle = EventIpcCodec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle())
         assertThat(CoreServiceEvent.fromIpcData(EventIpcCodec.fromBundle(bundle)).creationElapsedRealtime)
-            .isEqualTo(expected)
+            .isEqualTo(currentElapsedRealtime)
     }
 
     @Test
@@ -195,43 +190,34 @@ internal class CoreClientEventTest : CommonTest() {
     }
 
     @Test
-    fun creationTimestampDefaultsAndSetter() {
+    fun creationTimestampDefaultsFromClock() {
         assertThat(
-            CoreClientEvent().apply {
-                value = "Test value"
-                name = "Test event"
-                type = 0
-            }.creationTimestamp
+            CoreClientEvent(
+                valueBytes = "Test value".toByteArray(),
+                name = "Test event",
+                type = 0,
+            ).creationTimestamp
         ).isEqualTo(currentTimeMillis)
-
-        val expected = 3454534L
-        val report = CoreClientEvent().apply { creationTimestamp = expected }
-        assertThat(report.creationTimestamp).isEqualTo(expected)
     }
 
     @Test
     fun creationTimestampRoundTripViaIpc() {
-        val expected = 353454565L
-        val report = CoreClientEvent().apply { creationTimestamp = expected }
+        val report = CoreClientEvent()
         val bundle = EventIpcCodec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle())
         assertThat(CoreServiceEvent.fromIpcData(EventIpcCodec.fromBundle(bundle)).creationTimestamp)
-            .isEqualTo(expected)
+            .isEqualTo(currentTimeMillis)
     }
 
     @Test
-    fun valueAndValueBytes() {
+    fun valueBytesFromConstructor() {
         val bytes = byteArrayOf(1, 2, 3, 4, 10, 11, 12, 13, 14, 15, 21)
-        val report = CoreClientEvent().apply { valueBytes = bytes }
+        val report = CoreClientEvent(valueBytes = bytes)
         assertThat(report.valueBytes).isEqualTo(bytes)
-        assertThat(report.value).isEqualTo(String(bytes, StandardCharsets.UTF_8))
+        assertThat(String(report.valueBytes!!, StandardCharsets.UTF_8))
+            .isEqualTo(String(bytes, StandardCharsets.UTF_8))
 
-        report.value = null
-        assertThat(report.value).isNull()
-        assertThat(report.valueBytes).isNull()
-
-        report.valueBytes = null
-        assertThat(report.value).isNull()
-        assertThat(report.valueBytes).isNull()
+        val nullValueReport = CoreClientEvent(valueBytes = null)
+        assertThat(nullValueReport.valueBytes).isNull()
     }
 
     @Test
@@ -248,7 +234,7 @@ internal class CoreClientEventTest : CommonTest() {
         assertThat(result.source).isEqualTo(EventSource.JS)
         assertThat(result.type).isEqualTo(InternalEvents.EVENT_TYPE_WEBVIEW_SYNC.typeId)
         assertThat(result.name).isEmpty()
-        assertThat(result.value).isEqualTo(value)
+        assertThat(String(result.valueBytes!!, StandardCharsets.UTF_8)).isEqualTo(value)
     }
 
     @Test
@@ -262,11 +248,11 @@ internal class CoreClientEventTest : CommonTest() {
 
         val eventName = "test name"
         val eventValue = "test value"
-        val filled = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.typeId
-            name = eventName
-            value = eventValue
-        }
+        val filled = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.typeId,
+            name = eventName,
+            valueBytes = eventValue.toByteArray(),
+        )
         SoftAssertions().apply {
             assertThat(filled.toString())
                 .contains("event: $eventName")
@@ -276,11 +262,11 @@ internal class CoreClientEventTest : CommonTest() {
 
         val fittingValue = RandomStringGenerator(500).nextString()
         val longValue = fittingValue + "aaaaabbbbb"
-        val longReport = CoreClientEvent().apply {
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            name = eventName
-            value = longValue
-        }
+        val longReport = CoreClientEvent(
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            name = eventName,
+            valueBytes = longValue.toByteArray(),
+        )
         SoftAssertions().apply {
             assertThat(longReport.toString())
                 .contains("event: $eventName")
@@ -300,7 +286,7 @@ internal class CoreClientEventTest : CommonTest() {
         val event = CoreClientEvent.formJsInitEvent(value)
         SoftAssertions().apply {
             assertThat(event.trimPolicy).isEqualTo(EventTrimPolicy.NONE)
-            assertThat(event.value).isEqualTo(value)
+            assertThat(String(event.valueBytes!!, StandardCharsets.UTF_8)).isEqualTo(value)
             assertThat(event.source).isEqualTo(EventSource.JS)
         }.assertAll()
     }

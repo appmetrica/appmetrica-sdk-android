@@ -22,8 +22,6 @@ import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
-import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
@@ -151,57 +149,27 @@ public class ReportsHandler {
         mConnector.allowDisconnect();
     }
 
-    private CoreClientEvent prepareRegularReport(final CoreClientEvent event,
-                                               final ReporterEnvironment reporterEnvironment) {
-        if (EventsManager.shouldUseErrorEnvironment(event.getType())) {
-            DebugLogger.INSTANCE.info(
-                TAG,
-                "Add error environments: %s to event with type: %s",
-                reporterEnvironment.mErrorEnvironment,
-                event.getType()
-            );
-            event.setEventEnvironment(reporterEnvironment.getErrorEnvironment());
-        }
-        return event;
-    }
-
     void reportEvent(final CoreClientEvent event, final ReporterEnvironment reporterEnvironment) {
-        reportEvent(prepareRegularReport(event, reporterEnvironment), reporterEnvironment, null);
-    }
-
-    void reportEvent(
-        final CoreClientEvent event,
-        final ReporterEnvironment reporterEnvironment,
-        final Map<String, Object> attributes
-    ) {
-        reportEvent(event, reporterEnvironment, AppMetricaServiceDataReporter.TYPE_CORE, attributes);
+        reportEvent(
+            event,
+            reporterEnvironment,
+            AppMetricaServiceDataReporter.TYPE_CORE
+        );
     }
 
     public void reportEvent(
         CoreClientEvent report,
         final ReporterEnvironment environment,
-        final int serviceDataReporterType,
-        final Map<String, Object> attributes
+        final int serviceDataReporterType
     ) {
-        if (report.getType() == InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()) {
-            DebugLogger.INSTANCE.info(
-                TAG,
-                "Report event %s, value size: %d apiKey %s",
-                InternalEvents.valueOf(report.getType()).toString(),
-                report.getValueBytes().length,
-                environment.getReporterConfiguration().getApiKey()
-            );
-        }
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Report event %s, value size: %d apiKey %s",
+            InternalEvents.valueOf(report.getType()).toString(),
+            report.getValueBytes() != null ? report.getValueBytes().length : -1,
+            environment.getReporterConfiguration().getApiKey()
+        );
         mConnector.removeScheduleDisconnect();
-        if (Utils.isNullOrEmpty(attributes) == false) {
-            final String jsonValue = JsonHelper.mapToJsonString(attributes);
-            if (report.getType() == InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId()) {
-                report.setValueBytes(StringUtils.getUTF8Bytes(jsonValue));
-            } else {
-                report.setValue(jsonValue);
-            }
-            prepareRegularReport(report, environment);
-        }
         ReportToSend reportToSend = ReportToSend.newBuilder(report, environment)
             .withServiceDataReporterType(serviceDataReporterType)
             .build();
@@ -235,17 +203,16 @@ public class ReportsHandler {
             new IdentifiersData(identifiers, freshClientClids, receiver, forceRefreshConfiguration)
         );
         CoreClientEvent counterReport = CoreClientEvent.reportEntry(
-            InternalEvents.EVENT_TYPE_STARTUP
+            InternalEvents.EVENT_TYPE_STARTUP,
+            payload
         );
-        counterReport.setPayload(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
     }
 
     public void reportRequestReferrerEvent(@NonNull ReferrerResultReceiver receiver) {
         Bundle payload = new Bundle();
         payload.putParcelable(ReferrerResultReceiver.BUNDLE_KEY, receiver);
-        CoreClientEvent counterReport = CoreClientEvent.requestReferrerEntry();
-        counterReport.setPayload(payload);
+        CoreClientEvent counterReport = CoreClientEvent.requestReferrerEntry(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
     }
 

@@ -51,21 +51,19 @@ internal class EventIpcCodecTest : CommonTest() {
 
     @Test
     fun toBundleWritesFlatKeys() {
-        val report = CoreClientEvent().apply {
-            value = "value"
-            name = "name"
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            customType = 7
-            bytesTruncated = 3
-            profileID = "pid"
-            eventEnvironment = "env"
-            creationElapsedRealtime = 11L
-            creationTimestamp = 22L
-            source = EventSource.JS
-            payload = Bundle().apply { putString("p", "v") }
-            extras = hashMapOf("e" to byteArrayOf(9))
-            valueProtocolVersion = 2
-        }
+        val report = CoreClientEvent(
+            valueBytes = "value".toByteArray(),
+            name = "name",
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            customType = 7,
+            bytesTruncated = 3,
+            profileID = "pid",
+            eventEnvironment = "env",
+            source = EventSource.JS,
+            payload = Bundle().apply { putString("p", "v") },
+            extras = mapOf("e" to byteArrayOf(9)),
+            valueProtocolVersion = 2,
+        )
 
         val bundle = codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle())
 
@@ -77,8 +75,8 @@ internal class EventIpcCodecTest : CommonTest() {
         assertThat(bundle.getInt(EventIpcBundleKeys.TRUNCATED)).isEqualTo(3)
         assertThat(bundle.getString(EventIpcBundleKeys.PROFILE_ID)).isEqualTo("pid")
         assertThat(bundle.getString(EventIpcBundleKeys.ENVIRONMENT)).isEqualTo("env")
-        assertThat(bundle.getLong(EventIpcBundleKeys.CREATION_ELAPSED_REALTIME)).isEqualTo(11L)
-        assertThat(bundle.getLong(EventIpcBundleKeys.CREATION_TIMESTAMP)).isEqualTo(22L)
+        assertThat(bundle.getLong(EventIpcBundleKeys.CREATION_ELAPSED_REALTIME)).isEqualTo(CURRENT_ELAPSED_REALTIME)
+        assertThat(bundle.getLong(EventIpcBundleKeys.CREATION_TIMESTAMP)).isEqualTo(CURRENT_TIME_MILLIS)
         assertThat(bundle.getInt(EventIpcBundleKeys.SOURCE)).isEqualTo(EventSource.JS.code)
         assertThat(bundle.getBundle(EventIpcBundleKeys.PAYLOAD)!!.getString("p")).isEqualTo("v")
         assertThat(bundle.getBundle(EventIpcBundleKeys.EXTRAS)!!.getByteArray("e")).isEqualTo(byteArrayOf(9))
@@ -88,22 +86,20 @@ internal class EventIpcCodecTest : CommonTest() {
     @Test
     fun fromBundleReadsWrittenFields() {
         val payload = Bundle().apply { putString("p", "v") }
-        val extras = hashMapOf("e" to byteArrayOf(9))
-        val report = CoreClientEvent().apply {
-            value = "v"
-            name = "n"
-            type = 15
-            customType = 2
-            bytesTruncated = 3
-            profileID = "pid"
-            eventEnvironment = "env"
-            creationElapsedRealtime = 11L
-            creationTimestamp = 22L
-            source = EventSource.JS
-            this.payload = payload
-            this.extras = extras
-            valueProtocolVersion = 1
-        }
+        val extras = mapOf("e" to byteArrayOf(9))
+        val report = CoreClientEvent(
+            valueBytes = "v".toByteArray(),
+            name = "n",
+            type = 15,
+            customType = 2,
+            bytesTruncated = 3,
+            profileID = "pid",
+            eventEnvironment = "env",
+            source = EventSource.JS,
+            payload = payload,
+            extras = extras,
+            valueProtocolVersion = 1,
+        )
         val event = readEvent(codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle()))
 
         Assertions.ObjectPropertyAssertions(event)
@@ -120,8 +116,8 @@ internal class EventIpcCodecTest : CommonTest() {
             .checkField("bytesTruncated", 3)
             .checkField("profileID", "pid")
             .checkField("eventEnvironment", "env")
-            .checkField("creationElapsedRealtime", 11L)
-            .checkField("creationTimestamp", 22L)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .checkField("source", EventSource.JS)
             .checkField("payload", payload)
             .checkField("valueProtocolVersion", 1)
@@ -160,12 +156,10 @@ internal class EventIpcCodecTest : CommonTest() {
 
     @Test
     fun valueNullNormalizedToEmpty() {
-        val report = CoreClientEvent().apply {
-            type = 1
-            value = null
-            creationElapsedRealtime = 0L
-            creationTimestamp = 0L
-        }
+        val report = CoreClientEvent(
+            type = 1,
+            valueBytes = null,
+        )
         val event = readEvent(codec.toBundle(EventIpcData.fromCoreClientEvent(logger, report), Bundle()))
 
         Assertions.ObjectPropertyAssertions(event)
@@ -180,8 +174,8 @@ internal class EventIpcCodecTest : CommonTest() {
             .checkField("valueBytesStorage", ByteArray(0))
             .checkField("name", StringUtils.EMPTY)
             .checkField("bytesTruncated", 0)
-            .checkField("creationElapsedRealtime", 0L)
-            .checkField("creationTimestamp", 0L)
+            .checkField("creationElapsedRealtime", CURRENT_ELAPSED_REALTIME)
+            .checkField("creationTimestamp", CURRENT_TIME_MILLIS)
             .let { assertions -> checkExtrasContent(assertions, emptyMap()) }
             .checkFieldIsNull("eventEnvironment")
             .checkFieldIsNull("profileID")
@@ -204,12 +198,12 @@ internal class EventIpcCodecTest : CommonTest() {
     fun fromCoreClientEventTrimsLongNameAndValue() {
         val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
-        val report = CoreClientEvent().apply {
-            name = longName
-            valueBytes = longValue
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            trimPolicy = EventTrimPolicy.STANDARD
-        }
+        val report = CoreClientEvent(
+            name = longName,
+            valueBytes = longValue,
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            trimPolicy = EventTrimPolicy.STANDARD,
+        )
 
         val data = EventIpcData.fromCoreClientEvent(logger, report)
 
@@ -224,13 +218,13 @@ internal class EventIpcCodecTest : CommonTest() {
     fun fromCoreClientEventNoneDoesNotTrim() {
         val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
-        val report = CoreClientEvent().apply {
-            name = longName
-            valueBytes = longValue
-            type = InternalEvents.EVENT_TYPE_WEBVIEW_SYNC.typeId
-            bytesTruncated = 5
-            trimPolicy = EventTrimPolicy.NONE
-        }
+        val report = CoreClientEvent(
+            name = longName,
+            valueBytes = longValue,
+            type = InternalEvents.EVENT_TYPE_WEBVIEW_SYNC.typeId,
+            bytesTruncated = 5,
+            trimPolicy = EventTrimPolicy.NONE,
+        )
 
         val data = EventIpcData.fromCoreClientEvent(logger, report)
 
@@ -242,12 +236,12 @@ internal class EventIpcCodecTest : CommonTest() {
     @Test
     fun fromCoreClientEventAccumulatesBytesTruncatedWithValueDelta() {
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 9) { 4 }
-        val report = CoreClientEvent().apply {
-            valueBytes = longValue
-            type = InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.typeId
-            bytesTruncated = 55
-            trimPolicy = EventTrimPolicy.STANDARD
-        }
+        val report = CoreClientEvent(
+            valueBytes = longValue,
+            type = InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT.typeId,
+            bytesTruncated = 55,
+            trimPolicy = EventTrimPolicy.STANDARD,
+        )
 
         val data = EventIpcData.fromCoreClientEvent(logger, report)
 

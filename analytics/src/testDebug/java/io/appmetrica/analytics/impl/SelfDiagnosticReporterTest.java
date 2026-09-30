@@ -4,12 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +57,20 @@ public class SelfDiagnosticReporterTest extends CommonTest {
     @Test
     public void test() {
         ArgumentCaptor<Bundle> bundleCaptor = ArgumentCaptor.forClass(Bundle.class);
-        selfDiagnosticReporter.reportEvent(new CoreClientEvent());
+        selfDiagnosticReporter.reportEvent(new CoreClientEvent(
+            0,
+            0,
+            StringUtils.EMPTY,
+            null,
+            0,
+            Collections.emptyMap(),
+            null,
+            null,
+            StringUtils.getUTF8Bytes(StringUtils.EMPTY),
+            EventTrimPolicy.STANDARD,
+            null,
+            null
+        ));
         if (newReporterType != null) {
             verify(selfProcessReporter).reportData(
                 eq(AppMetricaServiceDataReporter.TYPE_CORE),

@@ -2,23 +2,21 @@ package io.appmetrica.analytics.coreapi.internal.event
 
 interface ClientEvent {
 
-    var type: Int
+    val type: Int
 
-    var customType: Int
+    val customType: Int
 
-    var name: String?
+    val name: String?
 
-    var value: String?
+    val valueBytes: ByteArray?
 
-    var valueBytes: ByteArray?
+    val valueProtocolVersion: Int?
 
-    var valueProtocolVersion: Int?
+    val bytesTruncated: Int
 
-    var bytesTruncated: Int
+    val extras: Map<String, ByteArray>
 
-    var extras: MutableMap<String, ByteArray>
+    val profileID: String?
 
-    var profileID: String?
-
-    var eventEnvironment: String?
+    val eventEnvironment: String?
 }

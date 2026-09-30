@@ -166,7 +166,7 @@ public class EventsManagerTest extends CommonTest {
                 .put("type", "open")
                 .put("auto", auto)
                 .toString(),
-            report.getValue(),
+            new String(report.getValueBytes()),
             true
         );
     }
@@ -175,7 +175,9 @@ public class EventsManagerTest extends CommonTest {
     public void customErrorEntry() {
         String message = "mes";
         byte[] value = "somevalue".getBytes();
-        CoreClientEvent report = CoreClientEvent.customErrorReportEntry(message, value);
+        ReporterEnvironment reporterEnvironment = mock(ReporterEnvironment.class);
+        when(reporterEnvironment.getErrorEnvironment()).thenReturn("error env");
+        CoreClientEvent report = CoreClientEvent.customErrorReportEntry(message, value, reporterEnvironment);
         SoftAssertions soft = new SoftAssertions();
 
         soft.assertThat(report.getName()).as("message").isEqualTo(message);
@@ -183,6 +185,7 @@ public class EventsManagerTest extends CommonTest {
         soft.assertThat(report.getType()).as("type").isEqualTo(
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF.getTypeId()
         );
+        soft.assertThat(report.getEventEnvironment()).as("eventEnvironment").isEqualTo("error env");
 
         soft.assertAll();
     }
@@ -193,7 +196,7 @@ public class EventsManagerTest extends CommonTest {
         final String value = "value";
         final CoreClientEvent report = CoreClientEvent.cleanupEventReportEntry(value);
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(report.getValue()).isEqualTo(value);
+        assertions.assertThat(new String(report.getValueBytes())).isEqualTo(value);
         assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CLEANUP.getTypeId());
         assertions.assertAll();
     }
@@ -243,11 +246,14 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testAnrEntry() {
         byte[] value = "value".getBytes();
-        CoreClientEvent clientCounterReport = CoreClientEvent.anrEntry(value);
+        ReporterEnvironment reporterEnvironment = mock(ReporterEnvironment.class);
+        when(reporterEnvironment.getErrorEnvironment()).thenReturn("error env");
+        CoreClientEvent clientCounterReport = CoreClientEvent.anrEntry(value, reporterEnvironment);
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(clientCounterReport.getName()).isEmpty();
         assertions.assertThat(clientCounterReport.getValueBytes()).isEqualTo(value);
         assertions.assertThat(clientCounterReport.getType()).isEqualTo(InternalEvents.EVENT_TYPE_ANR.getTypeId());
+        assertions.assertThat(clientCounterReport.getEventEnvironment()).isEqualTo("error env");
         assertions.assertAll();
     }
 
@@ -280,7 +286,7 @@ public class EventsManagerTest extends CommonTest {
                 .put("wasSet", true)
                 .put("autoTracking", autoTracking)
                 .put("source", DistributionSource.APP.getDescription())
-        ).toString(), report.getValue(), true);
+        ).toString(), new String(report.getValueBytes()), true);
     }
 
     @Test
@@ -291,14 +297,14 @@ public class EventsManagerTest extends CommonTest {
         );
         assertThat(report.getName()).isEmpty();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_ACTIVATION.getTypeId());
-        JSONAssert.assertEquals(new JSONObject().toString(), report.getValue(), true);
+        JSONAssert.assertEquals(new JSONObject().toString(), new String(report.getValueBytes()), true);
     }
 
     @Test
     public void requestReferrerEntry() {
-        CoreClientEvent report = CoreClientEvent.requestReferrerEntry();
+        CoreClientEvent report = CoreClientEvent.requestReferrerEntry(null);
         assertThat(report.getName()).isEmpty();
-        assertThat(report.getValue()).isEmpty();
+        assertThat(report.getValueBytes()).isEmpty();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_REQUEST_REFERRER.getTypeId());
     }
 
@@ -315,7 +321,7 @@ public class EventsManagerTest extends CommonTest {
         CoreClientEvent report = CoreClientEvent.setSessionExtraReportEntry(key, value);
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA.getTypeId());
         assertThat(report.getName()).isNullOrEmpty();
-        assertThat(report.getValue()).isNullOrEmpty();
+        assertThat(report.getValueBytes()).isNullOrEmpty();
         assertThat(report.getExtras()).containsExactlyEntriesOf(Collections.singletonMap(key, value));
     }
 

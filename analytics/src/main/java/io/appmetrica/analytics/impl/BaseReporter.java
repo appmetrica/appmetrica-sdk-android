@@ -278,9 +278,8 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void reportEvent(@NonNull String eventName, @Nullable final Map<String, Object> attributes) {
         mReportsHandler.reportEvent(
-            CoreClientEvent.regularEventReportEntry(eventName),
-            getEnvironment(),
-            attributes
+            CoreClientEvent.regularEventReportEntry(eventName, attributes),
+            getEnvironment()
         );
         mPublicLogger.info(
             "Event received: " + WrapUtils.wrapToTag(eventName) +
@@ -305,8 +304,7 @@ public abstract class BaseReporter implements IBaseReporter {
             mReportsHandler.reportEvent(
                 event,
                 mReporterEnvironment,
-                moduleEvent.getServiceDataReporterType(),
-                moduleEvent.getAttributes()
+                moduleEvent.getServiceDataReporterType()
             );
         }
     }
@@ -322,7 +320,7 @@ public abstract class BaseReporter implements IBaseReporter {
         } else {
             mPublicLogger.info("AppMetricaEvent received: " + eventData.getDescription());
             final CoreClientEvent counterReport = CoreClientEvent.appMetricaEventReportEntry(eventData);
-            mReportsHandler.reportEvent(counterReport, mReporterEnvironment, null);
+            mReportsHandler.reportEvent(counterReport, mReporterEnvironment);
         }
     }
 
@@ -343,7 +341,8 @@ public abstract class BaseReporter implements IBaseReporter {
         RegularError regularError = new RegularError(message, formUnhandledException(error));
         mReportsHandler.reportEvent(CoreClientEvent.regularErrorReportEntry(
                 regularError.message,
-                MessageNano.toByteArray(regularErrorConverter.fromModel(regularError))
+                MessageNano.toByteArray(regularErrorConverter.fromModel(regularError)),
+                mReporterEnvironment
         ), mReporterEnvironment);
         mPublicLogger.info("Error received: %s", WrapUtils.wrapToTag(message));
     }
@@ -366,7 +365,8 @@ public abstract class BaseReporter implements IBaseReporter {
         mReportsHandler.reportEvent(
             CoreClientEvent.customErrorReportEntry(
                 customError.regularError.message,
-                MessageNano.toByteArray(customErrorConverter.fromModel(customError))
+                MessageNano.toByteArray(customErrorConverter.fromModel(customError)),
+                mReporterEnvironment
             ),
             mReporterEnvironment
         );
@@ -552,7 +552,8 @@ public abstract class BaseReporter implements IBaseReporter {
         Anr anr = new Anr(allThreads, mExtraMetaInfoRetriever.getBuildId(), mExtraMetaInfoRetriever.isOffline());
         mReportsHandler.reportEvent(
             CoreClientEvent.anrEntry(
-                MessageNano.toByteArray(anrConverter.fromModel(anr))
+                MessageNano.toByteArray(anrConverter.fromModel(anr)),
+                mReporterEnvironment
             ),
             mReporterEnvironment
         );
@@ -587,7 +588,8 @@ public abstract class BaseReporter implements IBaseReporter {
         mReportsHandler.reportEvent(
             CoreClientEvent.unhandledExceptionReportEntry(
                 UnhandledException.getErrorName(unhandledException),
-                MessageNano.toByteArray(unhandledExceptionConverter.fromModel(unhandledException))
+                MessageNano.toByteArray(unhandledExceptionConverter.fromModel(unhandledException)),
+                mReporterEnvironment
             ),
             mReporterEnvironment
         );
@@ -602,7 +604,8 @@ public abstract class BaseReporter implements IBaseReporter {
         mReportsHandler.reportEvent(
             CoreClientEvent.customErrorReportEntry(
                 error.message,
-                MessageNano.toByteArray(regularErrorConverter.fromModel(error))
+                MessageNano.toByteArray(regularErrorConverter.fromModel(error)),
+                mReporterEnvironment
             ),
             mReporterEnvironment
         );
@@ -626,7 +629,8 @@ public abstract class BaseReporter implements IBaseReporter {
         mReportsHandler.reportEvent(
             CoreClientEvent.customErrorReportEntry(
                 customError.regularError.message,
-                MessageNano.toByteArray(customErrorConverter.fromModel(customError))
+                MessageNano.toByteArray(customErrorConverter.fromModel(customError)),
+                mReporterEnvironment
             ),
             mReporterEnvironment
         );

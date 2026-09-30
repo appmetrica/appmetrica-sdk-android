@@ -16,18 +16,18 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
         val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
         val longProfile = "p".repeat(EventLimitationProcessor.USER_PROFILE_ID_MAX_LENGTH + 8)
-        val source = CoreClientEvent().apply {
-            name = longName
-            valueBytes = longValue
-            profileID = longProfile
-            eventEnvironment = "env"
-            type = InternalEvents.EVENT_TYPE_REGULAR.typeId
-            customType = 3
-            valueProtocolVersion = 2
-            bytesTruncated = 0
-            trimPolicy = EventTrimPolicy.STANDARD
-            extras["k"] = byteArrayOf(1)
-        }
+        val source = CoreClientEvent(
+            name = longName,
+            valueBytes = longValue,
+            profileID = longProfile,
+            eventEnvironment = "env",
+            type = InternalEvents.EVENT_TYPE_REGULAR.typeId,
+            customType = 3,
+            valueProtocolVersion = 2,
+            bytesTruncated = 0,
+            trimPolicy = EventTrimPolicy.STANDARD,
+            extras = mapOf("k" to byteArrayOf(1)),
+        )
 
         val trimmed = TrimmedCoreClientEvent(logger, source)
 
@@ -54,12 +54,12 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
     fun nonePassthroughKeepsValuesAndExistingBytesTruncated() {
         val longName = "n".repeat(EventLimitationProcessor.EVENT_NAME_MAX_LENGTH + 40)
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 12) { 7 }
-        val source = CoreClientEvent().apply {
-            name = longName
-            valueBytes = longValue
-            bytesTruncated = 42
-            trimPolicy = EventTrimPolicy.NONE
-        }
+        val source = CoreClientEvent(
+            name = longName,
+            valueBytes = longValue,
+            bytesTruncated = 42,
+            trimPolicy = EventTrimPolicy.NONE,
+        )
 
         val trimmed = TrimmedCoreClientEvent(logger, source)
 
@@ -71,11 +71,11 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
     @Test
     fun accumulatesExistingBytesTruncatedWithFieldDeltas() {
         val longValue = ByteArray(EventLimitationProcessor.REPORT_VALUE_MAX_SIZE + 9) { 4 }
-        val source = CoreClientEvent().apply {
-            valueBytes = longValue
-            bytesTruncated = 55
-            trimPolicy = EventTrimPolicy.STANDARD
-        }
+        val source = CoreClientEvent(
+            valueBytes = longValue,
+            bytesTruncated = 55,
+            trimPolicy = EventTrimPolicy.STANDARD,
+        )
 
         val trimmed = TrimmedCoreClientEvent(logger, source)
 
@@ -86,13 +86,13 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
 
     @Test
     fun shortFieldsUnchangedKeepZeroBytesTruncated() {
-        val source = CoreClientEvent().apply {
-            name = "name"
-            valueBytes = "value".toByteArray()
-            profileID = "pid"
-            bytesTruncated = 0
-            trimPolicy = EventTrimPolicy.STANDARD
-        }
+        val source = CoreClientEvent(
+            name = "name",
+            valueBytes = "value".toByteArray(),
+            profileID = "pid",
+            bytesTruncated = 0,
+            trimPolicy = EventTrimPolicy.STANDARD,
+        )
 
         val trimmed = TrimmedCoreClientEvent(logger, source)
 

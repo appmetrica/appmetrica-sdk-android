@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runners.Parameterized;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -88,8 +89,7 @@ public abstract class ReporterReportCustomEventEventTypeBaseTests extends BaseRe
             .reportEvent(
                 same(mockedEvent),
                 any(ReporterEnvironment.class),
-                same(serviceDataReporterType),
-                any(Map.class)
+                eq(serviceDataReporterType)
             );
     }
 

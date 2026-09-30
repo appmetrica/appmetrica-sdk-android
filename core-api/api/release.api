@@ -186,19 +186,8 @@ public interface io.appmetrica.analytics.coreapi.internal.event.ClientEvent {
     public abstract [Nullable] String getName()
     public abstract [Nullable] String getProfileID()
     public abstract int getType()
-    public abstract [Nullable] String getValue()
     public abstract [Nullable] byte[] getValueBytes()
     public abstract [Nullable] Integer getValueProtocolVersion()
-    public abstract void setBytesTruncated(int)
-    public abstract void setCustomType(int)
-    public abstract void setEventEnvironment([Nullable] String)
-    public abstract void setExtras([NonNull] java.util.Map<String, byte[]>)
-    public abstract void setName([Nullable] String)
-    public abstract void setProfileID([Nullable] String)
-    public abstract void setType(int)
-    public abstract void setValue([Nullable] String)
-    public abstract void setValueBytes([Nullable] byte[])
-    public abstract void setValueProtocolVersion([Nullable] Integer)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.event.ServiceEvent {

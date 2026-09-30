@@ -15,7 +15,7 @@ internal class TrimmedCoreClientEvent(
     val type: Int = event.type
     val customType: Int = event.customType
     val valueProtocolVersion: Int? = event.valueProtocolVersion
-    val extras: MutableMap<String, ByteArray> = event.extras
+    val extras: Map<String, ByteArray> = event.extras
     val eventEnvironment: String? = event.eventEnvironment
     val creationElapsedRealtime: Long = event.creationElapsedRealtime
     val creationTimestamp: Long = event.creationTimestamp

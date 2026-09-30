@@ -156,7 +156,7 @@ public class DatabaseCleanerTest extends CommonTest {
         );
         details.put("actual_deleted_number", 3);
         JSONObject expected = new JSONObject().put("details", details);
-        JSONAssert.assertEquals(expected.toString(), report.getValue(), true);
+        JSONAssert.assertEquals(expected.toString(), new String(report.getValueBytes()), true);
     }
 
     @Test
@@ -250,7 +250,7 @@ public class DatabaseCleanerTest extends CommonTest {
             CoreClientEvent report = reportCaptor.getValue();
             JSONAssert.assertEquals(
                 new JSONArray().put(protoEvent),
-                new JSONObject(report.getValue()).getJSONObject("details").getJSONObject("cleared").getJSONArray("event_type"),
+                new JSONObject(new String(report.getValueBytes())).getJSONObject("details").getJSONObject("cleared").getJSONArray("event_type"),
                 true
             );
         }

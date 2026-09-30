@@ -24,11 +24,9 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UnhandledExceptionEventFormerTest extends CommonTest {
@@ -83,11 +81,11 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             when(
                 CoreClientEvent.unhandledExceptionReportEntry(
                     eq(errorName),
-                    same(eventValueBytes)
+                    same(eventValueBytes),
+                    same(mReporterEnvironment)
                 )
             ).thenReturn(clientCounterReport);
             ReportToSend report = mEventFormer.formEvent(unhandledException, mReporterEnvironment);
-            verify(clientCounterReport).setEventEnvironment(environment);
             SoftAssertions softly = new SoftAssertions();
             softly.assertThat(report.getEnvironment().getReporterConfiguration())
                 .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getReporterConfiguration());
