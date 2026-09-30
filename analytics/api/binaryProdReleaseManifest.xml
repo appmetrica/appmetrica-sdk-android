@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="io.appmetrica.analytics" >
+
+    <uses-sdk android:minSdkVersion="21" />
+
+    <!-- Open network sockets -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <queries>
+        <intent>
+            <action android:name="ru.vk.store.sdk.install.referrer.InstallReferrerProvider" />
+        </intent>
+    </queries>
+
+    <application tools:ignore="GoogleAppIndexingWarning" >
+
+        <!-- AppMetrica Analytics: common service -->
+        <service
+            android:name="io.appmetrica.analytics.internal.AppMetricaService"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="io.appmetrica.analytics.IAppMetricaService" />
+
+                <data android:scheme="appmetrica" />
+            </intent-filter>
+        </service>
+
+        <!-- To track preinstallations -->
+        <provider
+            android:name="io.appmetrica.analytics.internal.PreloadInfoContentProvider"
+            android:authorities="${applicationId}.appmetrica.preloadinfo.retail"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+    </application>
+
+</manifest>

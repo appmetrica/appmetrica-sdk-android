@@ -72,7 +72,6 @@ android {
             isDefault = true
 
             buildConfigField("String", "SDK_DEPENDENCY", "\"source\"")
-            aarCheck.enabled = true
         }
         create("perf") {
             dimension = "tier"
@@ -87,6 +86,7 @@ android {
             dimension = "tier"
 
             buildConfigField("String", "SDK_DEPENDENCY", "\"binary\"")
+            aarCheck.enabled = true
         }
     }
 }
