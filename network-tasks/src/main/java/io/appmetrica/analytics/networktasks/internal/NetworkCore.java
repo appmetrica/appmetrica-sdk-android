@@ -96,8 +96,8 @@ public class NetworkCore extends InterruptionSafeThread {
     public void run() {
         DebugLogger.INSTANCE.info(TAG, "Starting tasks processing ...");
 
-        NetworkTask networkTask = null;
         while (isRunning()) {
+            NetworkTask networkTask = null;
             try {
                 DebugLogger.INSTANCE.info(TAG, "Getting task ...");
                 synchronized (mStopTasksLock) {}

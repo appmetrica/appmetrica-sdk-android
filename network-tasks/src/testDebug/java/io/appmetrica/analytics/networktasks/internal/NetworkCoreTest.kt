@@ -16,6 +16,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.timeout
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -155,5 +156,20 @@ internal class NetworkCoreTest : CommonTest() {
         networkCore.stopTasks()
         verify(task1).onTaskRemoved()
         verify(task2).onTaskRemoved()
+    }
+
+    @Test
+    fun doesNotReFinishTaskAfterInterruptOnTake() {
+        networkCore.startTask(networkTask)
+        verify(networkTask, timeout(500)).onTaskFinished()
+        verify(networkTask, timeout(500)).onTaskRemoved()
+
+        // Let the worker block on the next take() before interrupting.
+        sleep(200)
+        networkCore.stopRunning()
+        networkCore.join(2000)
+
+        verify(networkTask, times(1)).onTaskFinished()
+        verify(networkTask, times(1)).onTaskRemoved()
     }
 }
