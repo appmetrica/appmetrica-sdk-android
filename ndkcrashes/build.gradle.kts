@@ -21,10 +21,9 @@ android {
     buildToolsVersion(Constants.Android.buildToolsVersion)
 
     defaultConfig {
+        this as DefaultConfig
         minSdkVersion(Constants.Android.minSdkVersionNative)
         targetSdkVersion(Constants.Android.sdkVersion)
-
-        this as DefaultConfig
         versionCode(Constants.NdkCrashes.versionCode)
         versionName(Constants.NdkCrashes.versionName)
 

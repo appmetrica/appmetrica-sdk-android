@@ -71,6 +71,8 @@ public class SynchronousStageExecutorTest extends CommonTest {
         when(mProvider.getInitializedImpl(eq(mContext))).thenReturn(mAppMetricaFacade);
         when(mProvider.peekInitializedImpl()).thenReturn(mAppMetricaFacade);
         when(LoggerStorage.getOrCreatePublicLogger(apiKey)).thenReturn(publicLogger);
+        when(sessionsTrackingManager.startWatchingIfNotYet())
+            .thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING);
         synchronousStageExecutor = new SynchronousStageExecutor(
             mProvider,
             webViewJsInterfaceHandler,

@@ -524,7 +524,7 @@ public class io.appmetrica.analytics.ecommerce.ECommerceCartItem {
     public String toString()
 }
 
-public abstract class io.appmetrica.analytics.ecommerce.ECommerceEvent implementation OBFUSCATED[io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable] {
+public abstract class io.appmetrica.analytics.ecommerce.ECommerceEvent {
     protected <init>()
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent addCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent beginCheckoutEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
@@ -534,6 +534,7 @@ public abstract class io.appmetrica.analytics.ecommerce.ECommerceEvent implement
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductCardEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductDetailsEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer)
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showScreenEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+    public abstract java.util.List toProto()
 }
 
 public class io.appmetrica.analytics.ecommerce.ECommerceOrder {
@@ -607,7 +608,6 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public <init>([NonNull] io.appmetrica.analytics.ReporterConfig)
     public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfiguration)
     public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
-    public <init>([NonNull] String)
     public final void addAutoCollectedDataSubscriber([NonNull] String)
     public final void addAutoCollectedDataSubscribers([NonNull] java.util.List<String>)
     public void applyFromAnonymousConfig([NonNull] io.appmetrica.analytics.AppMetricaConfig)
@@ -644,6 +644,7 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public void setLocationTracking(boolean)
     public void setLogEnabled(boolean)
     public final void setManualLocation([Nullable] android.location.Location)
+    public OBFUSCATED[setManualReporterType]([NonNull] String)
     public void setMaxReportsCount(int)
     public void setMaxReportsInDbCount(int)
     public void setReporterType([NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
@@ -668,6 +669,7 @@ public enum io.appmetrica.analytics.internal.CounterConfigurationReporterType {
 }
 
 public static final class io.appmetrica.analytics.internal.CounterConfigurationReporterType$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType fromStringValue([Nullable] String)
 }
 

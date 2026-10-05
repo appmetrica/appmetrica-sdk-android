@@ -3,6 +3,7 @@ package io.appmetrica.analytics.gradle.publishing
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.LibraryVariant
 import io.appmetrica.analytics.gradle.isCIBuild
+import io.appmetrica.gradle.utils.StringExtensions.capitalize
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -27,8 +28,6 @@ import org.gradle.plugins.signing.Sign
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
 import java.io.File
-import java.util.Locale
-import kotlin.collections.set
 
 class PublishingPlugin : Plugin<Project> {
 
@@ -123,17 +122,23 @@ class PublishingPlugin : Plugin<Project> {
         variant: LibraryVariant,
         extension: PublishingInfoExtension
     ) {
-        val capitalVariantName = variant.name.capitalize(Locale.ROOT)
+        val capitalVariantName = variant.name.capitalize()
         val android = project.the<LibraryExtension>()
 
         project.tasks.register("prepare${capitalVariantName}Javadoc", Javadoc::class.java) {
+            // Includes Java + Kotlin classes of this module. javaCompile.outputs alone misses
+            // Kotlin (AGP built-in kotlinc puts them under built_in_kotlinc/), so public Java
+            // that references impl Kotlin types fails with "cannot find symbol".
+            val compileLibJar = tasks.named("bundleLibCompileToJar$capitalVariantName")
+            dependsOn(compileLibJar)
+
             source = files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree.matching {
                 include("**/*.java")
             }
             exclude("**/impl/**")
             exclude("**/internal/**")
 
-            classpath = files(variant.javaCompile.outputs.files) +
+            classpath = files(compileLibJar) +
                 files("${android.sdkDirectory.path}/platforms/${android.compileSdkVersion}/android.jar") +
                 variant.getCompileClasspath(null)
 
@@ -204,7 +209,7 @@ class PublishingPlugin : Plugin<Project> {
     }
 
     private fun Project.registerSourcesJarTask(variant: LibraryVariant, extension: PublishingInfoExtension): TaskProvider<Jar> {
-        return tasks.register<Jar>("generate${variant.name.capitalize(Locale.ROOT)}SourcesArtifact") {
+        return tasks.register<Jar>("generate${variant.name.capitalize()}SourcesArtifact") {
             archiveClassifier.set("sources")
             archiveBaseName.set(getArtifactIdFor(variant, extension))
             destinationDirectory.set(layout.buildDirectory.dir("artifacts/sources"))
@@ -215,7 +220,7 @@ class PublishingPlugin : Plugin<Project> {
     }
 
     private fun Project.registerJavadocTask(variant: LibraryVariant, extension: PublishingInfoExtension): TaskProvider<Jar> {
-        val capitalVariantName = variant.name.capitalize(Locale.ROOT)
+        val capitalVariantName = variant.name.capitalize()
 
         return tasks.register<Jar>("prepare${capitalVariantName}JavadocJar") {
             group = "javadoc"

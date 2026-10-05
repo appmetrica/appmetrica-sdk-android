@@ -104,8 +104,8 @@ internal class NetworkCoreTest : CommonTest() {
         networkCore.startTask(networkTask)
         val inOrder = inOrder(executor, networkTask)
         inOrder.verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
-        inOrder.verify(networkTask).onTaskFinished()
-        inOrder.verify(networkTask).onTaskRemoved()
+        inOrder.verify(networkTask, timeout(500)).onTaskFinished()
+        inOrder.verify(networkTask, timeout(500)).onTaskRemoved()
     }
 
     @Test

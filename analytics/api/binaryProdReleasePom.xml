@@ -32,6 +32,15 @@
     <developerConnection>scm:git:https://github.com/appmetrica/appmetrica-sdk-android.git</developerConnection>
     <url>https://github.com/appmetrica/appmetrica-sdk-android</url>
   </scm>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib</artifactId>
+        <version>2.2.10</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>com.android.installreferrer</groupId>
@@ -96,7 +105,6 @@
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
-      <version>1.9.25</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>

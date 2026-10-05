@@ -24,6 +24,6 @@ internal class TempCachePutTask(
     }
 
     override fun toString(): String {
-        return "TempCachePutTask(scope='$scope', timestamp=$timestamp, data=$data)"
+        return "TempCachePutTask(scope='$scope', timestamp=$timestamp, data=${data.contentToString()})"
     }
 }

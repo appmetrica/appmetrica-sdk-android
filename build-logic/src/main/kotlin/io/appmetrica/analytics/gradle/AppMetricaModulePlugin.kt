@@ -17,10 +17,9 @@ class AppMetricaModulePlugin : Plugin<Project> {
             buildToolsVersion(Constants.Android.buildToolsVersion)
 
             defaultConfig {
+                this as DefaultConfig
                 minSdkVersion(Constants.Android.minSdkVersion)
                 targetSdkVersion(Constants.Android.sdkVersion)
-
-                this as DefaultConfig
                 versionName = Constants.Library.versionName
                 versionCode = Constants.Library.versionCode
             }

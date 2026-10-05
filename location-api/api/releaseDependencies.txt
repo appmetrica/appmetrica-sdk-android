@@ -1,4 +1,4 @@
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:proto:unspecified
-org.jetbrains.kotlin:kotlin-stdlib:1.9.25
+org.jetbrains.kotlin:kotlin-stdlib:2.2.10
 org.jetbrains:annotations:13.0

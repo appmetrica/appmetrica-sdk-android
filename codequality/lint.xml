@@ -2,6 +2,8 @@
 
 <lint>
 
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+
     <issue id="AppBundleLocaleChanges">
         <ignore path="**/src/test*/**" />
     </issue>

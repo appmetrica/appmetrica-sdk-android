@@ -10,11 +10,12 @@ public final class io.appmetrica.analytics.screenshot.internal.ClientSideScreens
     public static final [NonNull] io.appmetrica.analytics.screenshot.internal.ClientSideScreenshotConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig] getConfig$screenshot_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig] getConfig$screenshot()
 }
 
 public static final class io.appmetrica.analytics.screenshot.internal.ClientSideScreenshotConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.screenshot.internal.ClientSideScreenshotConfigWrapper toWrapper$screenshot_release([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.screenshot.internal.ClientSideScreenshotConfigWrapper toWrapper$screenshot([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig])
 }
 
 public final class io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<io.appmetrica.analytics.screenshot.internal.ClientSideScreenshotConfigWrapper> {
@@ -37,10 +38,11 @@ public final class io.appmetrica.analytics.screenshot.internal.ServiceSideScreen
     public static final [NonNull] io.appmetrica.analytics.screenshot.internal.ServiceSideScreenshotConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig] getConfig$screenshot_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig] getConfig$screenshot()
 }
 
 public static final class io.appmetrica.analytics.screenshot.internal.ServiceSideScreenshotConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.screenshot.internal.ServiceSideScreenshotConfigWrapper toWrapper$screenshot_release([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.screenshot.internal.ServiceSideScreenshotConfigWrapper toWrapper$screenshot([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig])
 }
 

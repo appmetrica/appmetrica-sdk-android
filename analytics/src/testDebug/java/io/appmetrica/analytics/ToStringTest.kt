@@ -273,7 +273,10 @@ internal class ToStringTest(
                 additionalDescription = "value with nulls"
             ),
 
-            ModuleEvent.newBuilder(10).build().toTestCase(additionalDescription = "empty value"),
+            ModuleEvent.newBuilder(10).build().toTestCase(
+                excludedFields = setOf("value"),
+                additionalDescription = "empty value"
+            ),
 
             ModuleEvent.newBuilder(10)
                 .withCategory(ModuleEvent.Category.SYSTEM)
@@ -282,7 +285,10 @@ internal class ToStringTest(
                 .withAttributes(mapOf("key" to "value"))
                 .withExtras(mapOf("key" to "value".toByteArray()))
                 .withEnvironment(mapOf("key" to "value"))
-                .build().toTestCase(additionalDescription = "filled value"),
+                .build().toTestCase(
+                    excludedFields = setOf("value"),
+                    additionalDescription = "filled value"
+                ),
 
             AppMetricaConfigExtension(listOf("subscriber"), true).toTestCase(additionalDescription = "filled value"),
             SelfReportingLazyEvent("Event value", "Event value").toTestCase(additionalDescription = "filled value"),

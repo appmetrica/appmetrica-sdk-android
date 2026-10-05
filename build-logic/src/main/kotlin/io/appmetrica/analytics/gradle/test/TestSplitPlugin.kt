@@ -150,8 +150,13 @@ class TestSplitPlugin : Plugin<Project> {
 
         val userTestFilters = detectUserTestFilters(project)
 
-        val robolectricTask = createRobolectricTask(project, originalTest, extension)
-        val standardTask = createStandardJUnitTask(project, originalTest, robolectricTask)
+        // Snapshot before wiring Merge. Split tasks configure lazily; if they copy
+        // originalTest.dependsOn after Merge is attached, they depend on Merge while
+        // Merge depends on them (via HtmlReport) → circular dependency.
+        val originalDependencies = originalTest.dependsOn.toList()
+
+        val robolectricTask = createRobolectricTask(project, originalTest, extension, originalDependencies)
+        val standardTask = createStandardJUnitTask(project, originalTest, robolectricTask, originalDependencies)
         val xmlReportTask = createXmlReportTask(project, originalTest, robolectricTask, standardTask)
         val htmlReportTask = createHtmlReportTask(project, originalTest, robolectricTask, standardTask)
         val mergeTask = createMergeTask(
@@ -242,11 +247,12 @@ class TestSplitPlugin : Plugin<Project> {
         project: Project,
         originalTest: Test,
         extension: TestSplitExtension,
+        originalDependencies: List<Any>,
     ) = project.tasks.register("${originalTest.name}Robolectric", Test::class.java) {
         description = "Runs Robolectric tests from ${originalTest.name}"
         group = "verification"
 
-        originalTest.dependsOn.forEach { dep ->
+        originalDependencies.forEach { dep ->
             dependsOn(dep)
         }
 
@@ -292,6 +298,7 @@ class TestSplitPlugin : Plugin<Project> {
         project: Project,
         originalTest: Test,
         robolectricTask: TaskProvider<Test>,
+        originalDependencies: List<Any>,
     ) = project.tasks.register("${originalTest.name}Standard", Test::class.java) {
         description = "Runs standard (non-Robolectric) tests from ${originalTest.name}"
         group = "verification"
@@ -299,8 +306,8 @@ class TestSplitPlugin : Plugin<Project> {
         // Run after Robolectric task to avoid JaCoCo agent race condition
         mustRunAfter(robolectricTask)
 
-        // Depend on test compilation (same as original test)
-        originalTest.dependsOn.forEach { dep ->
+        // Depend on test compilation (same as original test at split time)
+        originalDependencies.forEach { dep ->
             dependsOn(dep)
         }
 

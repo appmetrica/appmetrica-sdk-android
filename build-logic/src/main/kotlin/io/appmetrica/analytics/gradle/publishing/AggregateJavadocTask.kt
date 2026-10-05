@@ -47,7 +47,8 @@ fun Project.registerAggregateJavadocTask(
                 }
                 val variant = android.libraryVariants.firstOrNull { it.name == variantName }
                     ?: return@afterEvaluate
-                task.configure { contributeVariant(variant, android) }
+                val moduleProject = this
+                task.configure { contributeVariant(moduleProject, variant, android) }
             }
         }
     }
@@ -55,15 +56,24 @@ fun Project.registerAggregateJavadocTask(
     return task
 }
 
-private fun Javadoc.contributeVariant(variant: LibraryVariant, android: LibraryExtension) {
+private fun Javadoc.contributeVariant(
+    moduleProject: Project,
+    variant: LibraryVariant,
+    android: LibraryExtension,
+) {
+    // Includes Java + Kotlin of this module. javaCompile.outputs alone misses Kotlin
+    // (AGP built-in kotlinc), so public Java referencing impl Kotlin fails documentation.
+    val capitalVariantName = variant.name.replaceFirstChar { it.uppercase(Locale.ROOT) }
+    val compileLibJar = moduleProject.tasks.named("bundleLibCompileToJar$capitalVariantName")
+    dependsOn(compileLibJar)
+
     source(
-        project.files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree.matching {
+        moduleProject.files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree.matching {
             include("**/*.java")
         }
     )
     classpath = classpath +
-        project.files(variant.javaCompile.outputs.files) +
-        project.files("${android.sdkDirectory.path}/platforms/${android.compileSdkVersion}/android.jar") +
+        moduleProject.files(compileLibJar) +
+        moduleProject.files("${android.sdkDirectory.path}/platforms/${android.compileSdkVersion}/android.jar") +
         variant.getCompileClasspath(null)
-    dependsOn(variant.javaCompileProvider)
 }

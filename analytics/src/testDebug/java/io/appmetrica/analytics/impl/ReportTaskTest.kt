@@ -105,6 +105,7 @@ internal class ReportTaskTest : CommonTest() {
     val truncatedValue = "truncated event value"
     val sessionId = 1L
     val type = 0
+    private val profileId = "ProfileId"
     val sessionModel = DbSessionModel(
         id = sessionId,
         type = SessionType.FOREGROUND,
@@ -202,8 +203,6 @@ internal class ReportTaskTest : CommonTest() {
     private val firstHost = "first host"
     private val secondHost = "second host"
     private val reportHosts = listOf(firstHost, secondHost)
-
-    private val profileId = "ProfileId"
 
     private val uuid = UUID.randomUUID().toString()
     private val deviceId = UUID.randomUUID().toString()

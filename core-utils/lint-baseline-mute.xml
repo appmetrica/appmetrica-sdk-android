@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+<issues format="6" by="lint 9.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (9.2.0)" variant="all" version="9.2.0">
 
     <issue
         id="RobolectricUsage"
@@ -417,6 +417,61 @@
             file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
             line="144"
             column="5"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one or more of: PackageManager.GET_META_DATA, PackageManager.GET_SHARED_LIBRARY_FILES, PackageManager.MATCH_ALL, PackageManager.MATCH_DEFAULT_ONLY, PackageManager.MATCH_DISABLED_COMPONENTS, PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS, PackageManager.MATCH_DIRECT_BOOT_AUTO, PackageManager.MATCH_DIRECT_BOOT_AWARE, PackageManager.MATCH_DIRECT_BOOT_UNAWARE, PackageManager.MATCH_SYSTEM_ONLY, PackageManager.MATCH_UNINSTALLED_PACKAGES, PackageManager.GET_DISABLED_COMPONENTS, PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS, PackageManager.GET_UNINSTALLED_PACKAGES"
+        errorLine1="                PackageManager.ComponentInfoFlags.of(PackageManager.GET_PROVIDERS.toLong())"
+        errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/PackageManagerUtilsTiramisu.kt"
+            line="20"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.N) instead of `@TargetApi` to propagate the requirement to users of `AppDataDirProviderForN`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.N)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/io/AppDataDirProviderForN.kt"
+            line="9"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.N) instead of `@TargetApi` to propagate the requirement to users of `ExtractorN`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.N)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractor.kt"
+            line="28"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.TIRAMISU) instead of `@TargetApi` to propagate the requirement to users of `PackageManagerUtilsTiramisu`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.TIRAMISU)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/PackageManagerUtilsTiramisu.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.R) instead of `@TargetApi` to propagate the requirement to users of `SafePackageManagerHelperForR`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.R)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerHelperForR.kt"
+            line="9"
+            column="1"/>
     </issue>
 
 </issues>

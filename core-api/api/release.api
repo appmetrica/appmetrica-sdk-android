@@ -65,7 +65,9 @@ public final class io.appmetrica.analytics.coreapi.internal.constants.DeviceType
     public <init>()
 }
 
-public static final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion
+public static final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+}
 
 public interface io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController {
     public abstract boolean isRestrictedForMainReporter()
@@ -112,7 +114,7 @@ public interface io.appmetrica.analytics.coreapi.internal.data.ListConverter<S, 
 
 public interface io.appmetrica.analytics.coreapi.internal.data.Parser<IN, OUT> {
     public abstract [NonNull] OUT parse(IN)
-    public abstract [Nullable] OUT parseOrNull(IN)
+    public [Nullable] OUT parseOrNull(IN)
 }
 
 public static final class io.appmetrica.analytics.coreapi.internal.data.Parser$DefaultImpls {
@@ -350,6 +352,7 @@ public enum io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatu
 }
 
 public static final class io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus from([Nullable] String)
 }
 

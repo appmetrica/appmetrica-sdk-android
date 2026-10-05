@@ -9,13 +9,11 @@ import org.mockito.kotlin.whenever
 internal class MaxReportsCountReachedConditionTest : CommonTest() {
 
     private val pendingReportsCountProvider: PendingReportsCountProvider = mock()
-
     private val thresholdValue = 20
-    private val threshold: () -> Int = mock {
-        on { invoke() }.thenReturn(thresholdValue)
-    }
 
-    private val condition by setUp { MaxReportsCountReachedCondition(pendingReportsCountProvider, threshold) }
+    private val condition by setUp {
+        MaxReportsCountReachedCondition(pendingReportsCountProvider) { thresholdValue }
+    }
 
     @Test
     fun `isConditionMet for false`() {

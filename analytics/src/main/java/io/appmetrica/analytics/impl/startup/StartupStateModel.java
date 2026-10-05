@@ -191,6 +191,8 @@ public class StartupStateModel {
             ", encodedClidsFromResponse='" + encodedClidsFromResponse + '\'' +
             ", lastClientClidsForStartupRequest='" + lastClientClidsForStartupRequest + '\'' +
             ", lastChosenForRequestClids='" + lastChosenForRequestClids + '\'' +
+            ", lastReferrerForStartupRequest='" + lastReferrerForStartupRequest + '\'' +
+            ", lastYandexAdsOnlyForStartupRequest=" + lastYandexAdsOnlyForStartupRequest +
             ", collectingFlags=" + collectingFlags +
             ", obtainTime=" + obtainTime +
             ", hadFirstStartup=" + hadFirstStartup +

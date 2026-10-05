@@ -27,23 +27,25 @@ public final class io.appmetrica.analytics.adrevenue.other.internal.ClientSideAd
     public static final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig] getConfig$ad_revenue_other_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig] getConfig$ad_revenue_other()
     public [NonNull] String toString()
 }
 
 public static final class io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig])
 }
 
 public final class io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper {
     public static final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig] getConfig$ad_revenue_other_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig] getConfig$ad_revenue_other()
     public [NonNull] String toString()
 }
 
 public static final class io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig])
 }
 

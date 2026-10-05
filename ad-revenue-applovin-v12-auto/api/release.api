@@ -27,23 +27,25 @@ public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.
     public static final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig] getConfig$ad_revenue_applovin_v12_auto_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig] getConfig$ad_revenue_applovin_v12_auto()
     public [NonNull] String toString()
 }
 
 public static final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ClientApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.client.model.ClientApplovinConfig])
 }
 
 public final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper {
     public static final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig] getConfig$ad_revenue_applovin_v12_auto_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig] getConfig$ad_revenue_applovin_v12_auto()
     public [NonNull] String toString()
 }
 
 public static final class io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.ServiceApplovinConfigWrapper toWrapper$ad_revenue_applovin_v12_auto([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.applovin.v12.auto.impl.config.service.model.ServiceApplovinConfig])
 }
 

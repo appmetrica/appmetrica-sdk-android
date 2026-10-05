@@ -110,7 +110,9 @@ public final class io.appmetrica.analytics.coreutils.internal.buffering.Deferred
     public final void submit(T, boolean)
 }
 
-public static final class io.appmetrica.analytics.coreutils.internal.buffering.DeferredBatchExecutor$Companion
+public static final class io.appmetrica.analytics.coreutils.internal.buffering.DeferredBatchExecutor$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+}
 
 public final class io.appmetrica.analytics.coreutils.internal.buffering.LastValueTaskBuffer<T> implementation io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<T> {
     public <init>()
@@ -549,6 +551,7 @@ public final class io.appmetrica.analytics.coreutils.internal.proto.DecimalProto
 }
 
 public static final class io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.coreutils.internal.proto.DecimalProtoModel fromDecimal([NonNull] java.math.BigDecimal)
 }
 
@@ -707,7 +710,9 @@ public final class io.appmetrica.analytics.coreutils.internal.services.telephony
     public final [NonNull] String getNetworkType()
 }
 
-public static final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor$Companion
+public static final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+}
 
 public final class io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo {
     public static final [NonNull] String APP_PLATFORM
@@ -843,6 +848,7 @@ public final class io.appmetrica.analytics.coreutils.internal.validation.NonNull
 public final class io.appmetrica.analytics.coreutils.internal.validation.ValidationResult {
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult$Companion Companion
 
+    public <init>(io.appmetrica.analytics.coreutils.internal.validation.Validator, boolean, String, kotlin.jvm.internal.DefaultConstructorMarker)
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult failed([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>, [NonNull] String)
     public final [NonNull] String getDescription()
     public final [NonNull] Class<io.appmetrica.analytics.coreutils.internal.validation.Validator<?>> getValidatorClass()
@@ -851,6 +857,7 @@ public final class io.appmetrica.analytics.coreutils.internal.validation.Validat
 }
 
 public static final class io.appmetrica.analytics.coreutils.internal.validation.ValidationResult$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult failed([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>, [NonNull] String)
     public final [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult successful([NonNull] io.appmetrica.analytics.coreutils.internal.validation.Validator<?>)
 }

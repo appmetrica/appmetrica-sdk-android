@@ -12,6 +12,7 @@ public abstract class io.appmetrica.analytics.networkapi.Call {
 }
 
 public final class io.appmetrica.analytics.networkapi.NetworkCallMetrics {
+    public <init>(Long, Long, Long, Long, Long, boolean, String, kotlin.jvm.internal.DefaultConstructorMarker)
     public final boolean getConnectionReused()
     public final [Nullable] Long getDnsLookup()
     public final [Nullable] String getProtocol()
@@ -48,6 +49,7 @@ public abstract static class io.appmetrica.analytics.networkapi.NetworkClient$Bu
 }
 
 public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
+    public <init>(Integer, Integer, Long, javax.net.ssl.SSLSocketFactory, Boolean, Boolean, int, Boolean, kotlin.jvm.internal.DefaultConstructorMarker)
     public boolean equals([Nullable] Object)
     public final [Nullable] Long getCallTimeout()
     public final [Nullable] Boolean getCollectMetrics()
@@ -75,6 +77,7 @@ public static final class io.appmetrica.analytics.networkapi.NetworkClientSettin
 }
 
 public final class io.appmetrica.analytics.networkapi.Request {
+    public <init>(String, io.appmetrica.analytics.networkapi.Request$Method, byte[], java.util.Map, kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] byte[] getBody()
     public final [NonNull] java.util.Map<String, String> getHeaders()
     public final [NonNull] io.appmetrica.analytics.networkapi.Request$Method getMethod()
@@ -100,6 +103,7 @@ public enum io.appmetrica.analytics.networkapi.Request$Method {
 }
 
 public final class io.appmetrica.analytics.networkapi.Response {
+    public <init>(boolean, int, byte[], java.util.Map, Throwable, String, io.appmetrica.analytics.networkapi.NetworkCallMetrics, kotlin.jvm.internal.DefaultConstructorMarker)
     public final int getCode()
     public final [Nullable] Throwable getException()
     public final [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()

@@ -249,6 +249,7 @@ public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceL
 }
 
 public static final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
     public final void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
     public final void init([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator)

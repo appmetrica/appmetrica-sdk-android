@@ -10,7 +10,7 @@
     },
     "createdBy": {
         "gradle": {
-            "version": "8.10.2",
+            "version": "9.5.1",
             "buildId": "<random-string>"
         }
     },
@@ -46,10 +46,7 @@
             "dependencies": [
                 {
                     "group": "org.jetbrains.kotlin",
-                    "module": "kotlin-stdlib",
-                    "version": {
-                        "requires": "1.9.25"
-                    }
+                    "module": "kotlin-stdlib"
                 },
                 {
                     "group": "io.appmetrica.analytics",
@@ -84,6 +81,15 @@
                     "module": "analytics-proto",
                     "version": {
                         "requires": "9.0.0"
+                    }
+                }
+            ],
+            "dependencyConstraints": [
+                {
+                    "group": "org.jetbrains.kotlin",
+                    "module": "kotlin-stdlib",
+                    "version": {
+                        "requires": "2.2.10"
                     }
                 }
             ],

@@ -34,4 +34,5 @@ dependencies {
     implementation(appMetricaLibs.appMetricaJacoco)
     implementation(appMetricaLibs.appMetricaMavenCentralPublish)
     implementation(appMetricaLibs.appMetricaNoLogs)
+    implementation(appMetricaLibs.appMetricaUtils)
 }

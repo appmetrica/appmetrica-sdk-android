@@ -19,10 +19,11 @@ public final class io.appmetrica.analytics.remotepermissions.internal.ServiceSid
     public static final [NonNull] io.appmetrica.analytics.remotepermissions.internal.ServiceSideRemotePermissionsConfigWrapper$Companion Companion
 
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig] getConfig$remote_permissions_release()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig] getConfig$remote_permissions()
 }
 
 public static final class io.appmetrica.analytics.remotepermissions.internal.ServiceSideRemotePermissionsConfigWrapper$Companion {
-    public final [NonNull] io.appmetrica.analytics.remotepermissions.internal.ServiceSideRemotePermissionsConfigWrapper toWrapper$remote_permissions_release([NonNull] OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig])
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.remotepermissions.internal.ServiceSideRemotePermissionsConfigWrapper toWrapper$remote_permissions([NonNull] OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.config.service.model.ServiceSideRemotePermissionsConfig])
 }
 

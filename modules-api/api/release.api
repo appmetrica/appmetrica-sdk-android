@@ -134,6 +134,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.common.InternalClie
 public final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent {
     public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion Companion
 
+    public <init>(io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder, kotlin.jvm.internal.DefaultConstructorMarker)
     public final [Nullable] java.util.Map<String, Object> getAttributes()
     public final [Nullable] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category getCategory()
     public final [Nullable] java.util.Map<String, Object> getEnvironment()
@@ -156,7 +157,7 @@ public static final class io.appmetrica.analytics.modulesapi.internal.common.Int
     public final [Nullable] java.util.Map<String, byte[]> getExtras()
     public final [Nullable] String getName()
     public final [Nullable] Integer getServiceDataReporterType()
-    public final int getType$modules_api_release()
+    public final int getType$modules_api()
     public final [Nullable] byte[] getValue()
     public final void setAttributes([Nullable] java.util.Map<String, ? extends Object>)
     public final void setCategory([Nullable] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category)
@@ -184,6 +185,7 @@ public enum io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEve
 }
 
 public static final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder newBuilder(int)
 }
 

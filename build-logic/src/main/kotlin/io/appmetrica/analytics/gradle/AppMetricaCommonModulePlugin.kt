@@ -25,7 +25,6 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Locale
 import kotlin.jvm.optionals.getOrNull
 
 class AppMetricaCommonModulePlugin : Plugin<Project> {
@@ -69,7 +68,9 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
         project.tasks.withType<KotlinCompile> {
             // https://nda.ya.ru/t/htF7GLnh6cCW4c
-            kotlinOptions.suppressWarnings = true
+            compilerOptions {
+                suppressWarnings.set(true)
+            }
         }
     }
 
@@ -106,9 +107,9 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
     private fun Project.configureKotlin() {
         tasks.withType<KotlinCompile> {
-            if (name.toLowerCase(Locale.ROOT).contains("releasekotlin")) {
-                kotlinOptions {
-                    freeCompilerArgs += listOf(
+            if (name.lowercase().contains("releasekotlin")) {
+                compilerOptions {
+                    freeCompilerArgs.addAll(
                         "-Xno-call-assertions",
                         "-Xno-receiver-assertions",
                         "-Xno-param-assertions",
@@ -153,7 +154,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                 "DebugLogger.INSTANCE",
                 "NativeCrashLogger",
             )
-            shouldRemoveLogs = { it.buildType.name == "release" }
+            shouldRemoveLogs = { it.buildType == "release" }
         }
     }
 

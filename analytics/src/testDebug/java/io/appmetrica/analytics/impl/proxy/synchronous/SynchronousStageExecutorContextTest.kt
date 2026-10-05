@@ -32,7 +32,9 @@ internal class SynchronousStageExecutorContextTest : CommonTest() {
         on { peekInitializedImpl() } doReturn appMetricaFacade
     }
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()
-    private val sessionsTrackingManager: SessionsTrackingManager = mock()
+    private val sessionsTrackingManager: SessionsTrackingManager = mock {
+        on { startWatchingIfNotYet() } doReturn ActivityLifecycleManager.WatchingStatus.WATCHING
+    }
     private val activityLifecycleManager: ActivityLifecycleManager = mock()
     private val contextAppearedListener: ContextAppearedListener = mock()
     private val firstLaunchDetector: FirstLaunchDetector = mock()

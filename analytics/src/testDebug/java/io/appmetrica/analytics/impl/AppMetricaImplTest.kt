@@ -81,7 +81,10 @@ internal class AppMetricaImplTest : CommonTest() {
     }
 
     private val sessionsTrackingManager: SessionsTrackingManager by setUp {
-        ClientServiceLocator.getInstance().sessionsTrackingManager
+        ClientServiceLocator.getInstance().sessionsTrackingManager.also {
+            whenever(it.startWatchingIfNotYet())
+                .thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING)
+        }
     }
 
     private val modulesStatus = listOf(mock<ModuleStatus>(), mock<ModuleStatus>())

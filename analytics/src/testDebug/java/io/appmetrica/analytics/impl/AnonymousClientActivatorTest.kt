@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -33,7 +34,9 @@ internal class AnonymousClientActivatorTest : CommonTest() {
         on { getInitializedImpl(context) }.thenReturn(appMetricaFacade)
     }
 
-    private val sessionsTrackingManager: SessionsTrackingManager = mock()
+    private val sessionsTrackingManager: SessionsTrackingManager = mock {
+        on { startWatchingIfNotYet() } doReturn ActivityLifecycleManager.WatchingStatus.WATCHING
+    }
 
     private val executor: IHandlerExecutor = mock()
 

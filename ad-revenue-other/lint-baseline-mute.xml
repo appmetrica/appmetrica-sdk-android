@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
-
-    <issue
-        id="GradleCompatible"
-        message="Dependencies using groupId `com.android.support` and `androidx.*` can not be combined but found `com.android.support:support-v4:25.2.0` and `androidx.annotation:annotation:1.0.0` incompatible dependencies">
-        <location
-            file="build.gradle.kts"/>
-    </issue>
+<issues format="6" by="lint 9.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (9.2.0)" variant="all" version="9.2.0">
 
     <issue
         id="RobolectricUsage"

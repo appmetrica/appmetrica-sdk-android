@@ -1,21 +1,21 @@
 package io.appmetrica.analytics.gradle
 
 import com.android.build.api.dsl.BuildType
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import io.appmetrica.gradle.utils.StringExtensions.capitalize
+import java.util.Locale
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.file.Directory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
-import java.util.Locale
 
 private val nativeBuildTypes = mapOf(
     "debug" to "debug",
@@ -85,9 +85,9 @@ private fun Project.configureNative() {
                 val nativeBuildType = nativeBuildTypes[buildType.name]
                 requireNotNull(nativeBuildType) { "Unknown native build type for ${buildType.name}" }
 
-                tasks.named("merge${buildType.name.capitalized()}JniLibFolders").configure {
+                tasks.named("merge${buildType.name.capitalize()}JniLibFolders").configure {
                     crashpadArchs.values.forEach {
-                        dependsOn(tasks.named("build${nativeBuildType.capitalized()}${it.capitalized()}Crashpad"))
+                        dependsOn(tasks.named("build${nativeBuildType.capitalize()}${it.capitalize()}Crashpad"))
                     }
                 }
             }
@@ -128,7 +128,7 @@ private fun Project.configureCrashpad() {
                 workingDir = crashpadSourceDir.asFile
                 val args = mapOf(
                     "android_api_level" to 21,
-                    "android_ndk_root" to project.the<LibraryExtension>().ndkDirectory.canonicalPath,
+                    "android_ndk_root" to project.the<LibraryAndroidComponentsExtension>().sdkComponents.ndkDirectory.get().asFile.canonicalPath,
                     "is_debug" to (nativeBuildType == "debug"),
                     "target_cpu" to crashpadArch,
                     "target_os" to "android",
@@ -157,17 +157,18 @@ private fun Project.configureCrashpad() {
         }
     }
     // auto build crashpad before build self so libs
-    the<LibraryExtension>().libraryVariants.configureEach {
-        val variant = this
-        val nativeBuildType = nativeBuildTypes[variant.buildType.name]
-        requireNotNull(nativeBuildType) { "Unknown native build type for ${buildType.name}" }
-        val taskName = "buildCMake${if (nativeBuildType == "debug") "Debug" else "RelWithDebInfo"}"
-        crashpadArchs.forEach { (ndkArch, crashpadArch) ->
-            tasks.configureEach {
-                if (name.matches("${taskName}\\[${ndkArch}].*".toRegex())) {
-                    dependsOn(tasks.named(
-                        "build${nativeBuildType.capitalize(Locale.ROOT)}${crashpadArch.capitalize(Locale.ROOT)}Crashpad"
-                    ))
+    extensions.configure<LibraryAndroidComponentsExtension> {
+        onVariants { variant ->
+            val nativeBuildType = nativeBuildTypes[variant.buildType]
+            requireNotNull(nativeBuildType) { "Unknown native build type for ${variant.buildType}" }
+            val taskName = "buildCMake${if (nativeBuildType == "debug") "Debug" else "RelWithDebInfo"}"
+            crashpadArchs.forEach { (ndkArch, crashpadArch) ->
+                tasks.configureEach {
+                    if (name.matches("${taskName}\\[${ndkArch}].*".toRegex())) {
+                        dependsOn(tasks.named(
+                            "build${nativeBuildType.capitalize(Locale.ROOT)}${crashpadArch.capitalize(Locale.ROOT)}Crashpad"
+                        ))
+                    }
                 }
             }
         }

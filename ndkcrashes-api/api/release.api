@@ -7,6 +7,7 @@ public final class io.appmetrica.analytics.ndkcrashesapi.BuildConfig {
 }
 
 public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash {
+    public <init>(io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource, String, String, String, long, String, kotlin.jvm.internal.DefaultConstructorMarker)
     public final long getCreationTime()
     public final [NonNull] String getDumpFile()
     public final [NonNull] String getHandlerVersion()

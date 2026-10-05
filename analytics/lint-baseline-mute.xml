@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+<issues format="6" by="lint 9.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (9.2.0)" variant="all" version="9.2.0">
 
     <issue
         id="MockContextUsage"
@@ -646,7 +646,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
-            line="50"
+            line="49"
             column="1"/>
     </issue>
 
@@ -713,17 +713,6 @@
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/protobuf/converter/DbEventModelConverterTest.kt"
             line="18"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="RobolectricUsage"
-        message="Robolectric is forbidden in new tests. Use mocks instead."
-        errorLine1="@RunWith(RobolectricTestRunner::class)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/testDebug/java/io/appmetrica/analytics/impl/db/event/DbEventValueEncoderTest.kt"
-            line="12"
             column="1"/>
     </issue>
 
@@ -954,7 +943,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
-            line="36"
+            line="35"
             column="1"/>
     </issue>
 
@@ -965,7 +954,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/crash/jvm/JvmCrashTest.java"
-            line="247"
+            line="252"
             column="5"/>
     </issue>
 
@@ -976,7 +965,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="44"
+            line="45"
             column="1"/>
     </issue>
 
@@ -987,7 +976,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="169"
+            line="170"
             column="5"/>
     </issue>
 
@@ -998,7 +987,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="325"
+            line="344"
             column="5"/>
     </issue>
 
@@ -1009,7 +998,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="418"
+            line="437"
             column="5"/>
     </issue>
 
@@ -1669,7 +1658,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="383"
+            line="396"
             column="5"/>
     </issue>
 
@@ -1680,7 +1669,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="464"
+            line="477"
             column="5"/>
     </issue>
 
@@ -1691,7 +1680,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/request/appenders/StartupParamsAppenderTest.java"
-            line="536"
+            line="549"
             column="5"/>
     </issue>
 
@@ -1999,7 +1988,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/DatabaseCleanerTest.java"
-            line="89"
+            line="88"
             column="19"/>
     </issue>
 
@@ -2043,7 +2032,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="371"
+            line="390"
             column="13"/>
     </issue>
 
@@ -2054,7 +2043,7 @@
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="386"
+            line="405"
             column="55"/>
     </issue>
 
@@ -2065,7 +2054,7 @@
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="397"
+            line="416"
             column="55"/>
     </issue>
 
@@ -2076,7 +2065,7 @@
         errorLine2="                                                      ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="409"
+            line="428"
             column="55"/>
     </issue>
 
@@ -2087,7 +2076,7 @@
         errorLine2="                                                          ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/testDebug/java/io/appmetrica/analytics/impl/db/storage/KeyValueTableDbHelperTest.java"
-            line="450"
+            line="469"
             column="59"/>
     </issue>
 
@@ -2430,6 +2419,209 @@
             file="src/testDebug/java/io/appmetrica/analytics/impl/startup/StartupCenterTest.java"
             line="56"
             column="19"/>
+    </issue>
+
+    <issue
+        id="TextConcatSpace"
+        message="Missing space between &quot;or&quot; on the previous line and &quot;ignored&quot; here? Resulting string is &quot;orignored&quot;."
+        errorLine1="                &quot;ignored list. If couldn&apos;t find some event types, delete it from ignoredEventTypes.&quot;)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/EventToPreparerGeneralTestCoverageCheck.java"
+            line="37"
+            column="17"/>
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/preparer/EventToPreparerGeneralTestCoverageCheck.java"
+            line="36"
+            column="17"
+            message="Previous text here"/>
+    </issue>
+
+    <issue
+        id="ThreadConstraint"
+        message="Call must be from `@WorkerThread`, but context is allowing `@{Main,Ui}Thread`"
+        errorLine1="        firstServiceEntryPointManager.onPossibleFirstEntry(context)"
+        errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/ContentProviderHelper.kt"
+            line="46"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one of: Context.POWER_SERVICE, Context.WINDOW_SERVICE, Context.LAYOUT_INFLATER_SERVICE, Context.ACCOUNT_SERVICE, Context.ACTIVITY_SERVICE, Context.ALARM_SERVICE, Context.NOTIFICATION_SERVICE, Context.ACCESSIBILITY_SERVICE, Context.CAPTIONING_SERVICE, Context.KEYGUARD_SERVICE, Context.LOCATION_SERVICE, Context.HEALTHCONNECT_SERVICE, Context.SEARCH_SERVICE, Context.SENSOR_SERVICE, Context.STORAGE_SERVICE, Context.STORAGE_STATS_SERVICE, Context.WALLPAPER_SERVICE, Context.VIBRATOR_MANAGER_SERVICE, Context.VIBRATOR_SERVICE, Context.CONNECTIVITY_SERVICE, Context.TETHERING_SERVICE, Context.IPSEC_SERVICE, Context.VPN_MANAGEMENT_SERVICE, Context.NETWORK_STATS_SERVICE, Context.WIFI_SERVICE, Context.WIFI_AWARE_SERVICE, Context.WIFI_P2P_SERVICE, Context.WIFI_RTT_RANGING_SERVICE, Context.NSD_SERVICE, Context.AUDIO_SERVICE, Context.FINGERPRINT_SERVICE, Context.BIOMETRIC_SERVICE, Context.MEDIA_ROUTER_SERVICE, Context.TELEPHONY_SERVICE, Context.TELEPHONY_SUBSCRIPTION_SERVICE, Context.CARRIER_CONFIG_SERVICE, Context.EUICC_SERVICE, Context.TELECOM_SERVICE, Context.CLIPBOARD_SERVICE, Context.INPUT_METHOD_SERVICE, Context.TEXT_SERVICES_MANAGER_SERVICE, Context.TEXT_CLASSIFICATION_SERVICE, Context.APPWIDGET_SERVICE, Context.DROPBOX_SERVICE, Context.DEVICE_POLICY_SERVICE, Context.UI_MODE_SERVICE, Context.DOWNLOAD_SERVICE, Context.NFC_SERVICE, Context.BLUETOOTH_SERVICE, Context.USB_SERVICE, Context.LAUNCHER_APPS_SERVICE, Context.INPUT_SERVICE, Context.DISPLAY_SERVICE, Context.USER_SERVICE, Context.RESTRICTIONS_SERVICE, Context.APP_OPS_SERVICE, Context.ROLE_SERVICE, Context.CAMERA_SERVICE, Context.PRINT_SERVICE, Context.CONSUMER_IR_SERVICE, Context.TV_INTERACTIVE_APP_SERVICE, Context.TV_INPUT_SERVICE, Context.USAGE_STATS_SERVICE, Context.MEDIA_SESSION_SERVICE, Context.MEDIA_COMMUNICATION_SERVICE, Context.BATTERY_SERVICE, Context.JOB_SCHEDULER_SERVICE, Context.PERSISTENT_DATA_BLOCK_SERVICE, Context.MEDIA_PROJECTION_SERVICE, Context.MIDI_SERVICE, Context.HARDWARE_PROPERTIES_SERVICE, Context.SHORTCUT_SERVICE, Context.SYSTEM_HEALTH_SERVICE, Context.COMPANION_DEVICE_SERVICE, Context.VIRTUAL_DEVICE_SERVICE, Context.CROSS_PROFILE_APPS_SERVICE, Context.LOCALE_SERVICE, Context.MEDIA_METRICS_SERVICE, Context.DISPLAY_HASH_SERVICE, Context.CREDENTIAL_SERVICE, Context.DEVICE_LOCK_SERVICE, Context.GRAMMATICAL_INFLECTION_SERVICE, Context.SECURITY_STATE_SERVICE, Context.CONTACT_KEYS_SERVICE, Context.MEDIA_QUALITY_SERVICE, Context.ADVANCED_PROTECTION_SERVICE"
+        errorLine1="        on { getSystemService(any&lt;String>()) } doReturn connectivityManager"
+        errorLine2="                              ~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/PhoneUtilsConnectionTypeTests.kt"
+            line="42"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one of: Context.POWER_SERVICE, Context.WINDOW_SERVICE, Context.LAYOUT_INFLATER_SERVICE, Context.ACCOUNT_SERVICE, Context.ACTIVITY_SERVICE, Context.ALARM_SERVICE, Context.NOTIFICATION_SERVICE, Context.ACCESSIBILITY_SERVICE, Context.CAPTIONING_SERVICE, Context.KEYGUARD_SERVICE, Context.LOCATION_SERVICE, Context.HEALTHCONNECT_SERVICE, Context.SEARCH_SERVICE, Context.SENSOR_SERVICE, Context.STORAGE_SERVICE, Context.STORAGE_STATS_SERVICE, Context.WALLPAPER_SERVICE, Context.VIBRATOR_MANAGER_SERVICE, Context.VIBRATOR_SERVICE, Context.CONNECTIVITY_SERVICE, Context.TETHERING_SERVICE, Context.IPSEC_SERVICE, Context.VPN_MANAGEMENT_SERVICE, Context.NETWORK_STATS_SERVICE, Context.WIFI_SERVICE, Context.WIFI_AWARE_SERVICE, Context.WIFI_P2P_SERVICE, Context.WIFI_RTT_RANGING_SERVICE, Context.NSD_SERVICE, Context.AUDIO_SERVICE, Context.FINGERPRINT_SERVICE, Context.BIOMETRIC_SERVICE, Context.MEDIA_ROUTER_SERVICE, Context.TELEPHONY_SERVICE, Context.TELEPHONY_SUBSCRIPTION_SERVICE, Context.CARRIER_CONFIG_SERVICE, Context.EUICC_SERVICE, Context.TELECOM_SERVICE, Context.CLIPBOARD_SERVICE, Context.INPUT_METHOD_SERVICE, Context.TEXT_SERVICES_MANAGER_SERVICE, Context.TEXT_CLASSIFICATION_SERVICE, Context.APPWIDGET_SERVICE, Context.DROPBOX_SERVICE, Context.DEVICE_POLICY_SERVICE, Context.UI_MODE_SERVICE, Context.DOWNLOAD_SERVICE, Context.NFC_SERVICE, Context.BLUETOOTH_SERVICE, Context.USB_SERVICE, Context.LAUNCHER_APPS_SERVICE, Context.INPUT_SERVICE, Context.DISPLAY_SERVICE, Context.USER_SERVICE, Context.RESTRICTIONS_SERVICE, Context.APP_OPS_SERVICE, Context.ROLE_SERVICE, Context.CAMERA_SERVICE, Context.PRINT_SERVICE, Context.CONSUMER_IR_SERVICE, Context.TV_INTERACTIVE_APP_SERVICE, Context.TV_INPUT_SERVICE, Context.USAGE_STATS_SERVICE, Context.MEDIA_SESSION_SERVICE, Context.MEDIA_COMMUNICATION_SERVICE, Context.BATTERY_SERVICE, Context.JOB_SCHEDULER_SERVICE, Context.PERSISTENT_DATA_BLOCK_SERVICE, Context.MEDIA_PROJECTION_SERVICE, Context.MIDI_SERVICE, Context.HARDWARE_PROPERTIES_SERVICE, Context.SHORTCUT_SERVICE, Context.SYSTEM_HEALTH_SERVICE, Context.COMPANION_DEVICE_SERVICE, Context.VIRTUAL_DEVICE_SERVICE, Context.CROSS_PROFILE_APPS_SERVICE, Context.LOCALE_SERVICE, Context.MEDIA_METRICS_SERVICE, Context.DISPLAY_HASH_SERVICE, Context.CREDENTIAL_SERVICE, Context.DEVICE_LOCK_SERVICE, Context.GRAMMATICAL_INFLECTION_SERVICE, Context.SECURITY_STATE_SERVICE, Context.CONTACT_KEYS_SERVICE, Context.MEDIA_QUALITY_SERVICE, Context.ADVANCED_PROTECTION_SERVICE"
+        errorLine1="        whenever(context.getSystemService(any&lt;String>())).thenReturn(connectivityManager)"
+        errorLine2="                                          ~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/PhoneUtilsTest.kt"
+            line="44"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one of: LayoutParams.TYPE_BASE_APPLICATION, LayoutParams.TYPE_APPLICATION, LayoutParams.TYPE_APPLICATION_STARTING, LayoutParams.TYPE_DRAWN_APPLICATION, LayoutParams.TYPE_APPLICATION_PANEL, LayoutParams.TYPE_APPLICATION_MEDIA, LayoutParams.TYPE_APPLICATION_SUB_PANEL, LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, LayoutParams.TYPE_STATUS_BAR, LayoutParams.TYPE_SEARCH_BAR, LayoutParams.TYPE_PHONE, LayoutParams.TYPE_SYSTEM_ALERT, LayoutParams.TYPE_TOAST, LayoutParams.TYPE_SYSTEM_OVERLAY, LayoutParams.TYPE_PRIORITY_PHONE, LayoutParams.TYPE_SYSTEM_DIALOG, LayoutParams.TYPE_KEYGUARD_DIALOG, LayoutParams.TYPE_SYSTEM_ERROR, LayoutParams.TYPE_INPUT_METHOD, LayoutParams.TYPE_INPUT_METHOD_DIALOG, LayoutParams.TYPE_WALLPAPER, LayoutParams.TYPE_PRIVATE_PRESENTATION, LayoutParams.TYPE_ACCESSIBILITY_OVERLAY, LayoutParams.TYPE_APPLICATION_OVERLAY"
+        errorLine1="        verify(activity, never()).createWindowContext(any&lt;Display>(), any(), any())"
+        errorLine2="                                                                      ~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ScreenInfoExtractorTest.kt"
+            line="85"
+            column="71"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one of: LayoutParams.TYPE_BASE_APPLICATION, LayoutParams.TYPE_APPLICATION, LayoutParams.TYPE_APPLICATION_STARTING, LayoutParams.TYPE_DRAWN_APPLICATION, LayoutParams.TYPE_APPLICATION_PANEL, LayoutParams.TYPE_APPLICATION_MEDIA, LayoutParams.TYPE_APPLICATION_SUB_PANEL, LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, LayoutParams.TYPE_STATUS_BAR, LayoutParams.TYPE_SEARCH_BAR, LayoutParams.TYPE_PHONE, LayoutParams.TYPE_SYSTEM_ALERT, LayoutParams.TYPE_TOAST, LayoutParams.TYPE_SYSTEM_OVERLAY, LayoutParams.TYPE_PRIORITY_PHONE, LayoutParams.TYPE_SYSTEM_DIALOG, LayoutParams.TYPE_KEYGUARD_DIALOG, LayoutParams.TYPE_SYSTEM_ERROR, LayoutParams.TYPE_INPUT_METHOD, LayoutParams.TYPE_INPUT_METHOD_DIALOG, LayoutParams.TYPE_WALLPAPER, LayoutParams.TYPE_PRIVATE_PRESENTATION, LayoutParams.TYPE_ACCESSIBILITY_OVERLAY, LayoutParams.TYPE_APPLICATION_OVERLAY"
+        errorLine1="        verify(activity, never()).createWindowContext(any&lt;Int>(), any())"
+        errorLine2="                                                      ~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/ScreenInfoExtractorTest.kt"
+            line="86"
+            column="55"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.P) instead of `@TargetApi` to propagate the requirement to callers of `fromIntToStandbyBucketP`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.P)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/AppStandbyBucketConverter.kt"
+            line="24"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.P) instead of `@TargetApi` to propagate the requirement to users of `BackgroundRestrictionStateProviderHelperForP`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.P)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/BackgroundRestrictionStateProviderHelperForP.kt"
+            line="13"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.P) instead of `@TargetApi` to propagate the requirement to callers of `getSignaturesP`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.P)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/CertificatesFingerprintsProvider.java"
+            line="98"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.N) instead of `@TargetApi` to propagate the requirement to callers of `adoptFeature`"
+        errorLine1="        @TargetApi(Build.VERSION_CODES.N)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/features/FeatureAdapter.java"
+            line="46"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.N) instead of `@TargetApi` to propagate the requirement to users of `LocalesHelperForN`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.N)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/LocalesHelperForN.kt"
+            line="7"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.M) instead of `@TargetApi` to propagate the requirement to accessors of `NETWORK_CAPABILITIES_TRANSPORT_TYPE_MAPPING`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/PhoneUtils.java"
+            line="59"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.M) instead of `@TargetApi` to propagate the requirement to callers of `getNetworkTypeForM`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/PhoneUtils.java"
+            line="117"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.M) instead of `@TargetApi` to propagate the requirement to callers of `isOfflineBeforeQ`"
+        errorLine1="    @TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/PhoneUtils.java"
+            line="148"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.P) instead of `@TargetApi` to propagate the requirement to users of `ProcessNameProviderForP`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.P)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/utils/process/ProcessNameProviderForP.kt"
+            line="9"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.M) instead of `@TargetApi` to propagate the requirement to users of `SimInfoExtractorForM`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/telephony/SimInfoExtractorForM.kt"
+            line="13"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.Q) instead of `@TargetApi` to propagate the requirement to users of `SimInfoHelperForQ`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.Q)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/impl/telephony/SimInfoHelperForQ.kt"
+            line="10"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnnecessaryArrayInit"
+        message="This initialization lambda (`{ 0 }`) is unnecessary and is less efficient"
+        errorLine1="        packageInfo.requestedPermissionsFlags = IntArray(1) { 0 }"
+        errorLine2="                                                            ~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/impl/permissions/RuntimePermissionsRetrieverTest.kt"
+            line="79"
+            column="61"/>
     </issue>
 
 </issues>
