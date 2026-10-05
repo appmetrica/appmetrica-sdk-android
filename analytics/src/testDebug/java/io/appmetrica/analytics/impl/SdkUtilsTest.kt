@@ -19,14 +19,6 @@ internal class SdkUtilsTest : CommonTest() {
     val logMockedStaticRule = staticRule<BaseImportantLogger>()
 
     @Test
-    fun logStubUsage() {
-        SdkUtils.logStubUsage()
-        logMockedStaticRule.staticMock.verify {
-            ImportantLogger.info(SdkUtils.APPMETRICA_TAG, "User is locked. So use stubs. Events will not be sent.")
-        }
-    }
-
-    @Test
     fun logAttribution() {
         val message = "message: %s"
         val arg = "ok"

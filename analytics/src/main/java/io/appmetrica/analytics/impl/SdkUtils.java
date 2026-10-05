@@ -33,13 +33,6 @@ public class SdkUtils {
         );
     }
 
-    public static void logStubUsage() {
-        ImportantLogger.INSTANCE.info(
-            APPMETRICA_TAG,
-            "User is locked. So use stubs. Events will not be sent."
-        );
-    }
-
     @NonNull
     public static String formSdkBuildType() {
         StringBuilder builder = new StringBuilder();
