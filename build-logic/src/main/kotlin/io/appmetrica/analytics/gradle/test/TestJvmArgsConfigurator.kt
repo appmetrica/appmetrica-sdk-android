@@ -15,6 +15,18 @@ object TestJvmArgsConfigurator {
         test.jvmArgs("-Djdk.attach.allowAttachSelf=true")
         // need for fix https://nda.ya.ru/t/PGGDmRNa6Njj8w
         test.jvmArgs("-XX:CompileCommand=exclude,android/database/sqlite/SQLiteSession*.*")
+        // Required for Robolectric on JDK 17+: https://robolectric.org/getting-started/
+        test.jvmArgs(
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--add-opens=java.base/java.util=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-opens=java.base/java.net=ALL-UNNAMED",
+            "--add-opens=java.base/java.security=ALL-UNNAMED",
+            "--add-opens=java.base/java.text=ALL-UNNAMED",
+            "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+            "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+        )
         test.systemProperty("robolectric.logging.enabled", "true")
 
         test.beforeTest(

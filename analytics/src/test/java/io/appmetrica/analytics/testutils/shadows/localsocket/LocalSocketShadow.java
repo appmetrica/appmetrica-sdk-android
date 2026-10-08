@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 
-@Implements(value = LocalSocket.class, callThroughByDefault = true)
+@Implements(LocalSocket.class)
 public class LocalSocketShadow {
 
     private boolean mConnected;

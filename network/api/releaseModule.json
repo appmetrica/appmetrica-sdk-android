@@ -62,7 +62,10 @@
                 },
                 {
                     "group": "org.jetbrains.kotlin",
-                    "module": "kotlin-stdlib"
+                    "module": "kotlin-stdlib",
+                    "version": {
+                        "requires": "2.0.21"
+                    }
                 },
                 {
                     "group": "io.appmetrica.analytics",

@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 
-@Implements(value = LocalServerSocket.class, callThroughByDefault = true)
+@Implements(LocalServerSocket.class)
 public class LocalServerSocketShadow {
 
     private static String mName;
