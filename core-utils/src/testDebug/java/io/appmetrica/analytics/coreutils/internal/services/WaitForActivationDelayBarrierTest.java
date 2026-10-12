@@ -86,9 +86,9 @@ public class WaitForActivationDelayBarrierTest extends CommonTest {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
-        }).when(mExecutor).executeDelayed(any(Runnable.class), anyLong());
+        }).when(mExecutor).postDelayed(any(Runnable.class), anyLong());
         mActivationBarrier.subscribe(mRequestedWaiting, mExecutor, mCallback);
-        verify(mExecutor).executeDelayed(any(Runnable.class), eq(mExpectedDelay));
+        verify(mExecutor).postDelayed(any(Runnable.class), eq(mExpectedDelay));
         verify(mCallback).onWaitFinished();
     }
 
@@ -133,7 +133,7 @@ public class WaitForActivationDelayBarrierTest extends CommonTest {
             verify(runnable, times(1)).run();
             helper.subscribeIfNeeded(delay, executor);
             verifyNoMoreInteractions(activationBarrier);
-            verify(executor).execute(runnableCaptor.capture());
+            verify(executor).post(runnableCaptor.capture());
             runnableCaptor.getValue().run();
             verify(runnable, times(2)).run();
         }

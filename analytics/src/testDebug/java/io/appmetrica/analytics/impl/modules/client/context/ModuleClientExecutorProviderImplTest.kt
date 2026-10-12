@@ -6,6 +6,8 @@ import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 internal class ModuleClientExecutorProviderImplTest : CommonTest() {
 
@@ -20,5 +22,14 @@ internal class ModuleClientExecutorProviderImplTest : CommonTest() {
     fun defaultExecutor() {
         assertThat(moduleClientExecutorProvider.defaultExecutor)
             .isEqualTo(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor)
+    }
+
+    @Test
+    fun `defaultExecutor exposes queued post`() {
+        val runnable = mock<Runnable>()
+
+        moduleClientExecutorProvider.defaultExecutor.post(runnable)
+
+        verify(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).post(runnable)
     }
 }

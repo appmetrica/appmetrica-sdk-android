@@ -8,6 +8,7 @@ import android.location.Location
 import android.webkit.WebView
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
+import io.appmetrica.analytics.impl.AppMetricaPluginsImpl
 import io.appmetrica.analytics.impl.AppMetricaPluginsImplProvider
 import io.appmetrica.analytics.impl.AppMetricaPluginsImplProvider.impl
 import io.appmetrica.analytics.impl.IReporterExtended
@@ -18,11 +19,13 @@ import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.plugins.AppMetricaPlugins
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -42,11 +45,17 @@ internal class AppMetricaTests : CommonTest() {
 
     private val apiKey = TestsData.UUID_API_KEY
 
-    @get:Rule
-    val proxyProviderMockedStaticRule = staticRule<AppMetricaProxyProvider>()
+    private val appMetricaProxyRule = constructionRule<AppMetricaProxy>()
+    private val appMetricaPluginsImplRule = constructionRule<AppMetricaPluginsImpl>()
+
+    private val proxyProviderMockedStaticRule = staticRule<AppMetricaProxyProvider>()
+    private val pluginsImplProviderMockedStaticRule = staticRule<AppMetricaPluginsImplProvider>()
 
     @get:Rule
-    val pluginsImplProviderMockedStaticRule = staticRule<AppMetricaPluginsImplProvider>()
+    val ruleChain: RuleChain = RuleChain.outerRule(appMetricaProxyRule)
+        .around(appMetricaPluginsImplRule)
+        .around(proxyProviderMockedStaticRule)
+        .around(pluginsImplProviderMockedStaticRule)
 
     @Before
     fun setUp() {

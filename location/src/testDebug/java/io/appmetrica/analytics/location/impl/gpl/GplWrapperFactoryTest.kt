@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.LocationListener
 import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
 import io.appmetrica.gradle.testutils.CommonTest
@@ -15,8 +16,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.util.concurrent.TimeUnit
 
 internal class GplWrapperFactoryTest : CommonTest() {
 
@@ -24,6 +25,7 @@ internal class GplWrapperFactoryTest : CommonTest() {
     private val brokenContext = mock<Context>()
     private val locationListener = mock<LocationListener>()
     private val looper = mock<Looper>()
+    private val runnable = mock<Runnable>()
     private val executor = mock<IHandlerExecutor> {
         on { looper } doReturn looper
     }
@@ -52,7 +54,15 @@ internal class GplWrapperFactoryTest : CommonTest() {
     @Test
     fun create() {
         val result = gplWrapperFactory.create(context, locationListener, executor)
+
         assertThat(result).isEqualTo(singleGplWrapper())
+        val lastKnownExecutor = gplLibraryWrapperMockedConstructionRule.argumentInterceptor
+            .flatArguments()[3] as java.util.concurrent.Executor
+        assertThat(lastKnownExecutor).isInstanceOf(QueuedExecutor::class.java)
+
+        lastKnownExecutor.execute(runnable)
+
+        verify(executor).post(runnable)
     }
 
     @Test
@@ -70,5 +80,7 @@ internal class GplWrapperFactoryTest : CommonTest() {
 
     private fun singleGplWrapper(): GplLibraryWrapper =
         gplLibraryWrapperMockedConstructionRule
-            .singleWithArgs(context, locationListener, looper, executor, TimeUnit.SECONDS.toMillis(1))
+            .constructionMock
+            .constructed()
+            .single()
 }

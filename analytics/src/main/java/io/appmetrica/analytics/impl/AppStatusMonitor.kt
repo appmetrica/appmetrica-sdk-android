@@ -80,7 +80,7 @@ internal class AppStatusMonitor {
             if (!paused) {
                 paused = true
                 DebugLogger.info(tag, "Schedule pause runnable with %s seconds delay", timeout)
-                executor.executeDelayed(pauseRunnable, timeout)
+                executor.postDelayed(pauseRunnable, timeout)
             }
         }
     }

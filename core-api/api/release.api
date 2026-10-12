@@ -213,11 +213,18 @@ public interface io.appmetrica.analytics.coreapi.internal.event.ServiceEvent {
 
 public interface io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor extends io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread, java.util.concurrent.Executor {
     public abstract void execute([NonNull] Runnable)
-    public abstract void executeDelayed([NonNull] Runnable, long)
-    public abstract void executeDelayed([NonNull] Runnable, long, [NonNull] java.util.concurrent.TimeUnit)
+    public abstract void post([NonNull] Runnable)
+    public abstract void postDelayed([NonNull] Runnable, long)
+    public abstract void postDelayed([NonNull] Runnable, long, [NonNull] java.util.concurrent.TimeUnit)
     public abstract void remove([NonNull] Runnable)
     public abstract void removeAll()
     public abstract <T> java.util.concurrent.Future<T> submit(java.util.concurrent.Callable<T>)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutorExtensions {
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutorExtensions INSTANCE
+
+    public final void postDelayed-SxA4cEA([NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] Runnable, long)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor extends io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor {
@@ -237,6 +244,11 @@ public class io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafe
     public <init>([NonNull] String)
     public boolean isRunning()
     public void stopRunning()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor implementation java.util.concurrent.Executor {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor)
+    public void execute([NonNull] Runnable)
 }
 
 public class io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo {

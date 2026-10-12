@@ -22,7 +22,7 @@ internal class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : Common
     @Test
     fun onCreateNotDestroyed() {
         appMetricaCoreExecutionDispatcher.onCreate()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
         verify(appMetricaServiceCore).onCreate()
         verify(appMetricaServiceCore).onCreate()
@@ -33,7 +33,7 @@ internal class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : Common
         appMetricaCoreExecutionDispatcher.onDestroy()
         clearInvocations(appMetricaServiceCore)
         appMetricaCoreExecutionDispatcher.onCreate()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
         verify(appMetricaServiceCore).onCreate()
     }
@@ -41,7 +41,7 @@ internal class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : Common
     @Test
     fun onCreateDestroyedWhenExecuting() {
         appMetricaCoreExecutionDispatcher.onCreate()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         appMetricaCoreExecutionDispatcher.onDestroy()
         runnableCaptor.firstValue.run()
         verify(appMetricaServiceCore, Mockito.never()).onCreate()

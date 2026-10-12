@@ -26,7 +26,7 @@ internal class ReportConsumer(
                 "customType = ${serviceEvent.customType}; name = ${serviceEvent.name}"
         )
         if (!serviceEvent.isUndefinedType) {
-            tasksExecutor.execute(
+            tasksExecutor.post(
                 ReportRunnable(context, serviceEvent, extras, clientRepository)
             )
         } else {

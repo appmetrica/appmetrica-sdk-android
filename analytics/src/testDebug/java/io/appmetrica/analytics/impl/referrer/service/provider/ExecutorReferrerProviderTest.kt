@@ -35,7 +35,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
         executorReferrerProvider.requestReferrer(listener)
 
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         verify(delegate, never()).requestReferrer(listener)
 
         runnableCaptor.firstValue.run()
@@ -51,7 +51,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
         executorReferrerProvider.requestReferrer(listener)
 
         val executorRunnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(executorRunnableCaptor.capture())
+        verify(executor).post(executorRunnableCaptor.capture())
         // Run in the same thread as executor
         executorRunnableCaptor.firstValue.run()
 
@@ -60,7 +60,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
         // Callback arrives on the same thread as executor
         delegateListenerCaptor.firstValue.onResult(result)
 
-        // Listener should be called directly without an additional execute
+        // Listener should be called directly without an additional post
         verify(listener).onResult(result)
     }
 
@@ -72,7 +72,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
         executorReferrerProvider.requestReferrer(listener)
 
         val executorRunnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(executorRunnableCaptor.capture())
+        verify(executor).post(executorRunnableCaptor.capture())
         executorRunnableCaptor.firstValue.run()
 
         val delegateListenerCaptor = argumentCaptor<ReferrerListener>()
@@ -85,10 +85,10 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
         }.join()
 
         val executorRunnableCaptor2 = argumentCaptor<Runnable>()
-        verify(executor, times(2)).execute(executorRunnableCaptor2.capture())
+        verify(executor, times(2)).post(executorRunnableCaptor2.capture())
         executorRunnableCaptor2.secondValue.run()
 
-        // Listener should be called through executor (second execute)
+        // Listener should be called through executor (second post)
         verify(listener).onResult(result)
     }
 }

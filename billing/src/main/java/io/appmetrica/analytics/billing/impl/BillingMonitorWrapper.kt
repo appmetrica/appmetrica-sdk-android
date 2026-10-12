@@ -7,6 +7,7 @@ import io.appmetrica.analytics.billing.impl.storage.AutoInappCollectingInfoSeria
 import io.appmetrica.analytics.billing.impl.storage.BillingInfoStorageImpl
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycleListener
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState
@@ -35,7 +36,7 @@ internal class BillingMonitorWrapper(
 
         billingMonitor = BillingMonitorProvider().get(
             serviceContext.context,
-            serviceContext.executorProvider.getDefaultExecutor(),
+            QueuedExecutor(serviceContext.executorProvider.getDefaultExecutor()),
             serviceContext.executorProvider.getUiExecutor(),
             BillingTypeDetector.getBillingType(),
             BillingInfoStorageImpl(

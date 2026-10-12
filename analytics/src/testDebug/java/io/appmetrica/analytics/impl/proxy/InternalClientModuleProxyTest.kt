@@ -14,6 +14,7 @@ import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -36,13 +37,18 @@ internal class InternalClientModuleProxyTest : CommonTest() {
 
     private val moduleEventCaptor = argumentCaptor<ModuleEvent>()
 
-    @get:Rule
-    val modulesFacadeRule = staticRule<ModulesFacade>()
+    private val modulesProxyRule = MockedConstructionRule(ModulesProxy::class.java)
 
-    @get:Rule
-    val converterRule = MockedConstructionRule(ModuleAdRevenueConverter::class.java) { mock, _ ->
+    private val converterRule = MockedConstructionRule(ModuleAdRevenueConverter::class.java) { mock, _ ->
         whenever(mock.convert(autoAdRevenue)).thenReturn(adRevenue)
     }
+
+    private val modulesFacadeRule = staticRule<ModulesFacade>()
+
+    @get:Rule
+    val ruleChain: RuleChain = RuleChain.outerRule(modulesProxyRule)
+        .around(converterRule)
+        .around(modulesFacadeRule)
 
     private val proxy by setUp { InternalClientModuleProxy() }
 

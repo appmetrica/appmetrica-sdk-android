@@ -94,7 +94,7 @@ internal class ModulesProxyTest : CommonTest() {
         val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
         inOrder.verify(modulesBarrier).setAdvIdentifiersTracking(true)
         inOrder.verify(synchronousStageExecutor).setAdvIdentifiersTracking(true)
-        inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
+        inOrder.verify(executor, times(1)).post(runnableArgumentCaptor.capture())
         verifyNoMoreInteractions(mainReporter)
 
         runnableArgumentCaptor.firstValue.run()
@@ -111,7 +111,7 @@ internal class ModulesProxyTest : CommonTest() {
         val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
         inOrder.verify(modulesBarrier).reportEvent(moduleEvent)
         inOrder.verify(synchronousStageExecutor).reportEvent(moduleEvent)
-        inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
+        inOrder.verify(executor, times(1)).post(runnableArgumentCaptor.capture())
         verifyNoMoreInteractions(mainReporter)
 
         runnableArgumentCaptor.firstValue.run()
@@ -130,7 +130,7 @@ internal class ModulesProxyTest : CommonTest() {
         inOrder(modulesBarrier, synchronousStageExecutor, executor, mainReporter) {
             verify(modulesBarrier).setSessionExtra(key, value)
             verify(synchronousStageExecutor).setSessionExtra(key, value)
-            verify(executor).execute(runnableArgumentCaptor.capture())
+            verify(executor).post(runnableArgumentCaptor.capture())
             verifyNoMoreInteractions(mainReporter)
         }
 
@@ -150,7 +150,7 @@ internal class ModulesProxyTest : CommonTest() {
         inOrder(modulesBarrier, synchronousStageExecutor, executor, mainReporter) {
             verify(modulesBarrier).reportExternalAttribution(source, value)
             verify(synchronousStageExecutor).reportExternalAttribution(source, value)
-            verify(executor).execute(runnableArgumentCaptor.capture())
+            verify(executor).post(runnableArgumentCaptor.capture())
             verifyNoInteractions(mainReporter)
         }
 
@@ -206,7 +206,7 @@ internal class ModulesProxyTest : CommonTest() {
         val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
         inOrder.verify(modulesBarrier).reportAdRevenue(adRevenue, true)
         inOrder.verify(synchronousStageExecutor).reportAdRevenue(adRevenue, true)
-        inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
+        inOrder.verify(executor, times(1)).post(runnableArgumentCaptor.capture())
         verifyNoMoreInteractions(mainReporter)
 
         runnableArgumentCaptor.firstValue.run()
@@ -230,7 +230,7 @@ internal class ModulesProxyTest : CommonTest() {
         ) {
             verify(modulesBarrier).subscribeForAutoCollectedData(context, apiKey)
             verify(synchronousStageExecutor).subscribeForAutoCollectedData(context, apiKey)
-            verify(executor).execute(runnableArgumentCaptor.capture())
+            verify(executor).post(runnableArgumentCaptor.capture())
             verifyNoInteractions(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
             runnableArgumentCaptor.firstValue.run()
             verify(ClientServiceLocator.getInstance().appMetricaFacadeProvider)

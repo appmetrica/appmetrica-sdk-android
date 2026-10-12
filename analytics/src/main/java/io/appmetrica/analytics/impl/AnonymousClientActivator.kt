@@ -24,7 +24,7 @@ internal class AnonymousClientActivator(
     }
 
     fun activateDelayed(context: Context) {
-        clientExecutorProvider.defaultExecutor.executeDelayed(
+        clientExecutorProvider.defaultExecutor.postDelayed(
             object : SafeRunnable() {
                 override fun runSafety() {
                     activate(context)
@@ -50,7 +50,7 @@ internal class AnonymousClientActivator(
             logger.info("Session autotracking disabled")
         }
         provider.getInitializedImpl(context).activateCore(null)
-        clientExecutorProvider.defaultExecutor.execute {
+        clientExecutorProvider.defaultExecutor.post {
             provider.getInitializedImpl(context).activateFull(config)
         }
         provider.markActivated()

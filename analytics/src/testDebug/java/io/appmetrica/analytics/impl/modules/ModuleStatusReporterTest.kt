@@ -61,7 +61,7 @@ internal class ModuleStatusReporterTest : CommonTest() {
     fun reportModuleStatus() {
         moduleStatusReporter.reportModulesStatus(modulesStatus)
         verifyNoInteractions(reporter)
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
         verify(reporter)
             .reportLazyEvent(moduleStatusReportingTaskRule.constructionMock.constructed().first())

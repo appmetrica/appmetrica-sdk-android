@@ -76,7 +76,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         clearInvocations(executor);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verify(executor).execute(runnableCaptor.capture());
+        verify(executor).post(runnableCaptor.capture());
         runnableCaptor.getValue().run();
         verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
     }

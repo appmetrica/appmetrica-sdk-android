@@ -40,7 +40,7 @@ internal class GooglePlayReferrerLibrary(private val executor: ICommonExecutor) 
         @MainThread
         override fun onInstallReferrerSetupFinished(responseCode: Int) {
             DebugLogger.info(tag, "onInstallReferrerSetupFinished: $responseCode")
-            executor.execute {
+            executor.post {
                 val result = runCatching {
                     if (responseCode != InstallReferrerResponse.OK) {
                         reportResponseErrorOnSelfReporter(responseCode)

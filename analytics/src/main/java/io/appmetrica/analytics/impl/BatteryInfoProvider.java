@@ -44,7 +44,7 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
                     oldChargeType == null ? null : oldChargeType.name(),
                     newBatteryInfo.chargeType.name()
                 );
-                mExecutor.execute(new SafeRunnable() {
+                mExecutor.post(new SafeRunnable() {
                     @Override
                     public void runSafety() throws Exception {
                         notifyChargeTypeChanged(newBatteryInfo.chargeType);

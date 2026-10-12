@@ -14,7 +14,7 @@ internal class LibraryAnrListener(
 
     override fun onAppNotResponding() {
         val allThreads = threadsStateDumper.threadsDumpForAnr
-        ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor.execute {
+        ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor.post {
             anrReporter.reportAnr(allThreads)
             DebugLogger.info(tag, "Detected ANR: $allThreads")
         }

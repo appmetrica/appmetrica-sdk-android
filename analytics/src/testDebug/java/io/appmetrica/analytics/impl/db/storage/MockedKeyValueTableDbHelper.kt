@@ -20,7 +20,7 @@ internal open class MockedKeyValueTableDbHelper @JvmOverloads constructor(
                 runnable.run()
                 null
             }
-        ).whenever(mockExecutor).execute(any(Runnable::class.java))
+        ).whenever(mockExecutor).post(any(Runnable::class.java))
 
         doAnswer(
             Answer { invocation: InvocationOnMock ->
@@ -28,7 +28,7 @@ internal open class MockedKeyValueTableDbHelper @JvmOverloads constructor(
                 runnable.run()
                 null
             }
-        ).whenever(mockExecutor).executeDelayed(any(Runnable::class.java), any(Long::class.java))
+        ).whenever(mockExecutor).postDelayed(any(Runnable::class.java), any(Long::class.java))
     }
 ) : KeyValueTableDbHelper(
     tableName = "test_table",

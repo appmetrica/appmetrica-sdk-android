@@ -49,7 +49,7 @@ public class LocationDataCacheUpdateSchedulerTest extends CommonTest {
     @Test
     public void testOnStateUpdated() {
         mDataCacheUpdateScheduler.onStateUpdated();
-        verify(mExecutor).executeDelayed(mRunnableCaptor.capture(), eq(UPDATE_INTERVAL_SECONDS), eq(TimeUnit.SECONDS));
+        verify(mExecutor).postDelayed(mRunnableCaptor.capture(), eq(UPDATE_INTERVAL_SECONDS), eq(TimeUnit.SECONDS));
         mRunnableCaptor.getValue().run();
         verify(mLastKnownUpdater).updateLastKnown();
     }
@@ -60,17 +60,17 @@ public class LocationDataCacheUpdateSchedulerTest extends CommonTest {
         InOrder inOrder = Mockito.inOrder(mExecutor);
         inOrder.verify(mExecutor).remove(mRunnableCaptor.capture());
         Runnable lastRunnable = mRunnableCaptor.getValue();
-        inOrder.verify(mExecutor).executeDelayed(lastRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        inOrder.verify(mExecutor).postDelayed(lastRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
         clearInvocations(mExecutor);
         mDataCacheUpdateScheduler.onStateUpdated();
         verify(mExecutor).remove(lastRunnable);
-        verify(mExecutor).executeDelayed(lastRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        verify(mExecutor).postDelayed(lastRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
     @Test
     public void testStartUpdates() {
         mDataCacheUpdateScheduler.startUpdates();
-        verify(mExecutor).executeDelayed(mRunnableCaptor.capture(), eq(UPDATE_INTERVAL_SECONDS), eq(TimeUnit.SECONDS));
+        verify(mExecutor).postDelayed(mRunnableCaptor.capture(), eq(UPDATE_INTERVAL_SECONDS), eq(TimeUnit.SECONDS));
         mRunnableCaptor.getValue().run();
         verify(mLastKnownUpdater).updateLastKnown();
     }
@@ -90,7 +90,7 @@ public class LocationDataCacheUpdateSchedulerTest extends CommonTest {
     public void testUpdateNowIfNeededShouldUpdate() {
         when(mUpdateConditionsChecker.shouldUpdate()).thenReturn(true);
         mDataCacheUpdateScheduler.scheduleUpdateIfNeededNow();
-        verify(mExecutor).execute(mRunnableCaptor.capture());
+        verify(mExecutor).post(mRunnableCaptor.capture());
         mRunnableCaptor.getValue().run();
         verify(mLastKnownUpdater).updateLastKnown();
     }
@@ -99,7 +99,7 @@ public class LocationDataCacheUpdateSchedulerTest extends CommonTest {
     public void testUpdateNowIfNeededShouldNotUpdate() {
         when(mUpdateConditionsChecker.shouldUpdate()).thenReturn(false);
         mDataCacheUpdateScheduler.scheduleUpdateIfNeededNow();
-        verify(mExecutor).execute(mRunnableCaptor.capture());
+        verify(mExecutor).post(mRunnableCaptor.capture());
         mRunnableCaptor.getValue().run();
         verify(mLastKnownUpdater, never()).updateLastKnown();
     }

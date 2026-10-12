@@ -43,7 +43,7 @@ internal open class KeyValueTableDbHelper(
     )
 
     init {
-        executor.execute {
+        executor.post {
             synchronized(lock) {
                 loadValues()
                 initialized = true

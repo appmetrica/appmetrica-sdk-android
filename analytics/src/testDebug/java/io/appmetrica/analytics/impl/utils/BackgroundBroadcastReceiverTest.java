@@ -37,7 +37,7 @@ public class BackgroundBroadcastReceiverTest extends CommonTest {
     @Test
     public void onReceive() {
         backgroundBroadcastReceiver.onReceive(context, intent);
-        verify(executor).execute(runnableCaptor.capture());
+        verify(executor).post(runnableCaptor.capture());
         runnableCaptor.getValue().run();
         verify(block).consume(context, intent);
     }

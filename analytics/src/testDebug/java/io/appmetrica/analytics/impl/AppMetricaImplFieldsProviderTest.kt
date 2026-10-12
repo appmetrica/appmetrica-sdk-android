@@ -126,9 +126,12 @@ internal class AppMetricaImplFieldsProviderTest : CommonTest() {
         val moduleStatusReporter = fieldsProvider.createModuleStatusReporter(context)
         assertThat(moduleStatusReporter).isEqualTo(moduleStatusReporterRule.constructionMock.constructed().first())
         assertThat(moduleStatusReporterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(moduleStatusReporterRule.argumentInterceptor.flatArguments())
+        val arguments = moduleStatusReporterRule.argumentInterceptor.flatArguments()
+        assertThat(arguments.first()).isSameAs(
+            ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
+        )
+        assertThat(arguments)
             .contains(
-                ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor,
                 ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context),
                 "client_modules"
             )

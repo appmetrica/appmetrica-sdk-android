@@ -24,7 +24,7 @@ internal class LocationControllerImpl : LocationController, ToggleObserver {
 
     override fun registerObserver(observer: LocationControllerObserver, sticky: Boolean) {
         DebugLogger.info(tag, "registerObserver: $observer")
-        executor.execute {
+        executor.post {
             observers.add(observer)
             if (sticky) {
                 DebugLogger.info(tag, "Notify observer $observer as sticky - activated = $activated")
@@ -39,7 +39,7 @@ internal class LocationControllerImpl : LocationController, ToggleObserver {
 
     override fun onStateChanged(incomingState: Boolean) {
         DebugLogger.info(tag, "onStateChanged = $incomingState")
-        executor.execute {
+        executor.post {
             if (activated != incomingState) {
                 DebugLogger.info(tag, "State changed from $activated to $incomingState")
                 activated = incomingState

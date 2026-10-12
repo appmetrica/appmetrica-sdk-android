@@ -27,7 +27,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     public synchronized void onCreate() {
         DebugLogger.INSTANCE.info(TAG, "Post onCreate");
         shouldExecuteOnCreate = true;
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 synchronized (AppMetricaServiceCoreExecutionDispatcher.this) {
@@ -43,7 +43,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void onStart(final Intent intent, final int startId) {
         DebugLogger.INSTANCE.info(TAG, "Post onStart");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 mAppMetricaServiceCore.onStart(intent, startId);
@@ -54,7 +54,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void onStartCommand(final Intent intent, final int flags, final int startId) {
         DebugLogger.INSTANCE.info(TAG, "Post onStartCommand");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 mAppMetricaServiceCore.onStartCommand(intent, flags, startId);
@@ -65,7 +65,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void onBind(final Intent intent) {
         DebugLogger.INSTANCE.info(TAG, "Post onBind");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 mAppMetricaServiceCore.onBind(intent);
@@ -76,7 +76,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void onRebind(final Intent intent) {
         DebugLogger.INSTANCE.info(TAG, "Post onRebind");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 mAppMetricaServiceCore.onRebind(intent);
@@ -87,7 +87,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void onUnbind(final Intent intent) {
         DebugLogger.INSTANCE.info(TAG, "Post onUnbind");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() {
                 mAppMetricaServiceCore.onUnbind(intent);
@@ -108,7 +108,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void reportData(final int type, final Bundle data) {
         DebugLogger.INSTANCE.info(TAG, "Post reportEvent. Type: %d", type);
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
                 mAppMetricaServiceCore.reportData(type, data);
@@ -119,7 +119,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void resumeUserSession(@NonNull final Bundle data) {
         DebugLogger.INSTANCE.info(TAG, "Post resumeUserSession");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
                 mAppMetricaServiceCore.resumeUserSession(data);
@@ -130,7 +130,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @Override
     public void pauseUserSession(@NonNull final Bundle data) {
         DebugLogger.INSTANCE.info(TAG, "Post pauseUserSession");
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
                 mAppMetricaServiceCore.pauseUserSession(data);
@@ -140,7 +140,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onConfigurationChanged(@NonNull final Configuration newConfig) {
-        mCoreExecutor.execute(new SafeRunnable() {
+        mCoreExecutor.post(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
                 mAppMetricaServiceCore.onConfigurationChanged(newConfig);

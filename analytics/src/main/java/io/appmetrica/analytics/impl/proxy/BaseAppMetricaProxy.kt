@@ -18,7 +18,7 @@ internal open class BaseAppMetricaProxy protected constructor(
         ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
     protected fun dispatchSafely(task: Runnable) {
-        executor.execute(object : SafeRunnable() {
+        executor.post(object : SafeRunnable() {
             override fun runSafety() {
                 try {
                     task.run()

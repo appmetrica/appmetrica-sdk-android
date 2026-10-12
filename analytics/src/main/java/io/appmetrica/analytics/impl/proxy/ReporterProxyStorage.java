@@ -41,7 +41,7 @@ public class ReporterProxyStorage {
         ICommonExecutor executor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
         if (mFacadeProvider.peekInitializedImpl() == null) {
             DebugLogger.INSTANCE.info(TAG, "needs warm up core");
-            executor.execute(new Runnable() {
+            executor.post(new Runnable() {
                 @Override
                 public void run() {
                     DebugLogger.INSTANCE.info(TAG, "getInitializedImpl");

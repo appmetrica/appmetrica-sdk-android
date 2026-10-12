@@ -123,7 +123,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportUnhandledException(@NonNull final UnhandledException unhandledException) {
         barrier.reportUnhandledException(unhandledException);
         synchronousStageExecutor.reportUnhandledException(unhandledException);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportUnhandledException(unhandledException);
@@ -136,7 +136,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
         barrier.reportAnr(allThreads);
         synchronousStageExecutor.reportAnr(allThreads);
         List<Map.Entry<Thread, StackTraceElement[]>> entries = CollectionUtils.getListFromMap(allThreads);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportAnr(CollectionUtils.getMapFromList(entries));
@@ -148,7 +148,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportAnr(@NonNull final AllThreads allThreads) {
         barrier.reportAnr(allThreads);
         synchronousStageExecutor.reportAnr(allThreads);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportAnr(allThreads);
@@ -160,7 +160,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void sendEventsBuffer() {
         barrier.sendEventsBuffer();
         synchronousStageExecutor.sendEventsBuffer();
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().sendEventsBuffer();
@@ -172,7 +172,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void putAppEnvironmentValue(@NonNull final String key, @Nullable final String value) {
         barrier.putAppEnvironmentValue(key, value);
         synchronousStageExecutor.putAppEnvironmentValue(key, value);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().putAppEnvironmentValue(key, value);
@@ -184,7 +184,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void putErrorEnvironmentValue(@NonNull final String key, @Nullable final String value) {
         barrier.putErrorEnvironmentValue(key, value);
         synchronousStageExecutor.putErrorEnvironmentValue(key, value);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().putErrorEnvironmentValue(key, value);
@@ -196,7 +196,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void clearAppEnvironment() {
         barrier.clearAppEnvironment();
         synchronousStageExecutor.clearAppEnvironment();
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().clearAppEnvironment();
@@ -208,7 +208,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void clearErrorEnvironment() {
         barrier.clearErrorEnvironment();
         synchronousStageExecutor.clearErrorEnvironment();
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().clearErrorEnvironment();
@@ -220,7 +220,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportEvent(@NonNull final String eventName) {
         barrier.reportEvent(eventName);
         synchronousStageExecutor.reportEvent(eventName);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportEvent(eventName);
@@ -232,7 +232,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportEvent(@NonNull final String eventName, @Nullable final String jsonValue) {
         barrier.reportEvent(eventName, jsonValue);
         synchronousStageExecutor.reportEvent(eventName, jsonValue);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportEvent(eventName, jsonValue);
@@ -245,7 +245,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
         barrier.reportEvent(eventName, attributes);
         synchronousStageExecutor.reportEvent(eventName, attributes);
         final List<Map.Entry<String, Object>> entries = CollectionUtils.getListFromMap(attributes);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportEvent(eventName, CollectionUtils.getMapFromList(entries));
@@ -257,7 +257,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportError(@NonNull final String message, @Nullable final Throwable error) {
         barrier.reportError(message, error);
         final Throwable nonNullThrowable = synchronousStageExecutor.reportError(message, error);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportError(message, nonNullThrowable);
@@ -278,7 +278,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     ) {
         barrier.reportError(identifier, message, error);
         synchronousStageExecutor.reportError(identifier, message, error);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportError(identifier, message, error);
@@ -290,7 +290,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportUnhandledException(@NonNull final Throwable exception) {
         barrier.reportUnhandledException(exception);
         synchronousStageExecutor.reportUnhandledException(exception);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportUnhandledException(exception);
@@ -302,7 +302,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void resumeSession() {
         barrier.resumeSession();
         synchronousStageExecutor.resumeSession();
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().resumeSession();
@@ -314,7 +314,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void pauseSession() {
         barrier.pauseSession();
         synchronousStageExecutor.pauseSession();
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().pauseSession();
@@ -326,7 +326,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void setUserProfileID(@Nullable final String profileID) {
         barrier.setUserProfileID(profileID);
         synchronousStageExecutor.setUserProfileID(profileID);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().setUserProfileID(profileID);
@@ -338,7 +338,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportUserProfile(@NonNull final UserProfile profile) {
         barrier.reportUserProfile(profile);
         synchronousStageExecutor.reportUserProfile(profile);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportUserProfile(profile);
@@ -350,7 +350,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportRevenue(@NonNull final Revenue revenue) {
         barrier.reportRevenue(revenue);
         synchronousStageExecutor.reportRevenue(revenue);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportRevenue(revenue);
@@ -362,7 +362,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportAdRevenue(@NonNull final AdRevenue adRevenue) {
         barrier.reportAdRevenue(adRevenue);
         synchronousStageExecutor.reportAdRevenue(adRevenue);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportAdRevenue(adRevenue);
@@ -374,7 +374,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportECommerce(@NonNull final ECommerceEvent event) {
         barrier.reportECommerce(event);
         synchronousStageExecutor.reportECommerce(event);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportECommerce(event);
@@ -386,7 +386,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void setDataSendingEnabled(final boolean enabled) {
         barrier.setDataSendingEnabled(enabled);
         synchronousStageExecutor.setDataSendingEnabled(enabled);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().setDataSendingEnabled(enabled);
@@ -404,7 +404,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
         final ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey).build();
         barrier.activate(config);
         synchronousStageExecutor.activate(config);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 activateInternal(config);
@@ -416,7 +416,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
         barrier.activate(config);
         synchronousStageExecutor.activate(config);
         DebugLogger.INSTANCE.info(TAG, "activate with apiKey: %s", config.apiKey);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 DebugLogger.INSTANCE.info(TAG, "activate internal with apiKey = %s", config.apiKey);
@@ -436,7 +436,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     ) {
         barrier.reportEvent(moduleEvent);
         synchronousStageExecutor.reportEvent(moduleEvent);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportEvent(moduleEvent);
@@ -448,7 +448,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void setSessionExtra(@NonNull final String key, @Nullable final byte[] value) {
         barrier.setSessionExtra(key, value);
         synchronousStageExecutor.setSessionExtra(key, value);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().setSessionExtra(key, value);
@@ -460,7 +460,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportAdRevenue(@NonNull final AdRevenue adRevenue, final boolean autoCollected) {
         barrier.reportAdRevenue(adRevenue, autoCollected);
         synchronousStageExecutor.reportAdRevenue(adRevenue, autoCollected);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportAdRevenue(adRevenue, autoCollected);
@@ -472,7 +472,7 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void reportEvent(@NonNull final AppMetricaEvent event) {
         barrier.reportEvent(event);
         synchronousStageExecutor.reportEvent(event);
-        mExecutor.execute(new Runnable() {
+        mExecutor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportEvent(event);

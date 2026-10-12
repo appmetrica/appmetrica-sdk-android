@@ -38,11 +38,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
     }
 
     private val executor: IHandlerExecutor = mock {
-        on { execute(any()) } doAnswer { invocation ->
+        on { post(any()) } doAnswer { invocation ->
             (invocation.arguments[0] as Runnable).run()
             null
         }
-        on { executeDelayed(any(), any()) } doAnswer { invocation ->
+        on { postDelayed(any(), any()) } doAnswer { invocation ->
             (invocation.arguments[0] as Runnable).run()
             null
         }
@@ -71,11 +71,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
     fun `put multiple tasks accumulates and writes batch`() {
         val delayedRunnableCaptor = argumentCaptor<Runnable>()
         val accumulatingExecutor: IHandlerExecutor = mock {
-            on { execute(any()) } doAnswer { invocation ->
+            on { post(any()) } doAnswer { invocation ->
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { executeDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any()) } doAnswer { invocation ->
                 null
             }
         }
@@ -86,7 +86,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(scope, timestamp, data)
         testWriter.put(secondScope, secondTimestamp, secondData)
 
-        verify(accumulatingExecutor).executeDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
         delayedRunnableCaptor.firstValue.run()
 
         verify(batchWriter).invoke(batchWriterCaptor.capture())
@@ -102,11 +102,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
     @Test
     fun `flush writes pending tasks immediately`() {
         val delayedExecutor: IHandlerExecutor = mock {
-            on { execute(any()) } doAnswer { invocation ->
+            on { post(any()) } doAnswer { invocation ->
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { executeDelayed(any(), any()) } doAnswer {
+            on { postDelayed(any(), any()) } doAnswer {
                 null
             }
         }
@@ -128,11 +128,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
     @Test
     fun `flushAsync writes pending tasks asynchronously`() {
         val delayedExecutor: IHandlerExecutor = mock {
-            on { execute(any()) } doAnswer { invocation ->
+            on { post(any()) } doAnswer { invocation ->
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { executeDelayed(any(), any()) } doAnswer {
+            on { postDelayed(any(), any()) } doAnswer {
                 null
             }
         }
@@ -145,7 +145,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
 
         testWriter.flushAsync()
 
-        verify(delayedExecutor, times(1)).execute(any())
+        verify(delayedExecutor, times(1)).post(any())
         verify(batchWriter).invoke(batchWriterCaptor.capture())
 
         val capturedTasks = batchWriterCaptor.firstValue
@@ -172,7 +172,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
 
         writer.put(scope, timestamp, data)
 
-        verify(executor).executeDelayed(any(), eq(customDelay))
+        verify(executor).postDelayed(any(), eq(customDelay))
     }
 
     @Test
@@ -205,11 +205,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
 
         val delayedRunnableCaptor = argumentCaptor<Runnable>()
         val accumulatingExecutor: IHandlerExecutor = mock {
-            on { execute(any()) } doAnswer { invocation ->
+            on { post(any()) } doAnswer { invocation ->
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { executeDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any()) } doAnswer { invocation ->
                 null
             }
         }
@@ -225,7 +225,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(secondScope, secondTimestamp, secondData)
         testWriter.put(thirdScope, thirdTimestamp, thirdData)
 
-        verify(accumulatingExecutor).executeDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
 
         delayedRunnableCaptor.firstValue.run()
 
@@ -261,11 +261,11 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
 
         val delayedRunnableCaptor = argumentCaptor<Runnable>()
         val accumulatingExecutor: IHandlerExecutor = mock {
-            on { execute(any()) } doAnswer { invocation ->
+            on { post(any()) } doAnswer { invocation ->
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { executeDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any()) } doAnswer { invocation ->
                 null
             }
         }
@@ -276,7 +276,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(scope, timestamp, data)
         testWriter.put(secondScope, secondTimestamp, secondData)
 
-        verify(accumulatingExecutor).executeDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
 
         delayedRunnableCaptor.firstValue.run()
 

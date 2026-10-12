@@ -108,7 +108,7 @@ public class ReporterProxyStorageTest extends CommonTest {
                 throw new AssertionError("Activation scheduling was not released");
             }
             return null;
-        }).when(executor).execute(any(Runnable.class));
+        }).when(executor).post(any(Runnable.class));
 
         FutureTask<ReporterExtendedProxy> firstGet = new FutureTask<>(
             () -> storage.getOrCreate(mContext, mApiKey)
@@ -130,7 +130,7 @@ public class ReporterProxyStorageTest extends CommonTest {
         }
 
         assertThat(secondGet.get(5, TimeUnit.SECONDS)).isSameAs(firstGet.get(5, TimeUnit.SECONDS));
-        verify(executor).execute(any(Runnable.class));
+        verify(executor).post(any(Runnable.class));
     }
 
     @Test
@@ -138,14 +138,14 @@ public class ReporterProxyStorageTest extends CommonTest {
         doThrow(new IllegalStateException("activation failure"))
             .doNothing()
             .when(executor)
-            .execute(any(Runnable.class));
+            .post(any(Runnable.class));
 
         assertThatThrownBy(() -> storage.getOrCreate(mContext, mApiKey))
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("activation failure");
 
         assertThat(storage.getOrCreate(mContext, mApiKey)).isNotNull();
-        verify(executor, times(2)).execute(any(Runnable.class));
+        verify(executor, times(2)).post(any(Runnable.class));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ReporterProxyStorageTest extends CommonTest {
                 initializationTask[0] = invocation.getArgument(0);
             }
             return null;
-        }).when(executor).execute(any(Runnable.class));
+        }).when(executor).post(any(Runnable.class));
 
         storage.getOrCreate(mContext, mApiKey);
 

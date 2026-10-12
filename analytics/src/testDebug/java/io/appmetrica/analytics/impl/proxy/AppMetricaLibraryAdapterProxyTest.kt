@@ -17,6 +17,7 @@ import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRul
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
@@ -37,20 +38,24 @@ internal class AppMetricaLibraryAdapterProxyTest : CommonTest() {
 
     private val config: AppMetricaLibraryAdapterConfig = mock()
 
-    @get:Rule
-    var clientServiceLocatorRule: ClientServiceLocatorRule = ClientServiceLocatorRule()
+    private val clientServiceLocatorRule: ClientServiceLocatorRule = ClientServiceLocatorRule()
+
+    private val barrierRule = constructionRule<LibraryAdapterBarrier>()
+
+    private val synchronousStageExecutorRule = constructionRule<LibraryAdapterSynchronousStageExecutor>()
+
+    private val libraryEventConstructorRule = constructionRule<LibraryEventConstructor>()
+
+    private val modulesProxyRule = constructionRule<ModulesProxy>()
+    private val modulesFacadeRule = staticRule<ModulesFacade>()
 
     @get:Rule
-    val barrierRule = constructionRule<LibraryAdapterBarrier>()
-
-    @get:Rule
-    val synchronousStageExecutorRule = constructionRule<LibraryAdapterSynchronousStageExecutor>()
-
-    @get:Rule
-    val libraryEventConstructorRule = constructionRule<LibraryEventConstructor>()
-
-    @get:Rule
-    val modulesFacadeRule = staticRule<ModulesFacade>()
+    val ruleChain: RuleChain = RuleChain.outerRule(clientServiceLocatorRule)
+        .around(barrierRule)
+        .around(synchronousStageExecutorRule)
+        .around(libraryEventConstructorRule)
+        .around(modulesProxyRule)
+        .around(modulesFacadeRule)
 
     private val runnableCaptor = argumentCaptor<Runnable>()
 
@@ -166,7 +171,7 @@ internal class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         verify(synchronousStageExecutor).reportEvent(sender, event, payload)
 
         verify(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor)
-            .execute(runnableCaptor.capture())
+            .post(runnableCaptor.capture())
 
         runnableCaptor.firstValue.run()
 

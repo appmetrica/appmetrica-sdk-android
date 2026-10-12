@@ -62,7 +62,7 @@ public class AppMetricaConnectorTest extends CommonTest {
         mConnector.forbidDisconnect();
         Runnable unbindRunnable = mConnector.getUnbindRunnable();
         verify(mExecutor).remove(same(unbindRunnable));
-        verify(mExecutor, never()).executeDelayed(same(unbindRunnable), anyLong());
+        verify(mExecutor, never()).postDelayed(same(unbindRunnable), anyLong());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class AppMetricaConnectorTest extends CommonTest {
         mConnector.allowDisconnect();
         Runnable unbindRunnable = mConnector.getUnbindRunnable();
         verify(mExecutor).remove(same(unbindRunnable));
-        verify(mExecutor).executeDelayed(same(unbindRunnable), anyLong());
+        verify(mExecutor).postDelayed(same(unbindRunnable), anyLong());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AppMetricaConnectorTest extends CommonTest {
         mConnector.forbidDisconnect();
         mConnector.scheduleDisconnect();
         verify(mExecutor, times(2)).remove(same(unbindRunnable));
-        verify(mExecutor, never()).executeDelayed(same(unbindRunnable), anyLong());
+        verify(mExecutor, never()).postDelayed(same(unbindRunnable), anyLong());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class AppMetricaConnectorTest extends CommonTest {
         Runnable unbindRunnable = mConnector.getUnbindRunnable();
         mConnector.scheduleDisconnect();
         verify(mExecutor, times(attemptsToRemoveRunnable)).remove(same(unbindRunnable));
-        verify(mExecutor, times(attemptsToRemoveRunnable)).executeDelayed(same(unbindRunnable), anyLong());
+        verify(mExecutor, times(attemptsToRemoveRunnable)).postDelayed(same(unbindRunnable), anyLong());
     }
 
 }

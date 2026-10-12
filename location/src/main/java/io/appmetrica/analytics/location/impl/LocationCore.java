@@ -124,7 +124,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
 
     @AnyThread
     public void updateConfig(@NonNull final LocationConfig locationConfig) {
-        executor.execute(new Runnable() {
+        executor.post(new Runnable() {
             @Override
             public void run() {
                 locationStreamDispatcher.setLocationConfig(locationConfig);

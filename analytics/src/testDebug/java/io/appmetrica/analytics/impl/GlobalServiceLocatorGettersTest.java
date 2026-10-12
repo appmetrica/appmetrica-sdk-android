@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
 import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
@@ -50,11 +51,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
@@ -421,6 +424,29 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     private PreloadInfoData preloadInfoData;
     @Mock
     private ClidsInfo clidsInfo;
+
+    private final IHandlerExecutor defaultExecutor = mock(IHandlerExecutor.class);
+    private final IHandlerExecutor supportIoExecutor = mock(IHandlerExecutor.class);
+    private final IHandlerExecutor persistenceExecutor = mock(IHandlerExecutor.class);
+    private final IHandlerExecutor moduleExecutor = mock(IHandlerExecutor.class);
+
+    @Rule
+    public final MockedConstructionRule<ServiceExecutorProvider> serviceExecutorProviderMockedConstructionRule =
+        new MockedConstructionRule<>(
+            ServiceExecutorProvider.class,
+            new MockedConstruction.MockInitializer<ServiceExecutorProvider>() {
+                @Override
+                public void prepare(
+                    ServiceExecutorProvider mock,
+                    MockedConstruction.Context context
+                ) throws Throwable {
+                    when(mock.getDefaultExecutor()).thenReturn(defaultExecutor);
+                    when(mock.getSupportIOExecutor()).thenReturn(supportIoExecutor);
+                    when(mock.getPersistenceExecutor()).thenReturn(persistenceExecutor);
+                    when(mock.getModuleExecutor()).thenReturn(moduleExecutor);
+                }
+            }
+        );
 
     @Rule
     public final MockedStaticRule<DebugAssert> sDebugAssert = new MockedStaticRule<>(DebugAssert.class);

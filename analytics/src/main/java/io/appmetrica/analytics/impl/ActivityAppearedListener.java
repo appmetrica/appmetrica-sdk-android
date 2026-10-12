@@ -43,7 +43,7 @@ public class ActivityAppearedListener implements ActivityLifecycleListener {
     @Override
     @MainThread
     public void onEvent(@NonNull final Activity activity, @NonNull ActivityEvent event) {
-        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(new Runnable() {
             @Override
             @ApiProxyThread
             public void run() {

@@ -69,7 +69,7 @@ public class AppOpenWatcher implements ActivityLifecycleListener {
         if (deeplinkConsumerCopy == null) {
             savedCommands.add(command);
         } else {
-            ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
+            ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(new Runnable() {
                 @Override
                 public void run() {
                     command.consume(deeplinkConsumerCopy);

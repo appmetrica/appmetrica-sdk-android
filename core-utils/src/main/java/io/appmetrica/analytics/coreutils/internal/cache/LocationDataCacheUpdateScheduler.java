@@ -69,13 +69,13 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
     @Override
     public void scheduleUpdateIfNeededNow() {
         DebugLogger.INSTANCE.info(tag, "Schedule last known update now.");
-        mExecutor.execute(mUpdateIfNeededRunnable);
+        mExecutor.post(mUpdateIfNeededRunnable);
     }
 
     @Override
     public void onStateUpdated() {
         mExecutor.remove(mUpdateRunnable);
         DebugLogger.INSTANCE.info(tag, "Schedule update last known location by timer");
-        mExecutor.executeDelayed(mUpdateRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        mExecutor.postDelayed(mUpdateRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 }

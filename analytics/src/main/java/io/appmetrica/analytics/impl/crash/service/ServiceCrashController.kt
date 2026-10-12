@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.crash.service
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -42,7 +43,7 @@ internal class ServiceCrashController(
         reportsConsumer,
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
         JvmCrashFromCurrentSessionPredicate(),
-        executor,
+        QueuedExecutor(executor),
         "actual",
         FileCrashTimestampProvider()
     )
@@ -51,7 +52,7 @@ internal class ServiceCrashController(
         FileUtils.getCrashesDirectory(context)?.let { crashDirectory ->
             DebugLogger.info(tag, "Setup crash directory watcher. Directory: ${crashDirectory.path}")
             val crashDirectoryWatcher = CrashDirectoryWatcher(crashDirectory, crashesFromActualLaunchListener)
-            executor.execute(ReadOldCrashesRunnable(context, crashDirectory, crashesFromPreviousLaunchListener))
+            executor.post(ReadOldCrashesRunnable(context, crashDirectory, crashesFromPreviousLaunchListener))
             crashDirectoryWatcher.startWatching()
         }
         nativeCrashesService.initNativeCrashReporting(context, reportsConsumer)

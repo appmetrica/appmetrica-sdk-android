@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.crash.service
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -86,7 +87,7 @@ internal class ServiceCrashControllerTest : CommonTest() {
     @Test
     fun init() {
         serviceCrashController.init()
-        verify(executor).execute(readOldCrashesRunnable)
+        verify(executor).post(readOldCrashesRunnable)
         verify(crashDirectoryWatcher).startWatching()
         nativeCrashService.initNativeCrashReporting(context, reportConsumer)
     }
@@ -144,15 +145,24 @@ internal class ServiceCrashControllerTest : CommonTest() {
 
     @Test
     fun `constructor - check crashesFromActualLaunchListener`() {
-        Assertions.assertThat(crashFromFileConsumerMockedConstructionRule.argumentInterceptor.arguments[1])
+        val arguments = crashFromFileConsumerMockedConstructionRule.argumentInterceptor.arguments[1]
+        val queuedExecutor = arguments[4] as java.util.concurrent.Executor
+        val runnable = mock<Runnable>()
+
+        Assertions.assertThat(arguments)
             .containsExactly(
                 context,
                 reportConsumer,
                 InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
                 jvmCrashFromCurrentSessionPredicate,
-                executor,
+                queuedExecutor,
                 "actual",
                 fileCrashTimestampProviderRule.constructionMock.constructed()[1]
             )
+        Assertions.assertThat(queuedExecutor).isInstanceOf(QueuedExecutor::class.java)
+
+        queuedExecutor.execute(runnable)
+
+        verify(executor).post(runnable)
     }
 }

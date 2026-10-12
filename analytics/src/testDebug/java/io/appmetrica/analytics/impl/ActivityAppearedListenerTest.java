@@ -63,7 +63,7 @@ public class ActivityAppearedListenerTest extends CommonTest {
         activityAppearedListener.registerListener(secondListener);
         activityAppearedListener.onEvent(activity, ActivityEvent.CREATED);
         verifyNoInteractions(firstListener, secondListener);
-        verify(executor).execute(runnableCaptor.capture());
+        verify(executor).post(runnableCaptor.capture());
         runnableCaptor.getValue().run();
         verify(firstListener).onActivityAppeared(activity);
         verify(secondListener).onActivityAppeared(activity);

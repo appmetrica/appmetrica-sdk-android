@@ -254,7 +254,7 @@ internal class AppMetricaProxyTest : CommonTest() {
         val attributes = mutableMapOf<String, Any?>("k1" to "v1")
         proxy.reportEvent(name, attributes)
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         attributes["k1"] = "v2"
         runnableCaptor.firstValue.run()
         verify(mainReporter).reportEvent(eq(name), argThat<MutableMap<String, Any?>> { get("k1") == "v1" && size == 1 })

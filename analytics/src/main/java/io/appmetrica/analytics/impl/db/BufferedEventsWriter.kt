@@ -38,7 +38,7 @@ internal class BufferedEventsWriter(
                 val cleanupNeeded = writer.writeEvents(events)
                 if (cleanupNeeded) {
                     try {
-                        executor.execute { writer.deleteEmptyOverflowedSessions() }
+                        executor.post { writer.deleteEmptyOverflowedSessions() }
                     } catch (e: Throwable) {
                         DebugLogger.error(tag, e, "Unable to schedule empty sessions cleanup")
                     }

@@ -39,7 +39,7 @@ internal class GooglePlayReferrerLibraryTest : CommonTest() {
         on { build() } doReturn client
     }
     private val executor: ICommonExecutor = mock {
-        on { execute(any()) } doAnswer { (it.arguments[0] as Runnable).run() }
+        on { post(any()) } doAnswer { (it.arguments[0] as Runnable).run() }
     }
 
     @get:Rule
@@ -285,7 +285,7 @@ internal class GooglePlayReferrerLibraryTest : CommonTest() {
     fun `onInstallReferrerSetupFinished submits work to executor`() {
         val runnableCaptor = argumentCaptor<Runnable>()
         val nonExecutingExecutor: ICommonExecutor = mock {
-            on { execute(runnableCaptor.capture()) } doAnswer {}
+            on { post(runnableCaptor.capture()) } doAnswer {}
         }
         val nonExecutingLibrary = GooglePlayReferrerLibrary(nonExecutingExecutor)
 
@@ -295,7 +295,7 @@ internal class GooglePlayReferrerLibraryTest : CommonTest() {
         verify(client).startConnection(listenerCaptor.capture())
         listenerCaptor.firstValue.onInstallReferrerSetupFinished(InstallReferrerClient.InstallReferrerResponse.OK)
 
-        verify(nonExecutingExecutor).execute(any())
+        verify(nonExecutingExecutor).post(any())
         verify(listener, never()).onResult(any())
 
         // After running the submitted task, listener is called

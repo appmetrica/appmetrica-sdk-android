@@ -42,7 +42,7 @@ internal class NativeCrashHandlerImpl(
                 "Detected native crash with uuid = ${appMetricaNativeCrash.uuid}"
             )
             DebugLogger.info(tag, "Report native crash: $appMetricaNativeCrash")
-            executor.execute(
+            executor.post(
                 nativeCrashRunnableProvider.get(appMetricaNativeCrash) { markCrashCompleted(nativeCrash.uuid) }
             )
         } else {

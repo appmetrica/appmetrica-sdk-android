@@ -235,14 +235,14 @@ public class ReporterExtendedProxyTest extends CommonTest {
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(executor);
         mReporterExtendedProxy = createProxyWithMockedExecutor();
-        doNothing().when(executor).execute(any(Runnable.class));
+        doNothing().when(executor).post(any(Runnable.class));
         doReturn(true).when(mProvider).isActivated();
         final String name = "name";
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("k1", "v1");
         mReporterExtendedProxy.reportEvent(name, attributes);
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(executor).execute(runnableCaptor.capture());
+        verify(executor).post(runnableCaptor.capture());
         attributes.put("k1", "v2");
         runnableCaptor.getValue().run();
         verify(mReporter).reportEvent(eq(name), argThat(new ArgumentMatcher<Map<String, Object>>() {

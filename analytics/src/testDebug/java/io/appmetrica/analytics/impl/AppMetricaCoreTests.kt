@@ -87,7 +87,7 @@ internal class AppMetricaCoreTests : CommonTest() {
 
     @Test
     fun logSdkInfo() {
-        verify(defaultExecutor).execute(runnableCaptor.capture())
+        verify(defaultExecutor).post(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
         sdkUtilsMockedStaticRule.staticMock.verify {
             SdkUtils.logSdkInfo()

@@ -32,7 +32,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
 
     private val context: Context = mock()
     private val executor: ICommonExecutor = mock {
-        on { execute(any()) } doAnswer { invocationOnMock ->
+        on { post(any()) } doAnswer { invocationOnMock ->
             val runnable = invocationOnMock.arguments.first() as Runnable
             runnable.run()
         }
@@ -125,7 +125,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
     @Test
     fun init() {
         repeat(10) { advertisingIdGetter.init() }
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -263,7 +263,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
 
         verify(controller).updateStartupState(updatedStartupState)
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -274,7 +274,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.updateStateFromClientConfig(false)
 
         verify(controller).updateStateFromClientConfig(false)
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -286,7 +286,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         val updatedStartupState = StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build()).build()
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
 
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -306,7 +306,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
 
         verify(controller).updateStartupState(updatedStartupState)
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -409,7 +409,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
     @Test
     fun `init multiple times does not reinitialize`() {
         advertisingIdGetter.init()
-        verify(executor).execute(any())
+        verify(executor).post(any())
 
         clearInvocations(executor)
         repeat(5) {
@@ -444,7 +444,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.init()
         advertisingIdGetter.identifiers // Wait for blocking task to complete
 
-        verify(executor).executeDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
+        verify(executor).postDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
     }
 
     @Test
@@ -483,7 +483,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
         advertisingIdGetter.identifiers // Wait for refresh task
 
-        verify(executor).executeDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
+        verify(executor).postDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
     }
 
     @Test
@@ -491,7 +491,7 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.init()
         advertisingIdGetter.identifiers
 
-        verify(executor).executeDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
+        verify(executor).postDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
     }
 
     @Test
@@ -505,9 +505,9 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
 
         // Should execute the blocking task but not touch background task
-        verify(executor).execute(any())
+        verify(executor).post(any())
         verify(executor, never()).remove(any())
-        verify(executor, never()).executeDelayed(any(), any(), any())
+        verify(executor, never()).postDelayed(any(), any(), any())
     }
 
     @Test
@@ -527,6 +527,6 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         advertisingIdGetter.identifiers // Wait for refresh task
 
         verify(executor).remove(any())
-        verify(executor).executeDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
+        verify(executor).postDelayed(any(), eq(90L), eq(TimeUnit.SECONDS))
     }
 }

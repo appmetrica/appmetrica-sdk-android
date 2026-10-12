@@ -17,7 +17,7 @@ public class ConditionalExecutor<T> {
 
     @AnyThread
     public void addCommand(@NonNull final NonNullConsumer<T> command) {
-        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(new Runnable() {
             @Override
             public void run() {
                 synchronized (ConditionalExecutor.this) {

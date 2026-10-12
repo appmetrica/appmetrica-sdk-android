@@ -435,7 +435,7 @@ internal class LocationCoreTests : CommonTest() {
         locationCore.updateConfig(locationConfig)
 
         verifyNoMoreInteractions(locationStreamDispatcher)
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
 
         assertThat(runnableCaptor.allValues).hasSize(1)
         runnableCaptor.firstValue.run()

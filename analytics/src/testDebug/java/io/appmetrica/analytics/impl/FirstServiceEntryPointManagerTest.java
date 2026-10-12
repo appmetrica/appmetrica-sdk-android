@@ -162,8 +162,11 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
     private ModuleStatusReporter moduleStatusReporter() {
         assertThat(moduleStatusReporterMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(moduleStatusReporterMockedConstructionRule.getArgumentInterceptor().getArguments().get(0))
-            .containsExactly(
-                executor,
+            .first().isSameAs(
+                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor()
+            );
+        assertThat(moduleStatusReporterMockedConstructionRule.getArgumentInterceptor().getArguments().get(0))
+            .contains(
                 GlobalServiceLocator.getInstance().getServicePreferences(),
                 "service_modules",
                 timeProviderMockedConstructionRule.getConstructionMock().constructed().get(0)

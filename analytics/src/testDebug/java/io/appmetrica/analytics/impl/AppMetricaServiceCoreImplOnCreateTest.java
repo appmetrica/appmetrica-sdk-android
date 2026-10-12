@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
+import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
@@ -84,6 +85,9 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Rule
     public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
         new MockedConstructionRule<>(ServiceCrashController.class);
+    @Rule
+    public MockedConstructionRule<AppMetricaProxy> appMetricaProxyMockedConstructionRule =
+        new MockedConstructionRule<>(AppMetricaProxy.class);
 
     @Rule
     public ContextRule contextRule = new ContextRule();

@@ -23,7 +23,7 @@ internal class ModulesProxy {
         modulesBarrier.setAdvIdentifiersTracking(enabled)
         synchronousStageExecutor.setAdvIdentifiersTracking(enabled)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     getMainReporter().setAdvIdentifiersTracking(enabled, false)
@@ -36,7 +36,7 @@ internal class ModulesProxy {
         modulesBarrier.reportEvent(moduleEvent)
         synchronousStageExecutor.reportEvent(moduleEvent)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     getMainReporter().reportEvent(moduleEvent)
@@ -52,7 +52,7 @@ internal class ModulesProxy {
         modulesBarrier.setSessionExtra(key, value)
         synchronousStageExecutor.setSessionExtra(key, value)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     getMainReporter().setSessionExtra(key, value)
@@ -68,7 +68,7 @@ internal class ModulesProxy {
         modulesBarrier.reportExternalAttribution(source, value)
         synchronousStageExecutor.reportExternalAttribution(source, value)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     getMainReporter().reportExternalAttribution(ExternalAttributionFromModule(source, value))
@@ -105,7 +105,7 @@ internal class ModulesProxy {
         modulesBarrier.reportAdRevenue(adRevenue, autoCollected)
         synchronousStageExecutor.reportAdRevenue(adRevenue, autoCollected)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     getMainReporter().reportAdRevenue(adRevenue, autoCollected)
@@ -118,7 +118,7 @@ internal class ModulesProxy {
         modulesBarrier.subscribeForAutoCollectedData(context, apiKey)
         synchronousStageExecutor.subscribeForAutoCollectedData(context, apiKey)
 
-        executor.execute(
+        executor.post(
             object : SafeRunnable() {
                 override fun runSafety() {
                     ClientServiceLocator.getInstance().appMetricaFacadeProvider.addAutoCollectedDataSubscriber(apiKey)

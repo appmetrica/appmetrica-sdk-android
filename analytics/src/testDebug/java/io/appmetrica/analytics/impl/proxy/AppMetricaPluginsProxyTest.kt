@@ -79,7 +79,7 @@ internal class AppMetricaPluginsProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportUnhandledException(errorDetails)
         inOrder.verify(synchronousStageExecutor).reportPluginUnhandledException(errorDetails)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()
@@ -97,7 +97,7 @@ internal class AppMetricaPluginsProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportErrorWithFilledStacktrace(errorDetails, message)
         inOrder.verify(synchronousStageExecutor).reportPluginError(errorDetails, message)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()
@@ -126,7 +126,7 @@ internal class AppMetricaPluginsProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportError(identifier, message, errorDetails)
         inOrder.verify(synchronousStageExecutor).reportPluginError(identifier, message, errorDetails)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()

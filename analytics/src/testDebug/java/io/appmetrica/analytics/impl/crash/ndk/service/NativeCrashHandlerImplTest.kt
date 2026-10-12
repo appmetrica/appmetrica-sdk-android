@@ -99,7 +99,7 @@ internal class NativeCrashHandlerImplTest : CommonTest() {
     fun newCrash() {
         nativeCrashHandlerImpl.newCrash(nativeCrash)
         verify(logger).info(argThat { contains("Detected native crash with uuid = $uuid") })
-        verify(executor).execute(readAndReportRunnable)
+        verify(executor).post(readAndReportRunnable)
     }
 
     @Test

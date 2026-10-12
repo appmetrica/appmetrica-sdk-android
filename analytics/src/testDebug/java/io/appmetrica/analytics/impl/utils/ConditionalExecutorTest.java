@@ -59,7 +59,7 @@ public class ConditionalExecutorTest extends CommonTest {
                 data.pauseSession();
             }
         });
-        verify(executor, times(2)).execute(runnableCaptor.capture());
+        verify(executor, times(2)).post(runnableCaptor.capture());
         List<Runnable> addCommandRunnables = runnableCaptor.getAllValues();
         for (Runnable runnable : addCommandRunnables) {
             runnable.run();
@@ -81,7 +81,7 @@ public class ConditionalExecutorTest extends CommonTest {
                 data.enableAnrMonitoring();
             }
         });
-        verify(executor).execute(runnableCaptor.capture());
+        verify(executor).post(runnableCaptor.capture());
         List<Runnable> newAddCommandRunnables = runnableCaptor.getAllValues();
         assertThat(newAddCommandRunnables.size()).isEqualTo(1);
         newAddCommandRunnables.get(0).run();

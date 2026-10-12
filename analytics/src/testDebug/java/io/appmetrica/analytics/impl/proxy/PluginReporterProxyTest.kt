@@ -72,7 +72,7 @@ internal class PluginReporterProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportUnhandledException(error)
         inOrder.verify(synchronousStageExecutor).reportPluginUnhandledException(error)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()
@@ -90,7 +90,7 @@ internal class PluginReporterProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportErrorWithFilledStacktrace(error, message)
         inOrder.verify(synchronousStageExecutor).reportPluginError(error, message)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()
@@ -120,7 +120,7 @@ internal class PluginReporterProxyTest : CommonTest() {
         val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportError(id, message, error)
         inOrder.verify(synchronousStageExecutor).reportPluginError(id, message, error)
-        inOrder.verify(executor).execute(runnableCaptor.capture())
+        inOrder.verify(executor).post(runnableCaptor.capture())
         verifyNoInteractions(pluginReporter)
 
         runnableCaptor.firstValue.run()

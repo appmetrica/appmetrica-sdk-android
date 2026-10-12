@@ -42,7 +42,8 @@ object MockProvider {
         on { handler } doReturn mockedBlockingHandler
         on { looper } doReturn mockedLooper
         on { execute(any()) } doAnswer blockingRunnableAnswer
-        on { executeDelayed(any(), any()) } doAnswer blockingRunnableAnswer
+        on { post(any()) } doAnswer blockingRunnableAnswer
+        on { postDelayed(any(), any()) } doAnswer blockingRunnableAnswer
         on { submit(any<Callable<*>>()) } doAnswer callableAnswer
     }
 

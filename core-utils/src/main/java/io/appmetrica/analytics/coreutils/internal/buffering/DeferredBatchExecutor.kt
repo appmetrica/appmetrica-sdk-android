@@ -91,7 +91,7 @@ class DeferredBatchExecutor<T>(
      */
     fun flushAsync() {
         DebugLogger.info(tag, "flushAsync called")
-        executor.execute { flush() }
+        executor.post { flush() }
     }
 
     private fun cancelPendingTaskLocked() {
@@ -107,7 +107,7 @@ class DeferredBatchExecutor<T>(
         pendingTask = task
 
         DebugLogger.info(tag, "Scheduling processing task with delay=$delayMillis ms")
-        executor.executeDelayed(task, delayMillis)
+        executor.postDelayed(task, delayMillis)
     }
 
     /**

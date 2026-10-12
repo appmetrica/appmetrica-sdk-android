@@ -212,7 +212,7 @@ public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
     public void testDispatchCallToMetricaCoreImpl() throws Exception {
         mCommand.execute(mAppMetricaCoreExecutionDispatcher);
         verifyNoMoreInteractions(mAppMetricaServiceCore);
-        verify(mExecutor).execute(mRunnableCaptor.capture());
+        verify(mExecutor).post(mRunnableCaptor.capture());
         mRunnableCaptor.getValue().run();
         mVerifier.verify(verify(mAppMetricaServiceCore));
     }

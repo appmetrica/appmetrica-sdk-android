@@ -93,7 +93,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
 
     private void onInstanceCreated() {
         DebugLogger.INSTANCE.info(TAG, "onInstanceCreated");
-        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(new Runnable() {
             @Override
             public void run() {
                 DebugLogger.INSTANCE.info(TAG, "onInitializationFinished");

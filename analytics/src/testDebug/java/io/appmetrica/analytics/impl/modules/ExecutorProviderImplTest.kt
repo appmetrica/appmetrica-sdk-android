@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 internal class ExecutorProviderImplTest : CommonTest() {
@@ -47,6 +48,17 @@ internal class ExecutorProviderImplTest : CommonTest() {
     fun getUiExecutor() {
         assertThat(executorProviderImpl.getUiExecutor())
             .isEqualTo(GlobalServiceLocator.getInstance().serviceExecutorProvider.uiExecutor)
+    }
+
+    @Test
+    fun `getReportRunnableExecutor is stable and posts`() {
+        val reportRunnableExecutor = executorProviderImpl.getReportRunnableExecutor()
+
+        assertThat(executorProviderImpl.getReportRunnableExecutor()).isSameAs(reportRunnableExecutor)
+
+        reportRunnableExecutor.execute(runnable)
+
+        verify(GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor).post(runnable)
     }
 
     @Test

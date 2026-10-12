@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.utils.executors.NamedThreadFactory
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider
@@ -13,6 +14,10 @@ internal class ExecutorProviderImpl : ExecutorProvider {
     private val serviceExecutorProvider: ServiceExecutorProvider =
         GlobalServiceLocator.getInstance().serviceExecutorProvider
 
+    private val queuedReportExecutor: Executor by lazy {
+        QueuedExecutor(serviceExecutorProvider.reportRunnableExecutor)
+    }
+
     override fun getDefaultExecutor(): IHandlerExecutor = serviceExecutorProvider.defaultExecutor
 
     override fun getSupportIOExecutor(): IHandlerExecutor = serviceExecutorProvider.supportIOExecutor
@@ -21,7 +26,7 @@ internal class ExecutorProviderImpl : ExecutorProvider {
 
     override fun getUiExecutor(): Executor = serviceExecutorProvider.uiExecutor
 
-    override fun getReportRunnableExecutor(): Executor = serviceExecutorProvider.reportRunnableExecutor
+    override fun getReportRunnableExecutor(): Executor = queuedReportExecutor
 
     override fun getInterruptionThread(
         moduleIdentifier: String,

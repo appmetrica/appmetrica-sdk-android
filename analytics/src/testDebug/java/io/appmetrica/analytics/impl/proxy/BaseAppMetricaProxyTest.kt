@@ -50,8 +50,8 @@ internal class BaseAppMetricaProxyTest : CommonTest() {
         proxy.dispatchSafelyForTest { taskExecutionCount++ }
 
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(initialExecutor).execute(runnableCaptor.capture())
-        verify(replacementExecutor, never()).execute(any())
+        verify(initialExecutor).post(runnableCaptor.capture())
+        verify(replacementExecutor, never()).post(any())
         assertThat(runnableCaptor.firstValue).isInstanceOf(SafeRunnable::class.java)
         runnableCaptor.firstValue.run()
 
@@ -70,7 +70,7 @@ internal class BaseAppMetricaProxyTest : CommonTest() {
         proxy.dispatchSafelyForTest { throw error }
 
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         assertThat(runnableCaptor.firstValue).isInstanceOf(SafeRunnable::class.java)
         assertThatCode { runnableCaptor.firstValue.run() }.doesNotThrowAnyException()
         verify(reporter).reportError("Exception during asynchronous AppMetrica proxy task", error)
@@ -96,7 +96,7 @@ internal class BaseAppMetricaProxyTest : CommonTest() {
         }
 
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         val safeRunnable = runnableCaptor.firstValue as SafeRunnable
 
         assertThatThrownBy { safeRunnable.runSafety() }.isSameAs(taskError)

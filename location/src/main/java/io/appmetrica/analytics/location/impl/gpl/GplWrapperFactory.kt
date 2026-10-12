@@ -3,6 +3,7 @@ package io.appmetrica.analytics.location.impl.gpl
 import android.content.Context
 import android.location.LocationListener
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
 import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
@@ -20,7 +21,7 @@ internal class GplWrapperFactory {
                     context,
                     locationListener,
                     executor.looper,
-                    executor,
+                    QueuedExecutor(executor),
                     TimeUnit.SECONDS.toMillis(1)
                 )
             } catch (ex: Throwable) {

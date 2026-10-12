@@ -69,7 +69,7 @@ internal class AdvertisingIdGetter internal constructor(
                 scheduleBackgroundRefreshTask()
                 null
             }
-            executor.execute(blockingRefreshTask)
+            executor.post(blockingRefreshTask)
         }
     }
 
@@ -125,7 +125,7 @@ internal class AdvertisingIdGetter internal constructor(
         } else {
             DebugLogger.info(tag, "Advertising identifiers can track didn't changed. Ignore refresh identifiers")
         }
-        executor.execute(blockingRefreshTask)
+        executor.post(blockingRefreshTask)
         return blockingRefreshTask
     }
 
@@ -153,7 +153,7 @@ internal class AdvertisingIdGetter internal constructor(
     }
 
     private fun scheduleBackgroundRefreshTask() {
-        executor.executeDelayed(backgroundRefreshTask, backgroundRefreshIntervalSeconds, TimeUnit.SECONDS)
+        executor.postDelayed(backgroundRefreshTask, backgroundRefreshIntervalSeconds, TimeUnit.SECONDS)
     }
 
     private fun removeBackgroundRefreshTask() {

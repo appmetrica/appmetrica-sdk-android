@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
@@ -42,6 +43,7 @@ import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.utils.ActiveNetworkTypeProviderImpl;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
+import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
@@ -86,6 +88,27 @@ public class GlobalServiceLocatorTest extends CommonTest {
     private NetworkServiceLocator networkServiceLocator;
     @Mock
     private NetworkCore networkCore;
+    private final IHandlerExecutor defaultExecutor = mock(IHandlerExecutor.class);
+    private final IHandlerExecutor supportIoExecutor = mock(IHandlerExecutor.class);
+    private final IHandlerExecutor persistenceExecutor = mock(IHandlerExecutor.class);
+
+    @Rule
+    public final MockedConstructionRule<ServiceExecutorProvider> serviceExecutorProviderMockedConstructionRule =
+        new MockedConstructionRule<>(
+            ServiceExecutorProvider.class,
+            new MockedConstruction.MockInitializer<ServiceExecutorProvider>() {
+                @Override
+                public void prepare(
+                    ServiceExecutorProvider mock,
+                    MockedConstruction.Context context
+                ) throws Throwable {
+                    when(mock.getDefaultExecutor()).thenReturn(defaultExecutor);
+                    when(mock.getSupportIOExecutor()).thenReturn(supportIoExecutor);
+                    when(mock.getPersistenceExecutor()).thenReturn(persistenceExecutor);
+                }
+            }
+        );
+
     @Rule
     public final MockedStaticRule<DebugAssert> sDebugAssert = new MockedStaticRule<>(DebugAssert.class);
     @Rule

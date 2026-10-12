@@ -577,13 +577,13 @@ public class KeyValueTableDbHelperTest extends CommonTest {
             Runnable runnable = invocation.getArgument(0);
             runnable.run();
             return null;
-        }).when(syncExecutor).execute(any(Runnable.class));
+        }).when(syncExecutor).post(any(Runnable.class));
 
         doAnswer(invocation -> {
             Runnable runnable = invocation.getArgument(0);
             runnable.run();
             return null;
-        }).when(syncExecutor).executeDelayed(any(Runnable.class), anyLong());
+        }).when(syncExecutor).postDelayed(any(Runnable.class), anyLong());
 
         return new KeyValueTableDbHelper(
             Constants.PreferencesTable.TABLE_NAME,

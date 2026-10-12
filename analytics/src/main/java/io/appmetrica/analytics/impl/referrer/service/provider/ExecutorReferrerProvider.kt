@@ -10,13 +10,13 @@ internal class ExecutorReferrerProvider(
     override val referrerName: String get() = delegate.referrerName
 
     override fun requestReferrer(listener: ReferrerListener) {
-        executor.execute {
+        executor.post {
             val executorThread = Thread.currentThread()
             delegate.requestReferrer { result ->
                 if (Thread.currentThread() == executorThread) {
                     listener.onResult(result)
                 } else {
-                    executor.execute { listener.onResult(result) }
+                    executor.post { listener.onResult(result) }
                 }
             }
         }

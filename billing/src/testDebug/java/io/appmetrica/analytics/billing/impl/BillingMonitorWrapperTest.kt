@@ -30,6 +30,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -37,6 +38,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 internal class BillingMonitorWrapperTest : CommonTest() {
@@ -96,13 +98,14 @@ internal class BillingMonitorWrapperTest : CommonTest() {
     val billingInfoSenderImplRule = constructionRule<BillingInfoSenderImpl>()
 
     private val billingMonitor: BillingMonitor = mock()
+    private val workerRunnable: Runnable = mock()
 
     @get:Rule
     val billingMonitorProviderRule = constructionRule<BillingMonitorProvider> {
         on {
             get(
                 eq(context),
-                eq(defaultExecutor),
+                any(),
                 eq(uiExecutor),
                 eq(BillingType.LIBRARY_V8),
                 any(),
@@ -123,6 +126,17 @@ internal class BillingMonitorWrapperTest : CommonTest() {
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isNotEmpty()
+        val workerExecutorCaptor = argumentCaptor<Executor>()
+        verify(billingMonitorProviderRule.constructionMock.constructed().single()).get(
+            eq(context),
+            workerExecutorCaptor.capture(),
+            eq(uiExecutor),
+            eq(BillingType.LIBRARY_V8),
+            any(),
+            any()
+        )
+        workerExecutorCaptor.firstValue.execute(workerRunnable)
+        verify(defaultExecutor).post(workerRunnable)
         verify(billingMonitor).onBillingConfigChanged(BillingConfig(42, 4242))
         verify(applicationStateProvider).registerStickyObserver(any())
         verify(billingMonitor).onSessionResumed()

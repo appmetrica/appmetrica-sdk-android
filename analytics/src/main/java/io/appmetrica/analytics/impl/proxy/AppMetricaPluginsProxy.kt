@@ -20,7 +20,7 @@ internal class AppMetricaPluginsProxy {
         barrier.reportUnhandledException(errorDetails)
         // objects are non-null because otherwise validation would have failed
         synchronousStageExecutor.reportPluginUnhandledException(errorDetails!!)
-        executor.execute {
+        executor.post {
             getMainReporter().pluginExtension.reportUnhandledException(errorDetails)
         }
     }
@@ -32,7 +32,7 @@ internal class AppMetricaPluginsProxy {
         }
         // objects are non-null because otherwise validation would have failed
         synchronousStageExecutor.reportPluginError(errorDetails!!, message)
-        executor.execute {
+        executor.post {
             getMainReporter().pluginExtension.reportError(errorDetails, message)
         }
     }
@@ -41,7 +41,7 @@ internal class AppMetricaPluginsProxy {
         barrier.reportError(identifier, message, errorDetails)
         // objects are non-null because otherwise validation would have failed
         synchronousStageExecutor.reportPluginError(identifier!!, message, errorDetails)
-        executor.execute {
+        executor.post {
             getMainReporter().pluginExtension.reportError(identifier, message, errorDetails)
         }
     }

@@ -84,7 +84,7 @@ internal class AppStatusMonitorTest : CommonTest() {
                 )
             )
             verify(observer).onResume()
-            verify(executor).executeDelayed(any(), eq(sessionTimeout))
+            verify(executor).postDelayed(any(), eq(sessionTimeout))
             verify(observer).onPause()
             verifyNoMoreInteractions()
         }
@@ -148,6 +148,6 @@ internal class AppStatusMonitorTest : CommonTest() {
         Mockito.doAnswer { invocation: InvocationOnMock ->
             (invocation.getArgument<Any>(0) as Runnable).run()
             null
-        }.whenever(executor).executeDelayed(any(), eq(timeout))
+        }.whenever(executor).postDelayed(any(), eq(timeout))
     }
 }

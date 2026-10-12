@@ -46,7 +46,7 @@ public class ReportingTaskProcessorTest extends CommonTest {
         int dispatchPeriod = 100;
         doReturn(dispatchPeriod).when(requestConfig).getDispatchPeriod();
         reportingTaskProcessor.scheduleFlushTask();
-        verify(mCommonExecutor).executeDelayed(
+        verify(mCommonExecutor).postDelayed(
             reportingTaskProcessor.getFlushRunnable(),
             TimeUnit.SECONDS.toMillis(dispatchPeriod)
         );
@@ -61,6 +61,6 @@ public class ReportingTaskProcessorTest extends CommonTest {
     @Test
     public void scheduleFlushTaskNow() {
         reportingTaskProcessor.scheduleFlushTaskNow();
-        verify(mCommonExecutor).executeDelayed(reportingTaskProcessor.getFlushRunnable(), TimeUnit.SECONDS.toMillis(1));
+        verify(mCommonExecutor).postDelayed(reportingTaskProcessor.getFlushRunnable(), TimeUnit.SECONDS.toMillis(1));
     }
 }

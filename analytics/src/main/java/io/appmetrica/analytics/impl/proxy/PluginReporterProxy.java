@@ -38,7 +38,7 @@ public class PluginReporterProxy implements IPluginReporter {
     public void reportUnhandledException(@NonNull final PluginErrorDetails errorDetails) {
         barrier.reportUnhandledException(errorDetails);
         synchronousStageExecutor.reportPluginUnhandledException(errorDetails);
-        executor.execute(new Runnable() {
+        executor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportUnhandledException(errorDetails);
@@ -53,7 +53,7 @@ public class PluginReporterProxy implements IPluginReporter {
             return;
         }
         synchronousStageExecutor.reportPluginError(errorDetails, message);
-        executor.execute(new Runnable() {
+        executor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportError(errorDetails, message);
@@ -67,7 +67,7 @@ public class PluginReporterProxy implements IPluginReporter {
                             @Nullable final PluginErrorDetails errorDetails) {
         barrier.reportError(identifier, message, errorDetails);
         synchronousStageExecutor.reportPluginError(identifier, message, errorDetails);
-        executor.execute(new Runnable() {
+        executor.post(new Runnable() {
             @Override
             public void run() {
                 getReporter().reportError(identifier, message, errorDetails);

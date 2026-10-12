@@ -26,7 +26,7 @@ public class AppMetricaSelfReportFacade {
             "onInitializationFinished. Schedule self reporter initialization in %s seconds",
             SELF_REPORTER_INITIALIZATION_DELAY_SECONDS
         );
-        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().executeDelayed(
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().postDelayed(
             new Runnable() {
                 @Override
                 public void run() {
@@ -42,7 +42,7 @@ public class AppMetricaSelfReportFacade {
             TAG,
             "onFullyInitializationFinished. Schedule Self reporter initialization immediately"
         );
-        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(
             new Runnable() {
                 @Override
                 public void run() {

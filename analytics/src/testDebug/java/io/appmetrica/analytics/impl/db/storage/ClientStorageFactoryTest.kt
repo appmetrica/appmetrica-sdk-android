@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.db.TablesManager
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector
 import io.appmetrica.analytics.impl.db.constants.Constants
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
@@ -31,6 +32,9 @@ internal class ClientStorageFactoryTest : CommonTest() {
     private val databaseStoragePathProvider: DatabaseStoragePathProvider = mock {
         on { getPath(eq(context), any()) } doReturn databaseStoragePath
     }
+
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     @get:Rule
     val dataStoragePathProviderFactoryRule = constructionRule<DatabaseStoragePathProviderFactory> {

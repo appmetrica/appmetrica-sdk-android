@@ -42,7 +42,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
                 );
             } else {
                 DebugLogger.INSTANCE.info(TAG, "Already has been activated. Execute now.");
-                executor.execute(new Runnable() {
+                executor.post(new Runnable() {
                     @Override
                     public void run() {
                         activationCallback.onWaitFinished();
@@ -78,7 +78,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
                           @NonNull ICommonExecutor executor,
                           @NonNull final ActivationBarrierCallback callback) {
         final long timeToWait = Math.max(delta - (mTimeProvider.currentTimeMillis() - mStartTime), 0);
-        executor.executeDelayed(new Runnable() {
+        executor.postDelayed(new Runnable() {
             @Override
             public void run() {
                 DebugLogger.INSTANCE.info(TAG, "Activation finished");

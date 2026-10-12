@@ -50,7 +50,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).executeDelayed(any(), eq(delayMillis))
+        verify(executor).postDelayed(any(), eq(delayMillis))
     }
 
     @Test
@@ -64,7 +64,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event3, isUrgent = false)
 
         // Should only schedule once
-        verify(executor, times(1)).executeDelayed(any(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(any(), eq(delayMillis))
         // Should never remove tasks
         verify(executor, never()).remove(any())
     }
@@ -79,7 +79,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event2, isUrgent = false)
         bufferedWriter.addEvent(event3, isUrgent = false)
 
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
         runnableCaptor.firstValue.run()
 
         verify(writer).writeEvents(eventsCaptor.capture())
@@ -92,7 +92,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
         runnableCaptor.firstValue.run()
 
         verify(writer).writeEvents(any())
@@ -106,7 +106,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event, isUrgent = true)
 
         // Should not schedule delayed task
-        verify(executor, never()).executeDelayed(any(), any())
+        verify(executor, never()).postDelayed(any(), any())
 
         // Should write immediately
         verify(writer).writeEvents(any())
@@ -119,7 +119,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val urgentEvent = ContentValues()
 
         bufferedWriter.addEvent(event1, isUrgent = false)
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
 
         bufferedWriter.addEvent(urgentEvent, isUrgent = true)
 
@@ -149,7 +149,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         inOrder(writer, executor) {
             verify(writer).writeEvents(any())
-            verify(executor).execute(cleanupRunnableCaptor.capture())
+            verify(executor).post(cleanupRunnableCaptor.capture())
             verify(writer).notifyListeners(any())
         }
         verify(writer, never()).deleteEmptyOverflowedSessions()
@@ -164,10 +164,10 @@ internal class BufferedEventsWriterTest : CommonTest() {
         whenever(writer.writeEvents(any())).thenReturn(true)
         bufferedWriter.addEvent(ContentValues(), isUrgent = false)
 
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
         runnableCaptor.firstValue.run()
 
-        verify(executor).execute(cleanupRunnableCaptor.capture())
+        verify(executor).post(cleanupRunnableCaptor.capture())
         verify(writer, never()).deleteEmptyOverflowedSessions()
 
         cleanupRunnableCaptor.firstValue.run()
@@ -178,7 +178,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
     @Test
     fun `cleanup scheduling failure does not skip listener notification`() {
         whenever(writer.writeEvents(any())).thenReturn(true)
-        doThrow(RuntimeException("executor is stopped")).whenever(executor).execute(any())
+        doThrow(RuntimeException("executor is stopped")).whenever(executor).post(any())
 
         bufferedWriter.addEvent(ContentValues(), isUrgent = true)
 
@@ -205,7 +205,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
 
         bufferedWriter.addEvent(event, isUrgent = false)
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
 
         bufferedWriter.flush()
 
@@ -235,7 +235,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
     fun `flushAsync schedules flush on executor`() {
         bufferedWriter.flushAsync()
 
-        verify(executor).execute(any())
+        verify(executor).post(any())
     }
 
     @Test
@@ -245,7 +245,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event, isUrgent = false)
         bufferedWriter.flushAsync()
 
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
 
         verify(writer).writeEvents(any())
@@ -259,7 +259,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
         runnableCaptor.firstValue.run()
 
         // Should not throw exception
@@ -275,7 +275,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
         runnableCaptor.firstValue.run()
 
         // Should not throw exception
@@ -315,7 +315,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
 
         bufferedWriter.addEvent(event, isUrgent = false)
-        verify(executor).executeDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
 
         // Flush before scheduled task runs
         bufferedWriter.flush()
@@ -337,7 +337,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event2, isUrgent = false)
 
         // Should schedule again
-        verify(executor, times(2)).executeDelayed(any(), eq(delayMillis))
+        verify(executor, times(2)).postDelayed(any(), eq(delayMillis))
     }
 
     @Test
@@ -352,6 +352,6 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         customBufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).executeDelayed(any(), eq(customDelay))
+        verify(executor).postDelayed(any(), eq(customDelay))
     }
 }

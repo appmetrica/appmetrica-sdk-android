@@ -27,7 +27,7 @@ internal class AppMetricaCore(
 
     init {
         BaseReleaseLogger.init(context)
-        defaultExecutor.execute { SdkUtils.logSdkInfo() }
+        defaultExecutor.post { SdkUtils.logSdkInfo() }
         clientTimeTracker.trackCoreCreation()
         ClientComponentsInitializerProvider()
             .getClientComponentsInitializer()

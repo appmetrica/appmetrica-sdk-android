@@ -68,7 +68,7 @@ internal class AppMetricaLibraryAdapterProxy {
     ) {
         if (barrier.reportEvent(sender, event, payload)) {
             synchronousStageExecutor.reportEvent(sender, event, payload)
-            ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor.execute {
+            ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor.post {
                 ModulesFacade.reportEvent(libraryEventConstructor.constructEvent(sender, event, payload))
             }
         } else {

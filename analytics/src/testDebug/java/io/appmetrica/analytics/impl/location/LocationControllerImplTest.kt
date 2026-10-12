@@ -153,7 +153,7 @@ internal class LocationControllerImplTest : CommonTest() {
     }
 
     private fun touchLocationExecutorRunnable() {
-        verify(executor).execute(runnableCaptor.capture())
+        verify(executor).post(runnableCaptor.capture())
         runnableCaptor.lastValue.run()
         clearInvocations(executor)
     }

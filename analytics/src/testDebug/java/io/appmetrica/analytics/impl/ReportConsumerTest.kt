@@ -61,7 +61,7 @@ internal class ReportConsumerTest : CommonTest() {
     @Test
     fun `consumeReport if non undefined type`() {
         reportConsumer.consumeReport(serviceEvent, extras)
-        verify(reportExecutor).execute(reportRunnableMockedConstructionRule.constructionMock.constructed().first())
+        verify(reportExecutor).post(reportRunnableMockedConstructionRule.constructionMock.constructed().first())
         assertThat(reportRunnableMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(reportRunnableMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, serviceEvent, extras, clientRepository)

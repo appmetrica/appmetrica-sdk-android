@@ -104,7 +104,7 @@ public class AppMetricaConnector {
             executor.remove(mUnbindRunnable);
             if (mShouldNeverDisconnect == false) {
                 DebugLogger.INSTANCE.info(TAG, "plan unbind runnable in %d", SERVICE_UNBIND_DELAY_MILLIS);
-                executor.executeDelayed(mUnbindRunnable, SERVICE_UNBIND_DELAY_MILLIS);
+                executor.postDelayed(mUnbindRunnable, SERVICE_UNBIND_DELAY_MILLIS);
             }
         }
     }

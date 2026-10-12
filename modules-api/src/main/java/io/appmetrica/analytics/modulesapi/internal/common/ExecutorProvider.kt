@@ -10,6 +10,7 @@ import java.util.concurrent.Executor
 interface ExecutorProvider {
     /**
      * Returns default shared executor for simple short-term background tasks.
+     * Use [IHandlerExecutor.post] to preserve queued execution.
      * For I/O operations use executor from [getSupportIOExecutor].
      * @return The single [IHandlerExecutor] instance.
      * @see getSupportIOExecutor
@@ -19,6 +20,7 @@ interface ExecutorProvider {
 
     /**
      * Returns shared I/O executor for different I/O operations like network and file system requests.
+     * Use [IHandlerExecutor.post] to preserve queued execution.
      * For simple short-term background operations use [getDefaultExecutor].
      * @return The single [IHandlerExecutor] instance.
      * @see getDefaultExecutor
@@ -26,6 +28,10 @@ interface ExecutorProvider {
      */
     fun getSupportIOExecutor(): IHandlerExecutor
 
+    /**
+     * Returns the dedicated module executor. Use [IHandlerExecutor.post] when task ordering
+     * requires a queue.
+     */
     val moduleExecutor: IHandlerExecutor
 
     /**
@@ -52,5 +58,8 @@ interface ExecutorProvider {
         runnable: Runnable
     ): InterruptionSafeThread
 
+    /**
+     * Returns an executor that always queues commands on the report runnable executor.
+     */
     fun getReportRunnableExecutor(): Executor
 }
