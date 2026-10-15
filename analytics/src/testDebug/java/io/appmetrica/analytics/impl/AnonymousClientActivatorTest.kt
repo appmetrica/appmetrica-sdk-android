@@ -121,7 +121,7 @@ internal class AnonymousClientActivatorTest : CommonTest() {
     fun activateDelayed() {
         whenever(provider.isActivated).thenReturn(false)
         anonymousClientActivator.activateDelayed(context)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(TimeUnit.SECONDS.toMillis(10)))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(10_000L), eq(TimeUnit.MILLISECONDS))
         verify(provider, never()).markActivated()
         runnableCaptor.firstValue.run()
         verify(provider).markActivated()

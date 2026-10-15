@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarr
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import java.util.concurrent.TimeUnit;
 
 public class WaitForActivationDelayBarrier implements ActivationBarrier {
 
@@ -84,7 +85,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
                 DebugLogger.INSTANCE.info(TAG, "Activation finished");
                 callback.onWaitFinished();
             }
-        }, timeToWait);
+        }, timeToWait, TimeUnit.MILLISECONDS);
     }
 
 }

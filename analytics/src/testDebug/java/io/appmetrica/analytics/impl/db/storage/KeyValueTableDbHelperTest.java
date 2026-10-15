@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -583,7 +584,7 @@ public class KeyValueTableDbHelperTest extends CommonTest {
             Runnable runnable = invocation.getArgument(0);
             runnable.run();
             return null;
-        }).when(syncExecutor).postDelayed(any(Runnable.class), anyLong());
+        }).when(syncExecutor).postDelayed(any(Runnable.class), anyLong(), eq(TimeUnit.MILLISECONDS));
 
         return new KeyValueTableDbHelper(
             Constants.PreferencesTable.TABLE_NAME,

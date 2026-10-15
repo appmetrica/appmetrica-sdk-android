@@ -33,7 +33,8 @@ public class AppMetricaSelfReportFacade {
                     SelfReportFacadeProvider.getReporterWrapper().onInitializationFinished(context);
                 }
             },
-            TimeUnit.SECONDS.toMillis(SELF_REPORTER_INITIALIZATION_DELAY_SECONDS)
+            SELF_REPORTER_INITIALIZATION_DELAY_SECONDS,
+            TimeUnit.SECONDS
         );
     }
 

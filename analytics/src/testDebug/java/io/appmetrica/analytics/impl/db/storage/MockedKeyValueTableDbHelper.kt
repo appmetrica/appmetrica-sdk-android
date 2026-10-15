@@ -4,11 +4,13 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.doAnswer
 import org.mockito.Mockito.mock
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.whenever
 import org.mockito.stubbing.Answer
+import java.util.concurrent.TimeUnit
 
 internal open class MockedKeyValueTableDbHelper @JvmOverloads constructor(
     dbStorage: DatabaseStorage? = null,
@@ -28,7 +30,9 @@ internal open class MockedKeyValueTableDbHelper @JvmOverloads constructor(
                 runnable.run()
                 null
             }
-        ).whenever(mockExecutor).postDelayed(any(Runnable::class.java), any(Long::class.java))
+        ).whenever(mockExecutor).postDelayed(
+            any(Runnable::class.java), any(Long::class.java), eq(TimeUnit.MILLISECONDS)
+        )
     }
 ) : KeyValueTableDbHelper(
     tableName = "test_table",

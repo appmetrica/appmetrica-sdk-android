@@ -15,6 +15,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 class DeferredBatchExecutorTest : CommonTest() {
 
@@ -43,7 +44,7 @@ class DeferredBatchExecutorTest : CommonTest() {
     fun `submit schedules delayed task when buffer is empty`() {
         deferredExecutor.submit("task1")
 
-        verify(executor).postDelayed(any(), eq(delayMillis))
+        verify(executor).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -60,7 +61,7 @@ class DeferredBatchExecutorTest : CommonTest() {
         deferredExecutor.submit("task3")
 
         // Should only schedule once
-        verify(executor, times(1)).postDelayed(any(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         // Should never remove tasks
         verify(executor, never()).remove(any())
     }
@@ -71,7 +72,7 @@ class DeferredBatchExecutorTest : CommonTest() {
         deferredExecutor.submit("task2")
         deferredExecutor.submit("task3")
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         val tasksCaptor = argumentCaptor<List<String>>()
@@ -83,7 +84,7 @@ class DeferredBatchExecutorTest : CommonTest() {
     fun `scheduled task clears buffer after processing`() {
         deferredExecutor.submit("task1")
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(buffer.isEmpty()).isTrue()
@@ -94,7 +95,7 @@ class DeferredBatchExecutorTest : CommonTest() {
         deferredExecutor.submit("urgent_task", urgent = true)
 
         // Should not schedule delayed task
-        verify(executor, never()).postDelayed(any(), any())
+        verify(executor, never()).postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS))
 
         // Should process immediately
         val tasksCaptor = argumentCaptor<List<String>>()
@@ -105,7 +106,7 @@ class DeferredBatchExecutorTest : CommonTest() {
     @Test
     fun `submit with urgent=true cancels pending task`() {
         deferredExecutor.submit("task1")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         deferredExecutor.submit("urgent_task", urgent = true)
 
@@ -138,7 +139,7 @@ class DeferredBatchExecutorTest : CommonTest() {
     @Test
     fun `flush cancels pending scheduled task`() {
         deferredExecutor.submit("task1")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         deferredExecutor.flush()
 
@@ -185,7 +186,7 @@ class DeferredBatchExecutorTest : CommonTest() {
         whenever(processor.processBatch(any())).thenThrow(RuntimeException("Test exception"))
 
         deferredExecutor.submit("task1")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         // Should not throw exception
@@ -214,7 +215,7 @@ class DeferredBatchExecutorTest : CommonTest() {
     @Test
     fun `scheduled task does nothing when buffer is empty`() {
         deferredExecutor.submit("task1")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         // Flush before scheduled task runs
         deferredExecutor.flush()
@@ -234,7 +235,7 @@ class DeferredBatchExecutorTest : CommonTest() {
         deferredExecutor.submit("task2")
 
         // Should schedule again
-        verify(executor, times(2)).postDelayed(any(), eq(delayMillis))
+        verify(executor, times(2)).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -250,16 +251,17 @@ class DeferredBatchExecutorTest : CommonTest() {
 
     @Test
     fun `custom delay is used when specified`() {
-        val customDelay = 5000L
-        val customExecutor = DeferredBatchExecutor(
-            executor = executor,
-            buffer = buffer,
-            processor = processor,
-            delayMillis = customDelay
-        )
+        for (customDelay in listOf(5000L, Long.MIN_VALUE, Long.MAX_VALUE)) {
+            val customExecutor = DeferredBatchExecutor(
+                executor = executor,
+                buffer = buffer,
+                processor = processor,
+                delayMillis = customDelay
+            )
 
-        customExecutor.submit("task1")
+            customExecutor.submit("task1")
 
-        verify(executor).postDelayed(any(), eq(customDelay))
+            verify(executor).postDelayed(any(), eq(customDelay), eq(TimeUnit.MILLISECONDS))
+        }
     }
 }

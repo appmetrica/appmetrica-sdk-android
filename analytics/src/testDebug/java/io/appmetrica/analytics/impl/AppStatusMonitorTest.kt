@@ -15,6 +15,7 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 internal class AppStatusMonitorTest : CommonTest() {
 
@@ -84,7 +85,7 @@ internal class AppStatusMonitorTest : CommonTest() {
                 )
             )
             verify(observer).onResume()
-            verify(executor).postDelayed(any(), eq(sessionTimeout))
+            verify(executor).postDelayed(any(), eq(sessionTimeout), eq(TimeUnit.MILLISECONDS))
             verify(observer).onPause()
             verifyNoMoreInteractions()
         }
@@ -148,6 +149,6 @@ internal class AppStatusMonitorTest : CommonTest() {
         Mockito.doAnswer { invocation: InvocationOnMock ->
             (invocation.getArgument<Any>(0) as Runnable).run()
             null
-        }.whenever(executor).postDelayed(any(), eq(timeout))
+        }.whenever(executor).postDelayed(any(), eq(timeout), eq(TimeUnit.MILLISECONDS))
     }
 }

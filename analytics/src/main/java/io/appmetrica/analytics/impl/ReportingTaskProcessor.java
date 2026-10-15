@@ -32,7 +32,7 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
 
     @Override
     public void scheduleFlushTaskNow() {
-        commonTaskExecutor.postDelayed(mFlushRunnable, TimeUnit.SECONDS.toMillis(1));
+        commonTaskExecutor.postDelayed(mFlushRunnable, 1, TimeUnit.SECONDS);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
             final long dispatchTime = TimeUnit.SECONDS.toMillis(
                 getComponent().getFreshReportRequestConfig().getDispatchPeriod()
             );
-            commonTaskExecutor.postDelayed(mFlushRunnable, dispatchTime);
+            commonTaskExecutor.postDelayed(mFlushRunnable, dispatchTime, TimeUnit.MILLISECONDS);
         }
     }
 

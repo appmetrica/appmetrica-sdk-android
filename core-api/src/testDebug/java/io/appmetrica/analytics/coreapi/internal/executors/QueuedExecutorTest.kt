@@ -30,8 +30,6 @@ class QueuedExecutorTest : CommonTest() {
 
         override fun <T> submit(task: Callable<T>): Future<T> = error("Unexpected submit")
 
-        override fun postDelayed(runnable: Runnable, delay: Long) = error("Unexpected postDelayed")
-
         override fun postDelayed(runnable: Runnable, delay: Long, timeUnit: TimeUnit) =
             error("Unexpected postDelayed")
 

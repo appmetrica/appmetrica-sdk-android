@@ -17,6 +17,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 internal class BufferedTempCacheWriterTest : CommonTest() {
 
@@ -42,7 +43,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
             (invocation.arguments[0] as Runnable).run()
             null
         }
-        on { postDelayed(any(), any()) } doAnswer { invocation ->
+        on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer { invocation ->
             (invocation.arguments[0] as Runnable).run()
             null
         }
@@ -75,7 +76,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { postDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer { invocation ->
                 null
             }
         }
@@ -86,7 +87,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(scope, timestamp, data)
         testWriter.put(secondScope, secondTimestamp, secondData)
 
-        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L), eq(TimeUnit.MILLISECONDS))
         delayedRunnableCaptor.firstValue.run()
 
         verify(batchWriter).invoke(batchWriterCaptor.capture())
@@ -106,7 +107,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { postDelayed(any(), any()) } doAnswer {
+            on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer {
                 null
             }
         }
@@ -132,7 +133,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { postDelayed(any(), any()) } doAnswer {
+            on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer {
                 null
             }
         }
@@ -172,7 +173,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
 
         writer.put(scope, timestamp, data)
 
-        verify(executor).postDelayed(any(), eq(customDelay))
+        verify(executor).postDelayed(any(), eq(customDelay), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -209,7 +210,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { postDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer { invocation ->
                 null
             }
         }
@@ -225,7 +226,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(secondScope, secondTimestamp, secondData)
         testWriter.put(thirdScope, thirdTimestamp, thirdData)
 
-        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L), eq(TimeUnit.MILLISECONDS))
 
         delayedRunnableCaptor.firstValue.run()
 
@@ -265,7 +266,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
                 (invocation.arguments[0] as Runnable).run()
                 null
             }
-            on { postDelayed(any(), any()) } doAnswer { invocation ->
+            on { postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS)) } doAnswer { invocation ->
                 null
             }
         }
@@ -276,7 +277,7 @@ internal class BufferedTempCacheWriterTest : CommonTest() {
         testWriter.put(scope, timestamp, data)
         testWriter.put(secondScope, secondTimestamp, secondData)
 
-        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L))
+        verify(accumulatingExecutor).postDelayed(delayedRunnableCaptor.capture(), eq(1000L), eq(TimeUnit.MILLISECONDS))
 
         delayedRunnableCaptor.firstValue.run()
 

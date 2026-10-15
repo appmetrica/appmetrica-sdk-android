@@ -2,6 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.buffering
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import java.util.concurrent.TimeUnit
 
 /**
  * Executes tasks in batches with deferred execution.
@@ -107,7 +108,7 @@ class DeferredBatchExecutor<T>(
         pendingTask = task
 
         DebugLogger.info(tag, "Scheduling processing task with delay=$delayMillis ms")
-        executor.postDelayed(task, delayMillis)
+        executor.postDelayed(task, delayMillis, TimeUnit.MILLISECONDS)
     }
 
     /**

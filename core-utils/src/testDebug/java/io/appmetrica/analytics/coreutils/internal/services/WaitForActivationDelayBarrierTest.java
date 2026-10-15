@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,9 +87,9 @@ public class WaitForActivationDelayBarrierTest extends CommonTest {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
-        }).when(mExecutor).postDelayed(any(Runnable.class), anyLong());
+        }).when(mExecutor).postDelayed(any(Runnable.class), anyLong(), eq(TimeUnit.MILLISECONDS));
         mActivationBarrier.subscribe(mRequestedWaiting, mExecutor, mCallback);
-        verify(mExecutor).postDelayed(any(Runnable.class), eq(mExpectedDelay));
+        verify(mExecutor).postDelayed(any(Runnable.class), eq(mExpectedDelay), eq(TimeUnit.MILLISECONDS));
         verify(mCallback).onWaitFinished();
     }
 

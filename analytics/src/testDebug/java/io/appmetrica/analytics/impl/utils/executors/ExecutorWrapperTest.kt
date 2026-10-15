@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @SuppressLint("RobolectricUsage") // Real HandlerThread verifies queue ordering and cancellation.
 @RunWith(RobolectricTestRunner::class)
@@ -83,7 +84,7 @@ internal class ExecutorWrapperTest : CommonTest() {
 
     @Test
     fun `postDelayed preserves delay conversion`() {
-        executorWrapper.postDelayed(runnable, DELAY)
+        executorWrapper.postDelayed(runnable, DELAY.milliseconds)
         executorWrapper.postDelayed(runnable, DELAY, TimeUnit.SECONDS)
 
         val delayCaptor = argumentCaptor<Long>()

@@ -18,6 +18,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 internal class BufferedEventsWriterTest : CommonTest() {
 
@@ -50,7 +51,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).postDelayed(any(), eq(delayMillis))
+        verify(executor).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -64,7 +65,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event3, isUrgent = false)
 
         // Should only schedule once
-        verify(executor, times(1)).postDelayed(any(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         // Should never remove tasks
         verify(executor, never()).remove(any())
     }
@@ -79,7 +80,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event2, isUrgent = false)
         bufferedWriter.addEvent(event3, isUrgent = false)
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         verify(writer).writeEvents(eventsCaptor.capture())
@@ -92,7 +93,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
 
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         verify(writer).writeEvents(any())
@@ -106,7 +107,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event, isUrgent = true)
 
         // Should not schedule delayed task
-        verify(executor, never()).postDelayed(any(), any())
+        verify(executor, never()).postDelayed(any(), any(), eq(TimeUnit.MILLISECONDS))
 
         // Should write immediately
         verify(writer).writeEvents(any())
@@ -119,7 +120,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val urgentEvent = ContentValues()
 
         bufferedWriter.addEvent(event1, isUrgent = false)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         bufferedWriter.addEvent(urgentEvent, isUrgent = true)
 
@@ -164,7 +165,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         whenever(writer.writeEvents(any())).thenReturn(true)
         bufferedWriter.addEvent(ContentValues(), isUrgent = false)
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         verify(executor).post(cleanupRunnableCaptor.capture())
@@ -205,7 +206,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
 
         bufferedWriter.addEvent(event, isUrgent = false)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         bufferedWriter.flush()
 
@@ -259,7 +260,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         // Should not throw exception
@@ -275,7 +276,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         bufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         // Should not throw exception
@@ -315,7 +316,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
 
         bufferedWriter.addEvent(event, isUrgent = false)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         // Flush before scheduled task runs
         bufferedWriter.flush()
@@ -337,7 +338,7 @@ internal class BufferedEventsWriterTest : CommonTest() {
         bufferedWriter.addEvent(event2, isUrgent = false)
 
         // Should schedule again
-        verify(executor, times(2)).postDelayed(any(), eq(delayMillis))
+        verify(executor, times(2)).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
@@ -352,6 +353,6 @@ internal class BufferedEventsWriterTest : CommonTest() {
         val event = ContentValues()
         customBufferedWriter.addEvent(event, isUrgent = false)
 
-        verify(executor).postDelayed(any(), eq(customDelay))
+        verify(executor).postDelayed(any(), eq(customDelay), eq(TimeUnit.MILLISECONDS))
     }
 }

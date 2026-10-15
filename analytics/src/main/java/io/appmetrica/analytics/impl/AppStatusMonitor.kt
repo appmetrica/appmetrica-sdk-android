@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import java.util.concurrent.TimeUnit
 
 internal class AppStatusMonitor {
 
@@ -80,7 +81,7 @@ internal class AppStatusMonitor {
             if (!paused) {
                 paused = true
                 DebugLogger.info(tag, "Schedule pause runnable with %s seconds delay", timeout)
-                executor.postDelayed(pauseRunnable, timeout)
+                executor.postDelayed(pauseRunnable, timeout, TimeUnit.MILLISECONDS)
             }
         }
     }

@@ -25,6 +25,7 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 internal class AppMetricaSelfReportFacadeTest : CommonTest() {
     private val selfReporterWrapper: SelfReporterWrapper = mock()
@@ -71,7 +72,7 @@ internal class AppMetricaSelfReportFacadeTest : CommonTest() {
     @Test
     fun onInitializationFinished() {
         AppMetricaSelfReportFacade.onInitializationFinished(context)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(5000L))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(5L), eq(TimeUnit.SECONDS))
         runnableCaptor.firstValue.run()
         verify(selfReporterWrapper).onInitializationFinished(context)
     }

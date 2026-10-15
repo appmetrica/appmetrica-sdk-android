@@ -35,10 +35,6 @@ internal open class ExecutorWrapper @VisibleForTesting constructor(
         return futureTask
     }
 
-    open override fun postDelayed(runnable: Runnable, delay: Long) {
-        postDelayed(runnable, delay, TimeUnit.MILLISECONDS)
-    }
-
     open override fun postDelayed(runnable: Runnable, delay: Long, timeUnit: TimeUnit) {
         handler.postDelayed(runnable, timeUnit.toMillis(delay))
     }

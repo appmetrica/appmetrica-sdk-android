@@ -16,6 +16,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class BufferedFileWriterTest : CommonTest() {
 
@@ -46,19 +47,19 @@ class BufferedFileWriterTest : CommonTest() {
     fun `writeString schedules delayed task`() {
         bufferedWriter.writeString("test value")
 
-        verify(executor).postDelayed(any(), eq(delayMillis))
+        verify(executor).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
     }
 
     @Test
     fun `writeString does not cancel or reschedule task when called multiple times`() {
         bufferedWriter.writeString("value 1")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         bufferedWriter.writeString("value 2")
         bufferedWriter.writeString("value 3")
 
         // Should only schedule once
-        verify(executor, times(1)).postDelayed(any(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(any(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         // Should never remove tasks
         verify(executor, never()).remove(any())
     }
@@ -92,7 +93,7 @@ class BufferedFileWriterTest : CommonTest() {
     fun `writeString task writes to file when executed`() {
         bufferedWriter.writeString("test content")
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(testFile.exists()).isTrue()
@@ -105,7 +106,7 @@ class BufferedFileWriterTest : CommonTest() {
         val nestedWriter = BufferedFileWriter(executor, delayMillis, nestedFile)
 
         nestedWriter.writeString("content")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(nestedFile.exists()).isTrue()
@@ -125,7 +126,7 @@ class BufferedFileWriterTest : CommonTest() {
     @Test
     fun `flush cancels pending task`() {
         bufferedWriter.writeString("value")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         val task = runnableCaptor.firstValue
 
         bufferedWriter.flush()
@@ -171,7 +172,7 @@ class BufferedFileWriterTest : CommonTest() {
         bufferedWriter.writeString("value 3")
 
         // Only one task should be scheduled
-        verify(executor, times(1)).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         val task = runnableCaptor.firstValue
         task.run()
 
@@ -182,7 +183,7 @@ class BufferedFileWriterTest : CommonTest() {
     fun `writeString handles empty string`() {
         bufferedWriter.writeString("")
 
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(testFile.exists()).isTrue()
@@ -194,7 +195,7 @@ class BufferedFileWriterTest : CommonTest() {
         val largeString = "x".repeat(10000)
 
         bufferedWriter.writeString(largeString)
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(testFile.readText()).isEqualTo(largeString)
@@ -214,7 +215,7 @@ class BufferedFileWriterTest : CommonTest() {
     @Test
     fun `flush after task execution does nothing`() {
         bufferedWriter.writeString("value")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         bufferedWriter.flush()
@@ -228,7 +229,7 @@ class BufferedFileWriterTest : CommonTest() {
         testFile.writeText("old content")
 
         bufferedWriter.writeString("new content")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(testFile.readText()).isEqualTo("new content")
@@ -239,7 +240,7 @@ class BufferedFileWriterTest : CommonTest() {
         // First batch
         bufferedWriter.writeString("batch 1 value 1")
         bufferedWriter.writeString("batch 1 value 2")
-        verify(executor, times(1)).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor, times(1)).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.firstValue.run()
 
         assertThat(testFile.readText()).isEqualTo("batch 1 value 2")
@@ -247,7 +248,7 @@ class BufferedFileWriterTest : CommonTest() {
         // Second batch - should schedule a new task
         bufferedWriter.writeString("batch 2 value 1")
         bufferedWriter.writeString("batch 2 value 2")
-        verify(executor, times(2)).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor, times(2)).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
         runnableCaptor.lastValue.run()
 
         assertThat(testFile.readText()).isEqualTo("batch 2 value 2")
@@ -337,7 +338,7 @@ class BufferedFileWriterTest : CommonTest() {
         val writer = BufferedFileWriter(executor, delayMillis, readOnlyFile)
 
         writer.writeString("test content")
-        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis))
+        verify(executor).postDelayed(runnableCaptor.capture(), eq(delayMillis), eq(TimeUnit.MILLISECONDS))
 
         // Execute task - should handle exception gracefully
         runnableCaptor.firstValue.run()

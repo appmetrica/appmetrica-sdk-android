@@ -214,7 +214,6 @@ public interface io.appmetrica.analytics.coreapi.internal.event.ServiceEvent {
 public interface io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor extends io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread, java.util.concurrent.Executor {
     public abstract void execute([NonNull] Runnable)
     public abstract void post([NonNull] Runnable)
-    public abstract void postDelayed([NonNull] Runnable, long)
     public abstract void postDelayed([NonNull] Runnable, long, [NonNull] java.util.concurrent.TimeUnit)
     public abstract void remove([NonNull] Runnable)
     public abstract void removeAll()
