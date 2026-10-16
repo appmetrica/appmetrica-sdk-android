@@ -10,10 +10,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.adrevenue.ironsource.v7"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

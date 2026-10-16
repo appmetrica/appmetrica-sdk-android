@@ -11,10 +11,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.billing"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

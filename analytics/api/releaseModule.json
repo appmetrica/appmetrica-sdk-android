@@ -16,7 +16,7 @@
     },
     "variants": [
         {
-            "name": "binaryProdReleaseVariantBinaryProdReleaseApiPublication",
+            "name": "releaseVariantReleaseApiPublication",
             "attributes": {
                 "org.gradle.category": "library",
                 "org.gradle.dependency.bundling": "external",
@@ -59,7 +59,7 @@
             ]
         },
         {
-            "name": "binaryProdReleaseVariantBinaryProdReleaseRuntimePublication",
+            "name": "releaseVariantReleaseRuntimePublication",
             "attributes": {
                 "org.gradle.category": "library",
                 "org.gradle.dependency.bundling": "external",

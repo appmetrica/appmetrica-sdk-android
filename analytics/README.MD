@@ -7,19 +7,19 @@ Maven: `io.appmetrica.analytics:analytics:${VERSION}`.
 
 ### Assemble
 
-`./gradlew :analytics:assembleBinaryProdRelease`
+`./gradlew :analytics:assembleRelease`
 
 ### Publish to MavenLocal
 
-`./gradlew :analytics:publishBinaryProdReleasePublicationToMavenLocal`
+`./gradlew :analytics:publishReleasePublicationToMavenLocal`
 
 ### Tests
 
-`./gradlew :analytics:testBinaryProdReleaseUnitTest :analytics:generateBinaryProdReleaseJacocoReport`
+`./gradlew :analytics:testReleaseUnitTest :analytics:generateReleaseJacocoReport`
 
 ### Code style
 
-`./gradlew :analytics:lint :analytics:ktlint :analytics:checkstyleBinaryProdRelease`
+`./gradlew :analytics:lint :analytics:ktlint :analytics:checkstyleRelease`
 
 ### Check AAR API
 

@@ -10,10 +10,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.adrevenue.admob.v23"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

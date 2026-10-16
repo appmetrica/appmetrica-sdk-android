@@ -10,10 +10,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.apphudv3"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

@@ -11,10 +11,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.screenshot"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

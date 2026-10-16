@@ -11,10 +11,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.adrevenue.applovin.v12.auto"
-
-    defaultConfig {
-        missingDimensionStrategy("tier", "binaryProd")
-    }
 }
 
 dependencies {

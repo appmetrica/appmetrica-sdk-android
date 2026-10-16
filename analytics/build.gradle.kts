@@ -2,8 +2,6 @@ import com.android.build.gradle.internal.dsl.BuildType
 import io.appmetrica.analytics.gradle.Constants
 import io.appmetrica.analytics.gradle.Hosts
 import io.appmetrica.analytics.gradle.aidl.GenerateThirdPartyAidlTask
-import io.appmetrica.analytics.gradle.publishing.PublishingInfoFlavorExtension
-import io.appmetrica.gradle.aarcheck.agp.aarCheck
 import org.gradle.kotlin.dsl.register
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -31,7 +29,7 @@ android {
         buildConfigField("String", "SDK_BUILD_FLAVOR", "\"public\"")
         buildConfigField("String", "SDK_BUILD_TYPE", "\"\"")
 
-        buildConfigField("String", "SDK_DEPENDENCY", "\"\"")
+        buildConfigField("String", "SDK_DEPENDENCY", "\"binary\"")
         buildConfigField("boolean", "DEFAULT_LOCATION_COLLECTING", "false")
         buildConfigField("String", "SERVICE_COMPONENTS_INITIALIZER_CLASS_NAME", "\"\"")
         buildConfigField("String", "CLIENT_COMPONENTS_INITIALIZER_CLASS_NAME", "\"\"")
@@ -62,31 +60,6 @@ android {
             buildConfigField("String", "VERSION_NAME", "\"${Constants.Library.versionName}-SNAPSHOT\"")
             buildConfigField("boolean", "METRICA_DEBUG", "true")
             buildConfigField("String", "SDK_BUILD_TYPE", "\"snapshot\"")
-        }
-    }
-
-    flavorDimensionList.add("tier")
-    productFlavors {
-        create("prod") {
-            dimension = "tier"
-            isDefault = true
-
-            buildConfigField("String", "SDK_DEPENDENCY", "\"source\"")
-        }
-        create("perf") {
-            dimension = "tier"
-
-            buildConfigField("String", "SDK_DEPENDENCY", "\"source\"")
-
-            configure<PublishingInfoFlavorExtension> {
-                artifactIdSuffix.set("-perf")
-            }
-        }
-        create("binaryProd") {
-            dimension = "tier"
-
-            buildConfigField("String", "SDK_DEPENDENCY", "\"binary\"")
-            aarCheck.enabled = true
         }
     }
 }

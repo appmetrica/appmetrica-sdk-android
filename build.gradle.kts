@@ -14,9 +14,7 @@ version = Constants.Library.versionName
 
 val modules by lazy { subprojects.filter { it.plugins.hasPlugin(AppMetricaModulePlugin::class.java) } }
 val buildTypes = listOf("release", "snapshot", "debug")
-val projectToFlavorMapping = mapOf(
-    "analytics" to "binaryProd",
-).withDefault { "" }
+val projectToFlavorMapping = mapOf<String, String>().withDefault { "" }
 
 fun createTaskName(
     prefix: String,

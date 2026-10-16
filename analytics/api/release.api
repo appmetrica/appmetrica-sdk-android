@@ -228,7 +228,6 @@ public final class io.appmetrica.analytics.BuildConfig {
     public static final boolean DEBUG
     public static final String[] DEFAULT_HOSTS
     public static final boolean DEFAULT_LOCATION_COLLECTING
-    public static final String FLAVOR
     public static final String LIBRARY_PACKAGE_NAME
     public static final boolean METRICA_DEBUG
     public static final String SDK_BUILD_FLAVOR
