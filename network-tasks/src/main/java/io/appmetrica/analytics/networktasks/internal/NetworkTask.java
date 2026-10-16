@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 public class NetworkTask {
 
@@ -212,6 +213,11 @@ public class NetworkTask {
     @Nullable
     public SSLSocketFactory getSslSocketFactory() {
         return underlyingTask.getSslSocketFactory();
+    }
+
+    @Nullable
+    public X509TrustManager getTrustManager() {
+        return underlyingTask.getTrustManager();
     }
 
     private boolean shouldTryNextHostAllConditionsAreTrue(int responseCode) {

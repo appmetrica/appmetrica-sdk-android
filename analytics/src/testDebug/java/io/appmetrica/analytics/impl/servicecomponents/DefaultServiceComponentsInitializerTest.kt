@@ -35,6 +35,7 @@ internal class DefaultServiceComponentsInitializerTest : CommonTest() {
             "io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.AppLovinAutoServiceModuleEntryPoint",
             "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
             "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
+            "io.appmetrica.analytics.certificates.internal.CertificatesServiceModuleEntryPoint",
         )
         serviceComponentsInitializer.onCreate(context)
 

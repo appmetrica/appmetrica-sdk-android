@@ -22,11 +22,13 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 @RunWith(RobolectricTestRunner::class)
 class RequestExecutorTest : CommonTest() {
 
     private val sslSocketFactory = mock<SSLSocketFactory>()
+    private val trustManager = mock<X509TrustManager>()
     private val response = mock<Response>()
     private val call = mock<Call> {
         on { execute() } doReturn response
@@ -51,6 +53,8 @@ class RequestExecutorTest : CommonTest() {
             whenever(mock.withReadTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
             whenever(mock.withSslSocketFactory(sslSocketFactory)).thenReturn(mock)
             whenever(mock.withSslSocketFactory(null)).thenReturn(mock)
+            whenever(mock.withTrustManager(trustManager)).thenReturn(mock)
+            whenever(mock.withTrustManager(null)).thenReturn(mock)
             whenever(mock.withInstanceFollowRedirects(true)).thenReturn(mock)
             whenever(mock.build()).thenReturn(networkClientSettings)
         }
@@ -61,7 +65,10 @@ class RequestExecutorTest : CommonTest() {
     fun successfulExecutionFilled() {
         val prevEtag = "prev-etag"
         val url = "https://ya.ru"
-        assertThat(requestExecutor.execute(prevEtag, url, sslSocketFactory)).isSameAs(response)
+        assertThat(requestExecutor.execute(prevEtag, url, sslSocketFactory, trustManager)).isSameAs(response)
+        val settingsBuilder = networkClientSettingsBuilderRule.constructionMock.constructed().first()
+        verify(settingsBuilder).withSslSocketFactory(sslSocketFactory)
+        verify(settingsBuilder).withTrustManager(trustManager)
         with(newClientBuilder.constructionMock.constructed().first()) {
             verify(this).withSettings(networkClientSettings)
             verify(this).build()
@@ -80,7 +87,10 @@ class RequestExecutorTest : CommonTest() {
     fun successfulExecutionNullable() {
         val url = "https://ya.ru"
 
-        assertThat(requestExecutor.execute(null, url, null)).isSameAs(response)
+        assertThat(requestExecutor.execute(null, url, null, null)).isSameAs(response)
+        val settingsBuilder = networkClientSettingsBuilderRule.constructionMock.constructed().first()
+        verify(settingsBuilder).withSslSocketFactory(null)
+        verify(settingsBuilder).withTrustManager(null)
         with(newClientBuilder.constructionMock.constructed().first()) {
             verify(this).withSettings(networkClientSettings)
             verify(this).build()
@@ -98,7 +108,7 @@ class RequestExecutorTest : CommonTest() {
     @Test
     fun emptyEtag() {
         val url = "https://ya.ru"
-        requestExecutor.execute("", url, sslSocketFactory)
+        requestExecutor.execute("", url, sslSocketFactory, trustManager)
         assertThat(requestCaptor.firstValue.headers).isEmpty()
     }
 }

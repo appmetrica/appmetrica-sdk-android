@@ -53,6 +53,7 @@ internal class NetworkTaskPerformingStrategy {
                         .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
                         .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
                         .withSslSocketFactory(task.sslSocketFactory)
+                        .withTrustManager(task.trustManager)
                         .build()
                 )
                 .build()

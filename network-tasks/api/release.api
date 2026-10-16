@@ -94,7 +94,7 @@ public interface io.appmetrica.analytics.networktasks.internal.BaseRequestConfig
 }
 
 public class io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer {
-    public <init>([Nullable] javax.net.ssl.SSLSocketFactory)
+    public <init>([Nullable] javax.net.ssl.SSLSocketFactory, [Nullable] javax.net.ssl.X509TrustManager)
     public void performConnection([NonNull] String, [NonNull] io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer$Client)
 }
 
@@ -265,6 +265,7 @@ public class io.appmetrica.analytics.networktasks.internal.NetworkTask {
     public [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
     public [Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
     public [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
     public [NonNull] io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask getUnderlyingTask()
     public [Nullable] String getUrl()
     public [NonNull] String getUserAgent()
@@ -360,6 +361,7 @@ public interface io.appmetrica.analytics.networktasks.internal.UnderlyingNetwork
     public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
     public abstract [Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
     public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public abstract [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
     public abstract boolean onCreateTask()
     public abstract void onPerformRequest()
     public abstract void onPostRequestComplete(boolean)

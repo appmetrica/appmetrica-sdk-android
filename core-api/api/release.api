@@ -405,6 +405,7 @@ public interface io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy {
 
 public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider {
     public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public abstract [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
 }
 
 public enum io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent {

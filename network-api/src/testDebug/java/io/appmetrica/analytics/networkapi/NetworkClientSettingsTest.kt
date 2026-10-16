@@ -8,6 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 class NetworkClientSettingsTest : CommonTest() {
 
@@ -20,6 +21,7 @@ class NetworkClientSettingsTest : CommonTest() {
             .checkFieldIsNull("readTimeout")
             .checkFieldIsNull("callTimeout")
             .checkFieldIsNull("sslSocketFactory")
+            .checkFieldIsNull("trustManager")
             .checkFieldIsNull("useCaches")
             .checkFieldIsNull("instanceFollowRedirects")
             .checkField("maxResponseSize", Int.MAX_VALUE)
@@ -30,12 +32,14 @@ class NetworkClientSettingsTest : CommonTest() {
     @Test
     fun builderWithAllValues() {
         val sslSocketFactory = mock<SSLSocketFactory>()
+        val trustManager = mock<X509TrustManager>()
 
         val settings = NetworkClientSettings.Builder()
             .withConnectTimeout(5000)
             .withReadTimeout(10000)
             .withCallTimeout(15, TimeUnit.SECONDS)
             .withSslSocketFactory(sslSocketFactory)
+            .withTrustManager(trustManager)
             .withUseCaches(true)
             .withInstanceFollowRedirects(false)
             .withMaxResponseSize(1024 * 1024)
@@ -47,6 +51,7 @@ class NetworkClientSettingsTest : CommonTest() {
             .checkField("readTimeout", 10000)
             .checkField("callTimeout", 15000L)
             .checkField("sslSocketFactory", sslSocketFactory)
+            .checkField("trustManager", trustManager)
             .checkField("useCaches", true)
             .checkField("instanceFollowRedirects", false)
             .checkField("maxResponseSize", 1024 * 1024)
@@ -66,8 +71,9 @@ class NetworkClientSettingsTest : CommonTest() {
     @Test
     fun equalsForSameContent() {
         val sslSocketFactory = mock<SSLSocketFactory>()
-        val first = fullSettings(sslSocketFactory)
-        val second = fullSettings(sslSocketFactory)
+        val trustManager = mock<X509TrustManager>()
+        val first = fullSettings(sslSocketFactory, trustManager)
+        val second = fullSettings(sslSocketFactory, trustManager)
 
         SoftAssertions().apply {
             assertThat(first).isEqualTo(second)
@@ -80,6 +86,15 @@ class NetworkClientSettingsTest : CommonTest() {
     fun notEqualsForDifferentSslSocketFactoryIdentity() {
         val first = fullSettings(mock())
         val second = fullSettings(mock())
+
+        assertThat(first).isNotEqualTo(second)
+    }
+
+    @Test
+    fun notEqualsForDifferentTrustManagerIdentity() {
+        val sslSocketFactory = mock<SSLSocketFactory>()
+        val first = fullSettings(sslSocketFactory, mock())
+        val second = fullSettings(sslSocketFactory, mock())
 
         assertThat(first).isNotEqualTo(second)
     }
@@ -107,12 +122,16 @@ class NetworkClientSettingsTest : CommonTest() {
         assertThat(fullSettings(mock())).isNotEqualTo(null)
     }
 
-    private fun fullSettings(sslSocketFactory: SSLSocketFactory): NetworkClientSettings {
+    private fun fullSettings(
+        sslSocketFactory: SSLSocketFactory,
+        trustManager: X509TrustManager = mock(),
+    ): NetworkClientSettings {
         return NetworkClientSettings.Builder()
             .withConnectTimeout(5000)
             .withReadTimeout(10000)
             .withCallTimeout(15, TimeUnit.SECONDS)
             .withSslSocketFactory(sslSocketFactory)
+            .withTrustManager(trustManager)
             .withUseCaches(true)
             .withInstanceFollowRedirects(false)
             .withMaxResponseSize(1024)

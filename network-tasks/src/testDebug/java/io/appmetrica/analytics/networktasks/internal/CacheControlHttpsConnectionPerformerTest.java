@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ public class CacheControlHttpsConnectionPerformerTest {
     private Response response;
     @Mock
     private SSLSocketFactory sslSocketFactory;
+    @Mock
+    private X509TrustManager trustManager;
     private final String url = "some.url";
     private final String oldETag = "old-etag";
     private CacheControlHttpsConnectionPerformer performer;
@@ -35,14 +38,14 @@ public class CacheControlHttpsConnectionPerformerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        performer = new CacheControlHttpsConnectionPerformer(requestExecutor, sslSocketFactory);
+        performer = new CacheControlHttpsConnectionPerformer(requestExecutor, sslSocketFactory, trustManager);
         when(client.getOldETag()).thenReturn(oldETag);
-        when(requestExecutor.execute(oldETag, url, sslSocketFactory)).thenReturn(response);
+        when(requestExecutor.execute(oldETag, url, sslSocketFactory, trustManager)).thenReturn(response);
     }
 
     @Test
     public void executeThrows() {
-        doThrow(new RuntimeException()).when(requestExecutor).execute(oldETag, url, sslSocketFactory);
+        doThrow(new RuntimeException()).when(requestExecutor).execute(oldETag, url, sslSocketFactory, trustManager);
         performer.performConnection(url, client);
         verify(client).onError();
     }

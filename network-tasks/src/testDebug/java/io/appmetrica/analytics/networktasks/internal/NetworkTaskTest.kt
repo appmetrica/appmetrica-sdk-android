@@ -9,6 +9,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 import java.util.concurrent.Executor
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 class NetworkTaskTest : CommonTest() {
 
@@ -18,6 +19,7 @@ class NetworkTaskTest : CommonTest() {
     private val fullUrlFormer = mock<FullUrlFormer<*>>()
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
     private val sslSocketFactory = mock<SSLSocketFactory>()
+    private val trustManager = mock<X509TrustManager>()
     private val description = "some description"
     private val connectionBasedExecutionPolicy = mock<IExecutionPolicy>()
     private val exponentialBackoffPolicy = mock<ExponentialBackoffPolicy>()
@@ -27,6 +29,7 @@ class NetworkTaskTest : CommonTest() {
         on { this.responseDataHolder } doReturn responseDataHolder
         on { this.retryPolicyConfig } doReturn retryPolicyConfig
         on { this.sslSocketFactory } doReturn sslSocketFactory
+        on { this.trustManager } doReturn trustManager
         on { this.description() } doReturn description
     }
     private val firstShouldTryNextHostCondition = mock<NetworkTask.ShouldTryNextHostCondition>()
@@ -87,6 +90,7 @@ class NetworkTaskTest : CommonTest() {
     @Test
     fun sslSocketFactory() {
         assertThat(networkTask.sslSocketFactory).isEqualTo(sslSocketFactory)
+        assertThat(networkTask.trustManager).isEqualTo(trustManager)
     }
 
     @Test

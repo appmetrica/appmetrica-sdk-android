@@ -4,6 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
+import io.appmetrica.analytics.impl.network.http.ModuleSslSocketFactoryProvider
 
 internal class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
 
@@ -15,11 +16,15 @@ internal class DefaultServiceComponentsInitializer : ServiceComponentsInitialize
         "io.appmetrica.analytics.adrevenue.applovin.v12.auto.internal.AppLovinAutoServiceModuleEntryPoint",
         "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
         "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
+        "io.appmetrica.analytics.certificates.internal.CertificatesServiceModuleEntryPoint",
     )
 
     override fun onCreate(context: Context) {
         GlobalServiceLocator.getInstance().moduleEntryPointsRegister.register(
             *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
+        )
+        GlobalServiceLocator.getInstance().setSslSocketFactoryProvider(
+            ModuleSslSocketFactoryProvider()
         )
     }
 }

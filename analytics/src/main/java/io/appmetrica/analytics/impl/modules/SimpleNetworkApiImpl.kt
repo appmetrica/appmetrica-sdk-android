@@ -7,11 +7,11 @@ import io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnection
 
 internal class SimpleNetworkApiImpl : SimpleNetworkApi {
 
-    private val cacheControlHttpsConnectionPerformer = CacheControlHttpsConnectionPerformer(
-        GlobalServiceLocator.getInstance().sslSocketFactoryProvider.sslSocketFactory
-    )
-
     override fun performRequestWithCacheControl(url: String, client: NetworkClientWithCacheControl) {
-        cacheControlHttpsConnectionPerformer.performConnection(url, CacheControlConnectionHttpsClientImpl(client))
+        val provider = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
+        CacheControlHttpsConnectionPerformer(
+            provider.sslSocketFactory,
+            provider.trustManager
+        ).performConnection(url, CacheControlConnectionHttpsClientImpl(client))
     }
 }

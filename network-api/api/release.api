@@ -49,7 +49,7 @@ public abstract static class io.appmetrica.analytics.networkapi.NetworkClient$Bu
 }
 
 public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
-    public <init>(Integer, Integer, Long, javax.net.ssl.SSLSocketFactory, Boolean, Boolean, int, Boolean, kotlin.jvm.internal.DefaultConstructorMarker)
+    public <init>(Integer, Integer, Long, javax.net.ssl.SSLSocketFactory, javax.net.ssl.X509TrustManager, Boolean, Boolean, int, Boolean, kotlin.jvm.internal.DefaultConstructorMarker)
     public boolean equals([Nullable] Object)
     public final [Nullable] Long getCallTimeout()
     public final [Nullable] Boolean getCollectMetrics()
@@ -58,6 +58,7 @@ public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
     public final int getMaxResponseSize()
     public final [Nullable] Integer getReadTimeout()
     public final [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public final [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
     public final [Nullable] Boolean getUseCaches()
     public int hashCode()
     public [NonNull] String toString()
@@ -73,6 +74,7 @@ public static final class io.appmetrica.analytics.networkapi.NetworkClientSettin
     public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withMaxResponseSize(int)
     public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withReadTimeout(int)
     public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withSslSocketFactory([Nullable] javax.net.ssl.SSLSocketFactory)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withTrustManager([Nullable] javax.net.ssl.X509TrustManager)
     public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withUseCaches(boolean)
 }
 

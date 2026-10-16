@@ -43,7 +43,10 @@ internal class SimpleNetworkApiImplTest : CommonTest() {
         assertThat(cacheControlHttpsConnectionPerformerMockedConstructionRule.constructionMock.constructed())
             .hasSize(1)
         assertThat(cacheControlHttpsConnectionPerformerMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(GlobalServiceLocator.getInstance().sslSocketFactoryProvider.sslSocketFactory)
+            .containsExactly(
+                GlobalServiceLocator.getInstance().sslSocketFactoryProvider.sslSocketFactory,
+                GlobalServiceLocator.getInstance().sslSocketFactoryProvider.trustManager,
+            )
 
         assertThat(cacheControlConnectionHttpsClientImplMockedConstructionRule.constructionMock.constructed())
             .hasSize(1)

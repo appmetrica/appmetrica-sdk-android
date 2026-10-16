@@ -2,6 +2,7 @@ package io.appmetrica.analytics.networkapi
 
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Configuration settings for [NetworkClient].
@@ -11,6 +12,7 @@ import javax.net.ssl.SSLSocketFactory
  * @property readTimeout Read timeout in milliseconds, or null to use default
  * @property callTimeout Total call timeout in milliseconds (DNS + connect + write + read), or null to use default
  * @property sslSocketFactory Custom SSL socket factory for HTTPS connections, or null to use default
+ * @property trustManager Trust manager paired with [sslSocketFactory], or null to use the platform default
  * @property useCaches Whether to use caching for HTTP connections, or null to use default
  * @property instanceFollowRedirects Whether to follow HTTP redirects automatically, or null to use default
  * @property maxResponseSize Maximum size of response data in bytes
@@ -21,6 +23,7 @@ class NetworkClientSettings private constructor(
     val readTimeout: Int?,
     val callTimeout: Long?,
     val sslSocketFactory: SSLSocketFactory?,
+    val trustManager: X509TrustManager?,
     val useCaches: Boolean?,
     val instanceFollowRedirects: Boolean?,
     val maxResponseSize: Int,
@@ -35,6 +38,7 @@ class NetworkClientSettings private constructor(
             callTimeout == other.callTimeout &&
             // SSLSocketFactory has no value-equals; identity is the only safe comparison
             sslSocketFactory === other.sslSocketFactory &&
+            trustManager === other.trustManager &&
             useCaches == other.useCaches &&
             instanceFollowRedirects == other.instanceFollowRedirects &&
             maxResponseSize == other.maxResponseSize &&
@@ -46,6 +50,7 @@ class NetworkClientSettings private constructor(
         result = 31 * result + (readTimeout ?: 0)
         result = 31 * result + (callTimeout?.hashCode() ?: 0)
         result = 31 * result + System.identityHashCode(sslSocketFactory)
+        result = 31 * result + System.identityHashCode(trustManager)
         result = 31 * result + (useCaches?.hashCode() ?: 0)
         result = 31 * result + (instanceFollowRedirects?.hashCode() ?: 0)
         result = 31 * result + maxResponseSize
@@ -59,6 +64,7 @@ class NetworkClientSettings private constructor(
             "readTimeout=$readTimeout, " +
             "callTimeout=$callTimeout, " +
             "sslSocketFactory=$sslSocketFactory, " +
+            "trustManager=$trustManager, " +
             "useCaches=$useCaches, " +
             "instanceFollowRedirects=$instanceFollowRedirects, " +
             "maxResponseSize=$maxResponseSize, " +
@@ -76,6 +82,7 @@ class NetworkClientSettings private constructor(
         private var readTimeout: Int? = null
         private var callTimeout: Long? = null
         private var sslSocketFactory: SSLSocketFactory? = null
+        private var trustManager: X509TrustManager? = null
         private var useCaches: Boolean? = null
         private var instanceFollowRedirects: Boolean? = null
         private var maxResponseSize: Int = Int.MAX_VALUE
@@ -123,6 +130,17 @@ class NetworkClientSettings private constructor(
          */
         fun withSslSocketFactory(sslSocketFactory: SSLSocketFactory?): Builder {
             this.sslSocketFactory = sslSocketFactory
+            return this
+        }
+
+        /**
+         * Sets a trust manager paired with [withSslSocketFactory].
+         *
+         * @param trustManager Custom trust manager, or null to use the platform default
+         * @return This builder instance for method chaining
+         */
+        fun withTrustManager(trustManager: X509TrustManager?): Builder {
+            this.trustManager = trustManager
             return this
         }
 
@@ -181,6 +199,7 @@ class NetworkClientSettings private constructor(
             readTimeout = readTimeout,
             callTimeout = callTimeout,
             sslSocketFactory = sslSocketFactory,
+            trustManager = trustManager,
             useCaches = useCaches,
             instanceFollowRedirects = instanceFollowRedirects,
             maxResponseSize = maxResponseSize,

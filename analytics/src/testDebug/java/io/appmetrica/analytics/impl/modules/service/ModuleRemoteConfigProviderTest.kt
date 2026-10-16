@@ -44,7 +44,11 @@ internal class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForFirstModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule(firstIdentifier))
             .isEqualToComparingFieldByField(
-                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, firstRemoteConfig)
+                ServiceModuleRemoteConfigModel(
+                    identifiers,
+                    remoteConfigMetaInfo,
+                    firstRemoteConfig
+                )
             )
     }
 
@@ -52,7 +56,11 @@ internal class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForSecondModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule(secondIdentifier))
             .isEqualToComparingFieldByField(
-                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, secondRemoteConfig)
+                ServiceModuleRemoteConfigModel(
+                    identifiers,
+                    remoteConfigMetaInfo,
+                    secondRemoteConfig
+                )
             )
     }
 
@@ -60,7 +68,11 @@ internal class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForUnknownModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule("unknown module"))
             .isEqualToComparingFieldByField(
-                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, null)
+                ServiceModuleRemoteConfigModel(
+                    identifiers,
+                    remoteConfigMetaInfo,
+                    null
+                )
             )
     }
 }

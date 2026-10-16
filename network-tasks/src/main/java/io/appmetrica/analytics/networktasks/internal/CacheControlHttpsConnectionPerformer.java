@@ -15,6 +15,7 @@ import io.appmetrica.analytics.networktasks.impl.Constants;
 import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 public class CacheControlHttpsConnectionPerformer {
 
@@ -37,7 +38,8 @@ public class CacheControlHttpsConnectionPerformer {
         @NonNull
         public Response execute(@Nullable String prevEtag,
                                 @NonNull String url,
-                                @Nullable SSLSocketFactory sslSocketFactory) {
+                                @Nullable SSLSocketFactory sslSocketFactory,
+                                @Nullable X509TrustManager trustManager) {
             Request.Builder requestBuilder = new Request.Builder(url)
                 .withMethod(Request.Method.GET);
             if (TextUtils.isEmpty(prevEtag) == false) {
@@ -48,6 +50,7 @@ public class CacheControlHttpsConnectionPerformer {
                     new NetworkClientSettings.Builder()
                         .withInstanceFollowRedirects(true)
                         .withSslSocketFactory(sslSocketFactory)
+                        .withTrustManager(trustManager)
                         .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
                         .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
                         .build()
@@ -61,22 +64,34 @@ public class CacheControlHttpsConnectionPerformer {
     private final RequestExecutor requestExecutor;
     @Nullable
     private final SSLSocketFactory sslSocketFactory;
+    @Nullable
+    private final X509TrustManager trustManager;
 
-    public CacheControlHttpsConnectionPerformer(@Nullable SSLSocketFactory sslSocketFactory) {
-        this(new RequestExecutor(), sslSocketFactory);
+    public CacheControlHttpsConnectionPerformer(
+        @Nullable SSLSocketFactory sslSocketFactory,
+        @Nullable X509TrustManager trustManager
+    ) {
+        this(new RequestExecutor(), sslSocketFactory, trustManager);
     }
 
     @VisibleForTesting
     CacheControlHttpsConnectionPerformer(@NonNull RequestExecutor requestExecutor,
-                                         @Nullable SSLSocketFactory sslSocketFactory) {
+                                         @Nullable SSLSocketFactory sslSocketFactory,
+                                         @Nullable X509TrustManager trustManager) {
         this.requestExecutor = requestExecutor;
         this.sslSocketFactory = sslSocketFactory;
+        this.trustManager = trustManager;
     }
 
     public void performConnection(@NonNull String url, @NonNull Client client) {
         boolean success = false;
         try {
-            Response response = requestExecutor.execute(client.getOldETag(), url, sslSocketFactory);
+            Response response = requestExecutor.execute(
+                client.getOldETag(),
+                url,
+                sslSocketFactory,
+                trustManager
+            );
             success = handleResponse(response, client);
         } catch (Throwable e) {
             DebugLogger.INSTANCE.error(TAG, e, "Failed request with url = %s with reason = %s",

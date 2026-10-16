@@ -61,6 +61,8 @@ import java.nio.charset.Charset
 import java.util.UUID
 import java.util.function.Predicate
 import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 @SuppressLint("RobolectricUsage") // Database interactions
 @RunWith(RobolectricTestRunner::class)
@@ -250,6 +252,18 @@ internal class ReportTaskTest : CommonTest() {
         whenever(dbInteractor.getNextRequestId()).thenReturn(prevReportRequestId + 1)
         whenever(bytesTrimmerMockedRule.constructionMock.constructed()[0].trim(eventValue.toByteArray()))
             .thenReturn(truncatedValue.toByteArray())
+    }
+
+    @Test
+    fun sslSocketFactoryAndTrustManagerComeFromProvider() {
+        val sslSocketFactory = mock<SSLSocketFactory>()
+        val trustManager = mock<X509TrustManager>()
+        val provider = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
+        whenever(provider.sslSocketFactory).thenReturn(sslSocketFactory)
+        whenever(provider.trustManager).thenReturn(trustManager)
+
+        assertThat(reportTask.sslSocketFactory).isSameAs(sslSocketFactory)
+        assertThat(reportTask.trustManager).isSameAs(trustManager)
     }
 
     @Test

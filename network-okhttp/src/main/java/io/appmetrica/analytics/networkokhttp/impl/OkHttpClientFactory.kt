@@ -10,7 +10,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import java.security.KeyStore
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
@@ -36,22 +35,16 @@ internal class OkHttpClientFactory {
             settings.instanceFollowRedirects?.let { followRedirects(it) }
 
             withDebugInterceptorSupplier()
-            withSsl(settings.sslSocketFactory)
+            withSsl(settings)
             withCaches(settings.useCaches)
         }.build()
     }
 
-    private fun OkHttpClient.Builder.withSsl(sslSocketFactory: SSLSocketFactory?) {
+    private fun OkHttpClient.Builder.withSsl(settings: NetworkClientSettings) {
         try {
-            sslSocketFactory?.let { sslFactory ->
+            settings.sslSocketFactory?.let { sslFactory ->
                 DebugLogger.info(tag, "Setting custom sslFactory")
-                val trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm()
-                )
-                trustManagerFactory.init(null as KeyStore?)
-                val trustManager = trustManagerFactory.trustManagers
-                    .filterIsInstance<X509TrustManager>()
-                    .firstOrNull()
+                val trustManager = settings.trustManager ?: systemDefaultTrustManager()
                 if (trustManager != null) {
                     sslSocketFactory(sslFactory, trustManager)
                 }
@@ -59,6 +52,14 @@ internal class OkHttpClientFactory {
         } catch (ex: Throwable) {
             DebugLogger.error(tag, ex)
         }
+    }
+
+    private fun systemDefaultTrustManager(): X509TrustManager? {
+        val trustManagerFactory = TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm()
+        )
+        trustManagerFactory.init(null as KeyStore?)
+        return trustManagerFactory.trustManagers.filterIsInstance<X509TrustManager>().firstOrNull()
     }
 
     private fun OkHttpClient.Builder.withCaches(useCaches: Boolean?) {

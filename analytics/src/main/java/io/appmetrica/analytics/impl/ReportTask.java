@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session;
 
@@ -312,6 +313,12 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Override
     public SSLSocketFactory getSslSocketFactory() {
         return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslSocketFactory();
+    }
+
+    @Nullable
+    @Override
+    public X509TrustManager getTrustManager() {
+        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getTrustManager();
     }
 
     // region overridden methods with default implementation

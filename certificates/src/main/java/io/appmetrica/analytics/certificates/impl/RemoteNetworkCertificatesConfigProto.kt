@@ -1,0 +1,6 @@
+package io.appmetrica.analytics.certificates.impl
+
+import io.appmetrica.analytics.certificates.impl.protobuf.client.RemoteNetworkCertificatesConfigProtobuf
+
+internal typealias RemoteNetworkCertificatesConfigProto =
+    RemoteNetworkCertificatesConfigProtobuf.RemoteNetworkCertificatesConfig

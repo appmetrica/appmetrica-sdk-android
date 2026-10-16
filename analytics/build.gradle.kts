@@ -103,6 +103,7 @@ dependencies {
     runtimeOnly(project(":remote-permissions"))
     runtimeOnly(project(":reporter-extension"))
     runtimeOnly(project(":screenshot"))
+    runtimeOnly(project(":certificates"))
 
     testImplementation(project(":identifiers"))
     testImplementation(appMetricaLibs.playServicesLocation)

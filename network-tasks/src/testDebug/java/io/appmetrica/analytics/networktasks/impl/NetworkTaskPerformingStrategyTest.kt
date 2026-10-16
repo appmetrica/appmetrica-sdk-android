@@ -29,6 +29,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.AbstractMap
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 @RunWith(RobolectricTestRunner::class)
 internal class NetworkTaskPerformingStrategyTest : CommonTest() {
@@ -60,12 +61,14 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         on { this.execute() } doReturn response
     }
     private val sslSocketFactory = mock<SSLSocketFactory>()
+    private val trustManager = mock<X509TrustManager>()
     private val networkTask = mock<NetworkTask> {
         on { this.requestDataHolder } doReturn requestDataHolder
         on { this.responseDataHolder } doReturn responseDataHolder
         on { this.onPerformRequest() } doReturn true
         on { this.url } doReturn url
         on { this.sslSocketFactory } doReturn sslSocketFactory
+        on { this.trustManager } doReturn trustManager
         on { this.userAgent } doReturn userAgent
     }
     private val requestCaptor = argumentCaptor<Request>()
@@ -88,6 +91,7 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
             whenever(mock.withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
             whenever(mock.withReadTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
             whenever(mock.withSslSocketFactory(sslSocketFactory)).thenReturn(mock)
+            whenever(mock.withTrustManager(trustManager)).thenReturn(mock)
             whenever(mock.build()).thenReturn(networkClientSettings)
         }
 
@@ -124,6 +128,9 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
             .checkField("method", "getMethod", Request.Method.GET)
             .checkField("body", "getBody", ByteArray(0))
             .checkAll()
+        val settingsBuilder = networkClientSettingsBuilderRule.constructionMock.constructed()[0]
+        verify(settingsBuilder).withSslSocketFactory(sslSocketFactory)
+        verify(settingsBuilder).withTrustManager(trustManager)
         verify(newClientBuilder.constructionMock.constructed()[0]).withSettings(networkClientSettings)
     }
 

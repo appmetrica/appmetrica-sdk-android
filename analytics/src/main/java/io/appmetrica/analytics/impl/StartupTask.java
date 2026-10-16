@@ -17,6 +17,7 @@ import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 public class StartupTask implements UnderlyingNetworkTask {
 
@@ -164,6 +165,13 @@ public class StartupTask implements UnderlyingNetworkTask {
     public SSLSocketFactory getSslSocketFactory() {
         return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslSocketFactory();
     }
+
+    @Nullable
+    @Override
+    public X509TrustManager getTrustManager() {
+        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getTrustManager();
+    }
+
 
     // region overridden methods with default implementation
 

@@ -3,6 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 public interface UnderlyingNetworkTask {
 
@@ -33,6 +34,9 @@ public interface UnderlyingNetworkTask {
 
     @Nullable
     SSLSocketFactory getSslSocketFactory();
+
+    @Nullable
+    X509TrustManager getTrustManager();
 
     @Nullable
     RetryPolicyConfig getRetryPolicyConfig();

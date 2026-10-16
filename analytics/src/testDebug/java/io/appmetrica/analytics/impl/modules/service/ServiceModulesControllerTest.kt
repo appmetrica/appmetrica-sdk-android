@@ -6,10 +6,13 @@ import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
+import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
+import io.appmetrica.analytics.impl.network.http.ModuleSslSocketFactoryProvider
+import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl
 import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
@@ -35,6 +38,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
@@ -46,6 +50,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 internal class ServiceModulesControllerTest : CommonTest() {
 
@@ -775,10 +781,92 @@ internal class ServiceModulesControllerTest : CommonTest() {
         verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
+    @Test
+    fun `ssl socket factory provider stays empty without ssl module`() {
+        val holder = ModuleSslSocketFactoryProvider()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(holder)
+
+        modulesController.registerModule(lightModule)
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        assertThat(holder.sslSocketFactory).isNull()
+        assertThat(holder.trustManager).isNull()
+    }
+
+    @Test
+    fun `ssl socket factory provider binds module after successful init`() {
+        val holder = ModuleSslSocketFactoryProvider()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(holder)
+        val sslModule = sslSocketFactoryModule()
+
+        assertThat(holder.sslSocketFactory).isNull()
+        modulesController.registerModule(sslModule)
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        assertThat(holder.sslSocketFactory).isSameAs(sslModule.sslSocketFactory)
+        assertThat(holder.trustManager).isSameAs(sslModule.trustManager)
+    }
+
+    @Test
+    fun `ssl socket factory provider is not bound when init fails`() {
+        val holder = ModuleSslSocketFactoryProvider()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(holder)
+        val sslModule = sslSocketFactoryModule()
+        doThrow(RuntimeException("init failed")).whenever(sslModule)
+            .initServiceSide(any(), anyOrNull())
+
+        modulesController.registerModule(sslModule)
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        assertThat(holder.sslSocketFactory).isNull()
+        assertThat(holder.trustManager).isNull()
+    }
+
+    @Test
+    fun `ssl socket factory provider is unbound when handler registration fails`() {
+        val holder = ModuleSslSocketFactoryProvider()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(holder)
+        val sslModule = sslSocketFactoryModule()
+        whenever(sslModule.moduleEventServiceHandlerFactory).thenThrow(RuntimeException("handler failed"))
+
+        modulesController.registerModule(sslModule)
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        assertThat(holder.sslSocketFactory).isNull()
+        assertThat(holder.trustManager).isNull()
+    }
+
+    @Test
+    fun `non module ssl holder is not replaced by ssl module`() {
+        val existingHolder = mock<SslSocketFactoryProviderImpl>()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(existingHolder)
+        val sslModule = sslSocketFactoryModule()
+
+        modulesController.registerModule(sslModule)
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        assertThat(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).isSameAs(existingHolder)
+        verify(GlobalServiceLocator.getInstance(), never()).setSslSocketFactoryProvider(any())
+    }
+
+    private fun sslSocketFactoryModule(): SslSocketFactoryModule {
+        val factory = mock<SSLSocketFactory>()
+        val trust = mock<X509TrustManager>()
+        return mock<SslSocketFactoryModule> {
+            on { identifier } doReturn "certificates-ssl-module"
+            on { sslSocketFactory } doReturn factory
+            on { trustManager } doReturn trust
+        }
+    }
+
     private fun alwaysAskForPermissionStrategy(): NeverForbidPermissionStrategy =
         neverForbidPermissionStrategyMockedConstructionRule.singleWithArgs()
 
     internal abstract class AskForPermissionStrategyModule :
         ModuleServiceEntryPoint<Any>(),
         AskForPermissionStrategyModuleProvider
+
+    internal abstract class SslSocketFactoryModule :
+        ModuleServiceEntryPoint<Any>(),
+        SslSocketFactoryProvider
 }

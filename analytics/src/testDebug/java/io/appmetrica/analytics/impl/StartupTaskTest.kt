@@ -20,6 +20,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -157,6 +158,7 @@ internal class StartupTaskTest : CommonTest() {
 
     @Test
     fun onSuccessfulTaskFinished() {
+        whenever(fullUrlFormer.url).thenReturn("https://startup.example.com/path")
         startupTask.onRequestComplete()
         startupTask.onSuccessfulTaskFinished()
         verify(startupUnit).onRequestComplete(startupResult, startupRequestConfig, responseHeaders)
@@ -167,7 +169,7 @@ internal class StartupTaskTest : CommonTest() {
         whenever(responseHandler.handle(responseDataHolder)).thenReturn(null)
         startupTask.onRequestComplete()
         startupTask.onSuccessfulTaskFinished()
-        verify(startupUnit, never()).onRequestComplete(any(), any(), any())
+        verify(startupUnit, never()).onRequestComplete(any(), any(), anyOrNull())
     }
 
     @Test
@@ -175,7 +177,7 @@ internal class StartupTaskTest : CommonTest() {
         whenever(responseDataHolder.responseHeaders).thenReturn(null)
         startupTask.onRequestComplete()
         startupTask.onSuccessfulTaskFinished()
-        verify(startupUnit, never()).onRequestComplete(any(), any(), any())
+        verify(startupUnit, never()).onRequestComplete(any(), any(), anyOrNull())
     }
 
     @Test
@@ -205,7 +207,8 @@ internal class StartupTaskTest : CommonTest() {
 
     @Test
     fun getSslSocketFactory() {
-        assertThat(startupTask.sslSocketFactory)
-            .isEqualTo(GlobalServiceLocator.getInstance().sslSocketFactoryProvider.sslSocketFactory)
+        val provider = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
+        assertThat(startupTask.sslSocketFactory).isEqualTo(provider.sslSocketFactory)
+        assertThat(startupTask.trustManager).isEqualTo(provider.trustManager)
     }
 }

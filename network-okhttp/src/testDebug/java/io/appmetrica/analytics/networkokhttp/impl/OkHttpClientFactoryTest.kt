@@ -10,8 +10,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
+import java.security.KeyStore
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 @SuppressWarnings("RobolectricUsage")
 @RunWith(RobolectricTestRunner::class)
@@ -85,13 +88,16 @@ internal class OkHttpClientFactoryTest : CommonTest() {
     @Test
     fun createOkHttpClientWithSslSocketFactory() {
         val sslSocketFactory = mock<SSLSocketFactory>()
+        val trustManager = systemTrustManager()
         val settings = NetworkClientSettings.Builder()
             .withSslSocketFactory(sslSocketFactory)
+            .withTrustManager(trustManager)
             .build()
 
         val client = factory.createOkHttpClient(settings)
 
         assertThat(client.sslSocketFactory).isEqualTo(sslSocketFactory)
+        assertThat(client.x509TrustManager).isEqualTo(trustManager)
     }
 
     @Test
@@ -230,5 +236,11 @@ internal class OkHttpClientFactoryTest : CommonTest() {
                 .isNotSameAs(refillClients[1])
             assertAll()
         }
+    }
+
+    private fun systemTrustManager(): X509TrustManager {
+        val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        factory.init(null as KeyStore?)
+        return factory.trustManagers.filterIsInstance<X509TrustManager>().first()
     }
 }

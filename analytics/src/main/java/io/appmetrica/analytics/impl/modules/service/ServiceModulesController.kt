@@ -4,11 +4,13 @@ import android.location.Location
 import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
+import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateObserver
 import io.appmetrica.analytics.impl.modules.ModuleApi
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
+import io.appmetrica.analytics.impl.network.http.ModuleSslSocketFactoryProvider
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
@@ -231,6 +233,7 @@ internal class ServiceModulesController :
                 val configProvider = ModuleRemoteConfigProvider(startupState)
                 val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
                 module.initServiceSide(serviceContext, config)
+                bindSslSocketFactoryProviderIfNeeded(module)
 
                 module.moduleEventServiceHandlerFactory?.let {
                     DebugLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
@@ -253,7 +256,30 @@ internal class ServiceModulesController :
                 tag,
                 "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
             )
+            modulesWithProblems.forEach { unbindSslSocketFactoryProviderIfNeeded(it) }
             modules.removeAll(modulesWithProblems)
+        }
+    }
+
+    private fun bindSslSocketFactoryProviderIfNeeded(module: ModuleServiceEntryPoint<*>) {
+        if (module !is SslSocketFactoryProvider) {
+            return
+        }
+        val holder = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
+        if (holder is ModuleSslSocketFactoryProvider) {
+            DebugLogger.info(tag, "Bind SslSocketFactoryProvider from module ${module.identifier}")
+            holder.setDelegate(module)
+        }
+    }
+
+    private fun unbindSslSocketFactoryProviderIfNeeded(module: ModuleServiceEntryPoint<*>) {
+        if (module !is SslSocketFactoryProvider) {
+            return
+        }
+        val holder = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
+        if (holder is ModuleSslSocketFactoryProvider) {
+            DebugLogger.info(tag, "Unbind SslSocketFactoryProvider from module ${module.identifier}")
+            holder.setDelegate(null)
         }
     }
 

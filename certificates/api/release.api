@@ -1,0 +1,29 @@
+public final class io.appmetrica.analytics.certificates.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.certificates.internal.CertificatesServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper> implementation io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider {
+    public <init>()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper> getRemoteConfigExtensionConfiguration()
+    public [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper>)
+}
+
+public final class io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper {
+    public static final [NonNull] io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper$Companion Companion
+
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig] getConfig$certificates()
+}
+
+public static final class io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public final [NonNull] io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper toWrapper$certificates([NonNull] OBFUSCATED[io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig])
+}
+

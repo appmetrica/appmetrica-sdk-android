@@ -56,12 +56,13 @@ configurations.configureEach {
 - **apphud** - adds integration with `com.apphud:ApphudSDK-Android`.
 - **appsetid** - allows AppMetrica SDK to collect App Set IDs.
 - **billing** - allows AppMetrica SDK to collect billing events from Google Billing Library.
+- **billing** — aggregates the functionality of the in-app purchase collection.
+- **certificates** — optional module providing an additional TLS trust path for SDK network requests. Does not perform Certificate Transparency checks.
+- **id-sync** — deprecated empty compatibility artifact retained temporarily for dependency resolution.
 - **identifiers** - allows AppMetrica SDK to collect ADV IDs.
 - **location** - allows AppMetrica SDK to collect location.
 - **ndkcrashes** - allows AppMetrica SDK to handle native crashes on Android.
 - **screenshot** - allows AppMetrica SDK to collect screenshot taken events.
-- **id-sync** — deprecated empty compatibility artifact retained temporarily for dependency resolution.
-- **billing** — aggregates the functionality of the in-app purchase collection.
 
 ### Modules with optional dependencies
 
