@@ -3,10 +3,8 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
-import android.util.Base64;
 import android.util.Pair;
 import io.appmetrica.analytics.TestData;
-import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
@@ -20,7 +18,6 @@ import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -29,7 +26,6 @@ import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.IAppMetricaService;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -63,6 +59,7 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_STARTUP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -171,33 +168,59 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testReportStartupHasProcessReceiver() {
         final List<String> identifiers = Arrays.asList("uuid", "deviceid", "deviceid hash");
+        final Map<String, String> clientClids = Collections.singletonMap("clid", "123");
+        for (boolean forceRefresh : Arrays.asList(false, true)) {
+            clearInvocations(mReportsHandlerSpy, mReportsSender, mConnector);
 
-        mReportsHandlerSpy.reportStartupEvent(identifiers, mock(DataResultReceiver.class), null, true);
-        verify(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
+            mReportsHandlerSpy.reportStartupEvent(identifiers, clientClids, forceRefresh);
+
+            assertStartupPayload(identifiers, mDataResultReceiver, clientClids, forceRefresh);
+        }
     }
 
     @Test
     public void testReportStartupWithReceiver() {
         final List<String> identifiers = Arrays.asList("uuid", "deviceid", "deviceid hash");
         final ResultReceiver resultReceiver = mock(ResultReceiver.class);
-        final Map<String, String> clientClids = new HashMap<String, String>();
-        clientClids.put("clid0", "0");
-        clientClids.put("clid1", "1");
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                CoreClientEvent counterReport = (CoreClientEvent) invocationOnMock.getArguments()[0];
-                checkReportData(counterReport, EVENT_TYPE_STARTUP);
-                IdentifiersData identifiersData = counterReport.getPayload().getParcelable(IdentifiersData.BUNDLE_KEY);
-                assertThat(identifiersData.getIdentifiersList()).containsExactlyInAnyOrderElementsOf(identifiers);
-                assertThat(identifiersData.getResultReceiver()).isEqualTo(resultReceiver);
-                assertThat(identifiersData.getClidsFromClientForVerification()).isEqualTo(clientClids);
-                return null;
-            }
-        }).when(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
+        final Map<String, String> clientClids = Collections.singletonMap("clid", "123");
+        assertThat(resultReceiver).isNotSameAs(mDataResultReceiver);
+        for (ResultReceiver receiver : Arrays.asList(resultReceiver, null)) {
+            clearInvocations(mReportsHandlerSpy, mReportsSender, mConnector);
 
-        mReportsHandlerSpy.reportStartupEvent(identifiers, resultReceiver, clientClids, true);
-        verify(mReportsHandlerSpy).reportEvent(any(CoreClientEvent.class), any(ReporterEnvironment.class));
+            mReportsHandlerSpy.reportStartupEvent(identifiers, receiver, clientClids, true);
+
+            assertStartupPayload(identifiers, receiver, clientClids, true);
+        }
+    }
+
+    @Test
+    public void testReportStartupWithoutProcessReceiver() {
+        ProcessConfiguration configurationWithoutReceiver = new ProcessConfiguration(context, null);
+        when(commutationReporterEnvironment.getProcessConfiguration())
+            .thenReturn(configurationWithoutReceiver);
+
+        mReportsHandlerSpy.reportStartupEvent(Collections.emptyList(), null, false);
+
+        assertStartupPayload(Collections.emptyList(), null, Collections.emptyMap(), false);
+    }
+
+    private void assertStartupPayload(List<String> identifiers,
+                                      ResultReceiver receiver,
+                                      Map<String, String> clientClids,
+                                      boolean forceRefresh) {
+        ArgumentCaptor<CoreClientEvent> event = ArgumentCaptor.forClass(CoreClientEvent.class);
+        verify(mReportsHandlerSpy).reportEvent(event.capture(), any(ReporterEnvironment.class));
+        checkReportData(event.getValue(), EVENT_TYPE_STARTUP);
+        IdentifiersData payload = event.getValue().getPayload().getParcelable(IdentifiersData.BUNDLE_KEY);
+        assertThat(payload.getIdentifiersList()).containsExactlyElementsOf(identifiers);
+        assertThat(payload.getResultReceiver()).isSameAs(receiver);
+        assertThat(payload.getClidsFromClientForVerification()).isEqualTo(clientClids);
+        assertThat(payload.isForceRefreshConfiguration()).isEqualTo(forceRefresh);
+        ArgumentCaptor<ReportToSend> queued = ArgumentCaptor.forClass(ReportToSend.class);
+        verify(mReportsSender).queueReport(queued.capture());
+        assertThat(queued.getValue().isCrashReport()).isFalse();
+        verify(mConnector).removeScheduleDisconnect();
+        verify(mConnector, never()).scheduleDisconnect();
     }
 
     @Test

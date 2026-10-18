@@ -60,8 +60,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     @Nullable
     private PublicLogger mPublicLogger;
 
-    private final DataResultReceiver.Receiver defaultReceiver;
-
     private final Object mStartupParamsLock = new Object();
     private final Map<StartupParamsCallback, List<String>> mStartupParamsCallbacks = new WeakHashMap<>();
 
@@ -77,12 +75,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         mReportsHandler = reportsHandler;
         mStartupParams = startupParams;
         mHandler = handler;
-        defaultReceiver = new DataResultReceiver.Receiver() {
-            @Override
-            public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-                updateAllParamsByReceiver(resultData);
-            }
-        };
     }
 
     @Override
@@ -157,13 +149,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     }
 
     private void sendStartupEvent(@Nullable Map<String, String> clids, boolean forceRefreshConfiguration) {
-        sendStartupEvent(mAllIdentifiers, clids, forceRefreshConfiguration);
-    }
-
-    private void sendStartupEvent(@NonNull List<String> identifiers,
-                                  @Nullable Map<String, String> freshClientClids,
-                                  boolean forceRefreshConfiguration) {
-        sendStartupEvent(identifiers, defaultReceiver, freshClientClids, forceRefreshConfiguration);
+        mReportsHandler.reportStartupEvent(mAllIdentifiers, clids, forceRefreshConfiguration);
     }
 
     private void sendStartupEvent(@NonNull List<String> identifiers,
@@ -186,7 +172,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
                 clientIdentifiersHolder.getDeviceIdHash().id
             )
         );
-        notifyCallbacksIfValid();
     }
 
     public void sendStartupIfNeeded() {
@@ -421,12 +406,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     @NonNull
     Map<StartupParamsCallback, List<String>> getStartupAllParamsCallbacks() {
         return mStartupParamsCallbacks;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    @NonNull
-    public DataResultReceiver.Receiver getDefaultReceiver() {
-        return defaultReceiver;
     }
 
     @NonNull

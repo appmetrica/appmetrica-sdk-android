@@ -187,7 +187,18 @@ public class ReportsHandler {
     }
 
     public void reportStartupEvent(@NonNull List<String> identifiers,
-                                   @NonNull ResultReceiver receiver,
+                                   @Nullable Map<String, String> freshClientClids,
+                                   boolean forceRefreshConfiguration) {
+        reportStartupEvent(
+            identifiers,
+            mCommutationReportEnvironment.getProcessConfiguration().getDataResultReceiver(),
+            freshClientClids,
+            forceRefreshConfiguration
+        );
+    }
+
+    public void reportStartupEvent(@NonNull List<String> identifiers,
+                                   @Nullable ResultReceiver receiver,
                                    @Nullable Map<String, String> freshClientClids,
                                    boolean forceRefreshConfiguration) {
         DebugLogger.INSTANCE.info(
