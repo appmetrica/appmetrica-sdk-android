@@ -13,7 +13,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -39,7 +38,7 @@ internal class PhoneUtilsConnectionTypeTests(
     }
 
     private val context: Context = mock {
-        on { getSystemService(any<String>()) } doReturn connectivityManager
+        on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
     }
 
     @Before

@@ -6,11 +6,11 @@ private const val DEFAULT_BUILD_NUMBER = 65535
 private val BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: DEFAULT_BUILD_NUMBER.toString()
 
 object Constants {
-    const val robolectricSdk = 36 // after change run task `updateRobolectricSdk`
+    const val robolectricSdk = 37 // after change run task `updateRobolectricSdk`
 
     object Android {
-        const val buildToolsVersion = "36.0.0"
-        const val sdkVersion = 36
+        const val buildToolsVersion = "37.0.0"
+        const val sdkVersion = 37
         const val minSdkVersion = 21
         const val minSdkVersionNative = 21
     }

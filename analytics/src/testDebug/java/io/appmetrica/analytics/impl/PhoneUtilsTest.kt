@@ -2,6 +2,7 @@
 
 package io.appmetrica.analytics.impl
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -17,7 +18,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -41,7 +41,7 @@ internal class PhoneUtilsTest : CommonTest() {
 
     @Before
     fun setUp() {
-        whenever(context.getSystemService(any<String>())).thenReturn(connectivityManager)
+        whenever(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager)
     }
 
     @Test
