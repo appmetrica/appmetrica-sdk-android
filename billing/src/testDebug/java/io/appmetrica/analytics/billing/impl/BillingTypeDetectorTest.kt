@@ -45,19 +45,19 @@ internal class BillingTypeDetectorTest : CommonTest() {
     @Test
     fun getBillingTypeIfLibraryAndVersion5() {
         BuildConfig.VERSION_NAME = "5.0.0"
-        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test
     fun getBillingTypeIfLibraryAndVersion6() {
         BuildConfig.VERSION_NAME = "6.0.0"
-        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test
     fun getBillingTypeIfLibraryAndVersion7() {
         BuildConfig.VERSION_NAME = "7.0.0"
-        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test

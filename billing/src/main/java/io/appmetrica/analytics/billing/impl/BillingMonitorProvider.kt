@@ -8,7 +8,6 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSend
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
-import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 import io.appmetrica.analytics.billingv8.internal.BillingLibraryMonitor as BillingV8LibraryMonitor
 
 internal class BillingMonitorProvider {
@@ -25,17 +24,6 @@ internal class BillingMonitorProvider {
     ): BillingMonitor {
         DebugLogger.info(tag, "Billing type: $type")
         return when (type) {
-            BillingType.LIBRARY_V6 -> {
-                DebugLogger.info(tag, "Tracking purchases using Billing Library 6")
-                BillingV6LibraryMonitor(
-                    context,
-                    workerExecutor,
-                    uiExecutor,
-                    billingInfoStorage,
-                    billingInfoSender
-                )
-            }
-
             BillingType.LIBRARY_V8 -> {
                 DebugLogger.info(tag, "Tracking purchases using Billing Library 8")
                 BillingV8LibraryMonitor(

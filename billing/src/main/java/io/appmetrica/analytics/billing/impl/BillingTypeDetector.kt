@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val LOG_TAG = "[BillingTypeDetector]"
+private const val LIBRARY_V8_MIN_MAJOR_VERSION = 8
 
 internal object BillingTypeDetector {
 
@@ -21,15 +22,15 @@ internal object BillingTypeDetector {
         }
         DebugLogger.info(LOG_TAG, "Billing library version: $version")
 
+        val majorVersion = version
+            ?.takeIf { it.isNotBlank() }
+            ?.substringBefore('.')
+            ?.toIntOrNull()
+
         return when {
-            version.isNullOrBlank() -> BillingType.NONE
-            version.startsWith("2.") -> BillingType.NONE
-            version.startsWith("3.") -> BillingType.NONE
-            version.startsWith("4.") -> BillingType.NONE
-            version.startsWith("5.") -> BillingType.LIBRARY_V6
-            version.startsWith("6.") -> BillingType.LIBRARY_V6
-            version.startsWith("7.") -> BillingType.LIBRARY_V6
-            version.startsWith("8.") -> BillingType.LIBRARY_V8
+            majorVersion == null -> BillingType.NONE
+            majorVersion < LIBRARY_V8_MIN_MAJOR_VERSION -> BillingType.NONE
+            majorVersion == LIBRARY_V8_MIN_MAJOR_VERSION -> BillingType.LIBRARY_V8
             else -> BillingType.LIBRARY_V8
         }
     }

@@ -60,13 +60,6 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-v6",
-                    "version": {
-                        "requires": "9.0.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
                     "module": "analytics-billing-v8",
                     "version": {
                         "requires": "9.0.0"

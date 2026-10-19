@@ -15,7 +15,6 @@ android {
 
 dependencies {
     implementation(project(":billing-interface"))
-    implementation(project(":billing-v6"))
     implementation(project(":billing-v8"))
 
     implementation(project(":core-api"))

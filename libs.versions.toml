@@ -29,7 +29,6 @@ facebookAudienceNetwork = "6.21.0"
 ironsourceV9 = "9.0.0"
 
 # Billing
-billingV6 = "7.1.1"
 billingV8 = "8.0.0"
 
 # Apphud
@@ -97,7 +96,6 @@ ironsourceV7 = { module = "com.unity3d.ads-mediation:mediation-sdk", version.ref
 ironsourceV9 = { module = "com.unity3d.ads-mediation:mediation-sdk", version.ref = "ironsourceV9" }
 
 # Billing
-billingV6 = { module = "com.android.billingclient:billing", version.ref = "billingV6" }
 billingV8 = { module = "com.android.billingclient:billing", version.ref = "billingV8" }
 
 # Apphud

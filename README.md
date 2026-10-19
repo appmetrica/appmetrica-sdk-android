@@ -68,8 +68,7 @@ configurations.configureEach {
 The modules described below are not optional, but they do require external dependencies to function.
 You can find the necessary dependencies in the modules' README files.
 
-- **billing-v6** - wrapper for `com.android.billingclient:billing`.
-- **billing-v8** - wrapper for `com.android.billingclient:billing`.
+- **billing-v8** - wrapper for `com.android.billingclient:billing` (Google Play Billing Library 8+).
 - **gpllibrary** - wrapper for `com.google.android.gms:play-services-location`.
 
 ### Module dependencies

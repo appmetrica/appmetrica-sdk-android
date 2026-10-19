@@ -117,15 +117,6 @@
     from: "16.0.1"
     to: "16.1.0"
 - group: "io.appmetrica.analytics"
-  name: "analytics-billing-v6"
-  dependencies:
-  - repository: "https://dl.google.com/android/maven2"
-    group: "com.android.billingclient"
-    name: "billing"
-    from: "6.0.0"
-    to: "7.1.1"
-    forcible: false
-- group: "io.appmetrica.analytics"
   name: "analytics-billing-v8"
   dependencies:
   - repository: "https://dl.google.com/android/maven2"

@@ -67,10 +67,6 @@
         <allow pkg="io\.appmetrica\.analytics\.billing\.impl(\..+)?" regex="true"/>
     </subpackage>
 
-    <subpackage name="billingv6">
-        <allow pkg="io\.appmetrica\.analytics\.billingv6\.impl(\..+)?" regex="true"/>
-    </subpackage>
-
     <subpackage name="billingv8">
         <allow pkg="io\.appmetrica\.analytics\.billingv8\.impl(\..+)?" regex="true"/>
     </subpackage>
