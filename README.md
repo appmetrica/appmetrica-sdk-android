@@ -58,7 +58,6 @@ configurations.configureEach {
 - **billing** - allows AppMetrica SDK to collect billing events from Google Billing Library.
 - **billing** — aggregates the functionality of the in-app purchase collection.
 - **certificates** — optional module providing an additional TLS trust path for SDK network requests. Does not perform Certificate Transparency checks.
-- **id-sync** — deprecated empty compatibility artifact retained temporarily for dependency resolution.
 - **identifiers** - allows AppMetrica SDK to collect ADV IDs.
 - **location** - allows AppMetrica SDK to collect location.
 - **ndkcrashes** - allows AppMetrica SDK to handle native crashes on Android.

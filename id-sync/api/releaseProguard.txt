@@ -1,1 +1,0 @@
--keep class io.appmetrica.analytics.idsync.** { *; }

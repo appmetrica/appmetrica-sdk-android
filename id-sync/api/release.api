@@ -1,8 +1,0 @@
-public final class io.appmetrica.analytics.idsync.BuildConfig {
-    public static final String BUILD_TYPE
-    public static final boolean DEBUG
-    public static final String LIBRARY_PACKAGE_NAME
-
-    public <init>()
-}
-
