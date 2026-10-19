@@ -7,8 +7,9 @@ import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class ModulesIsolationTest : CommonTest() {
+private const val TEST_TIMEOUT_SECONDS = 120L
 
+class ModulesIsolationTest : CommonTest(timeoutSeconds = TEST_TIMEOUT_SECONDS) {
     @Test
     fun productFlowClassesAreNotUsedInAnalyticsModule() {
         val analyticsClassesUrl = AppMetrica::class.java.protectionDomain.codeSource.location
