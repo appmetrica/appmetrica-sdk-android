@@ -113,9 +113,11 @@ internal class Barrier(
         activityValidator.validate(activity)
     }
 
-    fun reportAppOpen(deeplink: String?) {
+    fun reportAppOpen(deeplink: String?): String {
         activationValidator.validate()
         deeplinkValidator.validate(deeplink)
+        // The validator above rejects null.
+        return deeplink!!
     }
 
     fun reportAppOpen(intent: Intent?) {

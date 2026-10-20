@@ -63,6 +63,7 @@ internal class AppMetricaProxyBarrierTests(
 
     @Before
     fun setUpClientServiceLocator() {
+        doReturn("someString").whenever(barrier).reportAppOpen("someString")
         val executor: IHandlerExecutor = MockProvider.mockedBlockingExecutorMock()
         whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
         whenever(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(any<Context>()).readUuid())

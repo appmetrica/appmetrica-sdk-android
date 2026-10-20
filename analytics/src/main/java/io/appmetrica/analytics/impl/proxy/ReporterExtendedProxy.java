@@ -169,6 +169,18 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @Override
+    public void reportAppOpen(@NonNull final String deeplink) {
+        barrier.reportAppOpen(deeplink);
+        synchronousStageExecutor.reportAppOpen(deeplink);
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getReporter().reportAppOpen(deeplink);
+            }
+        });
+    }
+
+    @Override
     public void putAppEnvironmentValue(@NonNull final String key, @Nullable final String value) {
         barrier.putAppEnvironmentValue(key, value);
         synchronousStageExecutor.putAppEnvironmentValue(key, value);

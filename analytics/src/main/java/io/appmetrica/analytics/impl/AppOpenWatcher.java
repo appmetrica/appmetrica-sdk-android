@@ -20,10 +20,10 @@ public class AppOpenWatcher implements ActivityLifecycleListener {
     private static final String TAG = "[AppOpenWatcher]";
 
     @NonNull
-    private final List<NonNullConsumer<DeeplinkConsumer>> savedCommands =
-        new ArrayList<NonNullConsumer<DeeplinkConsumer>>();
+    private final List<NonNullConsumer<IMainReporter>> savedCommands =
+        new ArrayList<NonNullConsumer<IMainReporter>>();
     @Nullable
-    private volatile DeeplinkConsumer deeplinkConsumer = null;
+    private volatile IMainReporter reporter = null;
 
     public void startWatching() {
         DebugLogger.INSTANCE.info(TAG, "Start watching app opens");
@@ -42,37 +42,37 @@ public class AppOpenWatcher implements ActivityLifecycleListener {
     }
 
     @ApiProxyThread
-    public void setDeeplinkConsumer(@NonNull DeeplinkConsumer deeplinkConsumer) {
-        DebugLogger.INSTANCE.info(TAG, "setReporter to %s", deeplinkConsumer);
-        List<NonNullConsumer<DeeplinkConsumer>> commandsToExecute;
+    public void setReporter(@NonNull IMainReporter reporter) {
+        DebugLogger.INSTANCE.info(TAG, "setReporter to %s", reporter);
+        List<NonNullConsumer<IMainReporter>> commandsToExecute;
         synchronized (this) {
-            this.deeplinkConsumer = deeplinkConsumer;
+            this.reporter = reporter;
             commandsToExecute = getCommandsToExecute();
         }
-        for (NonNullConsumer<DeeplinkConsumer> command : commandsToExecute) {
-            command.consume(deeplinkConsumer);
+        for (NonNullConsumer<IMainReporter> command : commandsToExecute) {
+            command.consume(reporter);
         }
     }
 
     @NonNull
-    private synchronized List<NonNullConsumer<DeeplinkConsumer>> getCommandsToExecute() {
-        List<NonNullConsumer<DeeplinkConsumer>> commands =
-            new ArrayList<NonNullConsumer<DeeplinkConsumer>>(savedCommands);
+    private synchronized List<NonNullConsumer<IMainReporter>> getCommandsToExecute() {
+        List<NonNullConsumer<IMainReporter>> commands =
+            new ArrayList<NonNullConsumer<IMainReporter>>(savedCommands);
         savedCommands.clear();
         return commands;
     }
 
     @MainThread
-    private synchronized void addOrExecuteCommand(@NonNull final NonNullConsumer<DeeplinkConsumer> command) {
-        final DeeplinkConsumer deeplinkConsumerCopy = deeplinkConsumer;
-        DebugLogger.INSTANCE.info(TAG, "addOrExecuteCommand. Deeplink consumer: %s", deeplinkConsumerCopy);
-        if (deeplinkConsumerCopy == null) {
+    private synchronized void addOrExecuteCommand(@NonNull final NonNullConsumer<IMainReporter> command) {
+        final IMainReporter reporterCopy = reporter;
+        DebugLogger.INSTANCE.info(TAG, "addOrExecuteCommand. Reporter: %s", reporterCopy);
+        if (reporterCopy == null) {
             savedCommands.add(command);
         } else {
             ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().post(new Runnable() {
                 @Override
                 public void run() {
-                    command.consume(deeplinkConsumerCopy);
+                    command.consume(reporterCopy);
                 }
             });
         }
@@ -95,12 +95,12 @@ public class AppOpenWatcher implements ActivityLifecycleListener {
         );
         final String deeplink = intent == null ? null : intent.getDataString();
         if (!StringUtils.isNullOrEmpty(deeplink)) {
-            addOrExecuteCommand(new NonNullConsumer<DeeplinkConsumer>() {
+            addOrExecuteCommand(new NonNullConsumer<IMainReporter>() {
                 @Override
                 @ApiProxyThread
-                public void consume(@NonNull DeeplinkConsumer deeplinkConsumer) {
+                public void consume(@NonNull IMainReporter reporter) {
                     DebugLogger.INSTANCE.info(TAG, "Reporting app open: %s", deeplink);
-                    deeplinkConsumer.reportAutoAppOpen(deeplink);
+                    reporter.reportAutoAppOpen(deeplink);
                 }
             });
         }

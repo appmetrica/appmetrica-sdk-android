@@ -355,6 +355,25 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
+    fun `main reporter stays the same across anonymous upgrade and key changes`() {
+        val anonymousConfig = AppMetricaConfig.newConfigBuilder(firstReporterApiKey).build()
+        val anonymousReporter = reporterFactory.buildOrUpdateAnonymousMainReporter(
+            anonymousConfig,
+            logger,
+            configExtension
+        )
+        val regularReporter = reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
+        assertThat(reporterFactory.getOrCreateReporter(ReporterConfig.newConfigBuilder(apiKey).build()))
+            .isSameAs(regularReporter)
+
+        val nextConfig = AppMetricaConfig.newConfigBuilder(secondReporterApiKey).build()
+        val changedKeyReporter = reporterFactory.buildOrUpdateMainReporter(nextConfig, logger, configExtension)
+
+        assertThat(anonymousReporter).isSameAs(regularReporter).isSameAs(changedKeyReporter)
+        assertThat(mainReporterConstructionRule.constructionMock.constructed()).hasSize(1)
+    }
+
+    @Test
     fun activateReporter() {
         val config = ReporterConfig.newConfigBuilder(firstReporterApiKey).build()
         reporterFactory.activateReporter(config)

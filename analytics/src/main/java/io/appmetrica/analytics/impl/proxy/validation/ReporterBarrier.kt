@@ -18,6 +18,9 @@ internal class ReporterBarrier {
     private val eventNameValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Event name")
     )
+    private val deeplinkValidator = ThrowIfFailedValidator(
+        NonEmptyStringValidator("Deeplink")
+    )
     private val errorMessageValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Error message")
     )
@@ -49,6 +52,10 @@ internal class ReporterBarrier {
 
     fun reportEvent(eventName: String?) {
         eventNameValidator.validate(eventName)
+    }
+
+    fun reportAppOpen(deeplink: String?) {
+        deeplinkValidator.validate(deeplink)
     }
 
     fun reportEvent(

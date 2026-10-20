@@ -298,6 +298,7 @@ public interface io.appmetrica.analytics.IReporter {
     public abstract void putErrorEnvironmentValue([NonNull] String, [Nullable] String)
     public abstract void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
     public abstract void reportAnr([NonNull] java.util.Map<Thread, StackTraceElement[]>)
+    public void reportAppOpen([NonNull] String)
     public abstract void reportECommerce([NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent)
     public abstract void reportError([NonNull] String, [Nullable] String)
     public abstract void reportError([NonNull] String, [Nullable] String, [Nullable] Throwable)

@@ -27,6 +27,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -207,6 +208,21 @@ public class SelfReporterWrapperTest extends CommonTest {
         mSelfReporterWrapper.onInitializationFinished(mContext);
         mSelfReporterWrapper.reportEvent(name);
         verify(mReporter).reportEvent(name);
+    }
+
+    @Test
+    public void reportAppOpenBuffersUntilInitializationAndThenDelegates() {
+        String bufferedLink = "some://buffered";
+        String directLink = "some://direct";
+        mSelfReporterWrapper.reportAppOpen(bufferedLink);
+        verifyNoInteractions(mReporter);
+
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        mSelfReporterWrapper.reportAppOpen(directLink);
+
+        org.mockito.InOrder order = inOrder(mReporter);
+        order.verify(mReporter).reportAppOpen(bufferedLink);
+        order.verify(mReporter).reportAppOpen(directLink);
     }
 
     @Test

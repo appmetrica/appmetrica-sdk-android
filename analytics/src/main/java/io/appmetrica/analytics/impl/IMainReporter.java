@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
+import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AnrListener;
@@ -9,10 +10,12 @@ import java.util.List;
 
 public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
 
+    void reportAppOpen(@Nullable Intent intent);
+
+    void reportAutoAppOpen(@Nullable String deeplink);
+
     void enableAnrMonitoring();
     
-    void reportAppOpen(@NonNull String deeplink, boolean auto);
-
     void onEnableAutoTrackingAttemptOccurred(@NonNull ActivityLifecycleManager.WatchingStatus status);
 
     void resumeSession(@Nullable Activity activity);

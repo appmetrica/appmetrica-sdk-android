@@ -64,7 +64,7 @@ internal class BarrierTest : CommonTest() {
 
     @Test
     fun reportAppOpenWithDeeplink() {
-        mBarrier.reportAppOpen("deeplink")
+        assertThat(mBarrier.reportAppOpen("deeplink")).isEqualTo("deeplink")
     }
 
     @Test(expected = ValidationException::class)

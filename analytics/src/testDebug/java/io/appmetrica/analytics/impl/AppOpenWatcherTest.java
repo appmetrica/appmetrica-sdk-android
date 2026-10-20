@@ -31,7 +31,7 @@ public class AppOpenWatcherTest extends CommonTest {
     @Mock
     private Intent intent;
     @Mock
-    private DeeplinkConsumer deeplinkConsumer;
+    private IMainReporter reporter;
     @Captor
     private ArgumentCaptor<Runnable> runnableCaptor;
     private final String deeplink = "some deeplink";
@@ -61,69 +61,69 @@ public class AppOpenWatcherTest extends CommonTest {
     }
 
     @Test
-    public void hasCallbacksNoDeeplinkConsumer() {
+    public void hasCallbacksNoReporter() {
         appOpenWatcher.startWatching();
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
+        appOpenWatcher.setReporter(reporter);
         verifyNoMoreInteractions(executor);
-        verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
+        verify(reporter).reportAutoAppOpen(deeplink);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumer() {
+    public void hasCallbacksHasReporter() {
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         clearInvocations(executor);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verify(executor).post(runnableCaptor.capture());
         runnableCaptor.getValue().run();
-        verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
+        verify(reporter).reportAutoAppOpen(deeplink);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumerNoIntent() {
+    public void hasCallbacksHasReporterNoIntent() {
         when(activity.getIntent()).thenReturn(null);
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumerGetIntentThrows() {
+    public void hasCallbacksHasReporterGetIntentThrows() {
         when(activity.getIntent()).thenThrow(new RuntimeException());
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumerNullIntent() {
+    public void hasCallbacksHasReporterNullIntent() {
         when(activity.getIntent()).thenReturn(null);
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumerNullDeeplink() {
+    public void hasCallbacksHasReporterNullDeeplink() {
         when(intent.getDataString()).thenReturn(null);
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
     }
 
     @Test
-    public void hasCallbacksHasDeeplinkConsumerEmptyDeeplink() {
+    public void hasCallbacksHasReporterEmptyDeeplink() {
         when(intent.getDataString()).thenReturn("");
         appOpenWatcher.startWatching();
-        appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
+        appOpenWatcher.setReporter(reporter);
         appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
-        verifyNoMoreInteractions(executor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, reporter);
     }
 
 }

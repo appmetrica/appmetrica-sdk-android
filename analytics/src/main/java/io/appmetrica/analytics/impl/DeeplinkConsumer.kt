@@ -4,10 +4,14 @@ import android.content.Intent
 import io.appmetrica.analytics.impl.utils.ApiProxyThread
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-internal class DeeplinkConsumer(private val mainReporter: IMainReporter) {
+internal class DeeplinkConsumer(private val reportEvent: AppOpenEventReporter) {
+
+    fun interface AppOpenEventReporter {
+        fun report(deeplink: String, auto: Boolean)
+    }
 
     private val tag = "[DeeplinkConsumer]"
-    private var lastDeeplink = ""
+    private var lastDeeplink: String? = null
 
     @ApiProxyThread
     fun reportAppOpen(intent: Intent?) {
@@ -33,7 +37,7 @@ internal class DeeplinkConsumer(private val mainReporter: IMainReporter) {
         deeplink?.takeIf { it.isNotEmpty() } ?: return
         if (lastDeeplink != deeplink) {
             lastDeeplink = deeplink
-            mainReporter.reportAppOpen(deeplink, auto)
+            reportEvent.report(deeplink, auto)
         } else {
             DebugLogger.info(tag, "Ignore duplicated deeplink: $deeplink")
         }

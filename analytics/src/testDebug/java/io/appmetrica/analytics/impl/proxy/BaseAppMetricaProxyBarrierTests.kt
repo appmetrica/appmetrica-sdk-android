@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
 import io.appmetrica.analytics.impl.AppMetricaFacade
-import io.appmetrica.analytics.impl.DeeplinkConsumer
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.proxy.validation.Barrier
@@ -21,7 +20,6 @@ internal abstract class BaseAppMetricaProxyBarrierTests(
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock {
         on { mainReporter } doReturn mainReporter
-        on { deeplinkConsumer } doReturn mock<DeeplinkConsumer>()
     }
     private val impl: AppMetricaFacade = mock {
         on { mainReporterApiConsumerProvider } doReturn mainReporterApiConsumerProvider

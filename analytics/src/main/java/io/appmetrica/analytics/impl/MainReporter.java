@@ -59,15 +59,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
-    public void reportAppOpen(@NonNull String deeplink, boolean auto) {
-        mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
-        mReportsHandler.reportEvent(
-                CoreClientEvent.openAppReportEntry(deeplink, auto),
-                mReporterEnvironment
-        );
-    }
-
-    @Override
     public void onEnableAutoTrackingAttemptOccurred(@NonNull ActivityLifecycleManager.WatchingStatus status) {
         if (status == ActivityLifecycleManager.WatchingStatus.WATCHING) {
             mPublicLogger.info("Enable activity auto tracking");

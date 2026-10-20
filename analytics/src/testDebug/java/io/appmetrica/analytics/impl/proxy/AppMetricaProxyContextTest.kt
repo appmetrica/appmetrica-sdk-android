@@ -7,7 +7,6 @@ import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
-import io.appmetrica.analytics.impl.DeeplinkConsumer
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
@@ -37,7 +36,6 @@ internal class AppMetricaProxyContextTest : CommonTest() {
 
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
-    private val deeplinkConsumer: DeeplinkConsumer = mock()
     private val impl: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock()
     private val reporterProxyStorage: ReporterProxyStorage = mock()
@@ -81,7 +79,6 @@ internal class AppMetricaProxyContextTest : CommonTest() {
         )
         whenever(impl.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         doReturn(mainReporter).whenever(mainReporterApiConsumerProvider).mainReporter
-        doReturn(deeplinkConsumer).whenever(mainReporterApiConsumerProvider).deeplinkConsumer
     }
 
     @Test

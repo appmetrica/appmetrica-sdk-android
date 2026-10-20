@@ -23,6 +23,8 @@ internal class ReporterSynchronousStageExecutor {
 
     fun sendEventsBuffer() {}
 
+    fun reportAppOpen(deeplink: String) {}
+
     fun reportEvent(eventName: String) {}
 
     fun reportEvent(eventName: String, jsonValue: String?) {}

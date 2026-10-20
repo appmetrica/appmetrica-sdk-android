@@ -1404,6 +1404,7 @@
   "analytics/src/testDebug/java/io/appmetrica/analytics/ExternalAttributionsTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/ExternalAttributionsTest.kt",
   "analytics/src/testDebug/java/io/appmetrica/analytics/FeaturesResultTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/FeaturesResultTest.kt",
   "analytics/src/testDebug/java/io/appmetrica/analytics/HashCodeEqualsTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/HashCodeEqualsTest.kt",
+  "analytics/src/testDebug/java/io/appmetrica/analytics/IReporterTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/IReporterTest.java",
   "analytics/src/testDebug/java/io/appmetrica/analytics/LazyReportConfigProviderTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/LazyReportConfigProviderTest.kt",
   "analytics/src/testDebug/java/io/appmetrica/analytics/MockUtils.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/MockUtils.kt",
   "analytics/src/testDebug/java/io/appmetrica/analytics/ModuleEventTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/testDebug/java/io/appmetrica/analytics/ModuleEventTest.kt",

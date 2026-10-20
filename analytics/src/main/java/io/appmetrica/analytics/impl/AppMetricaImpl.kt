@@ -340,9 +340,8 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         config: AppMetricaConfig
     ) {
         val reporter = creator.initialize()
-        mainReporterApiConsumerProvider = MainReporterApiConsumerProvider(reporter).also {
-            core.appOpenWatcher.setDeeplinkConsumer(it.deeplinkConsumer)
-        }
+        mainReporterApiConsumerProvider = MainReporterApiConsumerProvider(reporter)
+        core.appOpenWatcher.setReporter(reporter)
         sessionsTrackingManager.setReporter(reporter)
     }
 

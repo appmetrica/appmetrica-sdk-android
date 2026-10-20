@@ -11,15 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MainReporterApiConsumerProviderTest extends CommonTest {
 
     @Mock
-    private IMainReporter mainReporter;
-    @Mock
-    private DeeplinkConsumer deeplinkConsumer;
+    private MainReporter mainReporter;
     private MainReporterApiConsumerProvider mainReporterApiConsumerProvider;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mainReporterApiConsumerProvider = new MainReporterApiConsumerProvider(mainReporter, deeplinkConsumer);
+        mainReporterApiConsumerProvider = new MainReporterApiConsumerProvider(mainReporter);
     }
 
     @Test
@@ -27,8 +25,4 @@ public class MainReporterApiConsumerProviderTest extends CommonTest {
         assertThat(mainReporterApiConsumerProvider.getMainReporter()).isSameAs(mainReporter);
     }
 
-    @Test
-    public void getDeeplinkConsumer() {
-        assertThat(mainReporterApiConsumerProvider.getDeeplinkConsumer()).isSameAs(deeplinkConsumer);
-    }
 }

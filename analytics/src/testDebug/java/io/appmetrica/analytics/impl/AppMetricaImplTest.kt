@@ -156,13 +156,10 @@ internal class AppMetricaImplTest : CommonTest() {
     private val startupHelper: StartupHelper = mock()
     private val referrerHelper: ReferrerHelper = mock()
 
-    private val deeplinkConsumer: DeeplinkConsumer = mock()
-
     private val reporterFromConsumerProvider: MainReporter = mock()
 
     @get:Rule
     val mainReporterApiConsumerProviderMockedConstructionRule = constructionRule<MainReporterApiConsumerProvider> {
-        on { deeplinkConsumer } doReturn deeplinkConsumer
         on { mainReporter } doReturn reporterFromConsumerProvider
     }
 
@@ -686,7 +683,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate - build main reporter`() {
         impl.activate(config)
         verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
-        verify(appOpenWatcher).setDeeplinkConsumer(deeplinkConsumer)
+        verify(appOpenWatcher).setReporter(mainReporter)
         assertThat(mainReporterApiConsumerProviderMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(mainReporter)
         verify(sessionsTrackingManager).setReporter(mainReporter)
@@ -707,7 +704,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
             .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
-        verify(appOpenWatcher).setDeeplinkConsumer(deeplinkConsumer)
+        verify(appOpenWatcher).setReporter(anonymousMainReporter)
         assertThat(mainReporterApiConsumerProviderMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(anonymousMainReporter)
         verify(sessionsTrackingManager).setReporter(anonymousMainReporter)

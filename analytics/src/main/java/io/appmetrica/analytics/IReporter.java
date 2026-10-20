@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.Map;
@@ -21,6 +22,22 @@ import java.util.Map;
  * @see AppMetrica#getReporter(android.content.Context, String)
  */
 public interface IReporter {
+
+    /**
+     * Sends a report about opening the app via a deeplink.
+     * Consecutive calls with the same deeplink are reported only once for this reporter.
+     * Custom reporter implementations that do not override this method ignore the deeplink
+     * and log a warning in debug and snapshot builds.
+     *
+     * @param deeplink Deeplink value.
+     * @throws ValidationException If an SDK reporter receives a null or empty deeplink.
+     */
+    default void reportAppOpen(@NonNull String deeplink) {
+        DebugLogger.INSTANCE.warning(
+            "IReporter",
+            "reportAppOpen is not implemented by this reporter. Deeplink is ignored."
+        );
+    }
 
     /**
      * Initiates forced sending of all stored events from the buffer.<p>

@@ -14,6 +14,7 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ExternalAttribution
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
+import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult
@@ -22,7 +23,6 @@ import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.ActivityLifecycleManager
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
-import io.appmetrica.analytics.impl.DeeplinkConsumer
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
@@ -40,6 +40,7 @@ import io.appmetrica.analytics.testutils.MockProvider
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,7 +68,6 @@ internal class AppMetricaProxyTest : CommonTest() {
 
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
-    private val deeplinkConsumer: DeeplinkConsumer = mock()
     private val impl: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock()
     private val reporterProxyStorage: ReporterProxyStorage = mock()
@@ -103,7 +103,6 @@ internal class AppMetricaProxyTest : CommonTest() {
         proxy = createProxy()
         whenever(impl.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         doReturn(mainReporter).whenever(mainReporterApiConsumerProvider).mainReporter
-        doReturn(deeplinkConsumer).whenever(mainReporterApiConsumerProvider).deeplinkConsumer
     }
 
     @Test
@@ -276,10 +275,10 @@ internal class AppMetricaProxyTest : CommonTest() {
         val intent: Intent = mock()
         whenever(synchronousStageExecutor.reportAppOpen(activity)).thenReturn(intent)
         proxy.reportAppOpen(activity)
-        val order = inOrder(barrier, synchronousStageExecutor, deeplinkConsumer)
+        val order = inOrder(barrier, synchronousStageExecutor, mainReporter)
         order.verify(barrier).reportAppOpen(activity)
         order.verify(synchronousStageExecutor).reportAppOpen(activity)
-        order.verify(deeplinkConsumer).reportAppOpen(intent)
+        order.verify(mainReporter).reportAppOpen(intent)
     }
 
     @Test
@@ -288,30 +287,41 @@ internal class AppMetricaProxyTest : CommonTest() {
         val activity: Activity = mock()
         whenever(synchronousStageExecutor.reportAppOpen(activity)).thenReturn(null)
         proxy.reportAppOpen(activity)
-        val order = inOrder(barrier, synchronousStageExecutor, deeplinkConsumer)
+        val order = inOrder(barrier, synchronousStageExecutor, mainReporter)
         order.verify(barrier).reportAppOpen(activity)
         order.verify(synchronousStageExecutor).reportAppOpen(activity)
-        order.verify(deeplinkConsumer).reportAppOpen(null as Intent?)
+        order.verify(mainReporter).reportAppOpen(null as Intent?)
     }
 
     @Test
     fun reportAppOpenIntent() {
         val intent: Intent = mock()
         proxy.reportAppOpen(intent)
-        val order = inOrder(barrier, synchronousStageExecutor, deeplinkConsumer)
+        val order = inOrder(barrier, synchronousStageExecutor, mainReporter)
         order.verify(barrier).reportAppOpen(intent)
         order.verify(synchronousStageExecutor).reportAppOpen(intent)
-        order.verify(deeplinkConsumer).reportAppOpen(intent)
+        order.verify(mainReporter).reportAppOpen(intent)
     }
 
     @Test
     fun reportAppOpenString() {
         val appOpen = "appOpen"
+        whenever(barrier.reportAppOpen(appOpen)).thenReturn(appOpen)
         proxy.reportAppOpen(appOpen)
-        val order = inOrder(barrier, synchronousStageExecutor, deeplinkConsumer)
+        val order = inOrder(barrier, synchronousStageExecutor, mainReporter)
         order.verify(barrier).reportAppOpen(appOpen)
         order.verify(synchronousStageExecutor).reportAppOpen(appOpen)
-        order.verify(deeplinkConsumer).reportAppOpen(appOpen)
+        order.verify(mainReporter).reportAppOpen(appOpen)
+    }
+
+    @Test
+    fun reportAppOpenStringIfDeeplinkIsNull() {
+        whenever(provider.isActivated).thenReturn(true)
+        proxy = createProxy(Barrier(provider))
+
+        assertThatThrownBy { proxy.reportAppOpen(null) }
+            .isInstanceOf(ValidationException::class.java)
+        verifyNoMoreInteractions(synchronousStageExecutor, mainReporter)
     }
 
     @Test
@@ -701,7 +711,7 @@ internal class AppMetricaProxyTest : CommonTest() {
         order.verify(provider).setDataSendingEnabled(value)
     }
 
-    private fun createProxy() = AppMetricaProxy(
+    private fun createProxy(barrier: Barrier = this.barrier) = AppMetricaProxy(
         provider,
         barrier,
         silentActivationValidator,

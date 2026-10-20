@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,6 +93,8 @@ public abstract class BaseReporter implements IBaseReporter {
 
     protected final Context mContext;
     protected final ReporterEnvironment mReporterEnvironment;
+    @NonNull
+    private final DeeplinkConsumer deeplinkConsumer;
     @NonNull protected final PublicLogger mPublicLogger;
     @NonNull
     protected final UnhandledExceptionConverter unhandledExceptionConverter;
@@ -126,6 +129,7 @@ public abstract class BaseReporter implements IBaseReporter {
         mContext = context.getApplicationContext();
         mReportsHandler = reportsHandler;
         mReporterEnvironment = reporterEnvironment;
+        deeplinkConsumer = new DeeplinkConsumer(this::reportAppOpenEvent);
         mExtraMetaInfoRetriever = extraMetaInfoRetriever;
         this.unhandledExceptionConverter = unhandledExceptionConverter;
         this.regularErrorConverter = regularErrorConverter;
@@ -150,6 +154,27 @@ public abstract class BaseReporter implements IBaseReporter {
             mReporterEnvironment.getReporterConfiguration().getApiKey()
         );
         mReportsHandler.reportActivationEvent(mReporterEnvironment);
+    }
+
+    @Override
+    public void reportAppOpen(@NonNull String deeplink) {
+        deeplinkConsumer.reportAppOpen(deeplink);
+    }
+
+    public void reportAppOpen(@Nullable Intent intent) {
+        deeplinkConsumer.reportAppOpen(intent);
+    }
+
+    public void reportAutoAppOpen(@Nullable String deeplink) {
+        deeplinkConsumer.reportAutoAppOpen(deeplink);
+    }
+
+    private void reportAppOpenEvent(@NonNull String deeplink, boolean auto) {
+        mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
+        mReportsHandler.reportEvent(
+                CoreClientEvent.openAppReportEntry(deeplink, auto),
+                mReporterEnvironment
+        );
     }
 
     void setStartupParamsProvider(final StartupIdentifiersProvider startupParamsProvider) {

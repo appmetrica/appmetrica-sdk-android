@@ -6,6 +6,7 @@ import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.Revenue;
+import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
@@ -34,6 +35,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,6 +44,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class ReporterExtendedProxyTest extends CommonTest {
@@ -186,6 +189,36 @@ public class ReporterExtendedProxyTest extends CommonTest {
         inOrder.verify(reporterBarrier).reportEvent(name);
         inOrder.verify(mSynchronousStageExecutor).reportEvent(name);
         inOrder.verify(mReporter).reportEvent(name);
+    }
+
+    @Test
+    public void reportAppOpen() {
+        String deeplink = "some://deeplink";
+        mReporterExtendedProxy.reportAppOpen(deeplink);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportAppOpen(deeplink);
+        inOrder.verify(mSynchronousStageExecutor).reportAppOpen(deeplink);
+        inOrder.verify(mReporter).reportAppOpen(deeplink);
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void reportAppOpenRejectsInvalidDeeplinkBeforeScheduling() {
+        IHandlerExecutor executor = mock(IHandlerExecutor.class);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(executor);
+        ReporterExtendedProxy proxy = new ReporterExtendedProxy(
+            contextRule.getContext(),
+            new ReporterBarrier(),
+            mProvider,
+            mSynchronousStageExecutor,
+            ReporterConfig.newConfigBuilder(mApiKey).build(),
+            pluginReporterProxy
+        );
+
+        assertThatThrownBy(() -> proxy.reportAppOpen(null)).isInstanceOf(ValidationException.class);
+        assertThatThrownBy(() -> proxy.reportAppOpen("")).isInstanceOf(ValidationException.class);
+        verifyNoInteractions(executor, mSynchronousStageExecutor, mReporter);
     }
 
     @Test

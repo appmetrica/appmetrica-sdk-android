@@ -154,19 +154,19 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun reportAppOpen(activity: Activity) {
         barrier.reportAppOpen(activity)
         val openIntent = synchronousStageExecutor.reportAppOpen(activity)
-        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(openIntent) }
+        dispatchSafely { mainReporter.reportAppOpen(openIntent) }
     }
 
-    fun reportAppOpen(deeplink: String) {
-        barrier.reportAppOpen(deeplink)
-        synchronousStageExecutor.reportAppOpen(deeplink)
-        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(deeplink) }
+    fun reportAppOpen(deeplink: String?) {
+        val validatedDeeplink = barrier.reportAppOpen(deeplink)
+        synchronousStageExecutor.reportAppOpen(validatedDeeplink)
+        dispatchSafely { mainReporter.reportAppOpen(validatedDeeplink) }
     }
 
     fun reportAppOpen(intent: Intent) {
         barrier.reportAppOpen(intent)
         synchronousStageExecutor.reportAppOpen(intent)
-        dispatchSafely { mainReporterApiConsumerProvider.deeplinkConsumer.reportAppOpen(intent) }
+        dispatchSafely { mainReporter.reportAppOpen(intent) }
     }
 
     fun setLocation(location: Location?) {

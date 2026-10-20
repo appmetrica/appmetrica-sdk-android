@@ -30,7 +30,6 @@ import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.Attribute;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -72,7 +71,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -215,6 +213,46 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(CoreClientEvent.reportEntry(eq(InternalEvents.EVENT_TYPE_PURGE_BUFFER))).thenReturn(mockedEvent);
         mReporter.sendEventsBuffer();
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
+    }
+
+    @Test
+    public void reportAppOpenDeduplicatesOnlyConsecutiveLinksInOwnEnvironment() {
+        String firstLink = "some://first";
+        String secondLink = "some://second";
+        CoreClientEvent secondEvent = mock(CoreClientEvent.class);
+        when(CoreClientEvent.openAppReportEntry(firstLink, false)).thenReturn(mockedEvent);
+        when(CoreClientEvent.openAppReportEntry(secondLink, false)).thenReturn(secondEvent);
+
+        mReporter.reportAppOpen(firstLink);
+        mReporter.reportAppOpen(firstLink);
+        mReporter.reportAppOpen(secondLink);
+        mReporter.reportAppOpen(secondLink);
+        mReporter.reportAppOpen(firstLink);
+
+        InOrder order = Mockito.inOrder(mReportsHandler);
+        order.verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
+        order.verify(mReportsHandler).reportEvent(secondEvent, mReporterEnvironment);
+        order.verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void reportAppOpenSharesDeduplicationWithAutomaticConsumer() {
+        String firstLink = "some://first";
+        String secondLink = "some://second";
+        CoreClientEvent secondEvent = mock(CoreClientEvent.class);
+        when(CoreClientEvent.openAppReportEntry(firstLink, true)).thenReturn(mockedEvent);
+        when(CoreClientEvent.openAppReportEntry(secondLink, false)).thenReturn(secondEvent);
+
+        mReporter.reportAutoAppOpen(firstLink);
+        mReporter.reportAppOpen(firstLink);
+        mReporter.reportAppOpen(secondLink);
+        mReporter.reportAutoAppOpen(secondLink);
+
+        InOrder order = Mockito.inOrder(mReportsHandler);
+        order.verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
+        order.verify(mReportsHandler).reportEvent(secondEvent, mReporterEnvironment);
+        order.verifyNoMoreInteractions();
     }
 
     @Test
