@@ -28,7 +28,6 @@ class PublicPublishPlugin : Plugin<Project> {
                     }
                 }
             project.configure<MavenCentralPublishExtension> {
-                publishToMavenLocalTask.set(project.tasks.named("publishReleasePublicationToMavenLocal"))
                 artifactIds.set(ids)
             }
         }

@@ -14,7 +14,7 @@ import java.util.Locale
 
 fun Project.registerAggregateJavadocTask(
     buildType: String,
-    projectToFlavor: Map<String, String> = emptyMap(),
+    projectToFlavor: Map<Project, String> = emptyMap(),
 ): TaskProvider<Javadoc> {
     val capBuildType = buildType.replaceFirstChar { it.uppercase(Locale.ROOT) }
     val task = tasks.register<Javadoc>("aggregate${capBuildType}Javadoc") {
@@ -34,22 +34,18 @@ fun Project.registerAggregateJavadocTask(
 
     subprojects {
         plugins.withType<AppMetricaModulePlugin> {
-            afterEvaluate {
-                val publishingInfo = extensions.findByType<PublishingInfoExtension>() ?: return@afterEvaluate
-                if (!publishingInfo.withJavadoc.get()) return@afterEvaluate
+            val publishingInfo = extensions.findByType<PublishingInfoExtension>() ?: return@withType
+            if (!publishingInfo.withJavadoc.get()) return@withType
 
-                val android = the<LibraryExtension>()
-                val flavor = projectToFlavor[name].orEmpty()
-                val variantName = if (flavor.isEmpty()) {
-                    buildType
-                } else {
-                    "$flavor$capBuildType"
-                }
-                val variant = android.libraryVariants.firstOrNull { it.name == variantName }
-                    ?: return@afterEvaluate
-                val moduleProject = this
-                task.configure { contributeVariant(moduleProject, variant, android) }
+            val android = the<LibraryExtension>()
+            val flavor = projectToFlavor[this@subprojects].orEmpty()
+            val variantName = if (flavor.isEmpty()) {
+                buildType
+            } else {
+                "$flavor$capBuildType"
             }
+            val variant = android.libraryVariants.firstOrNull { it.name == variantName } ?: return@withType
+            task.configure { contributeVariant(this@subprojects, variant, android) }
         }
     }
 
