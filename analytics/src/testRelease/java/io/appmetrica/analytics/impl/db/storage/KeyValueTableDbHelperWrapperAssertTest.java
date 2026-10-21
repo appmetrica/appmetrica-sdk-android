@@ -9,17 +9,13 @@ import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 
-@RunWith(RobolectricTestRunner.class)
 public class KeyValueTableDbHelperWrapperAssertTest extends CommonTest {
 
     @Rule
@@ -27,13 +23,13 @@ public class KeyValueTableDbHelperWrapperAssertTest extends CommonTest {
 
     @Mock
     private IKeyValueTableDbHelper actualHelper;
+    @Mock
     private Context context;
     private KeyValueTableDbHelperWrapper helper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = RuntimeEnvironment.systemContext;
     }
 
     @Test

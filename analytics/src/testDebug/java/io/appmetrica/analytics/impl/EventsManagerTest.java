@@ -190,7 +190,6 @@ public class EventsManagerTest extends CommonTest {
         soft.assertAll();
     }
 
-
     @Test
     public void testCleanupEventReportEntry() {
         final String value = "value";

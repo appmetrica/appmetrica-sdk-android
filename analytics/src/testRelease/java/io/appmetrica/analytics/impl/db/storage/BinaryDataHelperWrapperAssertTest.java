@@ -9,21 +9,18 @@ import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 
-@RunWith(RobolectricTestRunner.class)
 public class BinaryDataHelperWrapperAssertTest extends CommonTest {
 
     @Mock
     private IBinaryDataHelper actualHelper;
+    @Mock
     private Context context;
     private BinaryDataHelperWrapper dataHelper;
 
@@ -33,7 +30,6 @@ public class BinaryDataHelperWrapperAssertTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = RuntimeEnvironment.systemContext;
     }
 
     @Test

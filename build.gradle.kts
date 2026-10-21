@@ -47,8 +47,6 @@ configure<MavenCentralPublishExtension> {
     publishToMavenLocalTask.set(tasks.named("publishReleasePublicationToMavenLocal"))
 }
 
-logger.lifecycle("ALEX98: ${project("analytics").defaultFlavor()}")
-
 fun registerAggregateTask(task: String): TaskProvider<Task> {
     return tasks.register(task) {
         description = "Runs $task for all modules"

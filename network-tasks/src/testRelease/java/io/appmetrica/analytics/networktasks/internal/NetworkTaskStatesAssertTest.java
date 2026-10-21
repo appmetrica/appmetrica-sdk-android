@@ -11,16 +11,13 @@ import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-@RunWith(RobolectricTestRunner.class)
 public class NetworkTaskStatesAssertTest {
 
     @Rule
