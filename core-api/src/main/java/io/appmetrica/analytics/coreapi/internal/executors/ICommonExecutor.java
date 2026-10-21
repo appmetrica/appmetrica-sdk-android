@@ -9,9 +9,11 @@ import java.util.concurrent.TimeUnit;
 public interface ICommonExecutor extends IInterruptionSafeThread, Executor {
 
     /**
-     * Adds a task to this executor's queue without running it inline.
+     * Executes a task, possibly inline according to the implementation's execution context.
+     * Inline execution can reenter the caller, bypass pending tasks, and propagate task exceptions.
+     * Use {@link #post(Runnable)} when the task must be queued.
      *
-     * @param runnable the task to enqueue
+     * @param runnable the task to execute
      */
     void execute(@NonNull Runnable runnable);
 

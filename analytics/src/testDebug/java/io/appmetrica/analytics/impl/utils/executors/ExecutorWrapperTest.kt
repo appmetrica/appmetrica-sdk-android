@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutorExtensions.postDelayed
+import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -15,14 +17,17 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.Collections
 import java.util.concurrent.Callable
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.FutureTask
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -68,18 +73,52 @@ internal class ExecutorWrapperTest : CommonTest() {
     }
 
     @Test
-    fun `post execute and submit enqueue tasks`() {
+    fun `post and submit enqueue tasks`() {
         executorWrapper.post(runnable)
-        executorWrapper.execute(runnable)
         val future = executorWrapper.submit(Callable { callableResult })
 
         val runnableCaptor = argumentCaptor<Runnable>()
-        verify(handler, times(3)).post(runnableCaptor.capture())
-        assertThat(runnableCaptor.allValues.take(2)).containsExactly(runnable, runnable)
+        verify(handler, times(2)).post(runnableCaptor.capture())
+        assertThat(runnableCaptor.firstValue).isSameAs(runnable)
 
-        runnableCaptor.thirdValue.run()
+        runnableCaptor.secondValue.run()
 
         assertThat(future.get()).isEqualTo(callableResult)
+    }
+
+    @Test
+    fun `execute posts original task from foreign or absent looper`() {
+        withExecutor { foreignExecutor ->
+            foreignExecutor.submit(
+                Callable {
+                    assertThat(Looper.myLooper()).isSameAs(foreignExecutor.getLooper()).isNotSameAs(looper)
+                    executorWrapper.execute(runnable)
+                }
+            ).get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        }
+
+        val executeWithoutLooper = FutureTask(
+            Callable {
+                assertThat(Looper.myLooper()).isNull()
+                executorWrapper.execute(runnable)
+            }
+        )
+        val thread = Thread(executeWithoutLooper)
+        thread.start()
+        try {
+            executeWithoutLooper.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        } finally {
+            thread.join(TimeUnit.SECONDS.toMillis(TIMEOUT_SECONDS))
+        }
+
+        verifyNoInteractions(runnable)
+        val runnableCaptor = argumentCaptor<Runnable>()
+        verify(handler, times(2)).post(runnableCaptor.capture())
+        runnableCaptor.allValues.forEach { task ->
+            assertThat(task).isSameAs(runnable)
+            task.run()
+        }
+        verify(runnable, times(2)).run()
     }
 
     @Test
@@ -96,21 +135,131 @@ internal class ExecutorWrapperTest : CommonTest() {
     }
 
     @Test
-    fun `execute keeps nested tasks queued`() = withExecutor { actualExecutor ->
+    fun `execute runs nested tasks inline before pending posts`() = withExecutor { actualExecutor ->
         val order = Collections.synchronizedList(mutableListOf<String>())
-        val nestedTaskCompleted = CountDownLatch(1)
+        val tasksCompleted = CountDownLatch(2)
+        val inlineCalls = AtomicInteger()
 
         actualExecutor.post {
             order += "outer-start"
+            actualExecutor.post { order += "pending" }
             actualExecutor.execute {
-                order += "nested"
-                nestedTaskCompleted.countDown()
+                order += "nested-start"
+                actualExecutor.execute {
+                    inlineCalls.incrementAndGet()
+                    order += "inner"
+                }
+                order += "nested-end"
+            }
+            actualExecutor.post {
+                order += "posted"
+                tasksCompleted.countDown()
+            }
+            QueuedExecutor(actualExecutor).execute {
+                order += "adapter"
+                tasksCompleted.countDown()
             }
             order += "outer-end"
         }
 
-        assertThat(nestedTaskCompleted.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
-        assertThat(order).containsExactly("outer-start", "outer-end", "nested")
+        assertThat(tasksCompleted.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
+        assertThat(inlineCalls.get()).isEqualTo(1)
+        assertThat(order).containsExactly(
+            "outer-start", "nested-start", "inner", "nested-end", "outer-end", "pending", "posted", "adapter"
+        )
+    }
+
+    @Test
+    fun `execute uses looper identity for threads with equal names`() = withExecutor { firstExecutor ->
+        withExecutor { secondExecutor ->
+            val firstLooper = firstExecutor.getLooper()
+            val secondLooper = secondExecutor.getLooper()
+            val taskCompleted = CountDownLatch(1)
+            val foreignCalls = AtomicInteger()
+            val ranOnSecondLooper = AtomicBoolean()
+
+            assertThat(firstLooper.getThread().getName()).isEqualTo(secondLooper.getThread().getName())
+            assertThat(firstLooper).isNotSameAs(secondLooper)
+
+            val outer = firstExecutor.submit(
+                Callable {
+                    var inlineCalls = 0
+                    firstExecutor.execute {
+                        assertThat(Looper.myLooper()).isSameAs(firstLooper)
+                        assertThat(Thread.currentThread()).isSameAs(firstLooper.getThread())
+                        inlineCalls++
+                    }
+                    assertThat(inlineCalls).isEqualTo(1)
+                    secondExecutor.execute {
+                        ranOnSecondLooper.set(Looper.myLooper() === secondLooper)
+                        foreignCalls.incrementAndGet()
+                        taskCompleted.countDown()
+                    }
+                }
+            )
+
+            outer.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            assertThat(taskCompleted.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
+            assertThat(ranOnSecondLooper.get()).isTrue()
+            assertThat(foreignCalls.get()).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `inline failure propagates and queued safe failure allows following tasks`() = withExecutor { actualExecutor ->
+        val failure = IllegalStateException("test failure")
+        val safeCalls = AtomicInteger()
+        val queueDrained = CountDownLatch(1)
+        val outer = actualExecutor.submit(
+            Callable {
+                assertThatThrownBy { actualExecutor.execute { throw failure } }.isSameAs(failure)
+                actualExecutor.post(
+                    object : SafeRunnable() {
+                        override fun runSafety() {
+                            safeCalls.incrementAndGet()
+                            throw failure
+                        }
+                    }
+                )
+                actualExecutor.post { queueDrained.countDown() }
+            }
+        )
+
+        outer.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        assertThat(queueDrained.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
+        assertThat(safeCalls.get()).isEqualTo(1)
+    }
+
+    @Test
+    fun `removal suppresses pending tasks without cancelling futures`() = withExecutor { actualExecutor ->
+        val removedCalls = AtomicInteger()
+        val singleRemovalDrained = CountDownLatch(1)
+        val queueDrained = CountDownLatch(1)
+        actualExecutor.post {
+            val removableTask = Runnable { removedCalls.incrementAndGet() }
+            actualExecutor.post(removableTask)
+            actualExecutor.remove(removableTask)
+            actualExecutor.post { singleRemovalDrained.countDown() }
+        }
+        assertThat(singleRemovalDrained.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
+        assertThat(removedCalls.get()).isZero()
+
+        val outer = actualExecutor.submit(
+            Callable {
+                actualExecutor.post { removedCalls.incrementAndGet() }
+                val removedFuture = actualExecutor.submit(Callable { removedCalls.incrementAndGet() })
+                actualExecutor.removeAll()
+                actualExecutor.post { queueDrained.countDown() }
+                removedFuture
+            }
+        )
+
+        val removedFuture = outer.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        assertThat(queueDrained.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isTrue()
+        assertThat(removedCalls.get()).isZero()
+        assertThat(removedFuture.isDone()).isFalse()
+        assertThat(removedFuture.isCancelled()).isFalse()
+        assertThat(removedFuture.cancel(false)).isTrue()
     }
 
     @Test

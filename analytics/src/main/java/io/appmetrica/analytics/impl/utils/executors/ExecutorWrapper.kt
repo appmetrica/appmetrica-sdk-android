@@ -21,8 +21,17 @@ internal open class ExecutorWrapper @VisibleForTesting constructor(
 
     open override fun getLooper(): Looper = looper
 
+    /**
+     * Runs immediately on this executor's Looper; otherwise posts the original task.
+     * Immediate calls can reenter the caller and bypass pending tasks. Exceptions propagate to the caller.
+     * There is no trampoline for nested calls; use [post] to break the call stack.
+     */
     open override fun execute(runnable: Runnable) {
-        post(runnable)
+        if (Looper.myLooper() === looper) {
+            runnable.run()
+        } else {
+            post(runnable)
+        }
     }
 
     open override fun post(runnable: Runnable) {
