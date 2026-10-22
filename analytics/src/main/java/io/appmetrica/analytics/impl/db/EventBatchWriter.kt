@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.db
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.impl.EventsManager
-import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
@@ -44,6 +43,7 @@ internal class EventBatchWriter(
         val dbLimit = component.freshReportRequestConfig.maxEventsInDbCount
         var wDatabase: SQLiteDatabase? = null
         var cleanupNeeded = false
+        var committed = false
         writeLock.withLock {
             try {
                 wDatabase = storage.writableDatabase
@@ -54,7 +54,6 @@ internal class EventBatchWriter(
                     for (reportItem in reports) {
                         db.insertOrThrow(Constants.EventsTable.TABLE_NAME, null, reportItem)
                         rowCount.incrementAndGet()
-                        logEvent(reportItem)
                     }
 
                     val rows = rowCount.get()
@@ -80,11 +79,22 @@ internal class EventBatchWriter(
                             listener.onEventsUpdated()
                         }
                     }
+                    committed = true
                 }
             } catch (exception: Throwable) {
                 DebugLogger.error(tag, exception, "Smth was wrong while inserting reports into database.")
             } finally {
-                Utils.endTransaction(wDatabase)
+                try {
+                    wDatabase?.endTransaction()
+                } catch (exception: Throwable) {
+                    committed = false
+                    DebugLogger.error(tag, exception, "Could not end reports transaction.")
+                }
+            }
+        }
+        if (committed) {
+            for (reportItem in reports) {
+                logEvent(reportItem)
             }
         }
         return cleanupNeeded

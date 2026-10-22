@@ -303,7 +303,31 @@ internal class EventBatchWriterTest : CommonTest() {
 
         writer.writeEvents(listOf(ContentValues()))
 
-        verify(publicLogger).info(logMessage)
+        inOrder(database, publicLogger) {
+            verify(database).setTransactionSuccessful()
+            verify(database).endTransaction()
+            verify(publicLogger).info(logMessage)
+        }
+    }
+
+    @Test
+    fun `writeEvents does not call publicLogger when insert fails`() {
+        whenever(EventsManager.isPublicForLogs(any<Int>())).thenReturn(true)
+        whenever(database.insertOrThrow(any(), isNull(), any())).doThrow(RuntimeException("DB error"))
+
+        writer.writeEvents(listOf(ContentValues()))
+
+        verify(publicLogger, never()).info(anyOrNull())
+    }
+
+    @Test
+    fun `writeEvents does not call publicLogger when endTransaction fails`() {
+        whenever(EventsManager.isPublicForLogs(any<Int>())).thenReturn(true)
+        whenever(database.endTransaction()).doThrow(RuntimeException("commit failed"))
+
+        writer.writeEvents(listOf(ContentValues()))
+
+        verify(publicLogger, never()).info(anyOrNull())
     }
 
     @Test

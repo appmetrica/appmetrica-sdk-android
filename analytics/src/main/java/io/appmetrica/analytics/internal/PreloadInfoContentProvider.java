@@ -80,7 +80,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        SdkUtils.logAttribution("Deleting is not supported");
+        DebugLogger.INSTANCE.info(TAG, "Deleting is not supported");
         return -1;
     }
 
@@ -89,7 +89,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                       @Nullable ContentValues values,
                       @Nullable String selection,
                       @Nullable String[] selectionArgs) {
-        SdkUtils.logAttribution("Updating is not supported");
+        DebugLogger.INSTANCE.info(TAG, "Updating is not supported");
         return -1;
     }
 
@@ -100,7 +100,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                         @Nullable String selection,
                         @Nullable String[] selectionArgs,
                         @Nullable String sortOrder) {
-        SdkUtils.logAttribution("Query is not supported");
+        DebugLogger.INSTANCE.info(TAG, "Query is not supported");
         return null;
     }
 
