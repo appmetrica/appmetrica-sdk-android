@@ -5,15 +5,17 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerListener
 import io.appmetrica.analytics.impl.referrer.service.ReferrerResult
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import kotlin.concurrent.thread
 
 internal class ExecutorReferrerProviderTest : CommonTest() {
     private val delegate: ReferrerProvider = mock()
@@ -36,7 +38,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
 
         val runnableCaptor = argumentCaptor<Runnable>()
         verify(executor).post(runnableCaptor.capture())
-        verify(delegate, never()).requestReferrer(listener)
+        verify(delegate, never()).requestReferrer(any())
 
         runnableCaptor.firstValue.run()
 
@@ -44,7 +46,7 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
     }
 
     @Test
-    fun `callback in same thread calls listener directly`() {
+    fun `callback delivers result through execute`() {
         val listener: ReferrerListener = mock()
         val result: ReferrerResult = mock()
 
@@ -52,43 +54,46 @@ internal class ExecutorReferrerProviderTest : CommonTest() {
 
         val executorRunnableCaptor = argumentCaptor<Runnable>()
         verify(executor).post(executorRunnableCaptor.capture())
-        // Run in the same thread as executor
         executorRunnableCaptor.firstValue.run()
 
         val delegateListenerCaptor = argumentCaptor<ReferrerListener>()
         verify(delegate).requestReferrer(delegateListenerCaptor.capture())
-        // Callback arrives on the same thread as executor
+        verifyNoInteractions(listener)
+
         delegateListenerCaptor.firstValue.onResult(result)
 
-        // Listener should be called directly without an additional post
+        val callbackRunnableCaptor = argumentCaptor<Runnable>()
+        verify(executor).execute(callbackRunnableCaptor.capture())
+        verify(executor).post(any())
+        verifyNoInteractions(listener)
+        callbackRunnableCaptor.firstValue.run()
+
         verify(listener).onResult(result)
     }
 
     @Test
-    fun `callback in different thread calls listener through executor`() {
+    fun `listener and delegate exceptions propagate without wrapping`() {
         val listener: ReferrerListener = mock()
-        val result: ReferrerResult = mock()
+        val result = ReferrerResult.Failure("failure", IllegalArgumentException("referrer error"))
+        val listenerFailure = IllegalStateException("listener error")
+        doThrow(listenerFailure).whenever(listener).onResult(result)
+        doAnswer {
+            it.getArgument<ReferrerListener>(0).onResult(result)
+            null
+        }.whenever(delegate).requestReferrer(any())
 
         executorReferrerProvider.requestReferrer(listener)
+        val requestCaptor = argumentCaptor<Runnable>()
+        verify(executor).post(requestCaptor.capture())
+        requestCaptor.firstValue.run()
+        val callbackCaptor = argumentCaptor<Runnable>()
+        verify(executor).execute(callbackCaptor.capture())
 
-        val executorRunnableCaptor = argumentCaptor<Runnable>()
-        verify(executor).post(executorRunnableCaptor.capture())
-        executorRunnableCaptor.firstValue.run()
+        assertThatThrownBy { callbackCaptor.firstValue.run() }.isSameAs(listenerFailure)
 
-        val delegateListenerCaptor = argumentCaptor<ReferrerListener>()
-        verify(delegate).requestReferrer(delegateListenerCaptor.capture())
-        verify(listener, never()).onResult(result)
+        val delegateFailure = IllegalArgumentException("delegate error")
+        doThrow(delegateFailure).whenever(delegate).requestReferrer(any())
 
-        // Simulate callback arriving on a different thread
-        thread {
-            delegateListenerCaptor.firstValue.onResult(result)
-        }.join()
-
-        val executorRunnableCaptor2 = argumentCaptor<Runnable>()
-        verify(executor, times(2)).post(executorRunnableCaptor2.capture())
-        executorRunnableCaptor2.secondValue.run()
-
-        // Listener should be called through executor (second post)
-        verify(listener).onResult(result)
+        assertThatThrownBy { requestCaptor.firstValue.run() }.isSameAs(delegateFailure)
     }
 }
