@@ -47,6 +47,7 @@ jsonassert = "1.5.0"
 archunit = "1.4.0"
 
 [plugins]
+appMetricaAndroidApplication = { id = "io.appmetrica.gradle.android-application", version.ref = "selfGradlePlugins" }
 appMetricaCheckNamespace = { id = "io.appmetrica.gradle.check-namespace", version.ref = "selfGradlePlugins" }
 appMetricaCodequality = { id = "io.appmetrica.gradle.codequality", version.ref = "selfGradlePlugins" }
 appMetricaGradlePlugin = { id = "io.appmetrica.gradle.gradle-plugin", version.ref = "selfGradlePlugins" }
