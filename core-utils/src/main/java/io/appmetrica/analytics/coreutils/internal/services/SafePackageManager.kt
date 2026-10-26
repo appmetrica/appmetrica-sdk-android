@@ -69,6 +69,9 @@ class SafePackageManager {
         context.packageManager.hasSystemFeature(name)
     }
 
+    fun getInstallerPackageName(context: Context): String? =
+        getInstallerPackageName(context, context.packageName)
+
     fun getInstallerPackageName(context: Context, packageName: String): String? = runSafely {
         val pm = context.packageManager
         val installer = if (isApiAchieved(Build.VERSION_CODES.R)) {
@@ -78,6 +81,22 @@ class SafePackageManager {
         }
         DebugLogger.info(tag, "AppInstaller = %s", installer)
         installer
+    }
+
+    fun getInstallationInitiatorPackageName(context: Context): String? =
+        getInstallationInitiatorPackageName(context, context.packageName)
+
+    fun getInstallationInitiatorPackageName(context: Context, packageName: String): String? = runSafely {
+        if (isApiAchieved(Build.VERSION_CODES.R)) {
+            val initiator = SafePackageManagerHelperForR.extractPackageInstallationInitiator(
+                context.packageManager,
+                packageName
+            )
+            DebugLogger.info(tag, "AppInstallationInitiator = %s", initiator)
+            initiator
+        } else {
+            null
+        }
     }
 
     private fun <T> runSafely(block: () -> T): T? = runSafely(defaultValue = null, block)

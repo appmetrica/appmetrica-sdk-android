@@ -270,4 +270,44 @@ public class SafePackageManagerTest extends CommonTest {
             .thenThrow(new RuntimeException());
         assertThat(mSafePackageManager.getInstallerPackageName(mContext, mPackageName)).isNull();
     }
+
+    @Test
+    @Config(sdk = Build.VERSION_CODES.O_MR1)
+    public void getInstallationInitiatorPackageNamePreR() {
+        assertThat(mSafePackageManager.getInstallationInitiatorPackageName(mContext, mPackageName)).isNull();
+    }
+
+    @Test
+    @Config(sdk = Build.VERSION_CODES.R)
+    public void getInstallationInitiatorPackageNameAndroid11OK() {
+        final String initiator = "com.android.shell";
+        when(SafePackageManagerHelperForR.extractPackageInstallationInitiator(mPackageManager, mPackageName))
+            .thenReturn(initiator);
+        assertThat(mSafePackageManager.getInstallationInitiatorPackageName(mContext, mPackageName))
+            .isEqualTo(initiator);
+    }
+
+    @Test
+    @Config(sdk = Build.VERSION_CODES.R)
+    public void getInstallationInitiatorPackageNameAndroid11ForNull() {
+        when(SafePackageManagerHelperForR.extractPackageInstallationInitiator(mPackageManager, mPackageName))
+            .thenReturn(null);
+        assertThat(mSafePackageManager.getInstallationInitiatorPackageName(mContext, mPackageName)).isNull();
+    }
+
+    @Test
+    @Config(sdk = Build.VERSION_CODES.R)
+    public void getInstallationInitiatorPackageNameAndroid11ForEmpty() {
+        when(SafePackageManagerHelperForR.extractPackageInstallationInitiator(mPackageManager, mPackageName))
+            .thenReturn("");
+        assertThat(mSafePackageManager.getInstallationInitiatorPackageName(mContext, mPackageName)).isEqualTo("");
+    }
+
+    @Test
+    @Config(sdk = Build.VERSION_CODES.R)
+    public void getInstallationInitiatorPackageNameAndroid11Exception() {
+        when(SafePackageManagerHelperForR.extractPackageInstallationInitiator(mPackageManager, mPackageName))
+            .thenThrow(new RuntimeException());
+        assertThat(mSafePackageManager.getInstallationInitiatorPackageName(mContext, mPackageName)).isNull();
+    }
 }

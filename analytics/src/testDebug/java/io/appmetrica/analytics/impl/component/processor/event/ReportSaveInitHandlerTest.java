@@ -43,6 +43,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
     private static final String KEY_PRELOAD_INFO = "preloadInfo";
     private static final String KEY_APP_INSTALLER = "appInstaller";
+    private static final String KEY_APP_INSTALLATION_INITIATOR = "appInstallationInitiator";
 
     @Mock
     private ComponentUnit mComponent;
@@ -62,8 +63,9 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     @Captor
     private ArgumentCaptor<CoreServiceEvent> mReportCaptor;
     private Context mContext;
-    private final String mPackage = "test.package";
+    private final String mComponentIdPackage = "other.component.package";
     private final String mInstaller = "yandex.store";
+    private final String mInitiator = "com.android.shell";
     private final Long currentTime = 100500L;
     private ReportSaveInitHandler mReportSaveInitHandler;
 
@@ -76,9 +78,10 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(false);
         when(mComponent.getFreshReportRequestConfig()).thenReturn(mReportRequestConfig);
         ComponentId componentId = mock(ComponentId.class);
-        when(componentId.getPackage()).thenReturn(mPackage);
+        when(componentId.getPackage()).thenReturn(mComponentIdPackage);
         when(mComponent.getComponentId()).thenReturn(componentId);
         when(mComponent.getContext()).thenReturn(mContext);
+        assertThat(mContext.getPackageName()).isNotEqualTo(mComponentIdPackage);
         when(mPreloadInfoStorage.retrieveData()).thenReturn(mPreloadInfoState);
         when(timeProvider.currentTimeMillis()).thenReturn(currentTime);
         mReportSaveInitHandler = new ReportSaveInitHandler(
@@ -138,22 +141,65 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
     @Test
     public void testProcessSendInitEventWithPackageInstaller() throws JSONException {
-        when(mSafePackageManager.getInstallerPackageName(mContext, mPackage)).thenReturn(mInstaller);
+        when(mSafePackageManager.getInstallerPackageName(mContext)).thenReturn(mInstaller);
 
         mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never()).getInstallerPackageName(mContext, mComponentIdPackage);
         assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLER)).isEqualTo(mInstaller);
     }
 
     @Test
     public void testProcessSendInitEventWithoutPackageInstaller() throws JSONException {
-        when(mSafePackageManager.getInstallerPackageName(mContext, mPackage)).thenReturn(null);
+        when(mSafePackageManager.getInstallerPackageName(mContext)).thenReturn(null);
 
         mReportSaveInitHandler.process(new CoreServiceEvent());
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never()).getInstallerPackageName(mContext, mComponentIdPackage);
         assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLER)).isEmpty();
+    }
+
+    @Test
+    public void processSendInitEventWithPackageInstallationInitiator() throws JSONException {
+        when(mSafePackageManager.getInstallationInitiatorPackageName(mContext)).thenReturn(mInitiator);
+
+        mReportSaveInitHandler.process(new CoreServiceEvent());
+
+        verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never())
+            .getInstallationInitiatorPackageName(mContext, mComponentIdPackage);
+        assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLATION_INITIATOR))
+            .isEqualTo(mInitiator);
+    }
+
+    @Test
+    public void processSendInitEventWithoutPackageInstallationInitiator() throws JSONException {
+        when(mSafePackageManager.getInstallationInitiatorPackageName(mContext)).thenReturn(null);
+
+        mReportSaveInitHandler.process(new CoreServiceEvent());
+
+        verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never())
+            .getInstallationInitiatorPackageName(mContext, mComponentIdPackage);
+        JSONObject value = new JSONObject(mReportCaptor.getValue().getValue());
+        assertThat(value.has(KEY_APP_INSTALLATION_INITIATOR)).isTrue();
+        assertThat(value.optString(KEY_APP_INSTALLATION_INITIATOR)).isEmpty();
+    }
+
+    @Test
+    public void processSendInitEventWithEmptyPackageInstallationInitiator() throws JSONException {
+        when(mSafePackageManager.getInstallationInitiatorPackageName(mContext)).thenReturn("");
+
+        mReportSaveInitHandler.process(new CoreServiceEvent());
+
+        verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never())
+            .getInstallationInitiatorPackageName(mContext, mComponentIdPackage);
+        JSONObject value = new JSONObject(mReportCaptor.getValue().getValue());
+        assertThat(value.has(KEY_APP_INSTALLATION_INITIATOR)).isTrue();
+        assertThat(value.optString(KEY_APP_INSTALLATION_INITIATOR)).isEmpty();
     }
 
     @Test
@@ -182,5 +228,35 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         verify(vitalComponentDataProvider, times(1)).setInitEventDone(true);
         verify(vitalComponentDataProvider, times(1))
             .setExternalAttributionWindowStart(currentTime);
+    }
+
+    @Test
+    public void processSendUpdateEventWithPackageInstallationInitiator() throws JSONException {
+        doReturn(true).when(mReportRequestConfig).isFirstActivationAsUpdate();
+        when(mSafePackageManager.getInstallationInitiatorPackageName(mContext)).thenReturn(mInitiator);
+
+        mReportSaveInitHandler.process(new CoreServiceEvent());
+
+        verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never())
+            .getInstallationInitiatorPackageName(mContext, mComponentIdPackage);
+        assertThat(mReportCaptor.getValue().getType()).isEqualTo(InternalEvents.EVENT_TYPE_APP_UPDATE.getTypeId());
+        assertThat(new JSONObject(mReportCaptor.getValue().getValue()).optString(KEY_APP_INSTALLATION_INITIATOR))
+            .isEqualTo(mInitiator);
+    }
+
+    @Test
+    public void processSendUpdateEventWithoutPackageInstallationInitiator() throws JSONException {
+        doReturn(true).when(mReportRequestConfig).isFirstActivationAsUpdate();
+        when(mSafePackageManager.getInstallationInitiatorPackageName(mContext)).thenReturn(null);
+
+        mReportSaveInitHandler.process(new CoreServiceEvent());
+
+        verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
+        verify(mSafePackageManager, never())
+            .getInstallationInitiatorPackageName(mContext, mComponentIdPackage);
+        JSONObject value = new JSONObject(mReportCaptor.getValue().getValue());
+        assertThat(value.has(KEY_APP_INSTALLATION_INITIATOR)).isTrue();
+        assertThat(value.optString(KEY_APP_INSTALLATION_INITIATOR)).isEmpty();
     }
 }

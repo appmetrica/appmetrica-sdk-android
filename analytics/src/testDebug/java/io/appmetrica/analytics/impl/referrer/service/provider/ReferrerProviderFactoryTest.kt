@@ -68,7 +68,7 @@ internal class ReferrerProviderFactoryTest(
     @Test
     fun `create returns correct decorator chain based on installer package name`() {
         whenever(context.packageName).thenReturn("com.test.app")
-        whenever(packageManager.getInstallerPackageName(context, "com.test.app"))
+        whenever(packageManager.getInstallerPackageName(context))
             .thenReturn(installerPackageName)
 
         val result = factory.create(context)

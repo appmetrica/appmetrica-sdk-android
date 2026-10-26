@@ -21,6 +21,7 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
 
     public static class JsonKeys {
         private static final String APP_INSTALLER = "appInstaller";
+        private static final String APP_INSTALLATION_INITIATOR = "appInstallationInitiator";
         public static final String PRELOAD_INFO = "preloadInfo";
     }
 
@@ -71,15 +72,22 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
             }
             final JSONObject eventValue = new JSONObject();
             final String packageInstaller = WrapUtils.getOrDefault(
-                    mPackageManager.getInstallerPackageName(
-                            component.getContext(),
-                            component.getComponentId().getPackage()
-                    ),
+                    mPackageManager.getInstallerPackageName(component.getContext()),
                     StringUtils.EMPTY
             );
-            DebugLogger.INSTANCE.info(TAG, "PackageInstaller = %s", packageInstaller);
+            final String packageInstallationInitiator = WrapUtils.getOrDefault(
+                    mPackageManager.getInstallationInitiatorPackageName(component.getContext()),
+                    StringUtils.EMPTY
+            );
+            DebugLogger.INSTANCE.info(
+                    TAG,
+                    "PackageInstaller = %s, PackageInstallationInitiator = %s",
+                    packageInstaller,
+                    packageInstallationInitiator
+            );
             try {
                 eventValue.put(JsonKeys.APP_INSTALLER, packageInstaller);
+                eventValue.put(JsonKeys.APP_INSTALLATION_INITIATOR, packageInstallationInitiator);
                 eventValue.put(
                         JsonKeys.PRELOAD_INFO,
                         mPreloadInfoStorage.retrieveData().toEventJson()

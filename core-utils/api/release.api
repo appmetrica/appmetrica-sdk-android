@@ -625,6 +625,9 @@ public final class io.appmetrica.analytics.coreutils.internal.services.SafePacka
     public final [Nullable] android.content.pm.ActivityInfo getActivityInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
     public final [Nullable] android.content.pm.ApplicationInfo getApplicationInfo([NonNull] android.content.Context, [NonNull] String, int)
     public final [Nullable] android.os.Bundle getApplicationMetaData([NonNull] android.content.Context)
+    public final [Nullable] String getInstallationInitiatorPackageName([NonNull] android.content.Context)
+    public final [Nullable] String getInstallationInitiatorPackageName([NonNull] android.content.Context, [NonNull] String)
+    public final [Nullable] String getInstallerPackageName([NonNull] android.content.Context)
     public final [Nullable] String getInstallerPackageName([NonNull] android.content.Context, [NonNull] String)
     public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String)
     public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String, int)
@@ -639,6 +642,7 @@ public final class io.appmetrica.analytics.coreutils.internal.services.SafePacka
 public final class io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR {
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR INSTANCE
 
+    public static final [Nullable] String extractPackageInstallationInitiator([NonNull] android.content.pm.PackageManager, [NonNull] String)
     public static final [Nullable] String extractPackageInstaller([NonNull] android.content.pm.PackageManager, [NonNull] String)
 }
 

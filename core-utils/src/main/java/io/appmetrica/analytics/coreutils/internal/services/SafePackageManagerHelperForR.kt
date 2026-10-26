@@ -12,4 +12,9 @@ object SafePackageManagerHelperForR {
     fun extractPackageInstaller(packageManager: PackageManager, packageName: String): String? {
         return packageManager.getInstallSourceInfo(packageName).installingPackageName
     }
+
+    @JvmStatic
+    fun extractPackageInstallationInitiator(packageManager: PackageManager, packageName: String): String? {
+        return packageManager.getInstallSourceInfo(packageName).initiatingPackageName
+    }
 }

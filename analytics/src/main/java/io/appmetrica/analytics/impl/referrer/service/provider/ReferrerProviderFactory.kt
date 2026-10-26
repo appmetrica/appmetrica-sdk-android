@@ -17,7 +17,7 @@ internal class ReferrerProviderFactory(
         val executor = globalServiceLocator.serviceExecutorProvider.supportIOExecutor
         val vitalCommonDataProvider = globalServiceLocator.vitalDataProviderStorage.commonDataProvider
 
-        val packageInstaller = packageManager.getInstallerPackageName(context, context.packageName)
+        val packageInstaller = packageManager.getInstallerPackageName(context)
         val provider = when (packageInstaller) {
             "com.android.vending" -> GoogleReferrerProvider(context, executor)
             "com.huawei.appmarket" -> HuaweiReferrerProvider(context)

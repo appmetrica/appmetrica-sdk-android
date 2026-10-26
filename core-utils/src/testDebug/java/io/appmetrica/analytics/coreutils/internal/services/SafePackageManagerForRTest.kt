@@ -22,6 +22,7 @@ class SafePackageManagerForRTest : CommonTest() {
 
     private val packageName = "com.test.package.name"
     private val installingPackageName = "com.test.installing.package.name"
+    private val initiatingPackageName = "com.test.initiating.package.name"
 
     @Before
     fun setUp() {
@@ -42,7 +43,7 @@ class SafePackageManagerForRTest : CommonTest() {
     @Test
     fun extractPackageInstallerForNull() {
         stubbing(installSourceInfo) {
-            on { initiatingPackageName } doReturn null
+            on { installingPackageName } doReturn null
         }
         assertThat(SafePackageManagerHelperForR.extractPackageInstaller(packageManager, packageName))
             .isEqualTo(null)
@@ -73,5 +74,57 @@ class SafePackageManagerForRTest : CommonTest() {
         }
         assertThatExceptionOfType(RuntimeException::class.java)
             .isThrownBy { SafePackageManagerHelperForR.extractPackageInstaller(packageManager, packageName) }
+    }
+
+    @Test
+    fun extractPackageInstallationInitiator() {
+        stubbing(installSourceInfo) {
+            on { initiatingPackageName } doReturn initiatingPackageName
+        }
+        assertThat(
+            SafePackageManagerHelperForR.extractPackageInstallationInitiator(packageManager, packageName)
+        ).isEqualTo(initiatingPackageName)
+    }
+
+    @Test
+    fun extractPackageInstallationInitiatorForNull() {
+        stubbing(installSourceInfo) {
+            on { initiatingPackageName } doReturn null
+        }
+        assertThat(
+            SafePackageManagerHelperForR.extractPackageInstallationInitiator(packageManager, packageName)
+        ).isEqualTo(null)
+    }
+
+    @Test
+    fun extractPackageInstallationInitiatorForEmpty() {
+        stubbing(installSourceInfo) {
+            on { initiatingPackageName } doReturn ""
+        }
+        assertThat(
+            SafePackageManagerHelperForR.extractPackageInstallationInitiator(packageManager, packageName)
+        ).isEqualTo("")
+    }
+
+    @Test
+    fun extractPackageInstallationInitiatorIfPackageManagerThrowsException() {
+        stubbing(packageManager) {
+            on { getInstallSourceInfo(packageName) } doThrow RuntimeException("Some exception")
+        }
+        assertThatExceptionOfType(RuntimeException::class.java)
+            .isThrownBy {
+                SafePackageManagerHelperForR.extractPackageInstallationInitiator(packageManager, packageName)
+            }
+    }
+
+    @Test
+    fun extractPackageInstallationInitiatorIfInstallSourceThrowsException() {
+        stubbing(installSourceInfo) {
+            on { initiatingPackageName } doThrow RuntimeException("Some exception")
+        }
+        assertThatExceptionOfType(RuntimeException::class.java)
+            .isThrownBy {
+                SafePackageManagerHelperForR.extractPackageInstallationInitiator(packageManager, packageName)
+            }
     }
 }
