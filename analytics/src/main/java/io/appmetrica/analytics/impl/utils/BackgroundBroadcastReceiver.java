@@ -21,7 +21,7 @@ public class BackgroundBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        executor.post(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 block.consume(context, intent);

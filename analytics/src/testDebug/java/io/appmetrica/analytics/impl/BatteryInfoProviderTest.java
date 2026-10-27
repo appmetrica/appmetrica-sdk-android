@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener;
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
 import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockProvider;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -157,6 +159,38 @@ public class BatteryInfoProviderTest extends CommonTest {
         verify(mChargeTypeChangeListener).onChargeTypeChanged(ChargeType.AC);
         mBatteryInfoProvider.registerChargeTypeListener(mSecondChargeTypeChangeListener);
         verify(mSecondChargeTypeChangeListener).onChargeTypeChanged(ChargeType.AC);
+    }
+
+    @Test
+    public void testBatteryInfoUpdatesBeforeQueuedChargeTypeNotification() {
+        IHandlerExecutor executor = mock(IHandlerExecutor.class);
+        BatteryChargeTypeListener chargeTypeListener = mock(BatteryChargeTypeListener.class);
+        Intent initialIntent = prepareIntentWithBatteryInfo(10, 100, BatteryManager.BATTERY_PLUGGED_AC);
+        when(chargeTypeListener.addStickyBatteryChargeTypeListener(any(Consumer.class)))
+            .thenReturn(initialIntent);
+        BatteryInfoProvider provider = new BatteryInfoProvider(executor, chargeTypeListener);
+        provider.registerChargeTypeListener(mChargeTypeChangeListener);
+        InOrder listenerOrder = inOrder(mChargeTypeChangeListener);
+        listenerOrder.verify(mChargeTypeChangeListener).onChargeTypeChanged(ChargeType.AC);
+        assertThat(provider.getBatteryLevel()).isEqualTo(10);
+        assertThat(provider.getChargeType()).isEqualTo(ChargeType.AC);
+
+        verify(chargeTypeListener).addStickyBatteryChargeTypeListener(listenerCaptor.capture());
+        listenerCaptor.getValue().consume(
+            prepareIntentWithBatteryInfo(50, 100, BatteryManager.BATTERY_PLUGGED_USB)
+        );
+
+        assertThat(provider.getBatteryLevel()).isEqualTo(50);
+        assertThat(provider.getChargeType()).isEqualTo(ChargeType.USB);
+        ArgumentCaptor<SafeRunnable> notificationCaptor = ArgumentCaptor.forClass(SafeRunnable.class);
+        verify(executor).post(notificationCaptor.capture());
+        verify(executor, never()).execute(any(Runnable.class));
+        listenerOrder.verifyNoMoreInteractions();
+
+        notificationCaptor.getValue().run();
+
+        listenerOrder.verify(mChargeTypeChangeListener).onChargeTypeChanged(ChargeType.USB);
+        listenerOrder.verifyNoMoreInteractions();
     }
 
     @Test
