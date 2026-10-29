@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -208,6 +209,11 @@ public class NetworkTask {
     @NonNull
     public ExponentialBackoffPolicy getExponentialBackoffPolicy() {
         return exponentialBackoffPolicy;
+    }
+
+    @NonNull
+    public AttemptFailureReason getFailureReason() {
+        return underlyingTask.getFailureReason();
     }
 
     @Nullable

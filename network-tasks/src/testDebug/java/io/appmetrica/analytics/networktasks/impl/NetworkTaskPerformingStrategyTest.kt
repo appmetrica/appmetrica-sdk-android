@@ -11,6 +11,9 @@ import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome
+import io.appmetrica.analytics.networktasks.internal.attempt.RetryState
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
@@ -70,6 +73,8 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         on { this.sslSocketFactory } doReturn sslSocketFactory
         on { this.trustManager } doReturn trustManager
         on { this.userAgent } doReturn userAgent
+        on { this.shouldTryNextHost() } doReturn false
+        on { this.failureReason } doReturn AttemptFailureReason.UNCLASSIFIED
     }
     private val requestCaptor = argumentCaptor<Request>()
     private val networkClient = mock<NetworkClient> {
@@ -105,7 +110,7 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         }
         whenever(networkTask.underlyingTask).thenReturn(underlyingNetworkTask)
         whenever(networkTask.url).thenReturn(null)
-        assertThat(strategy.performRequest(networkTask)).isFalse()
+        assertThat((strategy.performRequest(networkTask) as AttemptOutcome.Completed).succeeded).isFalse()
         assertThat(newClientBuilder.constructionMock.constructed()).isEmpty()
         assertThat(requestCaptor.allValues).isEmpty()
     }
@@ -250,7 +255,7 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         stubbing(networkTask) {
             on { onPerformRequest() } doReturn false
         }
-        assertThat(strategy.performRequest(networkTask)).isFalse
+        assertThat((strategy.performRequest(networkTask) as AttemptOutcome.Completed).succeeded).isFalse
         verify(networkTask).onRequestError(null)
     }
 
@@ -261,16 +266,24 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
             on { this.exception } doReturn exception
             on { this.isCompleted } doReturn false
         }
-        assertThat(strategy.performRequest(networkTask)).isFalse
+        assertThat((strategy.performRequest(networkTask) as AttemptOutcome.Completed).succeeded).isFalse
         verify(networkTask).onRequestError(exception)
     }
 
     @Test
     fun requestCompleteUnsuccessfully() {
+        stubbing(response) {
+            on { this.isCompleted } doReturn true
+        }
         stubbing(networkTask) {
             on { this.onRequestComplete() } doReturn false
         }
-        assertThat(strategy.performRequest(networkTask)).isFalse
+        val decision = strategy.performRequest(networkTask)
+        ObjectPropertyAssertions(decision)
+            .checkField("succeeded", false)
+            .checkField("retry", RetryState.STOP)
+            .checkField("failureReason", AttemptFailureReason.UNCLASSIFIED)
+            .checkAll()
     }
 
     @Test
@@ -281,6 +294,47 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         stubbing(networkTask) {
             on { this.onRequestComplete() } doReturn true
         }
-        assertThat(strategy.performRequest(networkTask)).isTrue
+        val decision = strategy.performRequest(networkTask)
+        ObjectPropertyAssertions(decision)
+            .checkField("succeeded", true)
+            .checkField("retry", RetryState.STOP)
+            .checkField("failureReason", AttemptFailureReason.UNCLASSIFIED)
+            .checkAll()
+    }
+
+    @Test
+    fun failureThatShouldTryNextHost() {
+        stubbing(response) {
+            on { this.isCompleted } doReturn true
+        }
+        stubbing(networkTask) {
+            on { this.onRequestComplete() } doReturn false
+            on { this.shouldTryNextHost() } doReturn true
+            on { this.failureReason } doReturn AttemptFailureReason.UNCLASSIFIED
+        }
+        val decision = strategy.performRequest(networkTask)
+        ObjectPropertyAssertions(decision)
+            .checkField("succeeded", false)
+            .checkField("retry", RetryState.RUN)
+            .checkField("failureReason", AttemptFailureReason.UNCLASSIFIED)
+            .checkAll()
+    }
+
+    @Test
+    fun failureWithPayloadRejectedReason() {
+        stubbing(response) {
+            on { this.isCompleted } doReturn true
+        }
+        stubbing(networkTask) {
+            on { this.onRequestComplete() } doReturn false
+            on { this.shouldTryNextHost() } doReturn false
+            on { this.failureReason } doReturn AttemptFailureReason.PAYLOAD_REJECTED
+        }
+        val decision = strategy.performRequest(networkTask)
+        ObjectPropertyAssertions(decision)
+            .checkField("succeeded", false)
+            .checkField("retry", RetryState.STOP)
+            .checkField("failureReason", AttemptFailureReason.PAYLOAD_REJECTED)
+            .checkAll()
     }
 }

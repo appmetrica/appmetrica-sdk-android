@@ -26,6 +26,8 @@ import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.FinalConfigProvider
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
+import io.appmetrica.analytics.networktasks.internal.backoff.AlwaysUpdateOnFailure
+import io.appmetrica.analytics.networktasks.internal.backoff.PreserveBackoffOnPayloadRejected
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
@@ -115,6 +117,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                     ).also {
                         checkExponentialBackoffDataHolder(NetworkHost.REPORT)
                     }
+                    .checkField("failureBackoffRules", PreserveBackoffOnPayloadRejected)
                     .checkAll()
             }
             .checkFieldRecursively<ReportTask>("underlyingTask") { reportTaskAssertions ->
@@ -184,6 +187,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                         ).also {
                             checkExponentialBackoffDataHolder(NetworkHost.STARTUP)
                         }
+                        .checkField("failureBackoffRules", AlwaysUpdateOnFailure)
                         .checkAll()
                 }
                 .checkFieldRecursively<StartupTask>("underlyingTask") { startupTaskAssertions ->

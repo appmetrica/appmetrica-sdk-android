@@ -21,9 +21,10 @@ public class io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppen
 
 public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicy implementation io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy {
     public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder)
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder, [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.FailureBackoffRules)
     public boolean canBeExecuted([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
-    public void onAllHostsAttemptsFinished(boolean)
-    public void onHostAttemptFinished(boolean)
+    public void onAllHostsAttemptsFinished([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
+    public void onHostAttemptFinished([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
 }
 
 public interface io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
@@ -190,8 +191,8 @@ public class io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDat
 
 public interface io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy {
     public abstract boolean canBeExecuted([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
-    public abstract void onAllHostsAttemptsFinished(boolean)
-    public abstract void onHostAttemptFinished(boolean)
+    public abstract void onAllHostsAttemptsFinished([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
+    public abstract void onHostAttemptFinished([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
 }
 
 public final class io.appmetrica.analytics.networktasks.internal.FinalConfigProvider<T> implementation io.appmetrica.analytics.networktasks.internal.ConfigProvider<T> {
@@ -261,6 +262,7 @@ public class io.appmetrica.analytics.networktasks.internal.NetworkTask {
     public [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy getConnectionExecutionPolicy()
     public [NonNull] java.util.concurrent.Executor getExecutor()
     public [NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy getExponentialBackoffPolicy()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason getFailureReason()
     public [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder getRequestDataHolder()
     public [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
     public [Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
@@ -356,6 +358,7 @@ public class io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper
 
 public interface io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask {
     public abstract [NonNull] String description()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason getFailureReason()
     public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.FullUrlFormer<?> getFullUrlFormer()
     public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder getRequestDataHolder()
     public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
@@ -373,6 +376,83 @@ public interface io.appmetrica.analytics.networktasks.internal.UnderlyingNetwork
     public abstract void onTaskFinished()
     public abstract void onTaskRemoved()
     public abstract void onUnsuccessfulTaskFinished()
+}
+
+public enum io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason {
+    PAYLOAD_REJECTED, UNCLASSIFIED
+
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason> getEntries()
+    public static io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason valueOf(String)
+    public static io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason[] values()
+}
+
+public abstract class io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState getRetry()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$Completed extends io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome {
+    public <init>(boolean, [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState, [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason)
+    public final boolean component1()
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState component2()
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason component3()
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$Completed copy(boolean, [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState, [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason getFailureReason()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState getRetry()
+    public final boolean getSucceeded()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$ReadyToRun extends io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome {
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$ReadyToRun INSTANCE
+
+    public boolean equals([Nullable] Object)
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState getRetry()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$Skipped extends io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome {
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome$Skipped INSTANCE
+
+    public boolean equals([Nullable] Object)
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.attempt.RetryState getRetry()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.networktasks.internal.attempt.RetryState {
+    RUN, STOP
+
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.networktasks.internal.attempt.RetryState> getEntries()
+    public static io.appmetrica.analytics.networktasks.internal.attempt.RetryState valueOf(String)
+    public static io.appmetrica.analytics.networktasks.internal.attempt.RetryState[] values()
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.backoff.AlwaysUpdateOnFailure implementation io.appmetrica.analytics.networktasks.internal.backoff.FailureBackoffRules {
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.AlwaysUpdateOnFailure INSTANCE
+
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction backoffAction([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
+}
+
+public enum io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction {
+    DO_NOTHING, RESET, UPDATE
+
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction> getEntries()
+    public static io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction valueOf(String)
+    public static io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction[] values()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.backoff.FailureBackoffRules {
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction backoffAction([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.backoff.PreserveBackoffOnPayloadRejected implementation io.appmetrica.analytics.networktasks.internal.backoff.FailureBackoffRules {
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.PreserveBackoffOnPayloadRejected INSTANCE
+
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.backoff.BackoffAction backoffAction([NonNull] io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome)
 }
 
 public final class io.appmetrica.analytics.networktasks.internal.utils.Utils {

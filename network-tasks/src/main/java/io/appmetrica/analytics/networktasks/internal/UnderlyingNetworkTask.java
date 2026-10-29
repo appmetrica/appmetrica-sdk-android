@@ -2,6 +2,7 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
@@ -16,6 +17,11 @@ public interface UnderlyingNetworkTask {
     boolean onRequestComplete();
 
     void onPostRequestComplete(boolean success);
+
+    @NonNull
+    default AttemptFailureReason getFailureReason() {
+        return AttemptFailureReason.UNCLASSIFIED;
+    }
 
     void onRequestError(@Nullable Throwable error);
 

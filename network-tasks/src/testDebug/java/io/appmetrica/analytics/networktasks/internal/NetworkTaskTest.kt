@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -85,6 +86,19 @@ class NetworkTaskTest : CommonTest() {
     @Test
     fun exponentialBackoffPolicy() {
         assertThat(networkTask.exponentialBackoffPolicy).isEqualTo(exponentialBackoffPolicy)
+    }
+
+    @Test
+    fun failureReasonDelegatesToUnderlyingTask() {
+        stubbing(underlyingTask) {
+            on { this.failureReason } doReturn AttemptFailureReason.PAYLOAD_REJECTED
+        }
+        assertThat(networkTask.failureReason).isEqualTo(AttemptFailureReason.PAYLOAD_REJECTED)
+
+        stubbing(underlyingTask) {
+            on { this.failureReason } doReturn AttemptFailureReason.UNCLASSIFIED
+        }
+        assertThat(networkTask.failureReason).isEqualTo(AttemptFailureReason.UNCLASSIFIED)
     }
 
     @Test

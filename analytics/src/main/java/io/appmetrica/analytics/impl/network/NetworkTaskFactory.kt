@@ -22,6 +22,8 @@ import io.appmetrica.analytics.networktasks.internal.FullUrlFormer
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder
+import io.appmetrica.analytics.networktasks.internal.backoff.AlwaysUpdateOnFailure
+import io.appmetrica.analytics.networktasks.internal.backoff.PreserveBackoffOnPayloadRejected
 
 internal object NetworkTaskFactory {
 
@@ -51,7 +53,10 @@ internal object NetworkTaskFactory {
             ConnectionBasedExecutionPolicy(
                 component.context
             ),
-            AllHostsExponentialBackoffPolicy(getBackoffHolder(NetworkHost.REPORT)),
+            AllHostsExponentialBackoffPolicy(
+                getBackoffHolder(NetworkHost.REPORT),
+                PreserveBackoffOnPayloadRejected,
+            ),
             ReportTask(
                 component,
                 paramsAppender,
@@ -77,7 +82,10 @@ internal object NetworkTaskFactory {
             ConnectionBasedExecutionPolicy(
                 startupUnit.context
             ),
-            AllHostsExponentialBackoffPolicy(getBackoffHolder(NetworkHost.STARTUP)),
+            AllHostsExponentialBackoffPolicy(
+                getBackoffHolder(NetworkHost.STARTUP),
+                AlwaysUpdateOnFailure,
+            ),
             StartupTask(
                 startupUnit,
                 FullUrlFormer(

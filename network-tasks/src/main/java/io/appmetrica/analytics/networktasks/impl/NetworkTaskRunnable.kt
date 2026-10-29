@@ -3,7 +3,10 @@ package io.appmetrica.analytics.networktasks.impl
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome
+import io.appmetrica.analytics.networktasks.internal.attempt.RetryState
 
 internal class NetworkTaskRunnable @VisibleForTesting constructor(
     private val networkTask: NetworkTask,
@@ -30,42 +33,53 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
     )
 
     override fun run() {
-        var taskFinished = false
-        var shouldExecuteTask: Boolean
         val exponentialBackoffPolicy = networkTask.exponentialBackoffPolicy
-        val canBeExecutedByConnectionPolicy = networkTask.connectionExecutionPolicy.canBeExecuted()
-        val canBeExecuted = networkTask.exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
-        if (rootThreadStateSource.isRunning) {
-            if (canBeExecutedByConnectionPolicy && canBeExecuted) {
-                var countRequest = 0
-                shouldExecuteTask = networkTask.onCreateNetworkTask()
-                if (!shouldExecuteTask) {
-                    DebugLogger.info(tag, "Skipping task, desc: ${networkTask.description()}")
-                }
-                var requestSuccessful: Boolean? = null
-                while (
-                    rootThreadStateSource.isRunning && shouldExecuteTask &&
-                    exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
-                ) {
-                    ++countRequest
+        if (!canStartExecution(exponentialBackoffPolicy)) {
+            handleIncompatibleNetworkType()
+            return
+        }
+
+        var lastAttemptOutcome = createInitialOutcome()
+        var attemptNumber = 0
+        while (
+            rootThreadStateSource.isRunning &&
+            exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
+        ) {
+            when (lastAttemptOutcome.retry) {
+                RetryState.RUN -> {
+                    ++attemptNumber
                     DebugLogger.info(
                         tag,
-                        "Executing task .. attempt: $countRequest, desc: ${networkTask.description()}",
+                        "Executing task .. attempt: $attemptNumber, desc: ${networkTask.description()}",
                     )
-                    requestSuccessful = taskPerformingStrategy.performRequest(networkTask)
-                    shouldExecuteTask = !requestSuccessful && networkTask.shouldTryNextHost()
-                    exponentialBackoffPolicy.onHostAttemptFinished(requestSuccessful)
+                    lastAttemptOutcome = taskPerformingStrategy.performRequest(networkTask)
                 }
-                DebugLogger.info(
-                    tag,
-                    "All attempts finished for task ${networkTask.description()}, success: $requestSuccessful",
-                )
-                exponentialBackoffPolicy.onAllHostsAttemptsFinished(requestSuccessful == true)
-                taskFinished = true
+
+                RetryState.STOP -> break
             }
+            exponentialBackoffPolicy.onHostAttemptFinished(lastAttemptOutcome)
         }
-        if (!taskFinished) {
-            handleIncompatibleNetworkType()
+
+        DebugLogger.info(
+            tag,
+            "All attempts finished for task ${networkTask.description()}, " +
+                "outcome: $lastAttemptOutcome",
+        )
+        exponentialBackoffPolicy.onAllHostsAttemptsFinished(lastAttemptOutcome)
+    }
+
+    private fun canStartExecution(exponentialBackoffPolicy: ExponentialBackoffPolicy): Boolean {
+        return rootThreadStateSource.isRunning &&
+            networkTask.connectionExecutionPolicy.canBeExecuted() &&
+            exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
+    }
+
+    private fun createInitialOutcome(): AttemptOutcome {
+        return if (networkTask.onCreateNetworkTask()) {
+            AttemptOutcome.ReadyToRun
+        } else {
+            DebugLogger.info(tag, "Skipping task, desc: ${networkTask.description()}")
+            AttemptOutcome.Skipped
         }
     }
 

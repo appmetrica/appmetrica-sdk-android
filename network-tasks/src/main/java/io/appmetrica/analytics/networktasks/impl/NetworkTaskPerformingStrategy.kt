@@ -7,13 +7,15 @@ import io.appmetrica.analytics.network.internal.NetworkClientBuilder
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome
+import io.appmetrica.analytics.networktasks.internal.attempt.RetryState
 import java.util.concurrent.TimeUnit
 
 internal class NetworkTaskPerformingStrategy {
 
     private val tag = "[NetworkTaskPerformingStrategy]"
 
-    fun performRequest(task: NetworkTask): Boolean {
+    fun performRequest(task: NetworkTask): AttemptOutcome {
         if (task.onPerformRequest()) {
             val url = task.url
             DebugLogger.info(tag, "Task %s perform request: %s", task.description(), url)
@@ -21,7 +23,7 @@ internal class NetworkTaskPerformingStrategy {
                 val errorMessage = "Task ${task.description()} url is `$url`. " +
                     "All hosts = ${task.underlyingTask.fullUrlFormer.allHosts?.toString()}"
                 task.onRequestError(IllegalArgumentException(errorMessage))
-                return false
+                return createAttemptOutcome(task, succeeded = false)
             }
             val requestBuilder = Request.Builder(url)
                 .addHeader(Constants.Headers.ACCEPT, Constants.Config.TYPE_JSON)
@@ -83,7 +85,7 @@ internal class NetworkTaskPerformingStrategy {
                 )
             }
             if (response.isCompleted) {
-                return task.onRequestComplete()
+                return createAttemptOutcome(task, succeeded = task.onRequestComplete())
             } else {
                 task.onRequestError(response.exception)
             }
@@ -91,7 +93,19 @@ internal class NetworkTaskPerformingStrategy {
             DebugLogger.info(tag, "Will not perform task %s", task.description())
             task.onRequestError(null)
         }
-        return false
+        return createAttemptOutcome(task, succeeded = false)
+    }
+
+    private fun createAttemptOutcome(task: NetworkTask, succeeded: Boolean): AttemptOutcome {
+        return AttemptOutcome.Completed(
+            succeeded = succeeded,
+            retry = if (!succeeded && task.shouldTryNextHost()) {
+                RetryState.RUN
+            } else {
+                RetryState.STOP
+            },
+            failureReason = task.failureReason,
+        )
     }
 
     private fun applyRequestHeaders(requestBuilder: Request.Builder, headers: Map<String, List<String>>) {

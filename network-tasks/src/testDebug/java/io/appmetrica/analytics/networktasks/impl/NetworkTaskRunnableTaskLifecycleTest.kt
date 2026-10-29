@@ -5,17 +5,22 @@ import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome
+import io.appmetrica.analytics.networktasks.internal.attempt.RetryState
 import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doReturnConsecutively
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -35,7 +40,6 @@ internal class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
     private val networkTask = mock<NetworkTask> {
         on { this.exponentialBackoffPolicy } doReturn exponentialBackoffPolicy
         on { this.connectionExecutionPolicy } doReturn connectionBasedExecutionPolicy
-        on { this.shouldTryNextHost() } doReturn false
         on { this.onCreateNetworkTask() } doReturn true
         on { this.retryPolicyConfig } doReturn retryPolicyConfig
     }
@@ -53,6 +57,8 @@ internal class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
         networkTaskRunnable.run()
         verify(networkTask).onCreateNetworkTask()
         verifyNoMoreInteractions(performingStrategy)
+        verify(exponentialBackoffPolicy, never()).onHostAttemptFinished(any())
+        verify(exponentialBackoffPolicy).onAllHostsAttemptsFinished(AttemptOutcome.Skipped)
     }
 
     @Test
@@ -79,22 +85,39 @@ internal class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
 
     @Test
     fun successfulNetworkTaskLifecycleTest() {
+        stubbing(performingStrategy) {
+            on { this.performRequest(networkTask) } doReturn AttemptOutcome.Completed(
+                succeeded = true,
+                retry = RetryState.STOP,
+                failureReason = AttemptFailureReason.UNCLASSIFIED,
+            )
+        }
         networkTaskRunnable.run()
         val inOrder = inOrder(networkTask, performingStrategy)
         inOrder.verify(networkTask).onCreateNetworkTask()
         inOrder.verify(performingStrategy).performRequest(networkTask)
-        inOrder.verify(networkTask).shouldTryNextHost()
     }
 
     @Test
     fun retriedNetworkTaskLifecycleTest() {
-        whenever(networkTask.shouldTryNextHost()).thenReturn(true, false)
+        stubbing(performingStrategy) {
+            on { this.performRequest(networkTask) } doReturnConsecutively listOf(
+                AttemptOutcome.Completed(
+                    succeeded = false,
+                    retry = RetryState.RUN,
+                    failureReason = AttemptFailureReason.UNCLASSIFIED,
+                ),
+                AttemptOutcome.Completed(
+                    succeeded = false,
+                    retry = RetryState.STOP,
+                    failureReason = AttemptFailureReason.UNCLASSIFIED,
+                ),
+            )
+        }
         networkTaskRunnable.run()
         val inOrder = Mockito.inOrder(networkTask, performingStrategy)
         inOrder.verify(networkTask).onCreateNetworkTask()
         inOrder.verify(performingStrategy).performRequest(networkTask)
-        inOrder.verify(networkTask).shouldTryNextHost()
         inOrder.verify(performingStrategy).performRequest(networkTask)
-        inOrder.verify(networkTask).shouldTryNextHost()
     }
 }

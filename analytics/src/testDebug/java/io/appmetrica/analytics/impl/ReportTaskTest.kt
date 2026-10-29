@@ -31,6 +31,7 @@ import io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder
 import io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
@@ -480,6 +481,15 @@ internal class ReportTaskTest : CommonTest() {
         reportTask.onCreateTask()
         reportTask.onPostRequestComplete(false)
         verify(dbInteractor, never()).cleanPostedData(any(), any(), any(), any())
+    }
+
+    @Test
+    fun failureReasonForBadRequestAndOtherErrors() {
+        whenever(responseDataHolder.responseCode).thenReturn(HttpsURLConnection.HTTP_BAD_REQUEST)
+        assertThat(reportTask.failureReason).isEqualTo(AttemptFailureReason.PAYLOAD_REJECTED)
+
+        whenever(responseDataHolder.responseCode).thenReturn(HttpsURLConnection.HTTP_INTERNAL_ERROR)
+        assertThat(reportTask.failureReason).isEqualTo(AttemptFailureReason.UNCLASSIFIED)
     }
 
     @Test

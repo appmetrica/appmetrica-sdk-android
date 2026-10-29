@@ -1,8 +1,13 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptOutcome
+import io.appmetrica.analytics.networktasks.internal.attempt.RetryState
+import io.appmetrica.analytics.networktasks.internal.backoff.PreserveBackoffOnPayloadRejected
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -15,26 +20,33 @@ class AllHostExponentialBackoffPolicyTest : CommonTest() {
     private val policy = AllHostsExponentialBackoffPolicy(dataHolder)
 
     @Test
-    fun onHostAttemptFinishedForTrue() = onHostAttemptFinished(true)
-
-    @Test
-    fun onHostAttemptFinishedForFalse() = onHostAttemptFinished(false)
-
-    private fun onHostAttemptFinished(success: Boolean) {
-        policy.onHostAttemptFinished(success)
+    fun onHostAttemptFinishedDoesNothing() {
+        policy.onHostAttemptFinished(succeeded())
+        policy.onHostAttemptFinished(failed(AttemptFailureReason.UNCLASSIFIED))
+        policy.onHostAttemptFinished(failed(AttemptFailureReason.PAYLOAD_REJECTED))
         verifyNoMoreInteractions(dataHolder)
     }
 
     @Test
-    fun onAllHostAttemptsFinishedForTrue() {
-        policy.onAllHostsAttemptsFinished(true)
+    fun onAllHostsAttemptsFinishedAppliesRules() {
+        policy.onAllHostsAttemptsFinished(succeeded())
         verify(dataHolder).reset()
+
+        clearInvocations(dataHolder)
+        policy.onAllHostsAttemptsFinished(failed(AttemptFailureReason.UNCLASSIFIED))
+        verify(dataHolder).updateLastAttemptInfo()
+
+        clearInvocations(dataHolder)
+        val preservePolicy = AllHostsExponentialBackoffPolicy(dataHolder, PreserveBackoffOnPayloadRejected)
+        preservePolicy.onAllHostsAttemptsFinished(failed(AttemptFailureReason.PAYLOAD_REJECTED))
+        verifyNoMoreInteractions(dataHolder)
     }
 
     @Test
-    fun onAllAttemptsFinishedForFalse() {
-        policy.onAllHostsAttemptsFinished(false)
-        verify(dataHolder).updateLastAttemptInfo()
+    fun onAllHostsAttemptsFinishedForSkippedDoesNothing() {
+        policy.onAllHostsAttemptsFinished(AttemptOutcome.Skipped)
+        policy.onAllHostsAttemptsFinished(AttemptOutcome.ReadyToRun)
+        verifyNoMoreInteractions(dataHolder)
     }
 
     @Test
@@ -47,4 +59,16 @@ class AllHostExponentialBackoffPolicyTest : CommonTest() {
         whenever(dataHolder.wasLastAttemptLongAgoEnough(retryPolicyConfig)).thenReturn(result)
         assertThat(policy.canBeExecuted(retryPolicyConfig)).isEqualTo(result)
     }
+
+    private fun succeeded() = AttemptOutcome.Completed(
+        succeeded = true,
+        retry = RetryState.STOP,
+        failureReason = AttemptFailureReason.UNCLASSIFIED,
+    )
+
+    private fun failed(reason: AttemptFailureReason) = AttemptOutcome.Completed(
+        succeeded = false,
+        retry = RetryState.STOP,
+        failureReason = reason,
+    )
 }

@@ -25,6 +25,7 @@ import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper;
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask;
+import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -227,6 +228,14 @@ public class ReportTask implements UnderlyingNetworkTask {
         if (success) {
             logSentEvents();
         }
+    }
+
+    @NonNull
+    @Override
+    public AttemptFailureReason getFailureReason() {
+        return Utils.isBadRequest(responseDataHolder.getResponseCode())
+            ? AttemptFailureReason.PAYLOAD_REJECTED
+            : AttemptFailureReason.UNCLASSIFIED;
     }
 
     private void logSentEvents() {
