@@ -315,20 +315,6 @@ public class ReportsHandlerTest extends CommonTest {
     }
 
     @Test
-    public void testReportEventWithAttributesStoresPlainJsonValue() {
-        final Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("key", "value");
-        final CoreClientEvent report = CoreClientEvent.regularEventReportEntry("name", attributes);
-
-        mReportsHandlerSpy.reportEvent(report, mArgReporterEnvironment);
-
-        ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
-        verify(mReportsSender).queueReport(reportToSend.capture());
-        TrimmedCoreClientEvent queuedReport = reportToSend.getValue().getReport();
-        assertThat(queuedReport.getValue()).isEqualTo(JsonHelper.mapToJsonString(attributes));
-    }
-
-    @Test
     public void testSendUserProfile() throws InvalidProtocolBufferNanoException {
         final Userprofile.Profile profile = new Userprofile.Profile();
         mReportsHandlerSpy.sendUserProfile(profile, mMainReporterEnvironment);
@@ -346,7 +332,7 @@ public class ReportsHandlerTest extends CommonTest {
         verify(mReportsSender, times(1)).queueReport(reportToSend.capture());
         TrimmedCoreClientEvent report = reportToSend.getValue().getReport();
         assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID.getTypeId());
-        assertThat(report.getValue()).isEqualTo(profileID);
+        assertThat(report.getValueBytes()).isEqualTo(StringUtils.getUTF8Bytes(profileID));
     }
 
     @Test

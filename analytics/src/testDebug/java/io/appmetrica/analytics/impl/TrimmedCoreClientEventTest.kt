@@ -4,6 +4,7 @@ import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.mockito.kotlin.mock
 
@@ -41,7 +42,6 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
         assertThat(trimmed.type).isEqualTo(InternalEvents.EVENT_TYPE_REGULAR.typeId)
         assertThat(trimmed.customType).isEqualTo(3)
         assertThat(trimmed.valueProtocolVersion).isEqualTo(2)
-        assertThat(trimmed.value).isEqualTo(String(trimmed.valueBytes!!, Charsets.UTF_8))
         assertThat(trimmed.extras).containsEntry("k", byteArrayOf(1))
 
         assertThat(source.name).isEqualTo(longName)
@@ -100,5 +100,53 @@ internal class TrimmedCoreClientEventTest : CommonTest() {
         assertThat(trimmed.valueBytes).isEqualTo("value".toByteArray())
         assertThat(trimmed.profileID).isEqualTo("pid")
         assertThat(trimmed.bytesTruncated).isZero()
+    }
+
+    @Test
+    fun toStringVariants() {
+        SoftAssertions().apply {
+            assertThat(TrimmedCoreClientEvent(logger, CoreClientEvent()).toString())
+                .contains("event: ")
+                .contains("type: " + InternalEvents.EVENT_TYPE_INIT.info)
+                .contains("value: 0 bytes")
+        }.assertAll()
+
+        val eventName = "test name"
+        val eventValue = "test value"
+        val filled = TrimmedCoreClientEvent(
+            logger,
+            CoreClientEvent(
+                type = InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.typeId,
+                name = eventName,
+                valueBytes = eventValue.toByteArray(),
+            ),
+        )
+        SoftAssertions().apply {
+            assertThat(filled.toString())
+                .contains("event: $eventName")
+                .contains("type: " + InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT.info)
+                .contains("value: ${eventValue.toByteArray().size} bytes")
+                .doesNotContain(eventValue)
+        }.assertAll()
+
+        SoftAssertions().apply {
+            assertThat(
+                TrimmedCoreClientEvent(
+                    logger,
+                    CoreClientEvent(valueBytes = null, trimPolicy = EventTrimPolicy.NONE),
+                ).toString(),
+            )
+                .contains("value: null")
+                .doesNotContain("bytes")
+        }.assertAll()
+
+        SoftAssertions().apply {
+            assertThat(
+                TrimmedCoreClientEvent(
+                    logger,
+                    CoreClientEvent(valueBytes = ByteArray(0), trimPolicy = EventTrimPolicy.NONE),
+                ).toString(),
+            ).contains("value: 0 bytes")
+        }.assertAll()
     }
 }

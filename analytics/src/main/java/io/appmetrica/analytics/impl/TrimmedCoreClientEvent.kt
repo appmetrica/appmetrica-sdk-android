@@ -5,7 +5,6 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.utils.limitation.EventFieldTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import java.nio.charset.StandardCharsets
 import java.util.Arrays
 
 internal class TrimmedCoreClientEvent(
@@ -27,7 +26,6 @@ internal class TrimmedCoreClientEvent(
         EventFieldTrimmer.valueBytesTrimmer(logger, event.trimPolicy).trim(event.valueBytes)
     val profileID: String? =
         EventFieldTrimmer.profileIdTrimmer(logger, event.trimPolicy).trim(event.profileID)
-    val value: String? = valueBytes?.let { String(it, StandardCharsets.UTF_8) }
 
     val bytesTruncated: Int =
         event.bytesTruncated +
@@ -38,7 +36,7 @@ internal class TrimmedCoreClientEvent(
         return "[" +
             "event: $name, " +
             "type: ${InternalEvents.valueOf(type).info}, " +
-            "value: ${Utils.trimToSize(value, Limits.EVENT_VALUE_FOR_LOGS_LIMIT)}" +
+            "value: ${valueBytes?.let { "${it.size} bytes" }}" +
             "]"
     }
 
