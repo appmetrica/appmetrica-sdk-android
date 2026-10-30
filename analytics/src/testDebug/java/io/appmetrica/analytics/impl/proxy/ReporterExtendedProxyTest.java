@@ -6,8 +6,8 @@ import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
@@ -17,6 +17,7 @@ import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.gradle.testutils.CommonTest;
@@ -29,22 +30,27 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class ReporterExtendedProxyTest extends CommonTest {
@@ -69,6 +75,9 @@ public class ReporterExtendedProxyTest extends CommonTest {
     
     @Rule
     public ContextRule contextRule = new ContextRule();
+
+    @Captor
+    private ArgumentCaptor<Runnable> runnableCaptor;
 
     private final String mApiKey = TestsData.generateApiKey();
     private ReporterExtendedProxy mReporterExtendedProxy;
@@ -194,6 +203,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
     @Test
     public void reportAppOpen() {
         String deeplink = "some://deeplink";
+        when(reporterBarrier.reportAppOpen(deeplink)).thenReturn(true);
         mReporterExtendedProxy.reportAppOpen(deeplink);
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
         inOrder.verify(reporterBarrier).reportAppOpen(deeplink);
@@ -203,22 +213,40 @@ public class ReporterExtendedProxyTest extends CommonTest {
     }
 
     @Test
-    public void reportAppOpenRejectsInvalidDeeplinkBeforeScheduling() {
+    public void reportAppOpenDiagnosticRunsAfterQueuedReporterConfig() {
         IHandlerExecutor executor = mock(IHandlerExecutor.class);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(executor);
+        ReporterConfig config = ReporterConfig.newConfigBuilder(mApiKey).build();
         ReporterExtendedProxy proxy = new ReporterExtendedProxy(
-            contextRule.getContext(),
-            new ReporterBarrier(),
-            mProvider,
-            mSynchronousStageExecutor,
-            ReporterConfig.newConfigBuilder(mApiKey).build(),
-            pluginReporterProxy
+            contextRule.getContext(), reporterBarrier, mProvider, mSynchronousStageExecutor,
+            config, pluginReporterProxy
         );
+        PublicLogger logger = mock(PublicLogger.class);
+        try (MockedStatic<LoggerStorage> storage = mockStatic(LoggerStorage.class)) {
+            storage.when(() -> LoggerStorage.getOrCreatePublicLogger(mApiKey)).thenReturn(logger);
 
-        assertThatThrownBy(() -> proxy.reportAppOpen(null)).isInstanceOf(ValidationException.class);
-        assertThatThrownBy(() -> proxy.reportAppOpen("")).isInstanceOf(ValidationException.class);
-        verifyNoInteractions(executor, mSynchronousStageExecutor, mReporter);
+            proxy.activate(config);
+            proxy.reportAppOpen(null);
+
+            verify(executor, times(2)).post(runnableCaptor.capture());
+            verifyNoMoreInteractions(executor);
+            storage.verifyNoInteractions();
+            verifyNoInteractions(mAppMetricaFacade, logger, mReporter);
+            runnableCaptor.getAllValues().get(0).run();
+            verify(mAppMetricaFacade).activateReporter(config);
+            storage.verifyNoInteractions();
+            runnableCaptor.getAllValues().get(1).run();
+
+            InOrder order = inOrder(mAppMetricaFacade, logger);
+            order.verify(mAppMetricaFacade).activateReporter(config);
+            order.verify(logger).info("Ignoring null, empty or blank deeplink in reportAppOpen");
+            verify(mSynchronousStageExecutor).activate(config);
+            verifyNoMoreInteractions(mSynchronousStageExecutor, logger);
+            verifyNoInteractions(mReporter);
+            storage.verify(() -> LoggerStorage.getOrCreatePublicLogger(mApiKey));
+            storage.verifyNoMoreInteractions();
+        }
     }
 
     @Test

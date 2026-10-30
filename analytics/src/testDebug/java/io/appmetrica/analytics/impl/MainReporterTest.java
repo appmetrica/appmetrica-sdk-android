@@ -390,9 +390,10 @@ public class MainReporterTest extends BaseReporterTest {
     public void testReportAppOpen() {
         String link = "some://uri";
         when(CoreClientEvent.openAppReportEntry(link, true)).thenReturn(mockedEvent);
+        Mockito.clearInvocations(mPublicLogger);
         mMainReporter.reportAutoAppOpen(link);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
-        verify(mPublicLogger).info("App opened via deeplink: " + link);
+        Mockito.verifyNoInteractions(mPublicLogger);
     }
 
     @Test

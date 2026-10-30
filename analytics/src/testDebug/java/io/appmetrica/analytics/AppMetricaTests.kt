@@ -150,7 +150,7 @@ internal class AppMetricaTests : CommonTest() {
 
     @Test
     fun reportAppOpenDeeplink() {
-        val deeplink = "deeplink"
+        val deeplink = "app://test"
         AppMetrica.reportAppOpen(deeplink)
         verify(proxy).reportAppOpen(deeplink)
     }
@@ -345,5 +345,18 @@ internal class AppMetricaTests : CommonTest() {
     fun setAdvIdentifiersTracking() {
         AppMetrica.setAdvIdentifiersTracking(true)
         verify(proxy).setAdvIdentifiersTracking(true)
+    }
+
+    @Test
+    fun `custom Kotlin reporter accepts non-null String override`() {
+        val delegate = mock<IReporter>()
+        val reporter = object : IReporter by delegate {
+            override fun reportAppOpen(deeplink: String) {
+                delegate.reportAppOpen(deeplink)
+            }
+        }
+        val deeplink = "scheme://value"
+        reporter.reportAppOpen(deeplink)
+        verify(delegate).reportAppOpen(deeplink)
     }
 }

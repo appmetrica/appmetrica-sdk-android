@@ -5,6 +5,7 @@ import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent;
 import io.appmetrica.analytics.coreapi.internal.event.AppMetricaEventData;
+import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult;
 import io.appmetrica.analytics.coreutils.internal.validation.Validator;
@@ -244,10 +245,14 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(CoreClientEvent.openAppReportEntry(firstLink, true)).thenReturn(mockedEvent);
         when(CoreClientEvent.openAppReportEntry(secondLink, false)).thenReturn(secondEvent);
 
+        Mockito.clearInvocations(mPublicLogger);
         mReporter.reportAutoAppOpen(firstLink);
+        Mockito.verifyNoInteractions(mPublicLogger);
         mReporter.reportAppOpen(firstLink);
         mReporter.reportAppOpen(secondLink);
         mReporter.reportAutoAppOpen(secondLink);
+        verify(mPublicLogger).info("App opened via deeplink: " + WrapUtils.wrapToTag(secondLink));
+        Mockito.verifyNoMoreInteractions(mPublicLogger);
 
         InOrder order = Mockito.inOrder(mReportsHandler);
         order.verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);

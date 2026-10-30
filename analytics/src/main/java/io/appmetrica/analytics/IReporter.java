@@ -26,11 +26,10 @@ public interface IReporter {
     /**
      * Sends a report about opening the app via a deeplink.
      * Consecutive calls with the same deeplink are reported only once for this reporter.
-     * Custom reporter implementations that do not override this method ignore the deeplink
-     * and log a warning in debug and snapshot builds.
+     * Custom reporter implementations that do not override this method ignore the deeplink.
      *
+     * Empty and blank deeplinks are ignored by SDK reporters.
      * @param deeplink Deeplink value.
-     * @throws ValidationException If an SDK reporter receives a null or empty deeplink.
      */
     default void reportAppOpen(@NonNull String deeplink) {
         DebugLogger.INSTANCE.warning(

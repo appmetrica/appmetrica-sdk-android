@@ -274,8 +274,8 @@ public final class AppMetrica {
 
     /**
      * Sends report about open app via deeplink.
+     * Empty and blank deeplinks are ignored.
      * @param deeplink Deeplink value.
-     * @throws ValidationException If the deeplink is null or empty.
      */
     public static void reportAppOpen(@NonNull String deeplink) {
         AppMetricaProxyProvider.getProxy().reportAppOpen(deeplink);

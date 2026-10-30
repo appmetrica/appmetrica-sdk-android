@@ -13,6 +13,7 @@ import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.IReporterExtended;
@@ -169,8 +170,17 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @Override
-    public void reportAppOpen(@NonNull final String deeplink) {
-        barrier.reportAppOpen(deeplink);
+    public void reportAppOpen(@Nullable final String deeplink) {
+        if (!barrier.reportAppOpen(deeplink)) {
+            mExecutor.post(new Runnable() {
+                @Override
+                public void run() {
+                    LoggerStorage.getOrCreatePublicLogger(mConfigWithApiKeyOnly.apiKey)
+                        .info("Ignoring null, empty or blank deeplink in reportAppOpen");
+                }
+            });
+            return;
+        }
         synchronousStageExecutor.reportAppOpen(deeplink);
         mExecutor.execute(new Runnable() {
             @Override

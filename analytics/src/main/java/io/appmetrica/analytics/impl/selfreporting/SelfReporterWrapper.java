@@ -124,7 +124,7 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter, 
     }
 
     @Override
-    public void reportAppOpen(@NonNull final String deeplink) {
+    public void reportAppOpen(@Nullable final String deeplink) {
         processCommand(new IReporterCommandPerformer() {
             @Override
             public void perform(@NonNull IReporterExtended reporter) {

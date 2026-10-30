@@ -170,7 +170,11 @@ public abstract class BaseReporter implements IBaseReporter {
     }
 
     private void reportAppOpenEvent(@NonNull String deeplink, boolean auto) {
-        mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
+        if (auto) {
+            DebugLogger.INSTANCE.info(TAG, "App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
+        } else {
+            mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
+        }
         mReportsHandler.reportEvent(
                 CoreClientEvent.openAppReportEntry(deeplink, auto),
                 mReporterEnvironment

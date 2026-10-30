@@ -17,14 +17,22 @@ import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonBlankStringValidator
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
@@ -35,6 +43,52 @@ internal class BarrierTest : CommonTest() {
     }
 
     private val mBarrier by setUp { Barrier(appMetricaFacadeProvider) }
+
+    private val deeplinkValidationResult: ValidationResult = mock()
+
+    @get:Rule
+    val deeplinkValidatorRule = constructionRule<NonBlankStringValidator> {
+        on { validate(anyOrNull()) } doReturn deeplinkValidationResult
+    }
+
+    @Test
+    fun `reportAppOpen returns true when validator accepts input`() {
+        val deeplink = " \t "
+        whenever(deeplinkValidationResult.isValid).thenReturn(true)
+
+        assertThat(mBarrier.reportAppOpen(deeplink)).isTrue()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(deeplink)
+    }
+
+    @Test
+    fun `reportAppOpen returns false when validator rejects input`() {
+        val deeplink = "app://test"
+        whenever(deeplinkValidationResult.isValid).thenReturn(false)
+
+        assertThat(mBarrier.reportAppOpen(deeplink)).isFalse()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(deeplink)
+    }
+
+    @Test
+    fun `reportAppOpen passes null to validator`() {
+        whenever(deeplinkValidationResult.isValid).thenReturn(true)
+
+        assertThat(mBarrier.reportAppOpen(null as String?)).isTrue()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(null)
+    }
+
+    @Test
+    fun `reportAppOpen checks activation before validating input`() {
+        whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
+
+        assertThatThrownBy { mBarrier.reportAppOpen(null as String?) }
+            .isInstanceOf(ValidationException::class.java)
+
+        verifyNoInteractions(deeplinkValidatorRule.constructionMock.constructed().single())
+    }
 
     @Test
     fun enableActivityAutoTracking() {
@@ -60,27 +114,6 @@ internal class BarrierTest : CommonTest() {
     @Test(expected = ValidationException::class)
     fun reportAppOpenIfActivityIsNull() {
         mBarrier.reportAppOpen(null as Activity?)
-    }
-
-    @Test
-    fun reportAppOpenWithDeeplink() {
-        assertThat(mBarrier.reportAppOpen("deeplink")).isEqualTo("deeplink")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportAppOpenWithDeeplinkIfNotActivated() {
-        whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
-        mBarrier.reportAppOpen("deeplink")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportAppOpenWithDeeplinkIfDeeplinkIsEmpty() {
-        mBarrier.reportAppOpen("")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportAppOpenWithDeeplinkIfDeeplinkIsNull() {
-        mBarrier.reportAppOpen(null as String?)
     }
 
     @Test

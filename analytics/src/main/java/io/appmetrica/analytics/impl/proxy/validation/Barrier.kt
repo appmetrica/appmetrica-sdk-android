@@ -16,6 +16,7 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonBlankStringValidator
 import io.appmetrica.analytics.coreutils.internal.validation.NonEmptyStringValidator
 import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
@@ -39,6 +40,7 @@ internal class Barrier(
     private val intentValidator = ThrowIfFailedValidator(
         NonNullValidator<Intent>("Intent")
     )
+    private val deeplinkValidator = NonBlankStringValidator("Deeplink")
     private val applicationValidator = ThrowIfFailedValidator(
         NonNullValidator<Application>("Application")
     )
@@ -50,9 +52,6 @@ internal class Barrier(
     )
     private val reporterConfigValidator = ThrowIfFailedValidator(
         NonNullValidator<ReporterConfig>("Reporter Config")
-    )
-    private val deeplinkValidator = ThrowIfFailedValidator(
-        NonEmptyStringValidator("Deeplink")
     )
     private val apiKeyValidator = ThrowIfFailedValidator(ApiKeyValidator())
     private val nonNullKeyValidator = ThrowIfFailedValidator(
@@ -113,11 +112,9 @@ internal class Barrier(
         activityValidator.validate(activity)
     }
 
-    fun reportAppOpen(deeplink: String?): String {
+    fun reportAppOpen(deeplink: String?): Boolean {
         activationValidator.validate()
-        deeplinkValidator.validate(deeplink)
-        // The validator above rejects null.
-        return deeplink!!
+        return deeplinkValidator.validate(deeplink).isValid
     }
 
     fun reportAppOpen(intent: Intent?) {

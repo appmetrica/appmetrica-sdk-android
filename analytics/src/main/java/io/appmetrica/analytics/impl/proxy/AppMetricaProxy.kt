@@ -18,6 +18,7 @@ import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
@@ -158,9 +159,15 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     }
 
     fun reportAppOpen(deeplink: String?) {
-        val validatedDeeplink = barrier.reportAppOpen(deeplink)
-        synchronousStageExecutor.reportAppOpen(validatedDeeplink)
-        dispatchSafely { mainReporter.reportAppOpen(validatedDeeplink) }
+        if (!barrier.reportAppOpen(deeplink)) {
+            dispatchSafely {
+                LoggerStorage.getMainPublicOrAnonymousLogger()
+                    .info("Ignoring null, empty or blank deeplink in reportAppOpen")
+            }
+            return
+        }
+        synchronousStageExecutor.reportAppOpen(deeplink!!)
+        dispatchSafely { mainReporter.reportAppOpen(deeplink) }
     }
 
     fun reportAppOpen(intent: Intent) {

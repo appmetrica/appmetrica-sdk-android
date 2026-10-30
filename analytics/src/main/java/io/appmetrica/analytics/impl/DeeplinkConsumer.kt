@@ -34,7 +34,7 @@ internal class DeeplinkConsumer(private val reportEvent: AppOpenEventReporter) {
     @ApiProxyThread
     private fun reportAppOpenInternal(deeplink: String?, auto: Boolean) {
         DebugLogger.info(tag, "Try to report deeplink: $deeplink, auto: $auto")
-        deeplink?.takeIf { it.isNotEmpty() } ?: return
+        if (deeplink.isNullOrBlank()) return
         if (lastDeeplink != deeplink) {
             lastDeeplink = deeplink
             reportEvent.report(deeplink, auto)

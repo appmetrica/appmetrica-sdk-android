@@ -5,6 +5,7 @@ import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonBlankStringValidator
 import io.appmetrica.analytics.coreutils.internal.validation.NonEmptyStringValidator
 import io.appmetrica.analytics.coreutils.internal.validation.NonNullValidator
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
@@ -15,11 +16,9 @@ import io.appmetrica.analytics.profile.UserProfile
 
 internal class ReporterBarrier {
 
+    private val deeplinkValidator = NonBlankStringValidator("Deeplink")
     private val eventNameValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Event name")
-    )
-    private val deeplinkValidator = ThrowIfFailedValidator(
-        NonEmptyStringValidator("Deeplink")
     )
     private val errorMessageValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Error message")
@@ -54,9 +53,7 @@ internal class ReporterBarrier {
         eventNameValidator.validate(eventName)
     }
 
-    fun reportAppOpen(deeplink: String?) {
-        deeplinkValidator.validate(deeplink)
-    }
+    fun reportAppOpen(deeplink: String?): Boolean = deeplinkValidator.validate(deeplink).isValid
 
     fun reportEvent(
         eventName: String?,

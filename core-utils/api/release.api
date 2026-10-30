@@ -833,6 +833,11 @@ public final class io.appmetrica.analytics.coreutils.internal.validation.Integer
     public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] Integer)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.validation.NonBlankStringValidator implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<String> {
+    public <init>([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] String)
+}
+
 public final class io.appmetrica.analytics.coreutils.internal.validation.NonEmptyCollectionValidator<T> implementation io.appmetrica.analytics.coreutils.internal.validation.Validator<java.util.Collection<? extends T>> {
     public <init>([NonNull] String)
     public [NonNull] io.appmetrica.analytics.coreutils.internal.validation.ValidationResult validate([Nullable] java.util.Collection<? extends T>)

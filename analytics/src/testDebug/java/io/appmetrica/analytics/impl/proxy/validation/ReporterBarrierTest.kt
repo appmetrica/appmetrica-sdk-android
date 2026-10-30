@@ -6,17 +6,62 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
+import io.appmetrica.analytics.coreutils.internal.validation.NonBlankStringValidator
+import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 internal class ReporterBarrierTest : CommonTest() {
 
     private val mBarrier by setUp { ReporterBarrier() }
+
+    private val deeplinkValidationResult: ValidationResult = mock()
+
+    @get:Rule
+    val deeplinkValidatorRule = constructionRule<NonBlankStringValidator> {
+        on { validate(anyOrNull()) } doReturn deeplinkValidationResult
+    }
+
+    @Test
+    fun `reportAppOpen returns true when validator accepts input`() {
+        val deeplink = " \t "
+        whenever(deeplinkValidationResult.isValid).thenReturn(true)
+
+        assertThat(mBarrier.reportAppOpen(deeplink)).isTrue()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(deeplink)
+    }
+
+    @Test
+    fun `reportAppOpen returns false when validator rejects input`() {
+        val deeplink = "app://test"
+        whenever(deeplinkValidationResult.isValid).thenReturn(false)
+
+        assertThat(mBarrier.reportAppOpen(deeplink)).isFalse()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(deeplink)
+    }
+
+    @Test
+    fun `reportAppOpen passes null to validator`() {
+        whenever(deeplinkValidationResult.isValid).thenReturn(true)
+
+        assertThat(mBarrier.reportAppOpen(null)).isTrue()
+
+        verify(deeplinkValidatorRule.constructionMock.constructed().single()).validate(null)
+    }
 
     @Test
     fun reportEvent() {

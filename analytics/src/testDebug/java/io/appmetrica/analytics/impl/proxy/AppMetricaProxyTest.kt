@@ -14,9 +14,10 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ExternalAttribution
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
-import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.coreutils.internal.validation.ValidationResult
 import io.appmetrica.analytics.coreutils.internal.validation.Validator
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
@@ -33,6 +34,7 @@ import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.Barrier
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator
 import io.appmetrica.analytics.internal.IdentifiersResult
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
@@ -40,11 +42,12 @@ import io.appmetrica.analytics.testutils.MockProvider
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
@@ -56,6 +59,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.same
+import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 
 internal class AppMetricaProxyTest : CommonTest() {
@@ -306,7 +310,7 @@ internal class AppMetricaProxyTest : CommonTest() {
     @Test
     fun reportAppOpenString() {
         val appOpen = "appOpen"
-        whenever(barrier.reportAppOpen(appOpen)).thenReturn(appOpen)
+        whenever(barrier.reportAppOpen(appOpen)).thenReturn(true)
         proxy.reportAppOpen(appOpen)
         val order = inOrder(barrier, synchronousStageExecutor, mainReporter)
         order.verify(barrier).reportAppOpen(appOpen)
@@ -315,13 +319,39 @@ internal class AppMetricaProxyTest : CommonTest() {
     }
 
     @Test
-    fun reportAppOpenStringIfDeeplinkIsNull() {
-        whenever(provider.isActivated).thenReturn(true)
-        proxy = createProxy(Barrier(provider))
+    fun reportAppOpenDiagnosticRunsAfterQueuedActivation() {
+        val executor: IHandlerExecutor = mock()
+        whenever(clientServiceLocatorRule.clientExecutorProvider.defaultExecutor).thenReturn(executor)
+        proxy = createProxy()
+        val config: AppMetricaConfig = mock()
+        val mergedConfig: AppMetricaConfig = mock()
+        val logger: PublicLogger = mock()
+        whenever(defaultOneShotMetricaConfig.mergeWithUserConfig(config)).thenReturn(mergedConfig)
+        mockStatic(LoggerStorage::class.java).use { storage ->
+            whenever(LoggerStorage.getMainPublicOrAnonymousLogger()).thenReturn(logger)
 
-        assertThatThrownBy { proxy.reportAppOpen(null) }
-            .isInstanceOf(ValidationException::class.java)
-        verifyNoMoreInteractions(synchronousStageExecutor, mainReporter)
+            proxy.activate(context, config)
+            proxy.reportAppOpen(null as String?)
+
+            val tasks = argumentCaptor<Runnable>()
+            verify(executor, times(2)).post(tasks.capture())
+            verifyNoMoreInteractions(executor)
+            storage.verifyNoInteractions()
+            verifyNoInteractions(impl, logger, mainReporter)
+            (tasks.allValues[0] as SafeRunnable).runSafety()
+            verify(impl).activateFull(mergedConfig)
+            storage.verifyNoInteractions()
+            (tasks.allValues[1] as SafeRunnable).runSafety()
+
+            val order = inOrder(impl, logger)
+            order.verify(impl).activateFull(mergedConfig)
+            order.verify(logger).info("Ignoring null, empty or blank deeplink in reportAppOpen")
+            verify(synchronousStageExecutor).activate(applicationContext, config)
+            verifyNoMoreInteractions(synchronousStageExecutor, logger)
+            verifyNoInteractions(mainReporter)
+            storage.verify { LoggerStorage.getMainPublicOrAnonymousLogger() }
+            storage.verifyNoMoreInteractions()
+        }
     }
 
     @Test
