@@ -112,7 +112,10 @@ internal class ReporterFactory(
         if (reporter == null) {
             DebugLogger.info(tag, "Create reporter for API_KEY = %s", config.apiKey)
             if (!apiKeysToIgnoreStartup.contains(config.apiKey)) {
-                startupHelper.sendStartupIfNeeded()
+                DebugLogger.info(tag, "New manual reporter; refresh startup parameters")
+                startupHelper.refresh()
+            } else {
+                DebugLogger.info(tag, "Skip startup refresh for SDK reporter")
             }
             val manualReporter = ManualReporter(
                 context,
@@ -123,7 +126,7 @@ internal class ReporterFactory(
             performCommonInitialization(manualReporter)
             manualReporter.putAllToAppEnvironment(config.appEnvironment)
             manualReporter.putAllToErrorEnvironment(config.errorEnvironment)
-            manualReporter.start()
+            manualReporter.onActivated()
             reporter = manualReporter
             reporters[config.apiKey] = reporter
         }
@@ -158,7 +161,7 @@ internal class ReporterFactory(
 
         DebugLogger.info(tag, "updateConfig for apiKey = ${config.apiKey}")
         reporter.updateConfig(config, configExtension)
-        reporter.start()
+        reporter.onActivated()
 
         reportsHandler.setShouldDisconnectFromServiceChecker(
             object : ShouldDisconnectFromServiceChecker {

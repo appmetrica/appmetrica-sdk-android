@@ -32,6 +32,7 @@ import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,15 +283,24 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     }
 
     @Test
-    public void testOnStartupChangedNotifiesIfDataConsistent() {
+    public void onStartupChangedNotifiesPendingReceiverOnceAfterClientDisconnect() {
         StartupState newStartupState = createStartupWithClientClids(null);
         when(mClientIdentifiersProvider.createClientIdentifiersHolder(mClidsForVerification)).thenReturn(mClientIdentifiersHolder);
+        CommutationClientUnit listener = mock(CommutationClientUnit.class);
+        mComponentUnit.connectClient(listener);
         setUpToRequireStartup();
+        mComponentUnit.disconnectClient(listener);
+        when(mLifecycleManager.getConnectedClients()).thenReturn(Collections.emptyList());
         verify(mResultReceiver, never()).send(anyInt(), any(Bundle.class));
         when(mIdentifiersData.isStartupConsistent(same(newStartupState))).thenReturn(true);
         mComponentUnit.onStartupChanged(newStartupState);
         verify(mClientIdentifiersHolder).toBundle(any(Bundle.class));
         verify(mResultReceiver).send(eq(1), any(Bundle.class));
+
+        mComponentUnit.onStartupChanged(newStartupState);
+
+        verify(mResultReceiver).send(anyInt(), any(Bundle.class));
+        verify(listener).onClientIdentifiersChanged(any(ClientIdentifiersHolder.class));
     }
 
     @Test
@@ -312,11 +322,15 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     }
 
     @Test
-    public void testOnStartupError() { // also that it clears
+    public void onStartupErrorNotifiesPendingReceiverOnceAfterClientDisconnect() {
         StartupError startupError = StartupError.PARSE;
         StartupState newStartupState = createStartupWithClientClids(null);
         when(mClientIdentifiersProvider.createClientIdentifiersHolder(mClidsForVerification)).thenReturn(mClientIdentifiersHolder);
+        CommutationClientUnit listener = mock(CommutationClientUnit.class);
+        mComponentUnit.connectClient(listener);
         setUpToRequireStartup();
+        mComponentUnit.disconnectClient(listener);
+        when(mLifecycleManager.getConnectedClients()).thenReturn(Collections.emptyList());
         verify(mResultReceiver, never()).send(anyInt(), any(Bundle.class));
         mComponentUnit.onStartupError(startupError, newStartupState);
         verify(mClientIdentifiersHolder).toBundle(any(Bundle.class));
@@ -324,7 +338,8 @@ public class CommutationDispatcherComponentTest extends CommonTest {
 
         when(mIdentifiersData.isStartupConsistent(same(newStartupState))).thenReturn(true);
         mComponentUnit.onStartupError(startupError, newStartupState);
-        verify(mResultReceiver, never()).send(eq(1), any(Bundle.class));
+        verify(mResultReceiver).send(anyInt(), any(Bundle.class));
+        verify(listener).onClientIdentifiersChanged(any(ClientIdentifiersHolder.class));
     }
 
     @Test

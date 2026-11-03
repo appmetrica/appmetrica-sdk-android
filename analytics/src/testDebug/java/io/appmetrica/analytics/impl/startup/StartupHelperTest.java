@@ -41,6 +41,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -198,42 +199,23 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
-    public void sendStartupIfNeededWhenInitialStartupNotSent() {
-        when(startupParams.shouldSendStartup()).thenReturn(false);
-        assertThat(startupHelper.initialStartupSent).isFalse();
+    public void refreshWithClientClidsEveryTime() {
+        startupHelper.setClids(clientClids);
+        clearInvocations(reportsHandler);
 
-        startupHelper.sendStartupIfNeeded();
+        startupHelper.refresh();
+        startupHelper.refresh();
 
-        assertThat(startupHelper.initialStartupSent).isTrue();
-        verify(reportsHandler).reportStartupEvent(
-            eq(allIdentifiers),
-            eq(null),
-            eq(false)
-        );
+        verify(reportsHandler, times(2)).reportStartupEvent(allIdentifiers, clientClids, false);
+        verifyNoMoreInteractions(reportsHandler);
     }
 
     @Test
-    public void sendStartupIfNeededWhenShouldSendStartup() {
-        when(startupParams.shouldSendStartup()).thenReturn(true);
-        startupHelper.initialStartupSent = true;
+    public void refreshWithoutClientClids() {
+        startupHelper.refresh();
 
-        startupHelper.sendStartupIfNeeded();
-
-        verify(reportsHandler).reportStartupEvent(
-            eq(allIdentifiers),
-            eq(null),
-            eq(false)
-        );
-    }
-
-    @Test
-    public void sendStartupIfNeededWhenShouldNotSend() {
-        when(startupParams.shouldSendStartup()).thenReturn(false);
-        startupHelper.initialStartupSent = true;
-
-        startupHelper.sendStartupIfNeeded();
-
-        verifyNoInteractions(reportsHandler);
+        verify(reportsHandler).reportStartupEvent(allIdentifiers, null, false);
+        verifyNoMoreInteractions(reportsHandler);
     }
 
     @Test
@@ -276,17 +258,13 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
-    public void setLibraryAdapterCustomHosts() {
+    public void updateLibraryAdapterCustomHostsDoesNotSendStartup() {
         List<String> customHosts = Arrays.asList("host1", "host2");
 
-        startupHelper.setLibraryAdapterCustomHosts(customHosts);
+        startupHelper.updateLibraryAdapterCustomHosts(customHosts);
 
         verify(reportsHandler).setLibraryAdapterCustomHosts(customHosts);
-        verify(reportsHandler).reportStartupEvent(
-            eq(allIdentifiers),
-            eq(null),
-            eq(false)
-        );
+        verifyNoMoreInteractions(reportsHandler);
     }
 
     @Test

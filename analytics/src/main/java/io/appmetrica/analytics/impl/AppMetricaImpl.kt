@@ -111,7 +111,8 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
                 )
             }
         }
-        val activatedNow = activateCommonComponentsIfNotYet(
+        val activatedNow = mainReporterApiConsumerProvider == null
+        val reporter = activateCommonComponentsIfNotYet(
             logger,
             config,
             mainReporterInitializer,
@@ -122,10 +123,17 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
             updateConfig(logger, config, true)
             configUpdated = true
             if (config.userProfileID != null) {
-                mainReporter.setUserProfileID(config.userProfileID)
+                reporter.setUserProfileID(config.userProfileID)
             }
+            reporter.onActivationUpdated()
         }
         if (activatedNow || configUpdated) {
+            DebugLogger.info(
+                tag,
+                "Ordinary activation ready: initial=$activatedNow, configUpdated=$configUpdated; " +
+                    "refresh startup parameters"
+            )
+            startupHelper.refresh()
             clientPreferences.saveAppMetricaConfig(config)
         } else {
             logger.warning("AppMetrica SDK already has been activated")
@@ -166,15 +174,24 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
                 )
             }
         }
+        val activatedNow = mainReporterApiConsumerProvider == null
         if (libraryAdapterConfig.customHosts != null) {
-            startupHelper.setLibraryAdapterCustomHosts(libraryAdapterConfig.customHosts)
+            startupHelper.updateLibraryAdapterCustomHosts(libraryAdapterConfig.customHosts)
         }
-        val activatedNow = activateCommonComponentsIfNotYet(
+        activateCommonComponentsIfNotYet(
             publicLogger,
             config,
             mainReporterInitializer,
             false
         )
+        if (activatedNow || libraryAdapterConfig.customHosts != null) {
+            DebugLogger.info(
+                tag,
+                "Anonymous activation ready: initial=$activatedNow, " +
+                    "adapterHostsProvided=${libraryAdapterConfig.customHosts != null}; refresh startup parameters"
+            )
+            startupHelper.refresh()
+        }
         if (activatedNow) {
             ImportantLogger.info(
                 SdkUtils.APPMETRICA_TAG,
@@ -248,7 +265,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         config: AppMetricaConfig,
         mainReporterInitializer: MainReporterInitializer,
         activateNonAnonymous: Boolean
-    ): Boolean {
+    ): MainReporter {
         return if (null == mainReporterApiConsumerProvider) {
             DebugLogger.info(
                 tag,
@@ -256,15 +273,14 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
             )
             updateConfig(publicLogger, config, activateNonAnonymous)
             referrerHelper.maybeRequestReferrer()
-            initMainReporterConsumerProvider(mainReporterInitializer, config)
-            true
+            initMainReporterConsumerProvider(mainReporterInitializer)
         } else {
-            mainReporterInitializer.initialize()
+            val reporter = mainReporterInitializer.initialize()
             DebugLogger.info(
                 tag,
                 "Common components has already been activated"
             )
-            false
+            reporter
         }
     }
 
@@ -280,14 +296,14 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         updateSessionAutoTrackingState(config)
         processConfiguration.update(config)
         startupHelper.setPublicLogger(logger)
-        initStartup(config)
+        applyStartupConfig(config)
         reportsHandler.updatePreActivationConfig(
             config.locationTracking,
             config.dataSendingEnabled,
             config.advIdentifiersTracking,
             activateNonAnonymous
         )
-        startupHelper.sendStartupIfNeeded()
+        DebugLogger.info(tag, "Client and startup configuration applied: ordinary=$activateNonAnonymous")
     }
 
     @WorkerThread
@@ -336,17 +352,17 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
 
     @WorkerThread
     private fun initMainReporterConsumerProvider(
-        creator: MainReporterInitializer,
-        config: AppMetricaConfig
-    ) {
+        creator: MainReporterInitializer
+    ): MainReporter {
         val reporter = creator.initialize()
         mainReporterApiConsumerProvider = MainReporterApiConsumerProvider(reporter)
         core.appOpenWatcher.setReporter(reporter)
         sessionsTrackingManager.setReporter(reporter)
+        return reporter
     }
 
     @WorkerThread
-    private fun initStartup(config: AppMetricaConfig) {
+    private fun applyStartupConfig(config: AppMetricaConfig) {
         startupHelper.setCustomHosts(config.customHosts)
         startupHelper.clids = getClids(config)
         val distributionReferrer = getDistributionReferrer(config)
@@ -408,8 +424,9 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     override fun setLibraryAdapterCustomHosts(customHosts: List<String>?) {
-        DebugLogger.info(tag, "Set library adapter custom hosts: $customHosts")
-        startupHelper.setLibraryAdapterCustomHosts(customHosts)
+        startupHelper.updateLibraryAdapterCustomHosts(customHosts)
+        DebugLogger.info(tag, "Library adapter hosts API update applied; refresh startup parameters")
+        startupHelper.refresh()
     }
 
     @AnyThread

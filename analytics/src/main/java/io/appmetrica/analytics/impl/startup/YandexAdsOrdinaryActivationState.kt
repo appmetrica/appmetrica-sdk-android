@@ -7,55 +7,48 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 /**
  * Service-owned ordinary-activation flag for `hoyas`, backed by service preferences DB.
  *
- * Anonymous apiKey clears previously observed ordinary activation.
+ * Client activation takes precedence over storage; ordinary client activation cannot be downgraded.
  */
 internal class YandexAdsOrdinaryActivationState(
     private val storage: PreferencesServiceDbStorage
 ) {
 
     private val tag = "[YandexAdsOrdinaryActivationState]"
+    private val stateFromStorage = storage.hasOrdinaryActivation()
 
     @Volatile
-    private var hasOrdinaryActivation: Boolean = storage.hasOrdinaryActivation()
+    private var stateFromClient: Boolean? = null
 
     init {
-        DebugLogger.info(tag, "Restored ordinary flag from storage: $hasOrdinaryActivation")
+        DebugLogger.info(tag, "Restored ordinary flag from storage: $stateFromStorage")
     }
 
     @Synchronized
     fun onMainClientApiKey(apiKey: String?) {
-        when (apiKey) {
-            null -> {
-                DebugLogger.info(tag, "Main client apiKey is null; ordinary flag unchanged=$hasOrdinaryActivation")
-            }
-
-            DefaultValues.ANONYMOUS_API_KEY -> {
-                val wasOrdinary = hasOrdinaryActivation
-                setOrdinaryActivation(false)
-                DebugLogger.info(
-                    tag,
-                    "Mark anonymous activation from anonymous api. wasOrdinary=$wasOrdinary"
-                )
-            }
-
-            else -> {
-                val wasOrdinary = hasOrdinaryActivation
-                setOrdinaryActivation(true)
-                DebugLogger.info(
-                    tag,
-                    "Mark ordinary activation from main client apiKey. wasOrdinary=$wasOrdinary"
-                )
-            }
-        }
-    }
-
-    fun hasOrdinaryActivation(): Boolean = hasOrdinaryActivation
-
-    private fun setOrdinaryActivation(value: Boolean) {
-        if (hasOrdinaryActivation == value) {
+        if (apiKey == null) {
+            DebugLogger.info(
+                tag,
+                "Ignore missing main client API key: client=$stateFromClient, " +
+                    "storedAtStart=$stateFromStorage, effective=${hasOrdinaryActivation()}"
+            )
             return
         }
-        hasOrdinaryActivation = value
-        storage.saveOrdinaryActivation(value)
+        val previousClient = stateFromClient
+        val incomingOrdinary = apiKey != DefaultValues.ANONYMOUS_API_KEY
+        val previous = hasOrdinaryActivation()
+        stateFromClient = previousClient == true || incomingOrdinary
+        val current = hasOrdinaryActivation()
+        if (previous != current) {
+            storage.saveOrdinaryActivation(current)
+        }
+        DebugLogger.info(
+            tag,
+            "Main client activation: incomingOrdinary=$incomingOrdinary, " +
+                "client=$previousClient -> $stateFromClient, storedAtStart=$stateFromStorage, " +
+                "effective=$previous -> $current, storageWriteRequested=${previous != current}, " +
+                "anonymousIgnoredByOrdinaryPriority=${previousClient == true && !incomingOrdinary}"
+        )
     }
+
+    fun hasOrdinaryActivation(): Boolean = stateFromClient ?: stateFromStorage
 }

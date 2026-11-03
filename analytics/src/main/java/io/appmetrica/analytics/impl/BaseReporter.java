@@ -147,10 +147,10 @@ public abstract class BaseReporter implements IBaseReporter {
         this.adRevenuePayloadEnricher = new SupportedAdNetworksPayloadEnricher(mContext);
     }
 
-    public void start() {
+    public void onActivated() {
         DebugLogger.INSTANCE.info(
-            TAG,
-            "Start reporter with apiKey = %s",
+            getTag(),
+            "Activate reporter with apiKey = %s",
             mReporterEnvironment.getReporterConfiguration().getApiKey()
         );
         mReportsHandler.reportActivationEvent(mReporterEnvironment);

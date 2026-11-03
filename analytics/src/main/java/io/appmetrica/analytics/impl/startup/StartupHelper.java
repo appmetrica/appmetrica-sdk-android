@@ -64,8 +64,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     private final Map<StartupParamsCallback, List<String>> mStartupParamsCallbacks = new WeakHashMap<>();
 
     private Map<String, String> mClientClids;
-    @VisibleForTesting
-    boolean initialStartupSent = false;
 
     public StartupHelper(
         @NonNull ReportsHandler reportsHandler,
@@ -174,15 +172,12 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         );
     }
 
-    public void sendStartupIfNeeded() {
+    public void refresh() {
         synchronized (mStartupParamsLock) {
-            if (!initialStartupSent || mStartupParams.shouldSendStartup()) {
-                initialStartupSent = true;
-                DebugLogger.INSTANCE.info(TAG, "Send startup event");
-                // Optional configuration update. If there was no initialization on the part of the application,
-                // the configuration based on default values must not be applied.
-                sendStartupEvent(mClientClids, false);
-            }
+            DebugLogger.INSTANCE.info(TAG, "Refresh startup parameters; forceRefreshConfiguration=false");
+            // Optional configuration update. If there was no initialization on the part of the application,
+            // the configuration based on default values must not be applied.
+            sendStartupEvent(mClientClids, false);
         }
     }
 
@@ -204,10 +199,11 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         }
     }
 
-    public void setLibraryAdapterCustomHosts(final List<String> libraryAdapterCustomHosts) {
+    public void updateLibraryAdapterCustomHosts(final List<String> libraryAdapterCustomHosts) {
         synchronized (mStartupParamsLock) {
             mReportsHandler.setLibraryAdapterCustomHosts(libraryAdapterCustomHosts);
-            sendStartupEvent(mClientClids, false);
+            DebugLogger.INSTANCE.info(TAG, "Library adapter hosts applied: count=%s",
+                libraryAdapterCustomHosts == null ? null : libraryAdapterCustomHosts.size());
         }
     }
 

@@ -47,10 +47,14 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
-    public void start() {
-        super.start();
-        DebugLogger.INSTANCE.info(getTag(), "Start");
+    public void onActivated() {
+        super.onActivated();
         ClientServiceLocator.getInstance().getModulesController().onActivated();
+    }
+
+    public void onActivationUpdated() {
+        DebugLogger.INSTANCE.info(getTag(), "Activation updated; report activation event");
+        mReportsHandler.reportActivationEvent(mReporterEnvironment);
     }
 
     @Override
@@ -102,7 +106,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     void updateConfig(@NonNull AppMetricaConfig config, @NonNull AppMetricaConfigExtension configExtension) {
-        DebugLogger.INSTANCE.info(getTag(), "Update config: %s; configExtension: $s", config, configExtension);
+        DebugLogger.INSTANCE.info(getTag(), "Update config: %s; configExtension: %s", config, configExtension);
 
         if (configExtension.getNeedClearEnvironment()) {
             clearAppEnvironment();

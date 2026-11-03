@@ -28,6 +28,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -115,6 +116,8 @@ internal class ReporterFactoryTest : CommonTest() {
         on { LoggerStorage.getOrCreatePublicLogger(firstReporterApiKey) } doReturn firstReporterLogger
         on { LoggerStorage.getOrCreatePublicLogger(secondReporterApiKey) } doReturn secondReporterLogger
         on { LoggerStorage.getOrCreatePublicLogger(apiKey) } doReturn logger
+        on { LoggerStorage.getOrCreatePublicLogger(SdkData.SDK_API_KEY_UUID) } doReturn logger
+        on { LoggerStorage.getOrCreatePublicLogger(SdkData.SDK_API_KEY_PUSH_SDK) } doReturn logger
     }
 
     private val reporterFactory: ReporterFactory by setUp {
@@ -138,6 +141,7 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(mainReporterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(mainReporterConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(mainReporterComponents)
+        verify(mainReporter).onActivated()
     }
 
     @Test
@@ -169,10 +173,10 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
-    fun `buildOrUpdateAnonymousMainReporter init and start mainReporter`() {
+    fun `buildOrUpdateAnonymousMainReporter init and activate mainReporter`() {
         reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verify(mainReporter).updateConfig(config, configExtension)
-        verify(mainReporter).start()
+        verify(mainReporter).onActivated()
     }
 
     @Test
@@ -235,6 +239,7 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(mainReporterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(mainReporterConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(mainReporterComponents)
+        verify(mainReporter).onActivated()
     }
 
     @Test
@@ -266,10 +271,10 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
-    fun `buildOrUpdateMainReporter init and start mainReporter`() {
+    fun `buildOrUpdateMainReporter init and activate mainReporter`() {
         reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(mainReporter).updateConfig(config, configExtension)
-        verify(mainReporter).start()
+        verify(mainReporter).onActivated()
     }
 
     @Test
@@ -343,6 +348,7 @@ internal class ReporterFactoryTest : CommonTest() {
         )
         verify(mainReporterComponents).updateConfig(config, logger)
         verify(reporterLifecycleListener).onCreateMainReporter(mainReporterContext, mainReporter)
+        verify(mainReporter).onActivated()
     }
 
     @Test
@@ -380,7 +386,7 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(manualReporterConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, processConfiguration, config, reportsHandler)
-        verify(manualReporter).start()
+        verify(manualReporter).onActivated()
     }
 
     @Test
@@ -461,6 +467,10 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(manualReporterConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, processConfiguration, config, reportsHandler)
+        inOrder(startupHelper, manualReporter) {
+            verify(startupHelper).refresh()
+            verify(manualReporter).onActivated()
+        }
     }
 
     @Test
@@ -472,7 +482,7 @@ internal class ReporterFactoryTest : CommonTest() {
         reporterFactory.getOrCreateReporter(config)
         inOrder(manualReporter) {
             verify(manualReporter).putAllToAppEnvironment(config.appEnvironment)
-            verify(manualReporter).start()
+            verify(manualReporter).onActivated()
         }
     }
 
@@ -485,7 +495,7 @@ internal class ReporterFactoryTest : CommonTest() {
         reporterFactory.getOrCreateReporter(config)
         inOrder(manualReporter) {
             verify(manualReporter).putAllToErrorEnvironment(config.errorEnvironment)
-            verify(manualReporter).start()
+            verify(manualReporter).onActivated()
         }
     }
 
@@ -505,6 +515,8 @@ internal class ReporterFactoryTest : CommonTest() {
         val secondConfig = ReporterConfig.newConfigBuilder(firstReporterApiKey).build()
         assertThat(reporterFactory.getOrCreateReporter(firstConfig))
             .isSameAs(reporterFactory.getOrCreateReporter(secondConfig))
+        verify(startupHelper).refresh()
+        verify(manualReporter).onActivated()
     }
 
     @Test
@@ -520,6 +532,16 @@ internal class ReporterFactoryTest : CommonTest() {
                 listOf(context, processConfiguration, firstConfig, reportsHandler),
                 listOf(context, processConfiguration, secondConfig, reportsHandler)
             )
+        verify(startupHelper, times(2)).refresh()
+    }
+
+    @Test
+    fun `getOrCreateReporter for SDK keys does not refresh startup`() {
+        for (apiKey in listOf(SdkData.SDK_API_KEY_UUID, SdkData.SDK_API_KEY_PUSH_SDK)) {
+            reporterFactory.getOrCreateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
+        }
+
+        verify(startupHelper, never()).refresh()
     }
 
     @Test

@@ -602,8 +602,8 @@ public abstract class BaseReporterTest extends BaseReporterData {
     }
 
     @Test
-    public void testStartShouldReportFirstEvent() {
-        mReporter.start();
+    public void onActivatedShouldReportActivationEvent() {
+        mReporter.onActivated();
         verify(mReportsHandler, times(1)).reportActivationEvent(any(ReporterEnvironment.class));
     }
 

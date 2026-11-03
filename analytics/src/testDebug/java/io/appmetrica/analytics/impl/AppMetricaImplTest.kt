@@ -147,6 +147,7 @@ internal class AppMetricaImplTest : CommonTest() {
     val loggerStorageMockedStaticRule = staticRule<LoggerStorage> {
         on { LoggerStorage.getOrCreateMainPublicLogger(apiKey) } doReturn publicLogger
         on { LoggerStorage.getMainPublicOrAnonymousLogger() } doReturn publicOrAnonymousLogger
+        on { LoggerStorage.getOrCreatePublicLogger(apiKey) } doReturn publicLogger
     }
 
     private val dataResultReceiver: DataResultReceiver = mock()
@@ -281,8 +282,27 @@ internal class AppMetricaImplTest : CommonTest() {
         verify(startupHelper).setCustomHosts(null)
         verify(startupHelper).clids = null
         verify(startupHelper).setDistributionReferrer(null)
-        verify(startupHelper).sendStartupIfNeeded()
+        verify(startupHelper).refresh()
         verifyNoMoreInteractions(startupHelper)
+    }
+
+    @Test
+    fun `activation queues privacy configuration and main reporter before startup`() {
+        val privacyConfig = AppMetricaConfig.newConfigBuilder(apiKey)
+            .withLocationTracking(false)
+            .withDataSendingEnabled(false)
+            .withAdvIdentifiersTracking(false)
+            .build()
+        whenever(reporterFactory.buildOrUpdateMainReporter(privacyConfig, publicLogger, configExtension))
+            .thenReturn(mainReporter)
+
+        impl.activate(privacyConfig)
+
+        inOrder(reportsHandler, reporterFactory, startupHelper) {
+            verify(reportsHandler).updatePreActivationConfig(false, false, false, true)
+            verify(reporterFactory).buildOrUpdateMainReporter(privacyConfig, publicLogger, configExtension)
+            verify(startupHelper).refresh()
+        }
     }
 
     @Test
@@ -300,7 +320,7 @@ internal class AppMetricaImplTest : CommonTest() {
         verify(startupHelper).setCustomHosts(null)
         verify(startupHelper).clids = null
         verify(startupHelper).setDistributionReferrer(null)
-        verify(startupHelper).sendStartupIfNeeded()
+        verify(startupHelper).refresh()
         verifyNoMoreInteractions(startupHelper)
     }
 
@@ -314,14 +334,66 @@ internal class AppMetricaImplTest : CommonTest() {
             anonymousConfigProviderMockedConstructionRule.constructionMock.constructed().first()
         whenever(anonymousConfigProvider.getConfig(configWithHosts)).thenReturn(anonymousConfig)
         impl.activateAnonymously(configWithHosts)
-        verify(startupHelper).setLibraryAdapterCustomHosts(customHosts)
+        verify(startupHelper).updateLibraryAdapterCustomHosts(customHosts)
+        inOrder(startupHelper, reportsHandler, reporterFactory) {
+            verify(startupHelper).updateLibraryAdapterCustomHosts(customHosts)
+            verify(reportsHandler).updatePreActivationConfig(null, null, null, false)
+            verify(reporterFactory)
+                .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
+            verify(startupHelper).refresh()
+        }
+
+        verify(startupHelper).refresh()
+        clearInvocations(startupHelper, reporterFactory)
+        impl.activateAnonymously(configWithHosts)
+        inOrder(reporterFactory, startupHelper) {
+            verify(startupHelper).updateLibraryAdapterCustomHosts(customHosts)
+            verify(reporterFactory)
+                .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
+            verify(startupHelper).refresh()
+        }
+        verifyNoMoreInteractions(startupHelper)
     }
 
     @Test
-    fun `setLibraryAdapterCustomHosts delegates to startup helper`() {
+    fun `anonymous activation with hosts after ordinary activation refreshes after reporter update`() {
         val customHosts = listOf("host1", "host2")
-        impl.setLibraryAdapterCustomHosts(customHosts)
-        verify(startupHelper).setLibraryAdapterCustomHosts(customHosts)
+        val configWithHosts = AppMetricaLibraryAdapterConfig.newConfigBuilder()
+            .withCustomHosts(customHosts)
+            .build()
+        val anonymousConfigProvider =
+            anonymousConfigProviderMockedConstructionRule.constructionMock.constructed().first()
+        whenever(anonymousConfigProvider.getConfig(configWithHosts)).thenReturn(anonymousConfig)
+        impl.activate(config)
+        clearInvocations(startupHelper, reportsHandler, reporterFactory)
+
+        impl.activateAnonymously(configWithHosts)
+
+        inOrder(startupHelper, reporterFactory) {
+            verify(startupHelper).updateLibraryAdapterCustomHosts(customHosts)
+            verify(reporterFactory)
+                .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
+            verify(startupHelper).refresh()
+        }
+        verifyNoMoreInteractions(startupHelper)
+        verifyNoInteractions(reportsHandler)
+    }
+
+    @Test
+    fun `setLibraryAdapterCustomHosts forwards null empty and repeated hosts`() {
+        val customHosts = listOf("host1", "host2")
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        for (hosts in listOf(null, emptyList(), customHosts, customHosts)) {
+            clearInvocations(startupHelper)
+
+            impl.setLibraryAdapterCustomHosts(hosts)
+
+            inOrder(startupHelper) {
+                verify(startupHelper).updateLibraryAdapterCustomHosts(hosts)
+                verify(startupHelper).refresh()
+            }
+            verifyNoMoreInteractions(startupHelper)
+        }
     }
 
     @Test
@@ -345,11 +417,11 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(startupHelper)
         impl.activate(config)
-        verify(startupHelper).sendStartupIfNeeded()
         verify(startupHelper).setPublicLogger(publicLogger)
         verify(startupHelper).setCustomHosts(null)
         verify(startupHelper).clids = null
         verify(startupHelper).setDistributionReferrer(null)
+        verify(startupHelper).refresh()
         verifyNoMoreInteractions(startupHelper)
     }
 
@@ -971,20 +1043,46 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate after activate anonymously - userProfileId is applied via setUserProfileID`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.activate(configWithProfileId)
-        verify(reporterFromConsumerProvider).setUserProfileID(profileId)
+        verify(mainReporter).setUserProfileID(profileId)
+    }
+
+    @Test
+    fun `ordinary upgrade applies explicit profile before activation and does not restart reporter`() {
+        listOf("", profileId).forEach { value ->
+            val upgradeConfig = AppMetricaConfig.newConfigBuilder(apiKey).withUserProfileID(value).build()
+            whenever(reporterFactory.buildOrUpdateMainReporter(upgradeConfig, publicLogger, configExtension))
+                .thenReturn(mainReporter)
+            val candidate = AppMetricaImpl(context, appmetricaCore)
+            candidate.activateAnonymously(appMetricaLibraryAdapterConfig)
+            clearInvocations(processConfiguration, mainReporter, startupHelper)
+            candidate.activate(upgradeConfig)
+            inOrder(processConfiguration, mainReporter, startupHelper) {
+                verify(processConfiguration).update(upgradeConfig)
+                verify(mainReporter).setUserProfileID(value)
+                verify(mainReporter).onActivationUpdated()
+                verify(startupHelper).refresh()
+            }
+            verify(mainReporter, never()).onActivated()
+            clearInvocations(mainReporter, startupHelper)
+            candidate.activate(upgradeConfig)
+            verify(mainReporter, never()).onActivationUpdated()
+            verify(startupHelper, never()).refresh()
+        }
     }
 
     @Test
     fun `activate after activate anonymously - userProfileId is null - setUserProfileID is not called`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.activate(config)
-        verify(reporterFromConsumerProvider, never()).setUserProfileID(any())
+        verify(mainReporter, never()).setUserProfileID(any())
+        verify(mainReporter).onActivationUpdated()
     }
 
     @Test
     fun `activate without prior anonymous activation - setUserProfileID is not called`() {
         impl.activate(configWithProfileId)
-        verify(reporterFromConsumerProvider, never()).setUserProfileID(any())
+        verify(mainReporter, never()).setUserProfileID(any())
+        verify(mainReporter, never()).onActivationUpdated()
     }
 
     @Test

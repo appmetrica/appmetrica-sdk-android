@@ -86,11 +86,22 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
-    public void callModulesOnActivatedOnStart() {
+    public void onActivatedReportsEventBeforeNotifyingModules() {
         mMainReporter = getReporter();
-        mMainReporter.start();
+        mMainReporter.onActivated();
 
-        verify(clientServiceLocatorRule.modulesController).onActivated();
+        InOrder activationOrder = inOrder(mReportsHandler, clientServiceLocatorRule.modulesController);
+        activationOrder.verify(mReportsHandler).reportActivationEvent(mReporterEnvironment);
+        activationOrder.verify(clientServiceLocatorRule.modulesController).onActivated();
+        activationOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void onActivationUpdatedReportsEventWithoutNotifyingModules() {
+        mMainReporter.onActivationUpdated();
+
+        verify(mReportsHandler).reportActivationEvent(mReporterEnvironment);
+        verify(clientServiceLocatorRule.modulesController, never()).onActivated();
     }
 
     @Test
