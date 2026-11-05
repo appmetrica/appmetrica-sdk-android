@@ -46,12 +46,17 @@ internal class HuaweiReferrerContentProviderTest : CommonTest() {
     fun `getReferrer returns Success with referrer info when cursor has data`() {
         val installReferrer = "utm_source=test&utm_medium=test"
         val clickTimestamp = 1234567890L
-        val installTimestamp = 1234567900L
+        val installBeginTimestamp = 1234567900L
+        val installFinishTimestamp = 1234567950L
 
         whenever(cursor.moveToFirst()).thenReturn(true)
-        whenever(cursor.getString(0)).thenReturn(installReferrer)
+        whenever(cursor.columnCount).thenReturn(6)
+        whenever(cursor.getString(5)).thenReturn(installReferrer)
+        whenever(cursor.isNull(1)).thenReturn(false)
+        whenever(cursor.isNull(3)).thenReturn(false)
         whenever(cursor.getLong(1)).thenReturn(clickTimestamp)
-        whenever(cursor.getLong(2)).thenReturn(installTimestamp)
+        whenever(cursor.getLong(2)).thenReturn(installFinishTimestamp)
+        whenever(cursor.getLong(3)).thenReturn(installBeginTimestamp)
 
         val result = contentProvider.getReferrer(context)
 
@@ -59,8 +64,52 @@ internal class HuaweiReferrerContentProviderTest : CommonTest() {
         val success = result as ReferrerResult.Success
         assertThat(success.referrerInfo.installReferrer).isEqualTo(installReferrer)
         assertThat(success.referrerInfo.referrerClickTimestampSeconds).isEqualTo(clickTimestamp)
-        assertThat(success.referrerInfo.installBeginTimestampSeconds).isEqualTo(installTimestamp)
+        assertThat(success.referrerInfo.installBeginTimestampSeconds).isEqualTo(installBeginTimestamp)
         assertThat(success.referrerInfo.source).isEqualTo(ReferrerInfo.Source.HMS)
+
+        verify(cursor).close()
+    }
+
+    @Test
+    fun `getReferrer returns Success with zero timestamps when values are null`() {
+        val installReferrer = "utm_source=test&utm_medium=test"
+
+        whenever(cursor.moveToFirst()).thenReturn(true)
+        whenever(cursor.columnCount).thenReturn(6)
+        whenever(cursor.getString(5)).thenReturn(installReferrer)
+        whenever(cursor.isNull(1)).thenReturn(true)
+        whenever(cursor.isNull(3)).thenReturn(true)
+
+        val result = contentProvider.getReferrer(context)
+
+        assertThat(result).isInstanceOf(ReferrerResult.Success::class.java)
+        val success = result as ReferrerResult.Success
+        assertThat(success.referrerInfo.installReferrer).isEqualTo(installReferrer)
+        assertThat(success.referrerInfo.referrerClickTimestampSeconds).isEqualTo(0L)
+        assertThat(success.referrerInfo.installBeginTimestampSeconds).isEqualTo(0L)
+
+        verify(cursor).close()
+    }
+
+    @Test
+    fun `getReferrer returns Success with zero timestamps when getLong throws`() {
+        val installReferrer = "utm_source=test&utm_medium=test"
+
+        whenever(cursor.moveToFirst()).thenReturn(true)
+        whenever(cursor.columnCount).thenReturn(6)
+        whenever(cursor.getString(5)).thenReturn(installReferrer)
+        whenever(cursor.isNull(1)).thenReturn(false)
+        whenever(cursor.isNull(3)).thenReturn(false)
+        whenever(cursor.getLong(1)).thenThrow(RuntimeException("click timestamp failed"))
+        whenever(cursor.getLong(3)).thenThrow(RuntimeException("install begin timestamp failed"))
+
+        val result = contentProvider.getReferrer(context)
+
+        assertThat(result).isInstanceOf(ReferrerResult.Success::class.java)
+        val success = result as ReferrerResult.Success
+        assertThat(success.referrerInfo.installReferrer).isEqualTo(installReferrer)
+        assertThat(success.referrerInfo.referrerClickTimestampSeconds).isEqualTo(0L)
+        assertThat(success.referrerInfo.installBeginTimestampSeconds).isEqualTo(0L)
 
         verify(cursor).close()
     }
@@ -75,7 +124,8 @@ internal class HuaweiReferrerContentProviderTest : CommonTest() {
         assertThat(result).isInstanceOf(ReferrerResult.Failure::class.java)
         val failure = result as ReferrerResult.Failure
         assertThat(failure.message).isEqualTo("Failed to get referrer from huawei content provider")
-        assertThat(failure.throwable?.message).isEqualTo("Not found content provider")
+        assertThat(failure.throwable).isNotNull
+        assertThat(failure.throwable!!.message).isEqualTo("Not found content provider")
     }
 
     @Test
@@ -87,37 +137,60 @@ internal class HuaweiReferrerContentProviderTest : CommonTest() {
         assertThat(result).isInstanceOf(ReferrerResult.Failure::class.java)
         val failure = result as ReferrerResult.Failure
         assertThat(failure.message).isEqualTo("Failed to get referrer from huawei content provider")
-        assertThat(failure.throwable?.message).isEqualTo("Cursor is empty")
+        assertThat(failure.throwable).isNotNull
+        assertThat(failure.throwable!!.message).isEqualTo("Cursor is empty")
 
         verify(cursor).close()
     }
 
     @Test
-    fun `getReferrer returns Failure when installReferrer is null`() {
+    fun `getReferrer returns Failure when columnCount is insufficient`() {
         whenever(cursor.moveToFirst()).thenReturn(true)
-        whenever(cursor.getString(0)).thenReturn(null)
+        whenever(cursor.columnCount).thenReturn(5)
 
         val result = contentProvider.getReferrer(context)
 
         assertThat(result).isInstanceOf(ReferrerResult.Failure::class.java)
         val failure = result as ReferrerResult.Failure
         assertThat(failure.message).isEqualTo("Failed to get referrer from huawei content provider")
-        assertThat(failure.throwable?.message).isEqualTo("Referrer is empty")
+        assertThat(failure.throwable).isNotNull
+        assertThat(failure.throwable!!.message).isEqualTo("Cursor column count is insufficient: 5")
 
         verify(cursor).close()
     }
 
     @Test
-    fun `getReferrer returns Failure when installReferrer is blank`() {
+    fun `getReferrer returns Failure when installReferrer at index 5 is null even if index 0 is filled`() {
         whenever(cursor.moveToFirst()).thenReturn(true)
-        whenever(cursor.getString(0)).thenReturn("   ")
+        whenever(cursor.columnCount).thenReturn(6)
+        whenever(cursor.getString(0)).thenReturn("legacy-referrer-at-0")
+        whenever(cursor.getString(5)).thenReturn(null)
 
         val result = contentProvider.getReferrer(context)
 
         assertThat(result).isInstanceOf(ReferrerResult.Failure::class.java)
         val failure = result as ReferrerResult.Failure
         assertThat(failure.message).isEqualTo("Failed to get referrer from huawei content provider")
-        assertThat(failure.throwable?.message).isEqualTo("Referrer is empty")
+        assertThat(failure.throwable).isNotNull
+        assertThat(failure.throwable!!.message).isEqualTo("Referrer is empty")
+
+        verify(cursor).close()
+    }
+
+    @Test
+    fun `getReferrer returns Failure when installReferrer at index 5 is blank even if index 0 is filled`() {
+        whenever(cursor.moveToFirst()).thenReturn(true)
+        whenever(cursor.columnCount).thenReturn(6)
+        whenever(cursor.getString(0)).thenReturn("legacy-referrer-at-0")
+        whenever(cursor.getString(5)).thenReturn("   ")
+
+        val result = contentProvider.getReferrer(context)
+
+        assertThat(result).isInstanceOf(ReferrerResult.Failure::class.java)
+        val failure = result as ReferrerResult.Failure
+        assertThat(failure.message).isEqualTo("Failed to get referrer from huawei content provider")
+        assertThat(failure.throwable).isNotNull
+        assertThat(failure.throwable!!.message).isEqualTo("Referrer is empty")
 
         verify(cursor).close()
     }
