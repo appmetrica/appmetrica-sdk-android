@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.AdvIdentifiersResult;
+import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.StartupParamsItemStatus;
@@ -219,15 +220,69 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
+    public void applyConfig() {
+        List<String> customHosts = Arrays.asList("host1", "host2");
+        Map<String, String> clids = new HashMap<>(clientClids);
+        clids.put("invalid:key", "123");
+        for (String referrer : Arrays.asList("distribution-referrer", "", null)) {
+            AppMetricaConfig config = AppMetricaConfig.newConfigBuilder("a4fdd6f1-7cbb-45a5-baa8-c10d7a4ba683")
+                .withCustomHosts(customHosts)
+                .withAdditionalConfig("YMM_clids", clids)
+                .withAdditionalConfig("YMM_distributionReferrer", referrer)
+                .build();
+            clearInvocations(startupParams, reportsHandler);
+
+            startupHelper.applyConfig(config);
+
+            InOrder inOrder = inOrder(startupParams, reportsHandler);
+            inOrder.verify(startupParams).getCustomHosts();
+            inOrder.verify(startupParams).setCustomHosts(customHosts);
+            inOrder.verify(reportsHandler).setCustomHosts(customHosts);
+            inOrder.verify(reportsHandler).setClids(clientClids);
+            inOrder.verify(startupParams).setClientClids(clientClids);
+            inOrder.verify(reportsHandler).setDistributionReferrer(referrer);
+            if (referrer != null) {
+                inOrder.verify(reportsHandler).setInstallReferrerSource("api");
+            }
+            verifyNoMoreInteractions(startupParams, reportsHandler);
+        }
+    }
+
+    @Test
+    public void applyConfigWithMissingOrEmptyValues() {
+        String apiKey = "a4fdd6f1-7cbb-45a5-baa8-c10d7a4ba683";
+        List<AppMetricaConfig> configs = Arrays.asList(
+            AppMetricaConfig.newConfigBuilder(apiKey).build(),
+            AppMetricaConfig.newConfigBuilder(apiKey)
+                .withCustomHosts(Collections.emptyList())
+                .withAdditionalConfig("YMM_clids", Collections.emptyMap())
+                .build()
+        );
+        for (AppMetricaConfig config : configs) {
+            clearInvocations(startupParams, reportsHandler);
+
+            startupHelper.applyConfig(config);
+
+            verify(startupParams).getCustomHosts();
+            verify(reportsHandler).setDistributionReferrer(null);
+            verifyNoMoreInteractions(startupParams, reportsHandler);
+        }
+    }
+
+    @Test
     public void setClids() {
         Map<String, String> clids = new HashMap<>();
         clids.put("clid0", "0");
         clids.put("clid1", "1");
+        Map<String, String> validClids = new HashMap<>(clids);
+        clids.put("invalid:key", "2");
+        clids.put("invalidValue", "not-a-number");
 
         startupHelper.setClids(clids);
 
-        verify(reportsHandler).setClids(anyMap());
-        verify(startupParams).setClientClids(anyMap());
+        verify(reportsHandler).setClids(validClids);
+        verify(startupParams).setClientClids(validClids);
+        assertThat(startupHelper.getClids()).isEqualTo(validClids);
     }
 
     @Test
@@ -249,12 +304,59 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void setCustomHosts() {
         List<String> customHosts = Arrays.asList("host1", "host2");
-        when(startupParams.getCustomHosts()).thenReturn(null);
+        List<List<String>> previousHosts = Arrays.asList(
+            null, Collections.emptyList(), Collections.singletonList("old")
+        );
+        for (List<String> oldHosts : previousHosts) {
+            clearInvocations(startupParams, reportsHandler);
+            when(startupParams.getCustomHosts()).thenReturn(oldHosts);
 
-        startupHelper.setCustomHosts(customHosts);
+            startupHelper.setCustomHosts(customHosts);
 
-        verify(startupParams).setCustomHosts(customHosts);
+            verify(startupParams).getCustomHosts();
+            verify(startupParams).setCustomHosts(customHosts);
+            verify(reportsHandler).setCustomHosts(customHosts);
+            verifyNoMoreInteractions(startupParams, reportsHandler);
+        }
+    }
+
+    @Test
+    public void setCustomHostsWithUnchangedValues() {
+        for (List<String> oldHosts : Arrays.asList(null, Collections.<String>emptyList())) {
+            for (List<String> newHosts : Arrays.asList(null, Collections.<String>emptyList())) {
+                clearInvocations(startupParams, reportsHandler);
+                when(startupParams.getCustomHosts()).thenReturn(oldHosts);
+
+                startupHelper.setCustomHosts(newHosts);
+
+                verify(startupParams).getCustomHosts();
+                verifyNoMoreInteractions(startupParams, reportsHandler);
+            }
+        }
+        List<String> customHosts = Arrays.asList("host1", "host2");
+        clearInvocations(startupParams, reportsHandler);
+        when(startupParams.getCustomHosts()).thenReturn(customHosts);
+
+        startupHelper.setCustomHosts(Arrays.asList("host1", "host2"));
+
+        verify(startupParams).getCustomHosts();
         verify(reportsHandler).setCustomHosts(customHosts);
+        verifyNoMoreInteractions(startupParams, reportsHandler);
+    }
+
+    @Test
+    public void resetCustomHosts() {
+        when(startupParams.getCustomHosts()).thenReturn(Arrays.asList("host1", "host2"));
+        for (List<String> customHosts : Arrays.asList(null, Collections.<String>emptyList())) {
+            clearInvocations(startupParams, reportsHandler);
+
+            startupHelper.setCustomHosts(customHosts);
+
+            verify(startupParams).getCustomHosts();
+            verify(startupParams).setCustomHosts(null);
+            verify(reportsHandler).setCustomHosts(null);
+            verifyNoMoreInteractions(startupParams, reportsHandler);
+        }
     }
 
     @Test

@@ -279,10 +279,31 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate - setup startup helper`() {
         impl.activate(config)
         verify(startupHelper).setPublicLogger(publicLogger)
-        verify(startupHelper).setCustomHosts(null)
-        verify(startupHelper).clids = null
-        verify(startupHelper).setDistributionReferrer(null)
+        verify(startupHelper).applyConfig(config)
         verify(startupHelper).refresh()
+        verifyNoMoreInteractions(startupHelper)
+    }
+
+    @Test
+    fun `activation applies startup parameters before refresh`() {
+        val customHosts = listOf("https://startup.example.org")
+        val clids = mapOf("clid0" to "123", "clid1" to "456")
+        val startupConfig = AppMetricaConfig.newConfigBuilder(apiKey)
+            .withCustomHosts(customHosts)
+            .withAdditionalConfig("YMM_clids", clids)
+            .withAdditionalConfig("YMM_distributionReferrer", "distribution-referrer")
+            .build()
+        whenever(reporterFactory.buildOrUpdateMainReporter(startupConfig, publicLogger, configExtension))
+            .thenReturn(mainReporter)
+
+        impl.activate(startupConfig)
+
+        inOrder(startupHelper, reporterFactory) {
+            verify(startupHelper).setPublicLogger(publicLogger)
+            verify(startupHelper).applyConfig(startupConfig)
+            verify(reporterFactory).buildOrUpdateMainReporter(startupConfig, publicLogger, configExtension)
+            verify(startupHelper).refresh()
+        }
         verifyNoMoreInteractions(startupHelper)
     }
 
@@ -317,9 +338,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously - setup startup helper`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(startupHelper).setPublicLogger(publicOrAnonymousLogger)
-        verify(startupHelper).setCustomHosts(null)
-        verify(startupHelper).clids = null
-        verify(startupHelper).setDistributionReferrer(null)
+        verify(startupHelper).applyConfig(anonymousConfig)
         verify(startupHelper).refresh()
         verifyNoMoreInteractions(startupHelper)
     }
@@ -418,9 +437,7 @@ internal class AppMetricaImplTest : CommonTest() {
         clearInvocations(startupHelper)
         impl.activate(config)
         verify(startupHelper).setPublicLogger(publicLogger)
-        verify(startupHelper).setCustomHosts(null)
-        verify(startupHelper).clids = null
-        verify(startupHelper).setDistributionReferrer(null)
+        verify(startupHelper).applyConfig(config)
         verify(startupHelper).refresh()
         verifyNoMoreInteractions(startupHelper)
     }

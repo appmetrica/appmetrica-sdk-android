@@ -6,11 +6,14 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AdvIdentifiersResult;
+import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
+import io.appmetrica.analytics.impl.AppMetricaInternalConfigExtractor;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DataResultReceiver;
@@ -28,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import static io.appmetrica.analytics.impl.referrer.common.Constants.INSTALL_REFERRER_SOURCE_API;
 
 public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOffsetProvider {
 
@@ -178,6 +183,17 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
             // Optional configuration update. If there was no initialization on the part of the application,
             // the configuration based on default values must not be applied.
             sendStartupEvent(mClientClids, false);
+        }
+    }
+
+    @WorkerThread
+    public void applyConfig(@NonNull AppMetricaConfig config) {
+        setCustomHosts(config.customHosts);
+        setClids(AppMetricaInternalConfigExtractor.getClids(config));
+        String distributionReferrer = AppMetricaInternalConfigExtractor.getDistributionReferrer(config);
+        setDistributionReferrer(distributionReferrer);
+        if (distributionReferrer != null) {
+            setInstallReferrerSource(INSTALL_REFERRER_SOURCE_API);
         }
     }
 

@@ -15,8 +15,6 @@ import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils.createPartialApiKey
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
-import io.appmetrica.analytics.impl.AppMetricaInternalConfigExtractor.getClids
-import io.appmetrica.analytics.impl.AppMetricaInternalConfigExtractor.getDistributionReferrer
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.impl.modules.ModulesSeeker
@@ -24,7 +22,6 @@ import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl
 import io.appmetrica.analytics.impl.modules.plugin.KnownPluginModuleDescriptors
 import io.appmetrica.analytics.impl.modules.plugin.PluginModuleStatusDetector
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper
-import io.appmetrica.analytics.impl.referrer.common.Constants
 import io.appmetrica.analytics.impl.startup.StartupHelper
 import io.appmetrica.analytics.impl.utils.BooleanUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -296,7 +293,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         updateSessionAutoTrackingState(config)
         processConfiguration.update(config)
         startupHelper.setPublicLogger(logger)
-        applyStartupConfig(config)
+        startupHelper.applyConfig(config)
         reportsHandler.updatePreActivationConfig(
             config.locationTracking,
             config.dataSendingEnabled,
@@ -359,17 +356,6 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         core.appOpenWatcher.setReporter(reporter)
         sessionsTrackingManager.setReporter(reporter)
         return reporter
-    }
-
-    @WorkerThread
-    private fun applyStartupConfig(config: AppMetricaConfig) {
-        startupHelper.setCustomHosts(config.customHosts)
-        startupHelper.clids = getClids(config)
-        val distributionReferrer = getDistributionReferrer(config)
-        startupHelper.setDistributionReferrer(distributionReferrer)
-        if (distributionReferrer != null) {
-            startupHelper.setInstallReferrerSource(Constants.INSTALL_REFERRER_SOURCE_API)
-        }
     }
 
     @WorkerThread
