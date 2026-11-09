@@ -12,16 +12,29 @@ object ReflectionUtils {
     }
 
     @JvmStatic
-    fun <T> loadAndInstantiateClassWithDefaultConstructor(className: String, targetType: Class<T>): T? = try {
-        DebugLogger.info(TAG, "Load and instantiate class `$className` with default constructor")
-        loadClass(className, targetType)?.getConstructor()?.newInstance()
+    fun <T> loadAndInstantiateClassWithDefaultConstructor(className: String, targetType: Class<T>): T? {
+        return loadAndInstantiateClass(className, targetType, emptyArray())
+    }
+
+    @JvmStatic
+    fun <T> loadAndInstantiateClass(
+        className: String,
+        targetType: Class<T>,
+        parameterTypes: Array<Class<*>>,
+        vararg args: Any?
+    ): T? = try {
+        DebugLogger.info(
+            TAG,
+            "Load and instantiate class `$className` with constructor parameters: %s",
+            parameterTypes.contentToString()
+        )
+        loadClass(className, targetType)?.getConstructor(*parameterTypes)?.newInstance(*args)
     } catch (e: Throwable) {
         DebugLogger.error(
             TAG,
             e,
-            "Failed to instantiate class with name \"%s\" and targetType: %",
-            className,
-            targetType
+            "Failed to instantiate class with name \"$className\", " +
+                "targetType: $targetType and parameterTypes: ${parameterTypes.contentToString()}"
         )
         null
     }

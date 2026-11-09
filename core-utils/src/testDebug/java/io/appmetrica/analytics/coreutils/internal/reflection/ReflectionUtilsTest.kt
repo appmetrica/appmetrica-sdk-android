@@ -14,6 +14,8 @@ class ReflectionUtilsTest : CommonTest() {
 
     internal class TestClassNotImplementTestInterface
 
+    internal class TestClassWithArgsConstructor(val value: String) : TestInterface
+
     @Test
     fun loadAndInstantiateClass() {
         assertThat(
@@ -40,6 +42,41 @@ class ReflectionUtilsTest : CommonTest() {
             ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
                 TestClassNotImplementTestInterface::class.java.name,
                 TestInterface::class.java
+            )
+        ).isNull()
+    }
+
+    @Test
+    fun loadAndInstantiateClassWithConstructorArgs() {
+        val result = ReflectionUtils.loadAndInstantiateClass(
+            TestClassWithArgsConstructor::class.java.name,
+            TestInterface::class.java,
+            arrayOf(String::class.java),
+            "arg"
+        )
+        assertThat(result).isInstanceOf(TestClassWithArgsConstructor::class.java)
+        assertThat((result as TestClassWithArgsConstructor).value).isEqualTo("arg")
+    }
+
+    @Test
+    fun loadAndInstantiateClassWithWrongConstructorArgs() {
+        assertThat(
+            ReflectionUtils.loadAndInstantiateClass(
+                TestClassWithArgsConstructor::class.java.name,
+                TestInterface::class.java,
+                arrayOf(Int::class.javaPrimitiveType!!),
+                1
+            )
+        ).isNull()
+    }
+
+    @Test
+    fun loadAndInstantiateClassWithConstructorArgsWithoutInterfaceImplementation() {
+        assertThat(
+            ReflectionUtils.loadAndInstantiateClass(
+                TestClassNotImplementTestInterface::class.java.name,
+                TestInterface::class.java,
+                emptyArray()
             )
         ).isNull()
     }
