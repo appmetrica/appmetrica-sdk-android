@@ -73,6 +73,9 @@ internal class ReporterFactory(
         logger: PublicLogger,
         configExtension: AppMetricaConfigExtension,
     ): MainReporter = mainReporter?.also { reporter ->
+        if (reporters[config.apiKey] !== reporter) {
+            reporterApiKeyUsedValidator.validate(config.apiKey)
+        }
         DebugLogger.info(tag, "Main reporter already exists. Update configuration with apiKey = ${config.apiKey}")
         mainReporterComponents.updateConfig(config, logger)
 

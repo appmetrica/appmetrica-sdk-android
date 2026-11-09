@@ -11,6 +11,7 @@ import io.appmetrica.analytics.DeferredDeeplinkListener
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.StartupParamsCallback
+import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
@@ -31,11 +32,13 @@ import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.con
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
 import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
@@ -833,6 +836,55 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `getMainReporterApiConsumerProvider before activate`() {
         assertThat(impl.mainReporterApiConsumerProvider).isNull()
+    }
+
+    @Test
+    fun `occupied key rejects anonymous upgrade before client mutations and allows free retry`() {
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        val originalProvider = impl.mainReporterApiConsumerProvider
+        val collaborators = arrayOf(
+            processConfiguration,
+            reportsHandler,
+            startupHelper,
+            referrerHelper,
+            clientPreferences,
+            jvmCrashClientController,
+            sessionsTrackingManager,
+            appOpenWatcher,
+            mainReporter,
+            anonymousMainReporter
+        )
+        clearInvocations(reporterFactory, *collaborators)
+        doThrow(ValidationException("Occupied key")).whenever(reporterFactory)
+            .buildOrUpdateMainReporter(config, publicLogger, configExtension)
+
+        assertThatThrownBy { impl.activate(config) }.isInstanceOf(ValidationException::class.java)
+
+        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
+        verifyNoInteractions(*collaborators)
+        assertThat(impl.mainReporterApiConsumerProvider).isSameAs(originalProvider)
+        assertThat(mainReporterApiConsumerProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+
+        val freeApiKey = UUID.randomUUID().toString()
+        loggerStorageMockedStaticRule.staticMock.on {
+            LoggerStorage.getOrCreatePublicLogger(freeApiKey)
+        }.thenReturn(publicLogger)
+        loggerStorageMockedStaticRule.staticMock.on {
+            LoggerStorage.getOrCreateMainPublicLogger(freeApiKey)
+        }.thenReturn(publicLogger)
+        val freeConfig = AppMetricaConfig.newConfigBuilder(freeApiKey).build()
+        doReturn(anonymousMainReporter).whenever(reporterFactory)
+            .buildOrUpdateMainReporter(freeConfig, publicLogger, configExtension)
+
+        impl.activate(freeConfig)
+
+        verify(reporterFactory).buildOrUpdateMainReporter(freeConfig, publicLogger, configExtension)
+        verify(processConfiguration).update(freeConfig)
+        verify(clientPreferences).saveAppMetricaConfig(freeConfig)
+        assertThat(impl.mainReporterApiConsumerProvider).isSameAs(originalProvider)
+        assertThat(mainReporterApiConsumerProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        verify(appOpenWatcher, never()).setReporter(any())
+        verify(sessionsTrackingManager, never()).setReporter(any())
     }
 
     @Test
