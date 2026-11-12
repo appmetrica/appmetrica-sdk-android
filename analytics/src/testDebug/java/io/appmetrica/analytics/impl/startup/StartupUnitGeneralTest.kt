@@ -324,8 +324,42 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         assertions.checkField("startupUpdateConfig", startupUpdateConfig)
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs)
         assertions.checkField("externalAttributionConfig", externalAttributionConfig)
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig")
         assertions.checkAll()
         assertThat(startupState.obtainTime).isEqualTo(obtainTime)
+    }
+
+    @Test
+    fun parseStartupResultKeepsLastValidClientReportsQueueBudget() {
+        val previous = ClientReportsQueueBudgetConfig.create(maxSizeMiB = 0, heapFraction = 0.125)
+        whenever(startupConfigurationHolder.startupState).thenReturn(
+            StartupState.Builder(mock<CollectingFlags>())
+                .withClientReportsQueueBudgetConfig(previous)
+                .build()
+        )
+        val result = mock<StartupResult> {
+            on { collectionFlags } doReturn mock()
+            on { clientReportsQueueBudgetConfig } doReturn null
+        }
+        val startupState = startupUnit.parseStartupResult(result, mockedStartupRequestConfig(), 0L)
+        assertThat(startupState.clientReportsQueueBudgetConfig).isEqualTo(previous)
+    }
+
+    @Test
+    fun parseStartupResultAppliesIncomingClientReportsQueueBudget() {
+        val previous = ClientReportsQueueBudgetConfig.create(maxSizeMiB = 4, heapFraction = 0.5)
+        val incoming = ClientReportsQueueBudgetConfig.create(maxSizeMiB = 8, heapFraction = 0.25)
+        whenever(startupConfigurationHolder.startupState).thenReturn(
+            StartupState.Builder(mock<CollectingFlags>())
+                .withClientReportsQueueBudgetConfig(previous)
+                .build()
+        )
+        val result = mock<StartupResult> {
+            on { collectionFlags } doReturn mock()
+            on { clientReportsQueueBudgetConfig } doReturn incoming
+        }
+        val startupState = startupUnit.parseStartupResult(result, mockedStartupRequestConfig(), 0L)
+        assertThat(startupState.clientReportsQueueBudgetConfig).isEqualTo(incoming)
     }
 
     @Test

@@ -48,6 +48,8 @@ internal class StartupState private constructor(
     val startupUpdateConfig: StartupUpdateConfig = startupStateModel.startupUpdateConfig
     val modulesRemoteConfigs: Map<String, Any> = startupStateModel.modulesRemoteConfigs
     val externalAttributionConfig: ExternalAttributionConfig? = startupStateModel.externalAttributionConfig
+    val clientReportsQueueBudgetConfig: ClientReportsQueueBudgetConfig? =
+        startupStateModel.clientReportsQueueBudgetConfig
 
     fun buildUpon(): Builder = buildUpon(startupStateModel.collectingFlags)
 
@@ -130,6 +132,9 @@ internal class StartupState private constructor(
 
         fun withExternalAttributionConfig(value: ExternalAttributionConfig?) =
             this.also { modelBuilder.withExternalAttributionConfig(value) }
+
+        fun withClientReportsQueueBudgetConfig(value: ClientReportsQueueBudgetConfig?) =
+            this.also { modelBuilder.withClientReportsQueueBudgetConfig(value) }
 
         fun build(): StartupState = StartupState(deviceId, deviceIdHash, modelBuilder.build())
     }

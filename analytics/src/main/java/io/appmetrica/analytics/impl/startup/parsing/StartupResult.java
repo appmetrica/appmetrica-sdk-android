@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig;
 import io.appmetrica.analytics.impl.startup.PermissionsCollectingConfig;
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
@@ -51,6 +52,8 @@ public class StartupResult {
     private Map<String, Object> moduleRemoteConfigs;
     @Nullable
     private ExternalAttributionConfig externalAttributionConfig;
+    @Nullable
+    private ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
 
     @NonNull
     public CollectingFlags getCollectionFlags() {
@@ -243,5 +246,16 @@ public class StartupResult {
 
     public void setExternalAttributionConfig(@Nullable ExternalAttributionConfig externalAttributionConfig) {
         this.externalAttributionConfig = externalAttributionConfig;
+    }
+
+    @Nullable
+    public ClientReportsQueueBudgetConfig getClientReportsQueueBudgetConfig() {
+        return clientReportsQueueBudgetConfig;
+    }
+
+    public void setClientReportsQueueBudgetConfig(
+        @Nullable ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig
+    ) {
+        this.clientReportsQueueBudgetConfig = clientReportsQueueBudgetConfig;
     }
 }

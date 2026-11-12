@@ -113,7 +113,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
-            .withIgnoredFields("mServerTimeOffset", "modulesConfig");
+            .withIgnoredFields("mServerTimeOffset", "modulesConfig", "clientReportsQueueBudgetConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(uuid, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdData", "getDeviceId", new IdentifiersResult(deviceId, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", new IdentifiersResult(deviceIdHash, IdentifierStatus.OK, null));
@@ -200,7 +200,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
-            .withIgnoredFields("mServerTimeOffset", "modulesConfig");
+            .withIgnoredFields("mServerTimeOffset", "modulesConfig", "clientReportsQueueBudgetConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(newUuid, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdData", "getDeviceId", new IdentifiersResult(newDeviceId, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", new IdentifiersResult(newDeviceIdHash, IdentifierStatus.OK, null));

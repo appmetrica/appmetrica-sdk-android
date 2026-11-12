@@ -23,6 +23,8 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
     private ModulesRemoteConfigsConverter modulesRemoteConfigsConverter = new ModulesRemoteConfigsConverter();
     private ExternalAttributionConfigConverter externalAttributionConfigConverter =
         new ExternalAttributionConfigConverter();
+    private ClientReportsQueueBudgetConfigConverter clientReportsQueueBudgetConfigConverter =
+        new ClientReportsQueueBudgetConfigConverter();
     private OptionalBoolConverter optionalBoolConverter = new StartupOptionalBoolConverter();
 
     @SuppressWarnings("checkstyle:methodLength")
@@ -91,6 +93,11 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         state.startupUpdateConfig = startupUpdateConfigConverter.fromModel(value.startupUpdateConfig);
         state.modulesRemoteConfigs = modulesRemoteConfigsConverter.fromModel(value.modulesRemoteConfigs);
         state.externalAttributionConfig = externalAttributionConfigConverter.fromModel(value.externalAttributionConfig);
+        if (value.clientReportsQueueBudgetConfig != null) {
+            state.clientReportsQueueBudgetConfig = clientReportsQueueBudgetConfigConverter.fromModel(
+                value.clientReportsQueueBudgetConfig
+            );
+        }
 
         return state;
     }
@@ -151,6 +158,11 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         if (nano.externalAttributionConfig != null) {
             builder.withExternalAttributionConfig(
                 externalAttributionConfigConverter.toModel(nano.externalAttributionConfig)
+            );
+        }
+        if (nano.clientReportsQueueBudgetConfig != null) {
+            builder.withClientReportsQueueBudgetConfig(
+                clientReportsQueueBudgetConfigConverter.toModel(nano.clientReportsQueueBudgetConfig)
             );
         }
 

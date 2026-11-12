@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -33,6 +34,8 @@ public class ClientIdentifiersHolder {
     private static final String EXTRA_NEXT_STARTUP_TIME = "NextStartupTime";
     private static final String EXTRA_FEATURES = "features";
     private static final String EXTRA_MODULE_CONFIGS = "module_configs";
+    private static final String EXTRA_CLIENT_REPORTS_QUEUE_BUDGET_CONFIG =
+        "client_reports_queue_budget_config";
     private static final String NO_IDENTIFIER_IN_STARTUP_STATE = "no identifier in startup state";
     private static final String BUNDLE_SREIALIZATION_ERROR = "bundle serialization error";
 
@@ -64,6 +67,8 @@ public class ClientIdentifiersHolder {
     private final FeaturesInternal features;
     @Nullable
     private final Bundle modulesConfig;
+    @Nullable
+    private final ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
 
     ClientIdentifiersHolder(@NonNull StartupState startupState,
                             @NonNull AdvertisingIdsHolder advertisingIdsHolder,
@@ -103,7 +108,8 @@ public class ClientIdentifiersHolder {
             TimeUtils.getServerTimeOffset(),
             startupState.getObtainTime() + startupState.getStartupUpdateConfig().getIntervalSeconds(),
             createFeaturesInternal(startupState.getCollectingFlags().sslPinning),
-            new Bundle()
+            new Bundle(),
+            startupState.getClientReportsQueueBudgetConfig()
         );
     }
 
@@ -123,7 +129,10 @@ public class ClientIdentifiersHolder {
             bundle.getLong(EXTRA_SERVER_TIME_OFFSET),
             bundle.getLong(EXTRA_NEXT_STARTUP_TIME),
             parseFeaturesInternal(bundle, EXTRA_FEATURES),
-            bundle.getBundle(EXTRA_MODULE_CONFIGS)
+            bundle.getBundle(EXTRA_MODULE_CONFIGS),
+            ClientReportsQueueBudgetConfig.fromJsonString(
+                bundle.getString(EXTRA_CLIENT_REPORTS_QUEUE_BUDGET_CONFIG)
+            )
         );
     }
 
@@ -142,7 +151,8 @@ public class ClientIdentifiersHolder {
         final long serverTimeOffset,
         final long nextStartupTime,
         @NonNull FeaturesInternal features,
-        @Nullable Bundle modulesConfig
+        @Nullable Bundle modulesConfig,
+        @Nullable ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig
     ) {
         mUuidData = uuidData;
         mDeviceIdData = deviceIdData;
@@ -159,6 +169,7 @@ public class ClientIdentifiersHolder {
         this.nextStartupTime = nextStartupTime;
         this.features = features;
         this.modulesConfig = modulesConfig;
+        this.clientReportsQueueBudgetConfig = clientReportsQueueBudgetConfig;
     }
 
     @NonNull
@@ -234,6 +245,11 @@ public class ClientIdentifiersHolder {
         return modulesConfig;
     }
 
+    @Nullable
+    public ClientReportsQueueBudgetConfig getClientReportsQueueBudgetConfig() {
+        return clientReportsQueueBudgetConfig;
+    }
+
     public void toBundle(@NonNull Bundle bundle) {
         bundle.putBundle(EXTRA_UUID, getBundleWithParcelable(mUuidData));
         bundle.putBundle(EXTRA_DEVICE_ID, getBundleWithParcelable(mDeviceIdData));
@@ -253,6 +269,12 @@ public class ClientIdentifiersHolder {
             EXTRA_MODULE_CONFIGS,
             GlobalServiceLocator.getInstance().getModulesController().getModulesConfigsBundleForClient()
         );
+        if (clientReportsQueueBudgetConfig != null) {
+            bundle.putString(
+                EXTRA_CLIENT_REPORTS_QUEUE_BUDGET_CONFIG,
+                clientReportsQueueBudgetConfig.toJsonString()
+            );
+        }
     }
 
     @NonNull
@@ -335,6 +357,7 @@ public class ClientIdentifiersHolder {
             ", nextStartupTime=" + nextStartupTime +
             ", features=" + features +
             ", modulesConfig=" + modulesConfig +
+            ", clientReportsQueueBudgetConfig=" + clientReportsQueueBudgetConfig +
             '}';
     }
 }

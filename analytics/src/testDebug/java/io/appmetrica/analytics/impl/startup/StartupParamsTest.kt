@@ -1199,6 +1199,50 @@ internal class StartupParamsTest : CommonTest() {
     }
 
     @Test
+    fun updateFromReceiverPersistsClientReportsQueueBudgetConfig() {
+        listOf(
+            ClientReportsQueueBudgetConfig.create(8L, 0.25)!!,
+            ClientReportsQueueBudgetConfig.create(0L, 1.0)!!,
+            ClientReportsQueueBudgetConfig.create(1L, 0.0)!!,
+        ).forEach { config ->
+            StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
+            mockPreferencesWithValidValues()
+            whenever(customSdkHostsHolder.commonResult).thenReturn(customSdkHostsResult)
+            whenever(featuresHolder.features).thenReturn(featuresInternal)
+            whenever(clidsStateChecker.doClientClidsMatchClientClidsForRequest(anyOrNull(), anyOrNull()))
+                .thenReturn(true)
+            whenever(clientIdentifiersHolder.clientReportsQueueBudgetConfig).thenReturn(config)
+
+            startupParams = createStartupParams()
+            clearInvocations(preferences)
+
+            startupParams.updateAllParamsByReceiver(clientIdentifiersHolder)
+
+            verify(preferences).putClientReportsQueueBudgetConfig(eq(config))
+        }
+    }
+
+    @Test
+    fun updateFromReceiverKeepsPreviousBudgetWhenIncomingNull() {
+        val previous = ClientReportsQueueBudgetConfig.create(4L, 0.5)!!
+        StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
+        mockPreferencesWithValidValues()
+        whenever(preferences.getClientReportsQueueBudgetConfig()).thenReturn(previous)
+        whenever(customSdkHostsHolder.commonResult).thenReturn(customSdkHostsResult)
+        whenever(featuresHolder.features).thenReturn(featuresInternal)
+        whenever(clidsStateChecker.doClientClidsMatchClientClidsForRequest(anyOrNull(), anyOrNull()))
+            .thenReturn(true)
+        whenever(clientIdentifiersHolder.clientReportsQueueBudgetConfig).thenReturn(null)
+
+        startupParams = createStartupParams()
+        clearInvocations(preferences)
+
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder)
+
+        verify(preferences).putClientReportsQueueBudgetConfig(eq(previous))
+    }
+
+    @Test
     fun shouldUpdateAllParamsInPreferencesOnSetClientClids() {
         val newClids = HashMap<String, String>()
         newClids.put("clid878", "999000")

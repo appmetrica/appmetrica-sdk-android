@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.startup.StartupState;
@@ -119,7 +120,8 @@ public class ClientIdentifiersHolderTest extends CommonTest {
             mServerTimeOffset,
             nextStartupTime,
             features,
-            modulesConfig
+            modulesConfig,
+            null
         );
 
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder).withPrivateFields(true);
@@ -138,6 +140,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         assertions.checkField("nextStartupTime", "getNextStartupTime", nextStartupTime);
         assertions.checkField("features", "getFeatures", features);
         assertions.checkField("modulesConfig", "getModulesConfig", modulesConfig);
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig", "getClientReportsQueueBudgetConfig");
         assertions.checkAll();
     }
 
@@ -198,7 +201,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(startupState, advertisingIdsHolder, clientClids);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
-            .withIgnoredFields("modulesConfig");
+            .withIgnoredFields("modulesConfig", "clientReportsQueueBudgetConfig");
         assertions.checkField("mUuidData", "getUuid", mUuidData);
         assertions.checkField("mDeviceIdData", "getDeviceId", mDeviceIdData);
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", mDeviceIdHashData);
@@ -264,6 +267,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
             mServerTimeOffset,
             nextStartupTime,
             features,
+            null,
             null
         );
         Bundle bundle = new Bundle();
@@ -306,6 +310,55 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         assertions.checkField("nextStartupTime", "getNextStartupTime", nextStartupTime);
         assertions.checkField("features", "getFeatures", features);
         assertions.checkField("modulesConfig", "getModulesConfig", modulesConfig);
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig", "getClientReportsQueueBudgetConfig");
         assertions.checkAll();
+    }
+
+    @Test
+    public void testBundleSerializationClientReportsQueueBudgetConfig() throws Exception {
+        assertBundleRoundTripClientReportsQueueBudgetConfig(
+            ClientReportsQueueBudgetConfig.create(8L, 0.25)
+        );
+        assertBundleRoundTripClientReportsQueueBudgetConfig(
+            ClientReportsQueueBudgetConfig.create(0L, 1.0)
+        );
+        assertBundleRoundTripClientReportsQueueBudgetConfig(
+            ClientReportsQueueBudgetConfig.create(1L, 0.0)
+        );
+    }
+
+    private void assertBundleRoundTripClientReportsQueueBudgetConfig(
+        ClientReportsQueueBudgetConfig config
+    ) throws Exception {
+        ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(
+            mUuidData,
+            mDeviceIdData,
+            mDeviceIdHashData,
+            mReportAdUrlData,
+            mGetAdUrlData,
+            mResponseClidsData,
+            mClientClidsForRequestData,
+            mGaidData, mHoaidData, yandexAdvIdData,
+            customSdkHostsData,
+            mServerTimeOffset,
+            nextStartupTime,
+            features,
+            modulesConfig,
+            config
+        );
+        Bundle bundle = new Bundle();
+        clientIdentifiersHolder.toBundle(bundle);
+        ClientIdentifiersHolder actual = new ClientIdentifiersHolder(bundle);
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(actual.getClientReportsQueueBudgetConfig())
+            .as("config=%s", config)
+            .isEqualTo(config);
+        softly.assertThat(actual.getClientReportsQueueBudgetConfig().getMaxSizeMiB())
+            .isEqualTo(config.getMaxSizeMiB());
+        softly.assertThat(actual.getClientReportsQueueBudgetConfig().getHeapFraction())
+            .isEqualTo(config.getHeapFraction());
+        softly.assertThat(bundle.getString("client_reports_queue_budget_config"))
+            .isEqualTo(config.toJsonString());
+        softly.assertAll();
     }
 }

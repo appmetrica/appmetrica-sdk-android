@@ -143,6 +143,9 @@ public class StartupParamsTestUtils {
         when(mock.putCustomSdkHosts(nullable(IdentifiersResult.class))).thenReturn(mock);
         when(mock.putNextStartupTime(anyLong())).thenReturn(mock);
         when(mock.putFeatures(any(FeaturesInternal.class))).thenReturn(mock);
+        when(mock.putClientReportsQueueBudgetConfig(
+            nullable(io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig.class)
+        )).thenReturn(mock);
     }
 
 }

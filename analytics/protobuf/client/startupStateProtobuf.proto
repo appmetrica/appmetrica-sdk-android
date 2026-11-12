@@ -116,4 +116,12 @@ message StartupState {
 
     optional string lastReferrerForStartupRequest = 34;
     optional OptionalBool lastYandexAdsOnlyForStartupRequest = 35 [default = OPTIONAL_BOOL_UNDEFINED];
+
+    // region clientReportsQueueBudgetConfig
+    message ClientReportsQueueBudgetConfig {
+        optional int64 maxSizeMiB = 1 [default = 16];
+        optional double heapFraction = 2 [default = 0.125];
+    }
+    optional ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig = 36;
+    // endregion
 }

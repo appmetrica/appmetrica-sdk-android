@@ -8,6 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.ClientConfigSerializer;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -41,6 +42,8 @@ public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
     static final PreferencesItem SCREEN_SIZE_CHECKED_BY_DEPRECATED =
             new PreferencesItem("SCREEN_SIZE_CHECKED_BY_DEPRECATED");
     static final PreferencesItem FEATURES = new PreferencesItem("FEATURES");
+    static final PreferencesItem CLIENT_REPORTS_QUEUE_BUDGET_CONFIG =
+            new PreferencesItem("CLIENT_REPORTS_QUEUE_BUDGET_CONFIG");
     static final PreferencesItem APPMETRICA_CLIENT_CONFIG = new PreferencesItem("APPMETRICA_CLIENT_CONFIG");
     static final PreferencesItem APPMETRICA_CLIENT_CONFIG_SAVED_AT =
             new PreferencesItem("APPMETRICA_CLIENT_CONFIG_SAVED_AT");
@@ -165,6 +168,24 @@ public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
     @NonNull
     public PreferencesClientDbStorage putFeatures(@NonNull FeaturesInternal features) {
         return writeString(FEATURES.fullKey(), JsonHelper.featuresToJson(features));
+    }
+
+    @Nullable
+    public ClientReportsQueueBudgetConfig getClientReportsQueueBudgetConfig() {
+        return ClientReportsQueueBudgetConfig.fromJsonString(
+            readString(CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey(), null)
+        );
+    }
+
+    @NonNull
+    public PreferencesClientDbStorage putClientReportsQueueBudgetConfig(
+        @Nullable ClientReportsQueueBudgetConfig config
+    ) {
+        String json = config == null ? null : config.toJsonString();
+        if (json != null) {
+            return writeString(CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey(), json);
+        }
+        return this;
     }
 
     @NonNull

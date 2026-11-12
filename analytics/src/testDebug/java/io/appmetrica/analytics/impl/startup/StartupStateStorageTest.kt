@@ -109,6 +109,7 @@ internal class StartupStateStorageTest : CommonTest() {
             }
             .checkField("modulesRemoteConfigs", emptyMap<String, Any>())
             .checkFieldIsNull("externalAttributionConfig")
+            .checkFieldIsNull("clientReportsQueueBudgetConfig")
             .checkAll()
     }
 
@@ -161,6 +162,7 @@ internal class StartupStateStorageTest : CommonTest() {
         }
         assertions.checkField("modulesRemoteConfigs", emptyMap<String, Any>())
         assertions.checkFieldIsNull("externalAttributionConfig")
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig")
 
         assertions.checkAll()
     }
@@ -239,6 +241,7 @@ internal class StartupStateStorageTest : CommonTest() {
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
             .checkField("externalAttributionConfig", externalAttributionConfig)
+            .checkFieldIsNull("clientReportsQueueBudgetConfig")
             .checkAll()
     }
 
@@ -319,6 +322,7 @@ internal class StartupStateStorageTest : CommonTest() {
         assertions.checkField("startupUpdateConfig", startupUpdateConfig)
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs)
         assertions.checkField("externalAttributionConfig", externalAttributionConfig)
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig")
 
         assertions.checkAll()
     }

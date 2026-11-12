@@ -143,7 +143,8 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
             new AttributionConfigParser(),
             new StartupUpdateConfigParser(),
             new ModulesRemoteConfigsParser(),
-            new ExternalAttributionConfigParser()
+            new ExternalAttributionConfigParser(),
+            new ClientReportsQueueBudgetConfigParser()
         );
         startupParser.parseStartupResponse("{}".getBytes());
 

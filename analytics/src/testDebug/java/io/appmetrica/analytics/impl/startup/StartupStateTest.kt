@@ -88,6 +88,7 @@ internal class StartupStateTest : CommonTest() {
             )
             .checkField("modulesRemoteConfigs", emptyMap<String, Any>())
             .checkFieldIsNull("externalAttributionConfig")
+            .checkFieldIsNull("clientReportsQueueBudgetConfig")
             .checkAll()
     }
 
@@ -162,6 +163,7 @@ internal class StartupStateTest : CommonTest() {
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
             .checkField("externalAttributionConfig", externalAttributionConfig)
+            .checkFieldIsNull("clientReportsQueueBudgetConfig")
             .checkAll()
     }
 
@@ -238,6 +240,7 @@ internal class StartupStateTest : CommonTest() {
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
             .checkField("externalAttributionConfig", externalAttributionConfig)
+            .checkFieldIsNull("clientReportsQueueBudgetConfig")
             .checkAll()
     }
 

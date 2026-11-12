@@ -4,6 +4,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.isEqualTo
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrDefault
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrNullable
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optDoubleOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrDefault
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optHexByteArray
@@ -46,6 +47,29 @@ class JsonUtilsTest : CommonTest() {
         val value = 23423L
         val input = JSONObject().put(valueKey, value)
         assertThat(input.optLongOrNull(valueKey)).isEqualTo(value)
+    }
+
+    @Test
+    fun `optDoubleOrNull for null`() {
+        assertThat(null.optDoubleOrNull(valueKey)).isNull()
+    }
+
+    @Test
+    fun `optDoubleOrNull for empty json`() {
+        assertThat(JSONObject().optDoubleOrNull(valueKey)).isNull()
+    }
+
+    @Test
+    fun `optDoubleOrNull for wrong value`() {
+        val input = JSONObject().put(valueKey, "Wrong value")
+        assertThat(input.optDoubleOrNull(valueKey)).isNull()
+    }
+
+    @Test
+    fun `optDoubleOrNull for value`() {
+        val value = 0.125
+        val input = JSONObject().put(valueKey, value)
+        assertThat(input.optDoubleOrNull(valueKey)).isEqualTo(value)
     }
 
     @Test

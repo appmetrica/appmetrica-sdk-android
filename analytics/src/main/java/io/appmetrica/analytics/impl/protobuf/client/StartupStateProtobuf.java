@@ -1108,6 +1108,107 @@ public interface StartupStateProtobuf {
       }
     }
 
+    public static final class ClientReportsQueueBudgetConfig extends
+        io.appmetrica.analytics.protobuf.nano.MessageNano {
+
+      private static volatile ClientReportsQueueBudgetConfig[] _emptyArray;
+      public static ClientReportsQueueBudgetConfig[] emptyArray() {
+        // Lazily initializes the empty array
+        if (_emptyArray == null) {
+          synchronized (
+              io.appmetrica.analytics.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
+            if (_emptyArray == null) {
+              _emptyArray = new ClientReportsQueueBudgetConfig[0];
+            }
+          }
+        }
+        return _emptyArray;
+      }
+
+      // optional int64 maxSizeMiB = 1 [default = 16];
+      public long maxSizeMiB;
+
+      // optional double heapFraction = 2 [default = 0.125];
+      public double heapFraction;
+
+      public ClientReportsQueueBudgetConfig() {
+        clear();
+      }
+
+      public ClientReportsQueueBudgetConfig clear() {
+        maxSizeMiB = 16L;
+        heapFraction = 0.125D;
+        cachedSize = -1;
+        return this;
+      }
+
+      @Override
+      public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano output)
+          throws java.io.IOException {
+        if (this.maxSizeMiB != 16L) {
+          output.writeInt64(1, this.maxSizeMiB);
+        }
+        if (java.lang.Double.doubleToLongBits(this.heapFraction)
+            != java.lang.Double.doubleToLongBits(0.125D)) {
+          output.writeDouble(2, this.heapFraction);
+        }
+        super.writeTo(output);
+      }
+
+      @Override
+      protected int computeSerializedSize() {
+        int size = super.computeSerializedSize();
+        if (this.maxSizeMiB != 16L) {
+          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+              .computeInt64Size(1, this.maxSizeMiB);
+        }
+        if (java.lang.Double.doubleToLongBits(this.heapFraction)
+            != java.lang.Double.doubleToLongBits(0.125D)) {
+          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+              .computeDoubleSize(2, this.heapFraction);
+        }
+        return size;
+      }
+
+      @Override
+      public ClientReportsQueueBudgetConfig mergeFrom(
+              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
+          throws java.io.IOException {
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              return this;
+            default: {
+              if (!io.appmetrica.analytics.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              this.maxSizeMiB = input.readInt64();
+              break;
+            }
+            case 17: {
+              this.heapFraction = input.readDouble();
+              break;
+            }
+          }
+        }
+      }
+
+      public static ClientReportsQueueBudgetConfig parseFrom(byte[] data)
+          throws io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException {
+        return io.appmetrica.analytics.protobuf.nano.MessageNano.mergeFrom(new ClientReportsQueueBudgetConfig(), data);
+      }
+
+      public static ClientReportsQueueBudgetConfig parseFrom(
+              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
+          throws java.io.IOException {
+        return new ClientReportsQueueBudgetConfig().mergeFrom(input);
+      }
+    }
+
     private static volatile StartupState[] _emptyArray;
     public static StartupState[] emptyArray() {
       // Lazily initializes the empty array
@@ -1218,6 +1319,9 @@ public interface StartupStateProtobuf {
     // optional .StartupState.OptionalBool lastYandexAdsOnlyForStartupRequest = 35 [default = OPTIONAL_BOOL_UNDEFINED];
     public int lastYandexAdsOnlyForStartupRequest;
 
+    // optional .StartupState.ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig = 36;
+    public StartupStateProtobuf.StartupState.ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
+
     public StartupState() {
       clear();
     }
@@ -1255,6 +1359,7 @@ public interface StartupStateProtobuf {
       externalAttributionConfig = null;
       lastReferrerForStartupRequest = "";
       lastYandexAdsOnlyForStartupRequest = StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED;
+      clientReportsQueueBudgetConfig = null;
       cachedSize = -1;
       return this;
     }
@@ -1380,6 +1485,9 @@ public interface StartupStateProtobuf {
       }
       if (this.lastYandexAdsOnlyForStartupRequest != StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED) {
         output.writeInt32(35, this.lastYandexAdsOnlyForStartupRequest);
+      }
+      if (this.clientReportsQueueBudgetConfig != null) {
+        output.writeMessage(36, this.clientReportsQueueBudgetConfig);
       }
       super.writeTo(output);
     }
@@ -1562,6 +1670,10 @@ public interface StartupStateProtobuf {
       if (this.lastYandexAdsOnlyForStartupRequest != StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
           .computeInt32Size(35, this.lastYandexAdsOnlyForStartupRequest);
+      }
+      if (this.clientReportsQueueBudgetConfig != null) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+          .computeMessageSize(36, this.clientReportsQueueBudgetConfig);
       }
       return size;
     }
@@ -1832,6 +1944,13 @@ public interface StartupStateProtobuf {
                 this.lastYandexAdsOnlyForStartupRequest = value;
                 break;
             }
+            break;
+          }
+          case 290: {
+            if (this.clientReportsQueueBudgetConfig == null) {
+              this.clientReportsQueueBudgetConfig = new StartupStateProtobuf.StartupState.ClientReportsQueueBudgetConfig();
+            }
+            input.readMessage(this.clientReportsQueueBudgetConfig);
             break;
           }
         }

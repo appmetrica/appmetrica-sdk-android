@@ -85,4 +85,10 @@ public final class JsonResponseKey {
     static final String EXTERNAL_ATTRIBUTION = "external_attribution";
     static final String COLLECTING_INTERVAL_SECONDS = "collecting_interval_seconds";
     //endregion
+
+    //region ClientReportsQueue
+    public static final String CLIENT_REPORTS_QUEUE = "client_reports_queue";
+    public static final String CLIENT_REPORTS_QUEUE_MAX_SIZE_MIB = "max_size_mib";
+    public static final String CLIENT_REPORTS_QUEUE_HEAP_FRACTION = "heap_fraction";
+    //endregion
 }

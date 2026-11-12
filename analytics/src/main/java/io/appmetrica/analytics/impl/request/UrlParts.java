@@ -38,6 +38,7 @@ public final class UrlParts {
     public static final String CACHE_CONTROL = "cache_control";
     public static final String ATTRIBUTION = "attribution";
     public static final String EXTERNAL_ATTRIBUTION = "external_attribution";
+    public static final String CLIENT_REPORTS_QUEUE = "client_reports_queue";
     public static final String IS_MAIN = "is_main";
     public static final String YANDEX_ADS_ONLY = "hoyas";
 

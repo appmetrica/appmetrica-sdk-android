@@ -268,6 +268,10 @@ internal class StartupUnit(
             .withStartupUpdateConfig(result.startupUpdateConfig)
             .withModulesRemoteConfigs(result.modulesRemoteConfigs)
             .withExternalAttributionConfig(result.externalAttributionConfig)
+            .withClientReportsQueueBudgetConfig(
+                result.clientReportsQueueBudgetConfig
+                    ?: startupState.clientReportsQueueBudgetConfig
+            )
             .build()
     }
 

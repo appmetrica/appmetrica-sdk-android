@@ -6,6 +6,7 @@ import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -27,15 +28,18 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -531,6 +535,50 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             clientDbStorage.putFeatures(features);
             verify(mDbStorage).put(PreferencesClientDbStorage.FEATURES.fullKey(), json);
         }
+    }
+
+    @Test
+    public void putAndGetClientReportsQueueBudgetConfig() {
+        assertPutAndGetClientReportsQueueBudgetConfig(ClientReportsQueueBudgetConfig.create(8L, 0.25));
+        assertPutAndGetClientReportsQueueBudgetConfig(ClientReportsQueueBudgetConfig.create(0L, 1.0));
+        assertPutAndGetClientReportsQueueBudgetConfig(ClientReportsQueueBudgetConfig.create(1L, 0.0));
+    }
+
+    private void assertPutAndGetClientReportsQueueBudgetConfig(ClientReportsQueueBudgetConfig config) {
+        String json = config.toJsonString();
+        clientDbStorage.putClientReportsQueueBudgetConfig(config);
+        verify(mDbStorage).put(
+            PreferencesClientDbStorage.CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey(),
+            json
+        );
+
+        when(mDbStorage.getString(
+            PreferencesClientDbStorage.CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey(),
+            null
+        )).thenReturn(json);
+        ClientReportsQueueBudgetConfig actual = clientDbStorage.getClientReportsQueueBudgetConfig();
+        assertThat(actual).isEqualTo(config);
+        assertThat(actual.getMaxSizeMiB()).isEqualTo(config.getMaxSizeMiB());
+        assertThat(actual.getHeapFraction()).isEqualTo(config.getHeapFraction());
+        clearInvocations(mDbStorage);
+    }
+
+    @Test
+    public void getClientReportsQueueBudgetConfigMissing() {
+        when(mDbStorage.getString(
+            PreferencesClientDbStorage.CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey(),
+            null
+        )).thenReturn(null);
+        assertThat(clientDbStorage.getClientReportsQueueBudgetConfig()).isNull();
+    }
+
+    @Test
+    public void putClientReportsQueueBudgetConfigNullDoesNotWrite() {
+        clientDbStorage.putClientReportsQueueBudgetConfig(null);
+        verify(mDbStorage, never()).put(
+            eq(PreferencesClientDbStorage.CLIENT_REPORTS_QUEUE_BUDGET_CONFIG.fullKey()),
+            any()
+        );
     }
 
     @Test

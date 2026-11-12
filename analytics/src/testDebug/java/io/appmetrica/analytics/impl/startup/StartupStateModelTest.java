@@ -132,6 +132,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs);
         assertions.checkField("externalAttributionConfig", externalAttributionConfig);
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig");
 
         assertions.checkAll();
     }
@@ -177,6 +178,7 @@ public class StartupStateModelTest extends CommonTest {
             new StartupUpdateConfig(DefaultValues.STARTUP_UPDATE_CONFIG.interval));
         assertions.checkField("modulesRemoteConfigs", Collections.emptyMap());
         assertions.checkField("externalAttributionConfig", (ExternalAttributionConfig) null);
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig");
         assertions.checkAll();
     }
 
@@ -288,6 +290,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs);
         assertions.checkField("externalAttributionConfig", externalAttributionConfig);
+        assertions.checkFieldIsNull("clientReportsQueueBudgetConfig");
 
         assertions.checkAll();
     }

@@ -51,6 +51,8 @@ public class StartupParams {
     private long mServerTimeOffsetSeconds;
     private boolean mClientClidsChangedAfterLastIdentifiersUpdate;
     private long nextStartupTime;
+    @Nullable
+    private ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
 
     private final PreferencesClientDbStorage mPreferences;
     @NonNull
@@ -121,6 +123,7 @@ public class StartupParams {
             .getClientClidsChangedAfterLastIdentifiersUpdate(true);
         mServerTimeOffsetSeconds = mPreferences.getServerTimeOffset(0);
         nextStartupTime = mPreferences.getNextStartupTime();
+        clientReportsQueueBudgetConfig = mPreferences.getClientReportsQueueBudgetConfig();
 
         updateAllParamsPreferences();
     }
@@ -315,6 +318,11 @@ public class StartupParams {
         updateServerTimeOffset(clientIdentifiersHolder);
         updateClidsByReceiver(clientIdentifiersHolder);
         nextStartupTime = clientIdentifiersHolder.getNextStartupTime();
+        ClientReportsQueueBudgetConfig incomingBudgetConfig =
+            clientIdentifiersHolder.getClientReportsQueueBudgetConfig();
+        if (incomingBudgetConfig != null) {
+            clientReportsQueueBudgetConfig = incomingBudgetConfig;
+        }
 
         updateAllParamsPreferences();
     }
@@ -334,7 +342,8 @@ public class StartupParams {
             .putClientClidsChangedAfterLastIdentifiersUpdate(mClientClidsChangedAfterLastIdentifiersUpdate)
             .putCustomSdkHosts(customSdkHostsHolder.getCommonResult())
             .putNextStartupTime(nextStartupTime)
-            .putFeatures(featuresHolder.getFeatures());
+            .putFeatures(featuresHolder.getFeatures())
+            .putClientReportsQueueBudgetConfig(clientReportsQueueBudgetConfig);
     }
 
     private void updateClidsByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {

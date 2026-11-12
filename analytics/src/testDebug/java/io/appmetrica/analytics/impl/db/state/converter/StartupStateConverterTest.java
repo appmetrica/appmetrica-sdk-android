@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.db.state.converter;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig;
 import io.appmetrica.analytics.impl.startup.PermissionsCollectingConfig;
@@ -66,6 +67,8 @@ public class StartupStateConverterTest extends CommonTest {
     private ModulesRemoteConfigsConverter modulesRemoteConfigsConverter;
     @Mock
     private ExternalAttributionConfigConverter externalAttributionConfigConverter;
+    @Mock
+    private ClientReportsQueueBudgetConfigConverter clientReportsQueueBudgetConfigConverter;
 
     @InjectMocks
     private StartupStateConverter mConverter;
@@ -102,6 +105,11 @@ public class StartupStateConverterTest extends CommonTest {
         new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
     private final StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfigProtoForNull =
         new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
+    private final ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfigModel =
+        ClientReportsQueueBudgetConfig.create(8L, 0.25);
+    private final StartupStateProtobuf.StartupState.ClientReportsQueueBudgetConfig
+        clientReportsQueueBudgetConfigProto =
+        new StartupStateProtobuf.StartupState.ClientReportsQueueBudgetConfig();
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -133,6 +141,10 @@ public class StartupStateConverterTest extends CommonTest {
             .thenReturn(externalAttributionConfigModel);
         when(externalAttributionConfigConverter.fromModel(null))
             .thenReturn(externalAttributionConfigProtoForNull);
+        when(clientReportsQueueBudgetConfigConverter.fromModel(clientReportsQueueBudgetConfigModel))
+            .thenReturn(clientReportsQueueBudgetConfigProto);
+        when(clientReportsQueueBudgetConfigConverter.toModel(clientReportsQueueBudgetConfigProto))
+            .thenReturn(clientReportsQueueBudgetConfigModel);
     }
 
     @Test
@@ -179,6 +191,7 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.startupUpdateConfig = startupUpdateNanoConfig;
         stateProto.modulesRemoteConfigs = modulesProto;
         stateProto.externalAttributionConfig = externalAttributionConfigProto;
+        stateProto.clientReportsQueueBudgetConfig = clientReportsQueueBudgetConfigProto;
 
         ObjectPropertyAssertions<StartupStateModel> assertions
             = Assertions.INSTANCE.ObjectPropertyAssertions(mConverter.toModel(stateProto));
@@ -224,6 +237,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesModel);
         assertions.checkField("externalAttributionConfig", externalAttributionConfigModel);
+        assertions.checkField("clientReportsQueueBudgetConfig", clientReportsQueueBudgetConfigModel);
 
         assertions.checkAll();
 
@@ -272,6 +286,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesModel)
             .withExternalAttributionConfig(externalAttributionConfigModel)
+            .withClientReportsQueueBudgetConfig(clientReportsQueueBudgetConfigModel)
             .build();
 
         StartupStateProtobuf.StartupState proto = mConverter.fromModel(stateModel);
@@ -324,6 +339,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("startupUpdateConfig", startupUpdateNanoConfig);
         assertions.checkField("modulesRemoteConfigs", modulesProto);
         assertions.checkField("externalAttributionConfig", externalAttributionConfigProto);
+        assertions.checkField("clientReportsQueueBudgetConfig", clientReportsQueueBudgetConfigProto);
 
         assertions.checkAll();
 
@@ -370,6 +386,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withAttributionConfig(null)
             .withCustomSdkHosts(null)
             .withExternalAttributionConfig(null)
+            .withClientReportsQueueBudgetConfig(null)
             .build();
 
         StartupStateProtobuf.StartupState stateProto = mConverter.fromModel(stateModel);
@@ -382,7 +399,8 @@ public class StartupStateConverterTest extends CommonTest {
             "bleCollectingConfig",
             "throttlingConfig",
             "cacheControl",
-            "attribution"
+            "attribution",
+            "clientReportsQueueBudgetConfig"
         );
     }
 

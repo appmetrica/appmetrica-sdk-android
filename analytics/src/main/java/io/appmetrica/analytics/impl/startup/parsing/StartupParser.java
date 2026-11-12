@@ -52,6 +52,8 @@ public class StartupParser {
     private final ModulesRemoteConfigsParser modulesRemoteConfigsParser;
     @NonNull
     private final ExternalAttributionConfigParser externalAttributionConfigParser;
+    @NonNull
+    private final ClientReportsQueueBudgetConfigParser clientReportsQueueBudgetConfigParser;
 
     public StartupParser() {
         this(
@@ -65,7 +67,8 @@ public class StartupParser {
             new AttributionConfigParser(),
             new StartupUpdateConfigParser(),
             new ModulesRemoteConfigsParser(),
-            new ExternalAttributionConfigParser()
+            new ExternalAttributionConfigParser(),
+            new ClientReportsQueueBudgetConfigParser()
         );
     }
 
@@ -81,7 +84,8 @@ public class StartupParser {
         @NonNull AttributionConfigParser attributionConfigParser,
         @NonNull StartupUpdateConfigParser startupUpdateConfigParser,
         @NonNull ModulesRemoteConfigsParser modulesRemoteConfigsParser,
-        @NonNull ExternalAttributionConfigParser externalAttributionConfigParser
+        @NonNull ExternalAttributionConfigParser externalAttributionConfigParser,
+        @NonNull ClientReportsQueueBudgetConfigParser clientReportsQueueBudgetConfigParser
     ) {
         mHostsParser = hostsParser;
         mFeaturesParser = featuresParser;
@@ -94,6 +98,7 @@ public class StartupParser {
         this.startupUpdateConfigParser = startupUpdateConfigParser;
         this.modulesRemoteConfigsParser = modulesRemoteConfigsParser;
         this.externalAttributionConfigParser = externalAttributionConfigParser;
+        this.clientReportsQueueBudgetConfigParser = clientReportsQueueBudgetConfigParser;
     }
 
     public StartupResult parseStartupResponse(final byte[] rawResponse) {
@@ -144,6 +149,7 @@ public class StartupParser {
         startupUpdateConfigParser.parse(result, response);
         modulesRemoteConfigsParser.parse(result, response);
         externalAttributionConfigParser.parse(result, response);
+        clientReportsQueueBudgetConfigParser.parse(result, response);
     }
 
     private void parseDeviceId(@NonNull StartupResult result,

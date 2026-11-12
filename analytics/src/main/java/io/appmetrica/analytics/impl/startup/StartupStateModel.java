@@ -83,6 +83,8 @@ public class StartupStateModel {
     public final Map<String, Object> modulesRemoteConfigs;
     @Nullable
     public final ExternalAttributionConfig externalAttributionConfig;
+    @Nullable
+    public final ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
 
     private StartupStateModel(@NonNull StartupStateBuilder builder) {
         this.uuid = builder.mUuid;
@@ -134,6 +136,7 @@ public class StartupStateModel {
             Collections.<String, Object>emptyMap() :
             builder.modulesRemoteConfigs;
         this.externalAttributionConfig = builder.externalAttributionConfig;
+        this.clientReportsQueueBudgetConfig = builder.clientReportsQueueBudgetConfig;
     }
 
     public StartupStateBuilder buildUpon() {
@@ -172,7 +175,8 @@ public class StartupStateModel {
             .withAttributionConfig(attributionConfig)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
-            .withExternalAttributionConfig(externalAttributionConfig);
+            .withExternalAttributionConfig(externalAttributionConfig)
+            .withClientReportsQueueBudgetConfig(clientReportsQueueBudgetConfig);
     }
 
     @Override
@@ -209,6 +213,7 @@ public class StartupStateModel {
             ", startupUpdateConfig=" + startupUpdateConfig +
             ", modulesRemoteConfigs=" + modulesRemoteConfigs +
             ", externalAttributionConfig=" + externalAttributionConfig +
+            ", clientReportsQueueBudgetConfig=" + clientReportsQueueBudgetConfig +
             '}';
     }
 
@@ -273,6 +278,8 @@ public class StartupStateModel {
         private Map<String, Object> modulesRemoteConfigs;
         @Nullable
         private ExternalAttributionConfig externalAttributionConfig;
+        @Nullable
+        private ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig;
 
         public StartupStateBuilder(@NonNull CollectingFlags collectingFlags) {
             mCollectingFlags = collectingFlags;
@@ -431,6 +438,14 @@ public class StartupStateModel {
             @Nullable ExternalAttributionConfig externalAttributionConfig
         ) {
             this.externalAttributionConfig = externalAttributionConfig;
+            return this;
+        }
+
+        @NonNull
+        public StartupStateBuilder withClientReportsQueueBudgetConfig(
+            @Nullable ClientReportsQueueBudgetConfig clientReportsQueueBudgetConfig
+        ) {
+            this.clientReportsQueueBudgetConfig = clientReportsQueueBudgetConfig;
             return this;
         }
 

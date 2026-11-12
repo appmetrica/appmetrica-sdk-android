@@ -21,6 +21,7 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
+import io.appmetrica.analytics.impl.startup.ClientReportsQueueBudgetConfig;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -60,6 +61,7 @@ public class ReportsHandler {
         @NonNull final CommutationReporterEnvironment commutationReporterEnvironment
     ) {
         this(
+            context,
             appMetricaConnector,
             eventFormer,
             commutationReporterEnvironment,
@@ -68,6 +70,7 @@ public class ReportsHandler {
     }
 
     private ReportsHandler(
+        @NonNull final Context context,
         @NonNull final AppMetricaConnector appMetricaConnector,
         @NonNull final UnhandledExceptionEventFormer eventFormer,
         @NonNull final CommutationReporterEnvironment commutationReporterEnvironment,
@@ -78,7 +81,11 @@ public class ReportsHandler {
             eventFormer,
             commutationReporterEnvironment,
             serviceCallableFactory,
-            new ReportsSender(appMetricaConnector, serviceCallableFactory)
+            new ReportsSender(
+                appMetricaConnector,
+                serviceCallableFactory,
+                createQueueBudget(context)
+            )
         );
     }
 
@@ -390,5 +397,22 @@ public class ReportsHandler {
     @NonNull
     ReporterEnvironment getCommutationReporterEnvironment() {
         return mCommutationReportEnvironment;
+    }
+
+    @NonNull
+    private static ClientReportsQueueBudget createQueueBudget(@NonNull final Context context) {
+        ClientReportsQueueBudgetConfig config = ClientServiceLocator.getInstance()
+            .getPreferencesClientDbStorage(context)
+            .getClientReportsQueueBudgetConfig();
+        ClientReportsQueueBudgetConfig effective =
+            config != null ? config : ClientReportsQueueBudgetConfig.DEFAULT;
+        Long limitBytes = effective.toByteLimit();
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Client reports queue budget from prefs: maxSizeMiB=" + effective.getMaxSizeMiB()
+                + " heapFraction=" + effective.getHeapFraction()
+                + " limitBytes=" + limitBytes
+        );
+        return new ClientReportsQueueBudget(limitBytes);
     }
 }

@@ -58,6 +58,18 @@ object JsonUtils {
     }
 
     @JvmStatic
+    fun JSONObject?.optDoubleOrNull(key: String): Double? {
+        if (this?.has(key) == true) {
+            try {
+                return this.getDouble(key)
+            } catch (e: Throwable) {
+                DebugLogger.error(TAG, e, e.message)
+            }
+        }
+        return null
+    }
+
+    @JvmStatic
     fun JSONObject?.optStringOrNullable(key: String, fallback: String?): String? =
         this.optStringOrNull(key) ?: fallback
 
