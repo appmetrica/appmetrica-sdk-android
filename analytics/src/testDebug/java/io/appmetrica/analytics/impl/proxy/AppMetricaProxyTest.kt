@@ -14,6 +14,7 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ExternalAttribution
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
+import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.coreapi.event.AppMetricaEvent
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
@@ -42,6 +43,7 @@ import io.appmetrica.analytics.testutils.MockProvider
 import io.appmetrica.gradle.androidtestutils.rules.ContextRule
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,6 +56,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
@@ -126,6 +129,59 @@ internal class AppMetricaProxyTest : CommonTest() {
         order.verify(synchronousStageExecutor).activate(applicationContext, config)
         order.verify(provider).markActivated()
         verify(impl).activateFull(mergedConfig)
+    }
+
+    @Test
+    fun `activate posts to cached executor`() {
+        val initialExecutor: IHandlerExecutor = mock()
+        val replacementExecutor: IHandlerExecutor = mock()
+        val executorProvider = ClientServiceLocator.getInstance().clientExecutorProvider
+        whenever(executorProvider.defaultExecutor).thenReturn(initialExecutor)
+        proxy = createProxy()
+        whenever(executorProvider.defaultExecutor).thenReturn(replacementExecutor)
+        val config: AppMetricaConfig = mock()
+        val mergedConfig: AppMetricaConfig = mock()
+        whenever(defaultOneShotMetricaConfig.mergeWithUserConfig(config)).thenReturn(mergedConfig)
+
+        proxy.activate(context, config)
+
+        val runnableCaptor = argumentCaptor<Runnable>()
+        verify(initialExecutor).post(runnableCaptor.capture())
+        verify(replacementExecutor, never()).post(any())
+        verify(defaultOneShotMetricaConfig, never()).mergeWithUserConfig(any())
+        verify(impl, never()).activateFull(any<AppMetricaConfig>())
+
+        runnableCaptor.firstValue.run()
+
+        verify(defaultOneShotMetricaConfig).mergeWithUserConfig(config)
+        verify(impl).activateFull(mergedConfig)
+    }
+
+    @Test
+    fun `activate propagates validation and other task failures`() {
+        listOf<Throwable>(
+            ValidationException("validation"),
+            IllegalStateException("activation"),
+            AssertionError("activation")
+        ).forEach { failure ->
+            val executor: IHandlerExecutor = mock()
+            whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
+            proxy = createProxy()
+            val config: AppMetricaConfig = mock()
+            val mergedConfig: AppMetricaConfig = mock()
+            val facade: AppMetricaFacade = mock()
+            whenever(defaultOneShotMetricaConfig.mergeWithUserConfig(config)).thenReturn(mergedConfig)
+            whenever(provider.getInitializedImpl(applicationContext)).thenReturn(facade)
+            doThrow(failure).whenever(facade).activateFull(mergedConfig)
+
+            proxy.activate(context, config)
+
+            val runnableCaptor = argumentCaptor<Runnable>()
+            verify(executor).post(runnableCaptor.capture())
+            verify(facade, never()).activateFull(any<AppMetricaConfig>())
+            assertThatThrownBy { runnableCaptor.firstValue.run() }
+                .isSameAs(failure)
+        }
     }
 
     @Test
@@ -338,7 +394,7 @@ internal class AppMetricaProxyTest : CommonTest() {
             verifyNoMoreInteractions(executor)
             storage.verifyNoInteractions()
             verifyNoInteractions(impl, logger, mainReporter)
-            (tasks.allValues[0] as SafeRunnable).runSafety()
+            tasks.allValues[0].run()
             verify(impl).activateFull(mergedConfig)
             storage.verifyNoInteractions()
             (tasks.allValues[1] as SafeRunnable).runSafety()

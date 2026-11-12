@@ -80,7 +80,8 @@ internal class AppMetricaProxy @VisibleForTesting internal constructor(
     fun activate(context: Context, config: AppMetricaConfig) {
         barrier.activate(context, config)
         synchronousStageExecutor.activate(context.applicationContext, config)
-        dispatchSafely {
+        // Do not catch or suppress activation exceptions here.
+        executor.post {
             provider.getInitializedImpl(context.applicationContext).activateFull(
                 defaultOneShotConfig.mergeWithUserConfig(config)
             )
