@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.MatrixCursor
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor
 import io.appmetrica.analytics.coreutils.internal.limitation.BytesTrimmer
@@ -17,6 +18,7 @@ import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventDescriptionToBytesConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.events.EventTrigger
+import io.appmetrica.analytics.impl.network.http.ModuleSslSocketFactoryProvider
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender
@@ -62,8 +64,6 @@ import java.nio.charset.Charset
 import java.util.UUID
 import java.util.function.Predicate
 import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 @SuppressLint("RobolectricUsage") // Database interactions
 @RunWith(RobolectricTestRunner::class)
@@ -256,15 +256,14 @@ internal class ReportTaskTest : CommonTest() {
     }
 
     @Test
-    fun sslSocketFactoryAndTrustManagerComeFromProvider() {
-        val sslSocketFactory = mock<SSLSocketFactory>()
-        val trustManager = mock<X509TrustManager>()
-        val provider = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
-        whenever(provider.sslSocketFactory).thenReturn(sslSocketFactory)
-        whenever(provider.trustManager).thenReturn(trustManager)
+    fun `TLS snapshot is forwarded with one provider read`() {
+        val expected = SslConfiguration(mock(), mock())
+        val provider: ModuleSslSocketFactoryProvider = mock()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(provider)
+        whenever(provider.sslConfiguration).thenReturn(expected)
 
-        assertThat(reportTask.sslSocketFactory).isSameAs(sslSocketFactory)
-        assertThat(reportTask.trustManager).isSameAs(trustManager)
+        assertThat(reportTask.sslConfiguration).isSameAs(expected)
+        verify(provider).sslConfiguration
     }
 
     @Test

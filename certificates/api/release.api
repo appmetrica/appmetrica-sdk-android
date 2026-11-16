@@ -10,8 +10,7 @@ public final class io.appmetrica.analytics.certificates.internal.CertificatesSer
     public <init>()
     public [NonNull] String getIdentifier()
     public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper> getRemoteConfigExtensionConfiguration()
-    public [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
-    public [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslConfiguration getSslConfiguration()
     public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper>)
 }
 

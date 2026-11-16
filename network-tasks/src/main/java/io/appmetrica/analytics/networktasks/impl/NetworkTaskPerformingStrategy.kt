@@ -49,13 +49,14 @@ internal class NetworkTaskPerformingStrategy {
                     }
                 }
             }
+            val sslConfiguration = task.sslConfiguration
             val client = NetworkClientBuilder()
                 .withSettings(
                     NetworkClientSettings.Builder()
                         .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
                         .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
-                        .withSslSocketFactory(task.sslSocketFactory)
-                        .withTrustManager(task.trustManager)
+                        .withSslSocketFactory(sslConfiguration.sslSocketFactory)
+                        .withTrustManager(sslConfiguration.trustManager)
                         .build()
                 )
                 .build()

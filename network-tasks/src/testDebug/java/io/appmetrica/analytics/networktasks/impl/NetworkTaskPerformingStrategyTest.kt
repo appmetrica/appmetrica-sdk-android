@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networktasks.impl
 
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.network.internal.NetworkClientBuilder
 import io.appmetrica.analytics.networkapi.Call
 import io.appmetrica.analytics.networkapi.NetworkClient
@@ -27,6 +28,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -65,13 +67,13 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
     }
     private val sslSocketFactory = mock<SSLSocketFactory>()
     private val trustManager = mock<X509TrustManager>()
+    private val sslConfiguration = SslConfiguration(sslSocketFactory, trustManager)
     private val networkTask = mock<NetworkTask> {
         on { this.requestDataHolder } doReturn requestDataHolder
         on { this.responseDataHolder } doReturn responseDataHolder
         on { this.onPerformRequest() } doReturn true
         on { this.url } doReturn url
-        on { this.sslSocketFactory } doReturn sslSocketFactory
-        on { this.trustManager } doReturn trustManager
+        on { this.sslConfiguration } doReturn sslConfiguration
         on { this.userAgent } doReturn userAgent
         on { this.shouldTryNextHost() } doReturn false
         on { this.failureReason } doReturn AttemptFailureReason.UNCLASSIFIED
@@ -95,8 +97,8 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         MockedConstructionRule(NetworkClientSettings.Builder::class.java) { mock, _ ->
             whenever(mock.withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
             whenever(mock.withReadTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
-            whenever(mock.withSslSocketFactory(sslSocketFactory)).thenReturn(mock)
-            whenever(mock.withTrustManager(trustManager)).thenReturn(mock)
+            whenever(mock.withSslSocketFactory(anyOrNull())).thenReturn(mock)
+            whenever(mock.withTrustManager(anyOrNull())).thenReturn(mock)
             whenever(mock.build()).thenReturn(networkClientSettings)
         }
 
@@ -137,6 +139,16 @@ internal class NetworkTaskPerformingStrategyTest : CommonTest() {
         verify(settingsBuilder).withSslSocketFactory(sslSocketFactory)
         verify(settingsBuilder).withTrustManager(trustManager)
         verify(newClientBuilder.constructionMock.constructed()[0]).withSettings(networkClientSettings)
+        verify(networkTask).sslConfiguration
+
+        whenever(networkTask.sslConfiguration).thenReturn(SslConfiguration.EMPTY)
+        strategy.performRequest(networkTask)
+
+        val emptySettingsBuilder = networkClientSettingsBuilderRule.constructionMock.constructed()[1]
+        verify(emptySettingsBuilder).withSslSocketFactory(null)
+        verify(emptySettingsBuilder).withTrustManager(null)
+        verify(newClientBuilder.constructionMock.constructed()[1]).withSettings(networkClientSettings)
+        verify(networkTask, times(2)).sslConfiguration
     }
 
     @Test

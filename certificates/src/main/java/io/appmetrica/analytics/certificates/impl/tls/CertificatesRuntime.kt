@@ -3,6 +3,7 @@ package io.appmetrica.analytics.certificates.impl.tls
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import javax.net.ssl.SSLSocketFactory
@@ -25,11 +26,7 @@ internal class CertificatesRuntime(
         private set
 
     @Volatile
-    var sslSocketFactory: SSLSocketFactory? = null
-        private set
-
-    @Volatile
-    var trustManager: X509TrustManager? = null
+    var sslConfiguration: SslConfiguration = SslConfiguration.EMPTY
         private set
 
     @Synchronized
@@ -66,16 +63,16 @@ internal class CertificatesRuntime(
     internal fun reset() {
         serviceContext = null
         config = ServiceSideNetworkCertificatesConfig()
-        sslSocketFactory = null
-        trustManager = null
+        sslConfiguration = SslConfiguration.EMPTY
     }
 
     private fun isDesiredStateReached(): Boolean {
         val context = serviceContext?.context
+        val configuration = sslConfiguration
         return if (context != null && config.enabled) {
-            sslSocketFactory != null && trustManager != null
+            configuration.sslSocketFactory != null && configuration.trustManager != null
         } else {
-            sslSocketFactory == null && trustManager == null
+            configuration.sslSocketFactory == null && configuration.trustManager == null
         }
     }
 
@@ -83,26 +80,22 @@ internal class CertificatesRuntime(
         val context = serviceContext?.context
         if (context == null || !config.enabled) {
             DebugLogger.info(tag, "rebuild: disable TLS override (enabled=${config.enabled})")
-            sslSocketFactory = null
-            trustManager = null
+            sslConfiguration = SslConfiguration.EMPTY
             return
         }
         try {
             val createdTrustManager = createTrustManager(context)
             if (createdTrustManager == null) {
                 DebugLogger.info(tag, "rebuild: failed to create trust manager")
-                sslSocketFactory = null
-                trustManager = null
+                sslConfiguration = SslConfiguration.EMPTY
                 return
             }
             val createdSocketFactory = createSocketFactory(createdTrustManager)
-            trustManager = createdTrustManager
-            sslSocketFactory = createdSocketFactory
+            sslConfiguration = SslConfiguration(createdSocketFactory, createdTrustManager)
             DebugLogger.info(tag, "rebuild: TLS ready")
         } catch (throwable: Throwable) {
             DebugLogger.error(tag, throwable, "rebuild: failed to create TLS pair")
-            sslSocketFactory = null
-            trustManager = null
+            sslConfiguration = SslConfiguration.EMPTY
         }
     }
 }

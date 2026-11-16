@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -8,9 +9,8 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
+import org.mockito.kotlin.verify
 import java.util.concurrent.Executor
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 class NetworkTaskTest : CommonTest() {
 
@@ -19,8 +19,7 @@ class NetworkTaskTest : CommonTest() {
     private val responseDataHolder = mock<ResponseDataHolder>()
     private val fullUrlFormer = mock<FullUrlFormer<*>>()
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
-    private val sslSocketFactory = mock<SSLSocketFactory>()
-    private val trustManager = mock<X509TrustManager>()
+    private val sslConfiguration = SslConfiguration(mock(), mock())
     private val description = "some description"
     private val connectionBasedExecutionPolicy = mock<IExecutionPolicy>()
     private val exponentialBackoffPolicy = mock<ExponentialBackoffPolicy>()
@@ -29,8 +28,7 @@ class NetworkTaskTest : CommonTest() {
         on { this.requestDataHolder } doReturn requestDataHolder
         on { this.responseDataHolder } doReturn responseDataHolder
         on { this.retryPolicyConfig } doReturn retryPolicyConfig
-        on { this.sslSocketFactory } doReturn sslSocketFactory
-        on { this.trustManager } doReturn trustManager
+        on { this.sslConfiguration } doReturn sslConfiguration
         on { this.description() } doReturn description
     }
     private val firstShouldTryNextHostCondition = mock<NetworkTask.ShouldTryNextHostCondition>()
@@ -102,9 +100,9 @@ class NetworkTaskTest : CommonTest() {
     }
 
     @Test
-    fun sslSocketFactory() {
-        assertThat(networkTask.sslSocketFactory).isEqualTo(sslSocketFactory)
-        assertThat(networkTask.trustManager).isEqualTo(trustManager)
+    fun `ssl configuration delegates to underlying task`() {
+        assertThat(networkTask.sslConfiguration).isSameAs(sslConfiguration)
+        verify(underlyingTask).sslConfiguration
     }
 
     @Test

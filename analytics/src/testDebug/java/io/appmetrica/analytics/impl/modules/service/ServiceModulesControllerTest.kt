@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -50,8 +51,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 internal class ServiceModulesControllerTest : CommonTest() {
 
@@ -789,8 +788,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(lightModule)
         modulesController.initServiceSide(serviceContext, startupState)
 
-        assertThat(holder.sslSocketFactory).isNull()
-        assertThat(holder.trustManager).isNull()
+        assertThat(holder.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -799,12 +797,11 @@ internal class ServiceModulesControllerTest : CommonTest() {
         whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(holder)
         val sslModule = sslSocketFactoryModule()
 
-        assertThat(holder.sslSocketFactory).isNull()
+        assertThat(holder.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         modulesController.registerModule(sslModule)
         modulesController.initServiceSide(serviceContext, startupState)
 
-        assertThat(holder.sslSocketFactory).isSameAs(sslModule.sslSocketFactory)
-        assertThat(holder.trustManager).isSameAs(sslModule.trustManager)
+        assertThat(holder.sslConfiguration).isSameAs(sslModule.sslConfiguration)
     }
 
     @Test
@@ -818,8 +815,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(sslModule)
         modulesController.initServiceSide(serviceContext, startupState)
 
-        assertThat(holder.sslSocketFactory).isNull()
-        assertThat(holder.trustManager).isNull()
+        assertThat(holder.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -832,8 +828,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(sslModule)
         modulesController.initServiceSide(serviceContext, startupState)
 
-        assertThat(holder.sslSocketFactory).isNull()
-        assertThat(holder.trustManager).isNull()
+        assertThat(holder.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -850,12 +845,10 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     private fun sslSocketFactoryModule(): SslSocketFactoryModule {
-        val factory = mock<SSLSocketFactory>()
-        val trust = mock<X509TrustManager>()
+        val configuration = SslConfiguration(mock(), mock())
         return mock<SslSocketFactoryModule> {
             on { identifier } doReturn "certificates-ssl-module"
-            on { sslSocketFactory } doReturn factory
-            on { trustManager } doReturn trust
+            on { sslConfiguration } doReturn configuration
         }
     }
 

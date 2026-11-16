@@ -20,7 +20,6 @@ import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
-import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
 class NetworkTaskStatesTest : CommonTest() {
@@ -32,7 +31,6 @@ class NetworkTaskStatesTest : CommonTest() {
         on { this.hasMoreHosts() } doReturn true
     }
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
-    private val sslSocketFactory = mock<SSLSocketFactory>()
     private val description = "some description"
     private val connectionBasedExecutionPolicy = mock<IExecutionPolicy>()
     private val exponentialBackoffPolicy = mock<ExponentialBackoffPolicy>()
@@ -41,7 +39,6 @@ class NetworkTaskStatesTest : CommonTest() {
         on { this.requestDataHolder } doReturn requestDataHolder
         on { this.responseDataHolder } doReturn responseDataHolder
         on { this.retryPolicyConfig } doReturn retryPolicyConfig
-        on { this.sslSocketFactory } doReturn sslSocketFactory
         on { this.description() } doReturn description
     }
     private val networkTask = NetworkTask(

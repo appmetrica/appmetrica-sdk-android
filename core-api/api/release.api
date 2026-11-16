@@ -403,9 +403,21 @@ public interface io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy {
     public abstract String description()
 }
 
+public final class io.appmetrica.analytics.coreapi.internal.io.SslConfiguration {
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslConfiguration$Companion Companion
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslConfiguration EMPTY
+
+    public <init>([Nullable] javax.net.ssl.SSLSocketFactory, [Nullable] javax.net.ssl.X509TrustManager)
+    public final [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public final [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.io.SslConfiguration$Companion {
+    public <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider {
-    public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
-    public abstract [Nullable] javax.net.ssl.X509TrustManager getTrustManager()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslConfiguration getSslConfiguration()
 }
 
 public enum io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent {

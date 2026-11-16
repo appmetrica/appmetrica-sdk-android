@@ -1,7 +1,9 @@
 package io.appmetrica.analytics.impl
 
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.network.Constants
+import io.appmetrica.analytics.impl.network.http.ModuleSslSocketFactoryProvider
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.request.appenders.StartupParamsAppender
 import io.appmetrica.analytics.impl.startup.StartupError
@@ -91,6 +93,17 @@ internal class StartupTaskTest : CommonTest() {
             responseDataHolder,
             configProvider
         )
+    }
+
+    @Test
+    fun `TLS snapshot is forwarded with one provider read`() {
+        val expected = SslConfiguration(mock(), mock())
+        val provider: ModuleSslSocketFactoryProvider = mock()
+        whenever(GlobalServiceLocator.getInstance().sslSocketFactoryProvider).thenReturn(provider)
+        whenever(provider.sslConfiguration).thenReturn(expected)
+
+        assertThat(startupTask.sslConfiguration).isSameAs(expected)
+        verify(provider).sslConfiguration
     }
 
     @Test
@@ -203,12 +216,5 @@ internal class StartupTaskTest : CommonTest() {
     @Test
     fun getFullUrlFormer() {
         assertThat(startupTask.fullUrlFormer).isEqualTo(fullUrlFormer)
-    }
-
-    @Test
-    fun getSslSocketFactory() {
-        val provider = GlobalServiceLocator.getInstance().sslSocketFactoryProvider
-        assertThat(startupTask.sslSocketFactory).isEqualTo(provider.sslSocketFactory)
-        assertThat(startupTask.trustManager).isEqualTo(provider.trustManager)
     }
 }

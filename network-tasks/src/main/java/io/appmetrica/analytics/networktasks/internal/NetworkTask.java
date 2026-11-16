@@ -3,14 +3,13 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration;
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.attempt.AttemptFailureReason;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
 
 public class NetworkTask {
 
@@ -216,14 +215,9 @@ public class NetworkTask {
         return underlyingTask.getFailureReason();
     }
 
-    @Nullable
-    public SSLSocketFactory getSslSocketFactory() {
-        return underlyingTask.getSslSocketFactory();
-    }
-
-    @Nullable
-    public X509TrustManager getTrustManager() {
-        return underlyingTask.getTrustManager();
+    @NonNull
+    public SslConfiguration getSslConfiguration() {
+        return underlyingTask.getSslConfiguration();
     }
 
     private boolean shouldTryNextHostAllConditionsAreTrue(int responseCode) {

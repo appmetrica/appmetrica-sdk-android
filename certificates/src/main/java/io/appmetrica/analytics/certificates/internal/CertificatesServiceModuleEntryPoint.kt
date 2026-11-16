@@ -7,6 +7,7 @@ import io.appmetrica.analytics.certificates.impl.tls.CertificatesRuntime
 import io.appmetrica.analytics.certificates.internal.ServiceSideNetworkCertificatesConfigWrapper.Companion.toWrapper
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
@@ -14,8 +15,6 @@ import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoi
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 class CertificatesServiceModuleEntryPoint :
     ModuleServiceEntryPoint<ServiceSideNetworkCertificatesConfigWrapper>(),
@@ -37,11 +36,8 @@ class CertificatesServiceModuleEntryPoint :
 
     override val identifier = Constants.MODULE_ID
 
-    override val sslSocketFactory: SSLSocketFactory?
-        get() = runtime.sslSocketFactory
-
-    override val trustManager: X509TrustManager?
-        get() = runtime.trustManager
+    override val sslConfiguration: SslConfiguration
+        get() = runtime.sslConfiguration
 
     override val remoteConfigExtensionConfiguration =
         object : RemoteConfigExtensionConfiguration<ServiceSideNetworkCertificatesConfigWrapper>() {

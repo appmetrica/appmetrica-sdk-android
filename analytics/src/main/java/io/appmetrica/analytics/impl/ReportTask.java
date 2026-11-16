@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.constants.Constants;
@@ -30,8 +31,6 @@ import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session;
 
@@ -318,16 +317,10 @@ public class ReportTask implements UnderlyingNetworkTask {
         return fullUrlFormer;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public SSLSocketFactory getSslSocketFactory() {
-        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslSocketFactory();
-    }
-
-    @Nullable
-    @Override
-    public X509TrustManager getTrustManager() {
-        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getTrustManager();
+    public SslConfiguration getSslConfiguration() {
+        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslConfiguration();
     }
 
     // region overridden methods with default implementation

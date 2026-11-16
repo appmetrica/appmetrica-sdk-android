@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration;
 import io.appmetrica.analytics.impl.network.Constants;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupError;
@@ -16,8 +17,6 @@ import io.appmetrica.analytics.networktasks.internal.RequestDataHolder;
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
 
 public class StartupTask implements UnderlyingNetworkTask {
 
@@ -160,16 +159,10 @@ public class StartupTask implements UnderlyingNetworkTask {
         return fullUrlFormer;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public SSLSocketFactory getSslSocketFactory() {
-        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslSocketFactory();
-    }
-
-    @Nullable
-    @Override
-    public X509TrustManager getTrustManager() {
-        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getTrustManager();
+    public SslConfiguration getSslConfiguration() {
+        return GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().getSslConfiguration();
     }
 
 

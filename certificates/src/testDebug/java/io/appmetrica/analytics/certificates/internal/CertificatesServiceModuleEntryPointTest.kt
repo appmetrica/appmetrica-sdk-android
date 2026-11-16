@@ -3,6 +3,7 @@ package io.appmetrica.analytics.certificates.internal
 import io.appmetrica.analytics.certificates.impl.Constants
 import io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig
 import io.appmetrica.analytics.certificates.testutils.CertificatesServiceContextMocks
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.gradle.testutils.CommonTest
@@ -33,8 +34,7 @@ internal class CertificatesServiceModuleEntryPointTest : CommonTest() {
 
     @Test
     fun `constructor does not create tls objects`() {
-        assertThat(entryPoint.sslSocketFactory).isNull()
-        assertThat(entryPoint.trustManager).isNull()
+        assertThat(entryPoint.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -48,8 +48,7 @@ internal class CertificatesServiceModuleEntryPointTest : CommonTest() {
 
         entryPoint.initServiceSide(serviceContext, initialConfig)
 
-        assertThat(entryPoint.sslSocketFactory).isNull()
-        assertThat(entryPoint.trustManager).isNull()
+        assertThat(entryPoint.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -59,8 +58,9 @@ internal class CertificatesServiceModuleEntryPointTest : CommonTest() {
             on { featuresConfig } doReturn null
         }
         entryPoint.initServiceSide(serviceContext, initialConfig)
-        assertThat(entryPoint.sslSocketFactory).isNotNull()
-        assertThat(entryPoint.trustManager).isNotNull()
+        val snapshot = entryPoint.sslConfiguration
+        assertThat(snapshot.sslSocketFactory).isNotNull()
+        assertThat(snapshot.trustManager).isNotNull()
 
         val updated = ServiceSideNetworkCertificatesConfig(enabled = false)
         val updatedConfig: ModuleRemoteConfig<ServiceSideNetworkCertificatesConfigWrapper?> = mock {
@@ -69,7 +69,6 @@ internal class CertificatesServiceModuleEntryPointTest : CommonTest() {
         entryPoint.remoteConfigExtensionConfiguration.getRemoteConfigUpdateListener()
             .onRemoteConfigUpdated(updatedConfig)
 
-        assertThat(entryPoint.sslSocketFactory).isNull()
-        assertThat(entryPoint.trustManager).isNull()
+        assertThat(entryPoint.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 }

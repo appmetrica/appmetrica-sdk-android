@@ -2,6 +2,7 @@ package io.appmetrica.analytics.certificates.impl.tls
 
 import io.appmetrica.analytics.certificates.impl.config.service.model.ServiceSideNetworkCertificatesConfig
 import io.appmetrica.analytics.certificates.testutils.CertificatesServiceContextMocks
+import io.appmetrica.analytics.coreapi.internal.io.SslConfiguration
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -15,6 +16,40 @@ internal class CertificatesRuntimeTest : CommonTest() {
     private val socketFactory: SSLSocketFactory = mock()
     private val otherTrustManager: X509TrustManager = mock()
     private val otherSocketFactory: SSLSocketFactory = mock()
+
+    @Test
+    fun `rebuild publishes complete generations and keeps old snapshots unchanged`() {
+        lateinit var runtime: CertificatesRuntime
+        var expectedDuringBuild = SslConfiguration.EMPTY
+        var nextTrustManager = trustManager
+        var nextSocketFactory = socketFactory
+        runtime = CertificatesRuntime(
+            createTrustManager = { nextTrustManager },
+            createSocketFactory = { manager ->
+                assertThat(manager).isSameAs(nextTrustManager)
+                assertThat(runtime.sslConfiguration).isSameAs(expectedDuringBuild)
+                nextSocketFactory
+            }
+        )
+        runtime.attach(CertificatesServiceContextMocks.serviceContext(), null)
+        val first = runtime.sslConfiguration
+        assertThat(first.sslSocketFactory).isSameAs(socketFactory)
+        assertThat(first.trustManager).isSameAs(trustManager)
+
+        expectedDuringBuild = first
+        nextTrustManager = otherTrustManager
+        nextSocketFactory = otherSocketFactory
+        runtime.attach(CertificatesServiceContextMocks.serviceContext(), null)
+        val second = runtime.sslConfiguration
+        assertThat(second.sslSocketFactory).isSameAs(otherSocketFactory)
+        assertThat(second.trustManager).isSameAs(otherTrustManager)
+        runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
+        assertThat(first.sslSocketFactory).isSameAs(socketFactory)
+        assertThat(first.trustManager).isSameAs(trustManager)
+        assertThat(second.sslSocketFactory).isSameAs(otherSocketFactory)
+        assertThat(second.trustManager).isSameAs(otherTrustManager)
+    }
 
     @Test
     fun `lifecycle skip rebuild failure and replay`() {
@@ -33,38 +68,43 @@ internal class CertificatesRuntimeTest : CommonTest() {
             },
         )
 
-        // update before attach: no context → both null, factory not used
+        // Disabled update before attach: no context, factory not used.
+        runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
+        assertThat(trustCalls).isEqualTo(0)
+        assertThat(factoryCalls).isEqualTo(0)
+
+        // Enabled update before attach also keeps the empty configuration.
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         assertThat(trustCalls).isEqualTo(0)
         assertThat(factoryCalls).isEqualTo(0)
 
         val serviceContext = CertificatesServiceContextMocks.serviceContext()
         runtime.attach(serviceContext, ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
         assertThat(trustCalls).isEqualTo(1)
         assertThat(factoryCalls).isEqualTo(1)
 
         // same enabled replay: identities kept, no rebuild
-        val factoryAfterSuccess = runtime.sslSocketFactory
-        val managerAfterSuccess = runtime.trustManager
+        val configurationAfterSuccess = runtime.sslConfiguration
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isSameAs(factoryAfterSuccess)
-        assertThat(runtime.trustManager).isSameAs(managerAfterSuccess)
+        assertThat(runtime.sslConfiguration).isSameAs(configurationAfterSuccess)
         assertThat(trustCalls).isEqualTo(1)
         assertThat(factoryCalls).isEqualTo(1)
 
         // disable then enable with another pair
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
+        runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
+        assertThat(trustCalls).isEqualTo(1)
+        assertThat(factoryCalls).isEqualTo(1)
+
         nextTrust = otherTrustManager
         nextFactory = { otherSocketFactory }
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isSameAs(otherSocketFactory)
-        assertThat(runtime.trustManager).isSameAs(otherTrustManager)
+        assertConfiguration(runtime, otherSocketFactory, otherTrustManager)
         assertThat(trustCalls).isEqualTo(2)
         assertThat(factoryCalls).isEqualTo(2)
 
@@ -72,23 +112,20 @@ internal class CertificatesRuntimeTest : CommonTest() {
         nextTrust = null
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         assertThat(trustCalls).isEqualTo(3)
 
         // factory failure clears both; same enabled retries
         nextTrust = trustManager
         nextFactory = { throw IllegalStateException("factory failed") }
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         assertThat(trustCalls).isEqualTo(4)
         assertThat(factoryCalls).isEqualTo(3)
 
         nextFactory = { socketFactory }
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = true))
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
         assertThat(trustCalls).isEqualTo(5)
         assertThat(factoryCalls).isEqualTo(4)
     }
@@ -103,23 +140,19 @@ internal class CertificatesRuntimeTest : CommonTest() {
 
         runtime.attach(serviceContext, null)
         assertThat(runtime.config.enabled).isTrue()
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
 
         runtime.updateConfig(ServiceSideNetworkCertificatesConfig(enabled = false))
         assertThat(runtime.config.enabled).isFalse()
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
 
         runtime.updateConfig(null)
         assertThat(runtime.config.enabled).isTrue()
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
 
         runtime.attach(serviceContext, ServiceSideNetworkCertificatesConfig(enabled = false))
         assertThat(runtime.config.enabled).isFalse()
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
     }
 
     @Test
@@ -143,46 +176,49 @@ internal class CertificatesRuntimeTest : CommonTest() {
         val enabled = ServiceSideNetworkCertificatesConfig(enabled = true)
 
         runtime.attach(firstContext, enabled)
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
         assertThat(trustCalls).isEqualTo(1)
         assertThat(factoryCalls).isEqualTo(1)
 
-        val factoryAfterReady = runtime.sslSocketFactory
-        val managerAfterReady = runtime.trustManager
+        val configurationAfterReady = runtime.sslConfiguration
         runtime.attach(firstContext, enabled)
-        assertThat(runtime.sslSocketFactory).isSameAs(factoryAfterReady)
-        assertThat(runtime.trustManager).isSameAs(managerAfterReady)
+        assertThat(runtime.sslConfiguration).isSameAs(configurationAfterReady)
         assertThat(trustCalls).isEqualTo(1)
         assertThat(factoryCalls).isEqualTo(1)
 
         nextTrust = null
         runtime.attach(secondContext, enabled)
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         assertThat(trustCalls).isEqualTo(2)
         assertThat(factoryCalls).isEqualTo(1)
 
         nextTrust = trustManager
         runtime.attach(secondContext, enabled)
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
         assertThat(trustCalls).isEqualTo(3)
         assertThat(factoryCalls).isEqualTo(2)
 
         nextFactory = { throw IllegalStateException("factory failed") }
         val thirdContext = CertificatesServiceContextMocks.serviceContext()
         runtime.attach(thirdContext, enabled)
-        assertThat(runtime.sslSocketFactory).isNull()
-        assertThat(runtime.trustManager).isNull()
+        assertThat(runtime.sslConfiguration).isSameAs(SslConfiguration.EMPTY)
         assertThat(trustCalls).isEqualTo(4)
         assertThat(factoryCalls).isEqualTo(3)
 
         nextFactory = { socketFactory }
         runtime.attach(thirdContext, enabled)
-        assertThat(runtime.sslSocketFactory).isSameAs(socketFactory)
-        assertThat(runtime.trustManager).isSameAs(trustManager)
+        assertConfiguration(runtime, socketFactory, trustManager)
         assertThat(trustCalls).isEqualTo(5)
         assertThat(factoryCalls).isEqualTo(4)
+    }
+
+    private fun assertConfiguration(
+        runtime: CertificatesRuntime,
+        expectedSocketFactory: SSLSocketFactory,
+        expectedTrustManager: X509TrustManager,
+    ) {
+        val configuration = runtime.sslConfiguration
+        assertThat(configuration.sslSocketFactory).isSameAs(expectedSocketFactory)
+        assertThat(configuration.trustManager).isSameAs(expectedTrustManager)
     }
 }
