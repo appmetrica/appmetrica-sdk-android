@@ -24,6 +24,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import kotlin.jvm.optionals.getOrNull
 
@@ -106,6 +107,15 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
     }
 
     private fun Project.configureKotlin() {
+        val pinnedStdlib = requireNotNull(
+            configurations.getByName("implementation").resolutionStrategy.forcedModules.single {
+                it.group == "org.jetbrains.kotlin" && it.name == "kotlin-stdlib"
+            }.version
+        )
+        configure<KotlinAndroidProjectExtension> {
+            coreLibrariesVersion = pinnedStdlib
+        }
+
         tasks.withType<KotlinCompile> {
             if (name.lowercase().contains("releasekotlin")) {
                 compilerOptions {
