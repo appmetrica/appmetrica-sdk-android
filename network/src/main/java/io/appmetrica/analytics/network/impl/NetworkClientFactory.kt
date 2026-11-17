@@ -18,7 +18,6 @@ internal object NetworkClientFactory {
         val builderClasses = listOfNotNull(
             getCustomNetworkClientBuilderClassName(),
             "io.appmetrica.analytics.networkokhttp.internal.OkHttpNetworkClientBuilder",
-            "io.appmetrica.analytics.networklegacy.internal.LegacyNetworkClientBuilder",
         )
 
         val clientBuilder = builderClasses.firstNotNullOfOrNull { builderClass ->

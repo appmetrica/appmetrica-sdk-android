@@ -131,10 +131,6 @@
         <allow pkg="io\.appmetrica\.analytics\.networkapi\.impl(\..+)?" regex="true"/>
     </subpackage>
 
-    <subpackage name="networklegacy">
-        <allow pkg="io\.appmetrica\.analytics\.networklegacy\.impl(\..+)?" regex="true"/>
-    </subpackage>
-
     <subpackage name="networkokhttp">
         <allow pkg="io\.appmetrica\.analytics\.networkokhttp\.impl(\..+)?" regex="true"/>
     </subpackage>
