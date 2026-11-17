@@ -1,6 +1,5 @@
 # AppMetrica SDK Billing collecting
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-billing:${VERSION}`.
 
 ## Builds

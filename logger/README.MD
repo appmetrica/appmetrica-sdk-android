@@ -1,6 +1,5 @@
 # AppMetrica SDK Logger Module
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-logger:${VERSION}`.
 
 ## Builds

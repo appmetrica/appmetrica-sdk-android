@@ -1,6 +1,5 @@
 # AppMetrica SDK Google Play Services Billing V8 Library Wrapper
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-billing-v8:${VERSION}`.
 
 ## Builds

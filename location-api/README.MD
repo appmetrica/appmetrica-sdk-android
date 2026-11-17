@@ -1,6 +1,5 @@
 # AppMetrica SDK Location API
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-location-api:${VERSION}`.
 
 ## Builds

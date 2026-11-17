@@ -1,6 +1,5 @@
 # AppMetrica SDK Core Utils Module
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-core-utils:${VERSION}`.
 
 ## Builds

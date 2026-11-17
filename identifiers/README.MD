@@ -1,6 +1,5 @@
 # AppMetrica SDK Identifiers
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-identifiers:${VERSION}`.
 
 ## Builds

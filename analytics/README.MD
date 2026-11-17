@@ -1,6 +1,5 @@
 # AppMetrica Analytics module
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics:${VERSION}`.
 
 ## Builds

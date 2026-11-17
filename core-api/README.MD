@@ -1,6 +1,5 @@
 # AppMetrica SDK Core API module
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-core-api:${VERSION}`.
 
 ## Builds

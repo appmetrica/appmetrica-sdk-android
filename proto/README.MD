@@ -2,7 +2,6 @@
 
 **This code is from https://android.googlesource.com/platform/external/protobuf/+/ad2472f14d85d1b2af0ada7610e8afa69c5b4992/javanano/**
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-proto:${VERSION}`.
 
 ## Builds

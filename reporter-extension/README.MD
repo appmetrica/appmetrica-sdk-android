@@ -1,6 +1,5 @@
 # AppMetrica SDK Reporter Extension Module
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-reporter-extension:${VERSION}`.
 
 ## Builds

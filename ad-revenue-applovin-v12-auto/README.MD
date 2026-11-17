@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection Adapter for AppLovin MAX v12 (ILRD)
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-applovin-v12-auto:${VERSION}`.
 
 ## Builds

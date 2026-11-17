@@ -1,6 +1,5 @@
 # AppMetrica SDK Network Tasks
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-network-tasks:${VERSION}`.
 
 ## Builds

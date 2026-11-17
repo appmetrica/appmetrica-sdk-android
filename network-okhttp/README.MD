@@ -1,6 +1,5 @@
 # AppMetrica SDK Network OkHttp
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-network-okhttp:${VERSION}`.
 
 ## Builds

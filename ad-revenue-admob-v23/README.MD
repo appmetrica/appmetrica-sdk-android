@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection Adapter for AdMob v23
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-admob-v23:${VERSION}`.
 
 ## Builds

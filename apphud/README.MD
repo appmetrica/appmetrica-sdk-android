@@ -1,6 +1,5 @@
 # AppMetrica SDK Apphud integration module
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-apphud:${VERSION}`.
 
 ## Builds

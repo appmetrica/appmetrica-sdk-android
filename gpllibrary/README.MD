@@ -1,6 +1,5 @@
 # AppMetrica SDK Google Play Location Library Wrapper
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-gpllibrary:${VERSION}`.
 
 ## Builds

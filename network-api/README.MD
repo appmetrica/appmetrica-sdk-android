@@ -1,6 +1,5 @@
 # AppMetrica SDK Network API
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-network-api:${VERSION}`.
 
 ## Builds

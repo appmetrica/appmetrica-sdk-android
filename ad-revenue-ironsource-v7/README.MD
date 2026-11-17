@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection Adapter for IronSource v7
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-ironsource-v7:${VERSION}`.
 
 ## Builds

@@ -1,6 +1,5 @@
 # AppMetrica NDK Crashes API
 
-**Required module**.
 Maven: `io.appmetrica.analytics:ndkcrashes-api:${VERSION}`.
 
 Minimum supported version of ndkcrashes is 3.0.0.

@@ -1,6 +1,5 @@
 # AppMetrica SDK Product Flow
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-product-flow:${VERSION}`.
 
 ## Builds

@@ -1,6 +1,5 @@
 # AppMetrica SDK Certificates
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-certificates:${VERSION}`.
 
 Provides an optional additional TLS trust path for AppMetrica SDK network

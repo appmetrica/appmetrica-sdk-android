@@ -1,7 +1,5 @@
 # AppMetrica NDK Crashes
 
-**Optional module**.
-
 This library adds ability to “AppMetrica SDK” to handle native crashes on Android.
 It is based on [Crashpad](https://chromium.googlesource.com/crashpad/crashpad/+/refs/heads/main) library and redistribute it in binary form.
 All changes in Crashpad code are indicated by the notice “//change for AppMetrica”.

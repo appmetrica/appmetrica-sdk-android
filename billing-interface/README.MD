@@ -1,6 +1,5 @@
 # AppMetrica SDK Billing API
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-billing-interface:${VERSION}`.
 
 ## Builds

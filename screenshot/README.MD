@@ -1,6 +1,5 @@
 # AppMetrica SDK Screenshot Listener Functionality
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-screenshot:${VERSION}`.
 
 ## Builds

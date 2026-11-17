@@ -1,6 +1,5 @@
 # AppMetrica SDK AppSetID
 
-**Required module**.
 Maven: `io.appmetrica.analytics:analytics-appsetid:${VERSION}`.
 
 ## Builds

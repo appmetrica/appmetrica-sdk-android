@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection Adapter for Other Networks
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-other:${VERSION}`.
 
 ## Builds

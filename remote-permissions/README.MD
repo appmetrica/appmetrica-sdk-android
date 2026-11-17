@@ -1,6 +1,5 @@
 # AppMetrica SDK Remote Permissions Functionality
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-remote-permissions:${VERSION}`.
 
 ## Builds

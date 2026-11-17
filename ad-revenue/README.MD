@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue:${VERSION}`.
 
 ## Builds

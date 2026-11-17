@@ -1,6 +1,5 @@
 # AppMetrica SDK Ad Revenue Auto Collection Adapter for Fyber v3
 
-**Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-fyber-v3:${VERSION}`.
 
 ## Builds
