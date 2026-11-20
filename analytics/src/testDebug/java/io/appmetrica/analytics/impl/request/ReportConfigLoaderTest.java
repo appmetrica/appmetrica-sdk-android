@@ -104,7 +104,7 @@ public class ReportConfigLoaderTest extends CommonTest {
                 null,
                 null,
                 null,
-                5,
+                1,
                 null,
                 null,
                 null,

@@ -84,6 +84,22 @@ public class SessionTests extends CommonTest {
     }
 
     @Test
+    public void expiresAtDefaultForegroundTimeout() {
+        Session session = createForegroundSession(10);
+        long timeoutDeadline = SLEEP_START_TIME + 10_000L;
+        assertThat(session.isExpired(timeoutDeadline - 1, timeoutDeadline)).isFalse();
+        assertThat(session.isExpired(timeoutDeadline, timeoutDeadline)).isTrue();
+    }
+
+    @Test
+    public void expiresAtConfiguredForegroundTimeout() {
+        Session session = createForegroundSession(30);
+        long timeoutDeadline = SLEEP_START_TIME + 30_000L;
+        assertThat(session.isExpired(timeoutDeadline - 1, timeoutDeadline)).isFalse();
+        assertThat(session.isExpired(timeoutDeadline, timeoutDeadline)).isTrue();
+    }
+
+    @Test
     public void testExpiredAfterReboot() {
         Long lastActiveTime = 345454656L;
         Long lastActiveTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(lastActiveTime);
@@ -185,6 +201,18 @@ public class SessionTests extends CommonTest {
         requestParameters.put("key2", "value2");
         contentValues.put("report_request_parameters", requestParameters.toString());
         return contentValues;
+    }
+
+    private Session createForegroundSession(int timeoutSeconds) {
+        ReportRequestConfig config = mock(ReportRequestConfig.class);
+        when(config.getSessionTimeout()).thenReturn(timeoutSeconds);
+        doReturn(config).when(mComponentUnit).getFreshReportRequestConfig();
+        SessionArgumentsInternal arguments = SessionArgumentsInternal
+            .newBuilder(SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).build())
+            .withCreationTime(SESSION_CREATION_TIME)
+            .withSleepStart(SLEEP_START_TIME)
+            .build();
+        return new Session(mComponentUnit, mSessionStorage, arguments, mSystemTimeProvider);
     }
 
     private ReportRequestConfig getRequestConfig() {
