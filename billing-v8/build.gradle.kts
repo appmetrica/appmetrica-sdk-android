@@ -14,6 +14,7 @@ android {
 
 dependencies {
     implementation(project(":billing-interface"))
+    implementation(project(":core-api"))
     implementation(project(":core-utils"))
     implementation(project(":logger"))
 

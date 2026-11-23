@@ -12,91 +12,70 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSend
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
-import io.appmetrica.analytics.billingv8.impl.library.BillingClientStateListenerImpl
+import io.appmetrica.analytics.billingv8.impl.library.BillingConnectionController
+import io.appmetrica.analytics.billingv8.impl.library.BillingPurchaseCollector
 import io.appmetrica.analytics.billingv8.impl.library.PurchasesUpdatedListenerImpl
 import io.appmetrica.analytics.billingv8.impl.storage.BillingInfoManagerImpl
 import io.appmetrica.analytics.billingv8.impl.update.UpdatePolicyImpl
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 
 class BillingLibraryMonitor(
     private val context: Context,
-    private val workerExecutor: Executor,
+    private val workerExecutor: IHandlerExecutor,
     private val uiExecutor: Executor,
     private val billingInfoStorage: BillingInfoStorage,
     private val billingInfoSender: BillingInfoSender,
     private val billingInfoManager: BillingInfoManager = BillingInfoManagerImpl(billingInfoStorage),
-    private val updatePolicy: UpdatePolicy = UpdatePolicyImpl()
-) : BillingMonitor, UpdateBillingProgressCallback {
+    private val updatePolicy: UpdatePolicy = UpdatePolicyImpl(),
+) : BillingMonitor {
 
-    private val tag = "[BillingLibraryMonitor V8]"
     private var billingConfig: BillingConfig? = null
-    private var refreshInProgress = false
 
     @WorkerThread
     override fun onSessionResumed() {
-        try {
-            DebugLogger.info(MODULE_TAG, "onSessionResumed with billingConfig=$billingConfig")
-            updateBilling(billingConfig)
-        } catch (e: Throwable) {
-            DebugLogger.error(tag, "Error occurred during billing library call $e")
-        }
+        DebugLogger.info(MODULE_TAG, "onSessionResumed")
+        billingConfig?.let(connectionController::request)
     }
 
-    @Synchronized
+    @WorkerThread
     override fun onBillingConfigChanged(billingConfig: BillingConfig?) {
-        try {
+        if (this.billingConfig != billingConfig) {
             DebugLogger.info(MODULE_TAG, "onBillingConfigChanged: $billingConfig")
-            if (this.billingConfig == billingConfig) {
-                return
-            }
             this.billingConfig = billingConfig
-            updateBilling(billingConfig)
-        } catch (e: Throwable) {
-            DebugLogger.error(tag, "Error occurred during billing library call $e")
+            if (billingConfig == null) {
+                connectionController.disable()
+            } else {
+                connectionController.request(billingConfig)
+            }
         }
     }
 
-    private fun updateBilling(billingConfig: BillingConfig?) {
-        DebugLogger.info(MODULE_TAG, "updateBilling with billingConfig=$billingConfig")
-        billingConfig ?: return
-        if (refreshInProgress) {
-            DebugLogger.info(MODULE_TAG, "updateBilling is already in progress")
-            return
-        }
-        refreshInProgress = true
-        val billingClient = BillingClient
-            .newBuilder(context)
-            .setListener(PurchasesUpdatedListenerImpl())
-            .enablePendingPurchases(
-                PendingPurchasesParams.newBuilder()
-                    .enableOneTimeProducts()
-                    .build()
-            )
-            .build()
-        billingClient.startConnection(
-            BillingClientStateListenerImpl(
-                billingConfig,
-                billingClient,
-                this@BillingLibraryMonitor,
-                object : UtilsProvider {
-                    override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
-
-                    override fun getUpdatePolicy() = this@BillingLibraryMonitor.updatePolicy
-
-                    override fun getBillingInfoSender() = this@BillingLibraryMonitor.billingInfoSender
-
-                    override fun getUiExecutor() = this@BillingLibraryMonitor.uiExecutor
-
-                    override fun getWorkerExecutor() = this@BillingLibraryMonitor.workerExecutor
-                }
-            )
+    private fun createClient() = BillingClient.newBuilder(context)
+        .setListener(PurchasesUpdatedListenerImpl())
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .build()
         )
+        .build()
+
+    private val utilsProvider = object : UtilsProvider {
+        override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
+
+        override fun getUpdatePolicy() = this@BillingLibraryMonitor.updatePolicy
+
+        override fun getBillingInfoSender() = this@BillingLibraryMonitor.billingInfoSender
+
+        override fun getUiExecutor() = this@BillingLibraryMonitor.uiExecutor
+
+        override fun getWorkerExecutor() = this@BillingLibraryMonitor.workerExecutor
     }
 
-    @Synchronized
-    override fun onUpdateFinished() {
-        refreshInProgress = false
-    }
+    private val connectionController = BillingConnectionController(
+        workerExecutor = workerExecutor,
+        createClient = ::createClient,
+        collect = BillingPurchaseCollector(utilsProvider)::collect,
+    )
 }

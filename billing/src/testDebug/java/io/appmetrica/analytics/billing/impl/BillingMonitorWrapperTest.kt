@@ -17,6 +17,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceCompone
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
@@ -31,6 +32,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -38,13 +40,18 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 internal class BillingMonitorWrapperTest : CommonTest() {
 
     private val context: Context = mock()
-    private val defaultExecutor: IHandlerExecutor = mock()
+    private val workerTasks = ArrayDeque<Runnable>()
+    private val defaultExecutor = mock<IHandlerExecutor> {
+        on { post(any()) } doAnswer {
+            workerTasks.addLast(it.getArgument(0))
+            null
+        }
+    }
     private val uiExecutor: IHandlerExecutor = mock()
     private val reportRunnableExecutor: IHandlerExecutor = mock()
     private val executorProvider: ExecutorProvider = mock {
@@ -98,14 +105,13 @@ internal class BillingMonitorWrapperTest : CommonTest() {
     val billingInfoSenderImplRule = constructionRule<BillingInfoSenderImpl>()
 
     private val billingMonitor: BillingMonitor = mock()
-    private val workerRunnable: Runnable = mock()
 
     @get:Rule
     val billingMonitorProviderRule = constructionRule<BillingMonitorProvider> {
         on {
             get(
                 eq(context),
-                any(),
+                eq(defaultExecutor),
                 eq(uiExecutor),
                 eq(BillingType.LIBRARY_V8),
                 any(),
@@ -124,19 +130,18 @@ internal class BillingMonitorWrapperTest : CommonTest() {
         whenever(applicationStateProvider.registerStickyObserver(any())).thenReturn(ApplicationState.VISIBLE)
 
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
+        assertThat(billingMonitorProviderRule.constructionMock.constructed()).isEmpty()
+        runWorkerTasks()
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isNotEmpty()
-        val workerExecutorCaptor = argumentCaptor<Executor>()
         verify(billingMonitorProviderRule.constructionMock.constructed().single()).get(
             eq(context),
-            workerExecutorCaptor.capture(),
+            eq(defaultExecutor),
             eq(uiExecutor),
             eq(BillingType.LIBRARY_V8),
             any(),
             any()
         )
-        workerExecutorCaptor.firstValue.execute(workerRunnable)
-        verify(defaultExecutor).post(workerRunnable)
         verify(billingMonitor).onBillingConfigChanged(BillingConfig(42, 4242))
         verify(applicationStateProvider).registerStickyObserver(any())
         verify(billingMonitor).onSessionResumed()
@@ -147,11 +152,18 @@ internal class BillingMonitorWrapperTest : CommonTest() {
         whenever(applicationStateProvider.registerStickyObserver(any())).thenReturn(ApplicationState.BACKGROUND)
 
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
+        runWorkerTasks()
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isNotEmpty()
         verify(billingMonitor).onBillingConfigChanged(BillingConfig(42, 4242))
-        verify(applicationStateProvider).registerStickyObserver(any())
+        val observer = argumentCaptor<ApplicationStateObserver>()
+        verify(applicationStateProvider).registerStickyObserver(observer.capture())
         verify(billingMonitor, never()).onSessionResumed()
+
+        observer.firstValue.onApplicationStateChanged(ApplicationState.VISIBLE)
+        verify(billingMonitor, never()).onSessionResumed()
+        runWorkerTasks()
+        verify(billingMonitor).onSessionResumed()
     }
 
     @Test
@@ -160,6 +172,7 @@ internal class BillingMonitorWrapperTest : CommonTest() {
         val wrapper = BillingMonitorWrapper(serviceContext, null)
 
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
+        runWorkerTasks()
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isNotEmpty()
         verify(billingMonitor, never()).onBillingConfigChanged(any())
@@ -172,6 +185,7 @@ internal class BillingMonitorWrapperTest : CommonTest() {
         whenever(applicationStateProvider.registerStickyObserver(any())).thenReturn(ApplicationState.VISIBLE)
 
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
+        runWorkerTasks()
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isNotEmpty()
         verify(billingMonitor).onBillingConfigChanged(BillingConfig(42, 4242))
@@ -185,16 +199,26 @@ internal class BillingMonitorWrapperTest : CommonTest() {
                 firstCollectingInappMaxAgeSeconds = 4343
             )
         )
+        val newBillingConfig = BillingConfig(43, 4343)
         wrapper.updateConfig(newServiceSideRemoteBillingConfig)
+        verify(billingMonitor, never()).onBillingConfigChanged(newBillingConfig)
+        runWorkerTasks()
 
-        verify(billingMonitor).onBillingConfigChanged(BillingConfig(43, 4343))
+        verify(billingMonitor).onBillingConfigChanged(newBillingConfig)
     }
 
     @Test
     fun onMainReporterCreatedIfRevenueAutoTrackingIsDisabled() {
         whenever(serviceComponentModuleConfig.isRevenueAutoTrackingEnabled()).thenReturn(false)
         wrapper.onMainReporterCreated(serviceModuleReporterComponentContext)
+        runWorkerTasks()
 
         assertThat(billingMonitorProviderRule.constructionMock.constructed()).isEmpty()
+    }
+
+    private fun runWorkerTasks() {
+        while (workerTasks.isNotEmpty()) {
+            workerTasks.removeFirst().run()
+        }
     }
 }

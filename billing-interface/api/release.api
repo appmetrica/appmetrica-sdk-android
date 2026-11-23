@@ -90,7 +90,7 @@ public interface io.appmetrica.analytics.billinginterface.internal.library.Utils
     public abstract [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender getBillingInfoSender()
     public abstract [NonNull] java.util.concurrent.Executor getUiExecutor()
     public abstract [NonNull] io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy getUpdatePolicy()
-    public abstract [NonNull] java.util.concurrent.Executor getWorkerExecutor()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getWorkerExecutor()
 }
 
 public interface io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor extends io.appmetrica.analytics.billinginterface.internal.config.BillingConfigChangedListener {

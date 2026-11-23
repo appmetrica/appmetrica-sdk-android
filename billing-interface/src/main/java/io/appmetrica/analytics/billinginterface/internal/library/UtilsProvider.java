@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager;
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender;
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import java.util.concurrent.Executor;
 
 public interface UtilsProvider {
@@ -21,5 +22,5 @@ public interface UtilsProvider {
     Executor getUiExecutor();
 
     @NonNull
-    Executor getWorkerExecutor();
+    IHandlerExecutor getWorkerExecutor();
 }

@@ -6,6 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor
 import io.appmetrica.analytics.billinginterface.internal.monitor.DummyBillingMonitor
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 import io.appmetrica.analytics.billingv8.internal.BillingLibraryMonitor as BillingV8LibraryMonitor
@@ -16,7 +17,7 @@ internal class BillingMonitorProvider {
 
     fun get(
         context: Context,
-        workerExecutor: Executor,
+        workerExecutor: IHandlerExecutor,
         uiExecutor: Executor,
         type: BillingType,
         billingInfoStorage: BillingInfoStorage,

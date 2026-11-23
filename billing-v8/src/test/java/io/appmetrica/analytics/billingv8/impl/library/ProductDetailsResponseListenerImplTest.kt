@@ -8,11 +8,11 @@ import com.android.billingclient.api.QueryProductDetailsResult
 import com.android.billingclient.api.QueryPurchasesParams
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
-import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoInteractions
@@ -20,17 +20,15 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 internal class ProductDetailsResponseListenerImplTest : CommonTest() {
 
-    private val workerExecutor: Executor = mock {
-        on { execute(any<SafeRunnable>()) } doAnswer {
-            (it.getArgument<Any>(0) as Runnable).run()
+    private val workerExecutor: IHandlerExecutor = mock {
+        on { post(any()) } doAnswer {
+            it.getArgument<Runnable>(0).run()
             null
         }
     }
@@ -41,7 +39,9 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
         on { workerExecutor } doReturn workerExecutor
     }
     private val billingInfoSentListener: () -> Unit = mock()
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock {
+        on { isWaitingFor(any()) } doReturn true
+    }
 
     private val purchaseHistoryRecord: Purchase = mock()
     private val purchaseHistoryRecords = listOf(
@@ -56,8 +56,6 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
         on { productDetailsList } doReturn productDetailsList
     }
 
-    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
-
     private val emptyQueryProductDetailsResult: QueryProductDetailsResult = mock {
         on { productDetailsList } doReturn emptyList()
     }
@@ -69,8 +67,7 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
             utilsProvider,
             billingInfoSentListener,
             purchaseHistoryRecords,
-            billingLibraryConnectionHolder,
-            updateBillingProgressCallback
+            billingLibraryConnectionHolder
         )
     }
 
@@ -85,8 +82,9 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
-        verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
-        verify(updateBillingProgressCallback).onUpdateFinished()
+        val calls = inOrder(billingLibraryConnectionHolder)
+        calls.verify(billingLibraryConnectionHolder).markFailed()
+        calls.verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
     }
 
     @Test
@@ -98,8 +96,10 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
                 .build(),
             queryProductDetailsResult
         )
-        verify(billingLibraryConnectionHolder, times(2)).removeListener(any())
-        verify(updateBillingProgressCallback).onUpdateFinished()
+        val calls = inOrder(billingLibraryConnectionHolder)
+        calls.verify(billingLibraryConnectionHolder).markFailed()
+        calls.verify(billingLibraryConnectionHolder).removeListener(any<PurchaseResponseListenerImpl>())
+        calls.verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
     }
 
     @Test
@@ -134,7 +134,7 @@ internal class ProductDetailsResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
+        verify(billingLibraryConnectionHolder, never()).markFailed()
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
-        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 }

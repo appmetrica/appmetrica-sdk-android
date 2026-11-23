@@ -13,7 +13,6 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv8.impl.BillingUtils
 import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.billingv8.impl.ProductTypeParser
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.billingv8.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -24,7 +23,6 @@ internal class PurchaseHistoryResponseListenerImpl(
     private val utilsProvider: UtilsProvider,
     private val type: String,
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
-    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : PurchasesResponseListener {
 
     @UiThread
@@ -32,10 +30,17 @@ internal class PurchaseHistoryResponseListenerImpl(
         billingResult: BillingResult,
         list: List<Purchase>
     ) {
-        utilsProvider.workerExecutor.execute(object : SafeRunnable() {
+        utilsProvider.workerExecutor.post(object : SafeRunnable() {
             override fun runSafety() {
-                processResponse(billingResult, list)
-                billingLibraryConnectionHolder.removeListener(this@PurchaseHistoryResponseListenerImpl)
+                if (!billingLibraryConnectionHolder.isWaitingFor(this@PurchaseHistoryResponseListenerImpl)) return
+                try {
+                    processResponse(billingResult, list)
+                } catch (e: Throwable) {
+                    billingLibraryConnectionHolder.markFailed()
+                    throw e
+                } finally {
+                    billingLibraryConnectionHolder.removeListener(this@PurchaseHistoryResponseListenerImpl)
+                }
             }
         })
     }
@@ -52,7 +57,7 @@ internal class PurchaseHistoryResponseListenerImpl(
                 "list=$purchaseHistoryRecords"
         )
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-            updateBillingProgressCallback.onUpdateFinished()
+            billingLibraryConnectionHolder.markFailed()
             return
         }
         val history = extractBillingInfo(purchaseHistoryRecords)
@@ -61,12 +66,10 @@ internal class PurchaseHistoryResponseListenerImpl(
         )
         if (newBillingInfo.isEmpty()) {
             StorageUpdater.updateStorage(history, newBillingInfo, type, utilsProvider.billingInfoManager)
-            updateBillingProgressCallback.onUpdateFinished()
         } else {
             querySkuDetails(
                 purchaseHistoryRecords,
                 newBillingInfo.keys.toList(),
-                updateBillingProgressCallback
             ) {
                 StorageUpdater.updateStorage(history, newBillingInfo, type, utilsProvider.billingInfoManager)
             }
@@ -96,7 +99,6 @@ internal class PurchaseHistoryResponseListenerImpl(
     private fun querySkuDetails(
         purchaseHistoryRecords: List<Purchase>,
         newSkus: List<String>,
-        updateBillingProgressCallback: UpdateBillingProgressCallback,
         billingInfoSentListener: () -> Unit
     ) {
         val listener = ProductDetailsResponseListenerImpl(
@@ -105,27 +107,28 @@ internal class PurchaseHistoryResponseListenerImpl(
             utilsProvider,
             billingInfoSentListener,
             purchaseHistoryRecords,
-            billingLibraryConnectionHolder,
-            updateBillingProgressCallback
+            billingLibraryConnectionHolder
         )
         billingLibraryConnectionHolder.addListener(listener)
-        if (billingClient.isReady) {
-            billingClient.queryProductDetailsAsync(
-                QueryProductDetailsParams.newBuilder()
-                    .setProductList(
-                        newSkus.map { productId ->
-                            QueryProductDetailsParams.Product.newBuilder()
-                                .setProductId(productId)
-                                .setProductType(type)
-                                .build()
-                        }
-                    )
-                    .build(),
-                listener
-            )
-        } else {
-            billingLibraryConnectionHolder.removeListener(listener)
-            updateBillingProgressCallback.onUpdateFinished()
+        billingLibraryConnectionHolder.startRequest(listener) {
+            if (billingClient.isReady) {
+                billingClient.queryProductDetailsAsync(
+                    QueryProductDetailsParams.newBuilder()
+                        .setProductList(
+                            newSkus.map { productId ->
+                                QueryProductDetailsParams.Product.newBuilder()
+                                    .setProductId(productId)
+                                    .setProductType(type)
+                                    .build()
+                            }
+                        )
+                        .build(),
+                    listener
+                )
+            } else {
+                billingLibraryConnectionHolder.markFailed()
+                billingLibraryConnectionHolder.removeListener(listener)
+            }
         }
     }
 }

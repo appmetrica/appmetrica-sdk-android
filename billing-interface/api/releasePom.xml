@@ -50,6 +50,12 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-core-api</artifactId>
+      <version>9.0.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
       <version>9.0.0</version>
       <scope>runtime</scope>

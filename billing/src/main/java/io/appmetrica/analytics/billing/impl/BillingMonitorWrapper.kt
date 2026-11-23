@@ -7,10 +7,10 @@ import io.appmetrica.analytics.billing.impl.storage.AutoInappCollectingInfoSeria
 import io.appmetrica.analytics.billing.impl.storage.BillingInfoStorageImpl
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor
-import io.appmetrica.analytics.coreapi.internal.executors.QueuedExecutor
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycleListener
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
@@ -20,23 +20,24 @@ internal class BillingMonitorWrapper(
 ) : ServiceModuleReporterComponentLifecycleListener {
 
     private val tag = "[BillingMonitorWrapper]"
+    private val workerExecutor = serviceContext.executorProvider.getDefaultExecutor()
 
     private var billingMonitor: BillingMonitor? = null
 
-    fun updateConfig(config: ServiceSideRemoteBillingConfig?) {
+    fun updateConfig(config: ServiceSideRemoteBillingConfig?) = onWorker {
         this.config = config.also {
             billingMonitor?.onBillingConfigChanged(config?.toBillingConfig())
         }
     }
 
-    override fun onMainReporterCreated(context: ServiceModuleReporterComponentContext) {
+    override fun onMainReporterCreated(context: ServiceModuleReporterComponentContext) = onWorker {
         if (!context.config.isRevenueAutoTrackingEnabled()) {
-            return
+            return@onWorker
         }
 
-        billingMonitor = BillingMonitorProvider().get(
+        val monitor = BillingMonitorProvider().get(
             serviceContext.context,
-            QueuedExecutor(serviceContext.executorProvider.getDefaultExecutor()),
+            workerExecutor,
             serviceContext.executorProvider.getUiExecutor(),
             BillingTypeDetector.getBillingType(),
             BillingInfoStorageImpl(
@@ -49,13 +50,14 @@ internal class BillingMonitorWrapper(
             BillingInfoSenderImpl(
                 context.reporter,
                 serviceContext.executorProvider.getReportRunnableExecutor(),
-            )
+            ),
         )
 
-        updateConfig(config)
+        billingMonitor = monitor
+        monitor.onBillingConfigChanged(config?.toBillingConfig())
 
         val currentState = serviceContext.applicationStateProvider.registerStickyObserver { state ->
-            checkStateAndCollectAutoInapp(state)
+            onWorker { checkStateAndCollectAutoInapp(state) }
         }
         checkStateAndCollectAutoInapp(currentState)
     }
@@ -70,6 +72,12 @@ internal class BillingMonitorWrapper(
                 DebugLogger.error(tag, "Error occurred during billing library call $e")
             }
         }
+    }
+
+    private fun onWorker(action: () -> Unit) {
+        workerExecutor.post(object : SafeRunnable() {
+            override fun runSafety() = action()
+        })
     }
 
     private fun ServiceSideRemoteBillingConfig.toBillingConfig() = BillingConfig(

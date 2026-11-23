@@ -5,6 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingType
 import io.appmetrica.analytics.billinginterface.internal.monitor.DummyBillingMonitor
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -18,7 +19,7 @@ import io.appmetrica.analytics.billingv8.internal.BillingLibraryMonitor as Billi
 internal class BillingMonitorProviderTest : CommonTest() {
 
     private val context: Context = mock()
-    private val workerExecutor: Executor = mock()
+    private val workerExecutor: IHandlerExecutor = mock()
     private val uiExecutor: Executor = mock()
     private val billingInfoStorage: BillingInfoStorage = mock()
     private val billingInfoSender: BillingInfoSender = mock()

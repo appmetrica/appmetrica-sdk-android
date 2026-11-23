@@ -12,7 +12,6 @@ import com.android.billingclient.api.QueryPurchasesParams
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv8.impl.BillingUtils
 import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -23,7 +22,6 @@ internal class ProductDetailsResponseListenerImpl(
     private val billingInfoSentListener: () -> Unit,
     private val purchaseHistoryRecords: List<Purchase>,
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
-    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : ProductDetailsResponseListener {
 
     @UiThread
@@ -31,10 +29,17 @@ internal class ProductDetailsResponseListenerImpl(
         billingResult: BillingResult,
         productDetails: QueryProductDetailsResult
     ) {
-        utilsProvider.workerExecutor.execute(object : SafeRunnable() {
+        utilsProvider.workerExecutor.post(object : SafeRunnable() {
             override fun runSafety() {
-                processResponse(billingResult, productDetails.productDetailsList)
-                billingLibraryConnectionHolder.removeListener(this@ProductDetailsResponseListenerImpl)
+                if (!billingLibraryConnectionHolder.isWaitingFor(this@ProductDetailsResponseListenerImpl)) return
+                try {
+                    processResponse(billingResult, productDetails.productDetailsList)
+                } catch (e: Throwable) {
+                    billingLibraryConnectionHolder.markFailed()
+                    throw e
+                } finally {
+                    billingLibraryConnectionHolder.removeListener(this@ProductDetailsResponseListenerImpl)
+                }
             }
         })
     }
@@ -50,8 +55,11 @@ internal class ProductDetailsResponseListenerImpl(
                 "result=${BillingUtils.toString(billingResult)}, " +
                 "list=$productDetails"
         )
-        if (billingResult.responseCode != BillingClient.BillingResponseCode.OK || productDetails.isEmpty()) {
-            updateBillingProgressCallback.onUpdateFinished()
+        if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+            billingLibraryConnectionHolder.markFailed()
+            return
+        }
+        if (productDetails.isEmpty()) {
             return
         }
         val listener = PurchaseResponseListenerImpl(
@@ -60,20 +68,21 @@ internal class ProductDetailsResponseListenerImpl(
             billingInfoSentListener,
             purchaseHistoryRecords,
             productDetails,
-            billingLibraryConnectionHolder,
-            updateBillingProgressCallback
+            billingLibraryConnectionHolder
         )
         billingLibraryConnectionHolder.addListener(listener)
-        if (billingClient.isReady) {
-            billingClient.queryPurchasesAsync(
-                QueryPurchasesParams.newBuilder()
-                    .setProductType(type)
-                    .build(),
-                listener
-            )
-        } else {
-            billingLibraryConnectionHolder.removeListener(listener)
-            updateBillingProgressCallback.onUpdateFinished()
+        billingLibraryConnectionHolder.startRequest(listener) {
+            if (billingClient.isReady) {
+                billingClient.queryPurchasesAsync(
+                    QueryPurchasesParams.newBuilder()
+                        .setProductType(type)
+                        .build(),
+                    listener
+                )
+            } else {
+                billingLibraryConnectionHolder.markFailed()
+                billingLibraryConnectionHolder.removeListener(listener)
+            }
         }
     }
 }

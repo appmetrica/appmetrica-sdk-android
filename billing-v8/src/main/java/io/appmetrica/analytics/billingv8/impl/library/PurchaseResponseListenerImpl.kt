@@ -10,7 +10,6 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv8.impl.BillingUtils
 import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.billingv8.impl.ProductInfoCreator
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -21,17 +20,23 @@ internal class PurchaseResponseListenerImpl(
     private val purchaseHistoryRecords: List<Purchase>,
     private val productDetails: List<ProductDetails>,
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
-    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : PurchasesResponseListener {
 
     override fun onQueryPurchasesResponse(
         billingResult: BillingResult,
         purchases: List<Purchase>
     ) {
-        utilsProvider.workerExecutor.execute(object : SafeRunnable() {
+        utilsProvider.workerExecutor.post(object : SafeRunnable() {
             override fun runSafety() {
-                processResponse(billingResult, purchases)
-                billingLibraryConnectionHolder.removeListener(this@PurchaseResponseListenerImpl)
+                if (!billingLibraryConnectionHolder.isWaitingFor(this@PurchaseResponseListenerImpl)) return
+                try {
+                    processResponse(billingResult, purchases)
+                } catch (e: Throwable) {
+                    billingLibraryConnectionHolder.markFailed()
+                    throw e
+                } finally {
+                    billingLibraryConnectionHolder.removeListener(this@PurchaseResponseListenerImpl)
+                }
             }
         })
     }
@@ -48,7 +53,7 @@ internal class PurchaseResponseListenerImpl(
                 "list=$purchases"
         )
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-            updateBillingProgressCallback.onUpdateFinished()
+            billingLibraryConnectionHolder.markFailed()
             return
         }
         val purchasesMap = createPurchasesMap(purchases)
@@ -61,7 +66,6 @@ internal class PurchaseResponseListenerImpl(
         DebugLogger.info(MODULE_TAG, "Product info to send $productInfos")
         utilsProvider.billingInfoSender.sendInfo(productInfos)
         billingInfoSentListener()
-        updateBillingProgressCallback.onUpdateFinished()
     }
 
     @WorkerThread

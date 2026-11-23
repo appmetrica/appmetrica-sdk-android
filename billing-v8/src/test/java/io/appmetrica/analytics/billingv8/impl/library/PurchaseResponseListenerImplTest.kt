@@ -8,12 +8,12 @@ import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
-import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
-import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
@@ -22,14 +22,13 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
-import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 internal class PurchaseResponseListenerImplTest : CommonTest() {
 
-    private val workerExecutor: Executor = mock {
-        on { execute(any<SafeRunnable>()) } doAnswer {
-            (it.getArgument<Any>(0) as Runnable).run()
+    private val workerExecutor: IHandlerExecutor = mock {
+        on { post(any()) } doAnswer {
+            it.getArgument<Runnable>(0).run()
             null
         }
     }
@@ -39,7 +38,9 @@ internal class PurchaseResponseListenerImplTest : CommonTest() {
         on { workerExecutor } doReturn workerExecutor
     }
     private val billingInfoSentListener: () -> Unit = mock()
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock {
+        on { isWaitingFor(any()) } doReturn true
+    }
 
     private val firstPurchase: Purchase = mock {
         on { products } doReturn listOf("sku1")
@@ -153,8 +154,6 @@ internal class PurchaseResponseListenerImplTest : CommonTest() {
         Purchase("{\"productId\":\"sku1\", \"autoRenewing\":\"true\"}", "purchasesSignature")
     )
 
-    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
-
     private val purchaseResponseListener by setUp {
         PurchaseResponseListenerImpl(
             BillingClient.ProductType.INAPP,
@@ -162,8 +161,7 @@ internal class PurchaseResponseListenerImplTest : CommonTest() {
             billingInfoSentListener,
             purchaseHistoryRecords,
             skuDetails,
-            billingLibraryConnectionHolder,
-            updateBillingProgressCallback
+            billingLibraryConnectionHolder
         )
     }
 
@@ -175,12 +173,11 @@ internal class PurchaseResponseListenerImplTest : CommonTest() {
                 .build(),
             listOf()
         )
-        verify(billingLibraryConnectionHolder).removeListener(
-            purchaseResponseListener
-        )
+        val calls = inOrder(billingLibraryConnectionHolder)
+        calls.verify(billingLibraryConnectionHolder).markFailed()
+        calls.verify(billingLibraryConnectionHolder).removeListener(purchaseResponseListener)
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
-        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -198,6 +195,5 @@ internal class PurchaseResponseListenerImplTest : CommonTest() {
         verify(billingInfoSender).sendInfo(argument.capture())
         assertThat(argument.firstValue).isEqualTo(productInfos)
         verify(billingInfoSentListener).invoke()
-        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 }
