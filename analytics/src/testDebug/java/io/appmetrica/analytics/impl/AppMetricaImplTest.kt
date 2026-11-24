@@ -602,15 +602,18 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `activate - jvm crash controller`() {
         impl.activate(config)
-        verify(jvmCrashClientController).registerApplicationCrashConsumer(context, impl, config)
-        verify(jvmCrashClientController).registerTechnicalCrashConsumers(context, impl)
+        inOrder(publicLogger, jvmCrashClientController, reporterFactory) {
+            verify(publicLogger).setEnabled(true)
+            verify(jvmCrashClientController).applyActivationConfig(context, impl, config)
+            verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
+        }
         verifyNoMoreInteractions(jvmCrashClientController)
     }
 
     @Test
     fun `activate with disabled = jvm crash controller`() {
         impl.activate(configWithDisabled)
-        verify(jvmCrashClientController).clearCrashConsumers()
+        verify(jvmCrashClientController).applyActivationConfig(context, impl, configWithDisabled)
         verifyNoMoreInteractions(jvmCrashClientController)
     }
 
@@ -618,14 +621,14 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate twice - jvm crash controller`() {
         impl.activate(config)
         clearInvocations(jvmCrashClientController)
+        impl.activate(config)
         verifyNoInteractions(jvmCrashClientController)
     }
 
     @Test
     fun `activate anonymously - jvm crash controller`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
-        verify(jvmCrashClientController).registerApplicationCrashConsumer(context, impl, anonymousConfig)
-        verify(jvmCrashClientController).registerTechnicalCrashConsumers(context, impl)
+        verify(jvmCrashClientController).applyActivationConfig(context, impl, anonymousConfig)
         verifyNoMoreInteractions(jvmCrashClientController)
     }
 
@@ -642,8 +645,11 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(jvmCrashClientController)
         impl.activate(config)
-        verify(jvmCrashClientController).registerApplicationCrashConsumer(context, impl, config)
-        verify(jvmCrashClientController).registerTechnicalCrashConsumers(context, impl)
+        inOrder(reporterFactory, jvmCrashClientController, mainReporter) {
+            verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
+            verify(jvmCrashClientController).applyActivationConfig(context, impl, config)
+            verify(mainReporter).onActivationUpdated()
+        }
         verifyNoMoreInteractions(jvmCrashClientController)
     }
 
@@ -652,7 +658,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(jvmCrashClientController)
         impl.activate(configWithDisabled)
-        verify(jvmCrashClientController).clearCrashConsumers()
+        verify(jvmCrashClientController).applyActivationConfig(context, impl, configWithDisabled)
         verifyNoMoreInteractions(jvmCrashClientController)
     }
 

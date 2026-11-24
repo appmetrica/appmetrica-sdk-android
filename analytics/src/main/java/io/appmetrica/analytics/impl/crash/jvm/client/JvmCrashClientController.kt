@@ -1,8 +1,11 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
 import android.content.Context
+import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.ClientServiceLocator
+import io.appmetrica.analytics.impl.DefaultValuesForCrashReporting
 import io.appmetrica.analytics.impl.IReporterFactoryProvider
 import io.appmetrica.analytics.impl.crash.ApplicationCrashProcessorCreator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -17,6 +20,25 @@ internal class JvmCrashClientController {
 
     private var technicalCrashConsumersRegistered = false
     private var mainCrashConsumerRegistered = false
+
+    @WorkerThread
+    fun applyActivationConfig(
+        context: Context,
+        reporterFactoryProvider: IReporterFactoryProvider,
+        config: AppMetricaConfig
+    ) {
+        val logger = LoggerStorage.getMainPublicOrAnonymousLogger()
+        val crashReportingEnabled =
+            config.crashReporting ?: DefaultValuesForCrashReporting.DEFAULT_REPORTS_CRASHES_ENABLED
+        if (crashReportingEnabled) {
+            registerApplicationCrashConsumer(context, reporterFactoryProvider, config)
+            registerTechnicalCrashConsumers(context, reporterFactoryProvider)
+            logger.info("Register application crash handler")
+        } else {
+            clearCrashConsumers()
+            logger.info("Disable all crash handlers")
+        }
+    }
 
     @Synchronized
     fun setUpCrashHandler() {

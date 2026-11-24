@@ -289,7 +289,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     ) {
         DebugLogger.info(tag, "updateConfig")
         updatePublicLoggerState(config, logger)
-        updateCrashHandlerState(config, logger)
+        core.jvmCrashClientController.applyActivationConfig(context, this, config)
         updateSessionAutoTrackingState(config)
         processConfiguration.update(config)
         startupHelper.setPublicLogger(logger)
@@ -311,26 +311,6 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         } else {
             logger.setEnabled(false)
             PublicLogger.getAnonymousInstance().setEnabled(false)
-        }
-    }
-
-    @WorkerThread
-    private fun updateCrashHandlerState(appMetricaConfig: AppMetricaConfig, logger: PublicLogger) {
-        val crashReportingEnabled = WrapUtils.getOrDefault(
-            appMetricaConfig.crashReporting,
-            DefaultValuesForCrashReporting.DEFAULT_REPORTS_CRASHES_ENABLED
-        )
-        if (crashReportingEnabled) {
-            core.jvmCrashClientController.registerApplicationCrashConsumer(
-                context,
-                this,
-                appMetricaConfig
-            )
-            core.jvmCrashClientController.registerTechnicalCrashConsumers(context, this)
-            logger.info("Register application crash handler")
-        } else {
-            core.jvmCrashClientController.clearCrashConsumers()
-            logger.info("Disable all crash handlers")
         }
     }
 
